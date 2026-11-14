@@ -1,8 +1,8 @@
 {
  "schema_version": 1,
- "built_at": "2026-11-14T21:23:38+00:00",
+ "built_at": "2026-11-14T22:19:10+00:00",
  "pull": {
-  "pulled_at": "2026-11-14T21:22:50+00:00",
+  "pulled_at": "2026-11-14T22:18:50+00:00",
   "site_bbl": "3052110074",
   "matched_label": "2625 BEDFORD AVENUE, Brooklyn, NY, USA"
  },
@@ -801,8 +801,8 @@
        "ref": "dob_now_filings:B01330433-S3",
        "job_filing_number": "B01330433-S3",
        "filing_date": "2026-02-24T00:00:00.000",
-       "filing_status": "On Hold - Pending Withdrawal of Special Inspector",
-       "current_status_date": "2026-11-12T17:59:10.000",
+       "filing_status": "On Hold – Administrative Action",
+       "current_status_date": "2026-11-13T16:11:08.000",
        "status_is_after_cutoff": false,
        "earth_work_work_type_": "YES",
        "foundation_work_type_": "YES",
@@ -970,8 +970,8 @@
        "ref": "dob_now_filings:B01330433-S3",
        "job_filing_number": "B01330433-S3",
        "filing_date": "2026-02-24T00:00:00.000",
-       "filing_status": "On Hold - Pending Withdrawal of Special Inspector",
-       "current_status_date": "2026-11-12T17:59:10.000",
+       "filing_status": "On Hold – Administrative Action",
+       "current_status_date": "2026-11-13T16:11:08.000",
        "status_is_after_cutoff": false,
        "earth_work_work_type_": "YES",
        "foundation_work_type_": "YES",
@@ -1031,8 +1031,8 @@
        "ref": "dob_now_filings:B01330433-S3",
        "job_filing_number": "B01330433-S3",
        "filing_date": "2026-02-24T00:00:00.000",
-       "filing_status": "On Hold - Pending Withdrawal of Special Inspector",
-       "current_status_date": "2026-11-12T17:59:10.000",
+       "filing_status": "On Hold – Administrative Action",
+       "current_status_date": "2026-11-13T16:11:08.000",
        "status_is_after_cutoff": false,
        "earth_work_work_type_": "YES",
        "foundation_work_type_": "YES",
@@ -1121,30 +1121,7 @@
    "related_records": {
     "filings": {
      "status": "ok",
-     "records": [
-      {
-       "ref": "dob_now_filings:B01330433-S3",
-       "job_filing_number": "B01330433-S3",
-       "filing_date": "2026-02-24T00:00:00.000",
-       "filing_status": "On Hold - Pending Withdrawal of Special Inspector",
-       "current_status_date": "2026-11-12T17:59:10.000",
-       "status_is_after_cutoff": false,
-       "earth_work_work_type_": "YES",
-       "foundation_work_type_": "YES",
-       "support_of_excavation_work_type_": "No"
-      },
-      {
-       "ref": "dob_now_filings:B01330433-S4",
-       "job_filing_number": "B01330433-S4",
-       "filing_date": "2026-02-17T00:00:00.000",
-       "filing_status": "On Hold - Pending Withdrawal of Special Inspector",
-       "current_status_date": "2026-11-12T17:56:13.000",
-       "status_is_after_cutoff": false,
-       "earth_work_work_type_": "NO",
-       "foundation_work_type_": "NO",
-       "support_of_excavation_work_type_": "No"
-      }
-     ]
+     "records": []
     },
     "citations": []
    },

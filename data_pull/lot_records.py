@@ -141,7 +141,7 @@ def pull_lot(bbl: str, seed_bins: list[str]) -> dict:
         datasets["dob_complaints"] = _run("dob_complaints", complaints_where, bbl)
     else:
         datasets["dob_complaints"] = _skipped("no BIN found for this lot; complaints join by BIN only")
-    # 311 rows filed by street or intersection carry no bbl, so they are missed here.
+    # 311 rows with no bbl are missed here (2,004 DOB rows in 2026, all filed by address, checked 2026-11-14).
     datasets["dob_311_requests"] = _run("dob_311_requests", f"agency='DOB' AND bbl='{bbl}'", bbl)
 
     return {"bbl": bbl, "bins": bins, "datasets": datasets}

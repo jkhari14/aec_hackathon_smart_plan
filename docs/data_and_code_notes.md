@@ -44,12 +44,12 @@ open, keyless SODA endpoints (`https://data.cityofnewyork.us/resource/<ID>.json`
 |---|---|---|---|
 | PLUTO (lot data) | `64uk-42ks` | `bbl` | Lags reality: it still lists 2625 Bedford as a 1933 one-story building |
 | DOB NOW job filings | `w9ak-ipjd` | `bbl`, `bin`, job number | One row per filing (`-I1`, `-S3`...). Earth work can sit on a later filing |
-| DOB violations | `3h2n-5cm9` | `boro` + `block` + `lot`, or `bin` | No `bbl` column. `lot` is stored in several widths (`00073`, `73`), so query all of them. Status is free text |
+| DOB violations | `3h2n-5cm9` | `boro` + `block` + `lot`, or `bin` | No `bbl` column. `lot` is stored in several widths (`00073`, `0073`), so query all of them. Status is free text |
 | ECB violations | `6bgk-3dad` | `boro` + `block` + `lot` | Carries the section of law and the inspector's note |
 | DOB safety violations | `855j-jady` | `bbl`, `bin` | The newer civil-penalty set. It holds 1321 Flatbush's open violation; the two older sets do not |
 | HPD violations (housing agency) | `wvxf-dwi5` | `bbl` | Not DOB. "Open" includes items decades old |
 | DOB complaints | `eabe-havv` | `bin` only | Categories are 2-character codes; DOB publishes the key separately |
-| 311 requests routed to DOB | `erm2-nwe9` | `bbl`, with `agency='DOB'` | The complaint in words and DOB's resolution. Can repeat a DOB complaint with no shared key, so never add the two. Rows filed by street or intersection have no `bbl`; starts in 2020 |
+| 311 requests routed to DOB | `erm2-nwe9` | `bbl`, with `agency='DOB'` | The complaint in words and DOB's resolution. Can repeat a DOB complaint with no shared key, so never add the two. Rows with no `bbl` are missed: 2,004 DOB rows in 2026 so far, all filed by address (queried 2026-11-14). Starts 2020-01-01 |
 
 - **We have not found stop-work orders as their own dataset**, so the plan's data row needs
   adjusting. They surface indirectly: a DOB violation that says so, or an ECB violation for

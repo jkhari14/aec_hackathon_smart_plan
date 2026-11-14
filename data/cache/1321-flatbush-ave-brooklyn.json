@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "pulled_at": "2026-11-14T21:23:16+00:00",
+ "pulled_at": "2026-11-14T22:19:02+00:00",
  "address_lookup": {
   "input": "1321 Flatbush Ave, Brooklyn",
   "matched_label": "1321 FLATBUSH AVENUE, Brooklyn, NY, USA",
@@ -3193,18 +3193,6 @@
        "story": "2"
       },
       {
-       "violationid": "16250490",
-       "inspectiondate": "2023-09-25T00:00:00.000",
-       "novissueddate": "2023-09-27T00:00:00.000",
-       "class": "C",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION CLOSED",
-       "currentstatusdate": "2025-09-03T00:00:00.000",
-       "novdescription": "§ 27-2005 HMC: PROPERLY REPAIR OR REPLACE THE BROKEN OR DEFECTIVE DISLODGED WOOD DOOR FRAME WITH EXPOSED NAILS AT WEST WALL IN THE BATHROOM LOCATED AT APT 2F, 2nd STORY, 1st APARTMENT FROM EAST AT SOUTH",
-       "apartment": "2F",
-       "story": "2"
-      },
-      {
        "violationid": "16263026",
        "inspectiondate": "2023-09-25T00:00:00.000",
        "novissueddate": "2023-09-28T00:00:00.000",
@@ -3347,6 +3335,18 @@
        "story": "2"
       },
       {
+       "violationid": "16250490",
+       "inspectiondate": "2023-09-25T00:00:00.000",
+       "novissueddate": "2023-09-27T00:00:00.000",
+       "class": "C",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION CLOSED",
+       "currentstatusdate": "2025-09-03T00:00:00.000",
+       "novdescription": "§ 27-2005 HMC: PROPERLY REPAIR OR REPLACE THE BROKEN OR DEFECTIVE DISLODGED WOOD DOOR FRAME WITH EXPOSED NAILS AT WEST WALL IN THE BATHROOM LOCATED AT APT 2F, 2nd STORY, 1st APARTMENT FROM EAST AT SOUTH",
+       "apartment": "2F",
+       "story": "2"
+      },
+      {
        "violationid": "16257551",
        "inspectiondate": "2023-09-25T00:00:00.000",
        "novissueddate": "2023-09-27T00:00:00.000",
@@ -3359,15 +3359,15 @@
        "story": "2"
       },
       {
-       "violationid": "15866779",
+       "violationid": "15866839",
        "inspectiondate": "2023-03-24T00:00:00.000",
        "novissueddate": "2023-03-28T00:00:00.000",
-       "class": "B",
+       "class": "A",
        "violationstatus": "Open",
        "currentstatus": "NOV SENT OUT",
        "currentstatusdate": "2023-03-28T00:00:00.000",
-       "novdescription": "§ 27-2005, 2007 ADM CODE REMOVE ALL ENCUMBRANCES CONSISTING OF HOUSEHOLD TRASH AND CARPET OBSTRUCTING THE SCUDDLE LATTER TO ROOF AT LOBBY",
-       "story": "0"
+       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD THREAD 10TH FROM BOTTOM AT PUBLIC HALL STAIRS, 1st STORY",
+       "story": "1"
       },
       {
        "violationid": "15866752",
@@ -3392,25 +3392,14 @@
        "story": "0"
       },
       {
-       "violationid": "15866839",
+       "violationid": "15866779",
        "inspectiondate": "2023-03-24T00:00:00.000",
        "novissueddate": "2023-03-28T00:00:00.000",
-       "class": "A",
+       "class": "B",
        "violationstatus": "Open",
        "currentstatus": "NOV SENT OUT",
        "currentstatusdate": "2023-03-28T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD THREAD 10TH FROM BOTTOM AT PUBLIC HALL STAIRS, 1st STORY",
-       "story": "1"
-      },
-      {
-       "violationid": "15866748",
-       "inspectiondate": "2023-03-24T00:00:00.000",
-       "novissueddate": "2023-03-28T00:00:00.000",
-       "class": "A",
-       "violationstatus": "Open",
-       "currentstatus": "NOV SENT OUT",
-       "currentstatusdate": "2023-03-28T00:00:00.000",
-       "novdescription": "§ 27-2104 ADM CODE POST AND MAINTAIN A PROPER SIGN ON WALL OF ENTRANCE STORY SHOWING THE REGISTRATION NUMBER ASSIGNED BY THE DEPARTMENT AND THE ADDRESS OF THE BUILDING. AT LOBBY",
+       "novdescription": "§ 27-2005, 2007 ADM CODE REMOVE ALL ENCUMBRANCES CONSISTING OF HOUSEHOLD TRASH AND CARPET OBSTRUCTING THE SCUDDLE LATTER TO ROOF AT LOBBY",
        "story": "0"
       },
       {
@@ -3434,6 +3423,17 @@
        "currentstatusdate": "2023-03-28T00:00:00.000",
        "novdescription": "§ 27-2005, 2007 ADM CODE REMOVE ALL ENCUMBRANCES CONSISTING OF CARPET AND HOUSEHOLD TRASH OBSTRUCTING THE SCUDDLE LADDER TO ROOF AT PUBLIC HALL, 3rd STORY",
        "story": "3"
+      },
+      {
+       "violationid": "15866748",
+       "inspectiondate": "2023-03-24T00:00:00.000",
+       "novissueddate": "2023-03-28T00:00:00.000",
+       "class": "A",
+       "violationstatus": "Open",
+       "currentstatus": "NOV SENT OUT",
+       "currentstatusdate": "2023-03-28T00:00:00.000",
+       "novdescription": "§ 27-2104 ADM CODE POST AND MAINTAIN A PROPER SIGN ON WALL OF ENTRANCE STORY SHOWING THE REGISTRATION NUMBER ASSIGNED BY THE DEPARTMENT AND THE ADDRESS OF THE BUILDING. AT LOBBY",
+       "story": "0"
       },
       {
        "violationid": "15834056",
@@ -5941,11 +5941,11 @@
       {
        "job_filing_number": "B01479063-I1",
        "job_type": "Alteration",
-       "filing_status": "Permit Entire",
+       "filing_status": "On Hold – Administrative Action",
        "filing_date": "2026-11-03T00:00:00.000",
        "approved_date": "2026-11-09T13:09:11.000",
        "first_permit_date": "2026-11-10T00:00:00.000",
-       "current_status_date": "2026-11-10T14:14:23.000",
+       "current_status_date": "2026-11-13T16:13:22.000",
        "bin": "3430674",
        "bbl": "3052110074",
        "house_no": "2625",
@@ -5962,9 +5962,9 @@
       {
        "job_filing_number": "B01330433-S8",
        "job_type": "New Building",
-       "filing_status": "Objections",
+       "filing_status": "On Hold – Administrative Action",
        "filing_date": "2026-03-26T00:00:00.000",
-       "current_status_date": "2026-04-21T14:44:21.000",
+       "current_status_date": "2026-11-13T16:12:08.000",
        "bin": "3430674",
        "bbl": "3052110074",
        "house_no": "2625",
@@ -5981,10 +5981,10 @@
       {
        "job_filing_number": "B01330433-S7",
        "job_type": "New Building",
-       "filing_status": "Approved",
+       "filing_status": "On Hold – Administrative Action",
        "filing_date": "2026-03-20T00:00:00.000",
        "approved_date": "2026-09-30T16:22:56.000",
-       "current_status_date": "2026-09-30T20:22:56.000",
+       "current_status_date": "2026-11-13T16:11:58.000",
        "bin": "3430674",
        "bbl": "3052110074",
        "house_no": "2625",
@@ -6001,9 +6001,9 @@
       {
        "job_filing_number": "B01330433-S5",
        "job_type": "New Building",
-       "filing_status": "Objections",
+       "filing_status": "On Hold – Administrative Action",
        "filing_date": "2026-03-06T00:00:00.000",
-       "current_status_date": "2026-03-26T20:08:10.000",
+       "current_status_date": "2026-11-13T16:11:46.000",
        "bin": "3430674",
        "bbl": "3052110074",
        "house_no": "2625",
@@ -6020,11 +6020,11 @@
       {
        "job_filing_number": "B01330433-S3",
        "job_type": "New Building",
-       "filing_status": "On Hold - Pending Withdrawal of Special Inspector",
+       "filing_status": "On Hold – Administrative Action",
        "filing_date": "2026-02-24T00:00:00.000",
        "approved_date": "2026-06-03T22:32:02.000",
        "first_permit_date": "2026-09-09T00:00:00.000",
-       "current_status_date": "2026-11-12T17:59:10.000",
+       "current_status_date": "2026-11-13T16:11:08.000",
        "bin": "3430674",
        "bbl": "3052110074",
        "house_no": "2625",
@@ -6041,11 +6041,11 @@
       {
        "job_filing_number": "B01330433-S4",
        "job_type": "New Building",
-       "filing_status": "On Hold - Pending Withdrawal of Special Inspector",
+       "filing_status": "On Hold – Administrative Action",
        "filing_date": "2026-02-17T00:00:00.000",
        "approved_date": "2026-03-22T22:39:25.000",
        "first_permit_date": "2026-09-09T00:00:00.000",
-       "current_status_date": "2026-11-12T17:56:13.000",
+       "current_status_date": "2026-11-13T16:11:24.000",
        "bin": "3430674",
        "bbl": "3052110074",
        "house_no": "2625",
@@ -6083,11 +6083,11 @@
       {
        "job_filing_number": "B01341537-I1",
        "job_type": "Alteration",
-       "filing_status": "Permit Entire",
+       "filing_status": "On Hold – Administrative Action",
        "filing_date": "2026-02-03T00:00:00.000",
        "approved_date": "2026-02-04T15:29:41.000",
        "first_permit_date": "2026-03-11T00:00:00.000",
-       "current_status_date": "2026-03-11T15:12:18.000",
+       "current_status_date": "2026-11-13T16:10:53.000",
        "bin": "3430674",
        "bbl": "3052110074",
        "house_no": "2625",
@@ -6104,9 +6104,9 @@
       {
        "job_filing_number": "B01330433-I1",
        "job_type": "New Building",
-       "filing_status": "Objections",
+       "filing_status": "On Hold – Administrative Action",
        "filing_date": "2026-01-15T00:00:00.000",
-       "current_status_date": "2026-09-29T16:46:45.000",
+       "current_status_date": "2026-11-13T16:10:22.000",
        "bin": "3430674",
        "bbl": "3052110074",
        "house_no": "2625",
@@ -6529,7 +6529,7 @@
   "PLUTO and the building footprints can lag a demolition or a collapse.",
   "Touching lots share an edge or a corner on the city's tax map.",
   "stop_work_mentions lists records whose text mentions a stop-work order. It is not a complete list: we have not found stop-work orders published as their own dataset.",
-  "dob_311_requests and dob_complaints can hold the same complaint, and they share no key: never add their counts. 311 rows filed by street or intersection, and rows before 2020, are missed.",
+  "dob_311_requests and dob_complaints can hold the same complaint, and they share no key: never add their counts. 311 rows with no bbl, and rows before 2020, are missed.",
   "DOB violations filed under a letter borough code (a few thousand of 2.5 million rows) are found only through a BIN."
  ]
 }
