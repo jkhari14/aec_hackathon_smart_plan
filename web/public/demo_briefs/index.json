@@ -1,0 +1,20 @@
+[
+ {
+  "slug": "2625-bedford-ave-brooklyn",
+  "address": "2625 BEDFORD AVENUE, Brooklyn, NY, USA",
+  "project_type": "excavation_next_to_existing",
+  "demo_as_of": [
+   "2026-06-01",
+   "2026-11-11"
+  ]
+ },
+ {
+  "slug": "1321-flatbush-ave-brooklyn",
+  "address": "1321 FLATBUSH AVENUE, Brooklyn, NY, USA",
+  "project_type": "excavation_next_to_existing",
+  "demo_as_of": [
+   "2026-06-01",
+   "2026-11-11"
+  ]
+ }
+]
