@@ -101,38 +101,56 @@ on" column have merged. Jacob merges, in this order, and posts each merge in Sla
 
 ## Shared contracts (built in PR 0)
 
-Everyone builds against these. JSON Schemas live in `contracts/schemas/`, one fixture per schema in
-`contracts/fixtures/`, pydantic models in `api/contracts.py`, TypeScript types in
-`web/src/contracts.ts`.
+Everyone builds against these. The pydantic models in `api/contracts.py` are the source of truth;
+`.venv/bin/python -m contracts.generate` writes the JSON Schemas in `contracts/schemas/` and
+`api/openapi.json`, and `npm run contracts` in `web/` turns that into `web/src/api_types.ts`, with
+friendly names in `web/src/contracts.ts`. One fixture per schema lives in `contracts/fixtures/` (real
+2625 Bedford records and real reported cases). `tests/test_contracts.py` fails if a fixture stops
+matching or the generated files are stale. To change a contract, edit `api/contracts.py`, regenerate,
+update the fixture, and send it as its own small PR before the PR that needs it.
 
 - **Hazards:** `structural`, `geotech`, `fire`, `flood`, `contamination`, `facade`, `weather`,
   `construction_safety`.
 - **Severity:** `0` signal (complaint), `1` enforcement (violation, stop-work, vacate), `2` incident
   (injury, partial collapse), `3` catastrophic (fatality, full collapse).
-- **`LayerCatalogEntry`:** `layer_id`, `name`, `hazard`, `source_name`, `source_url`, `updated_at`,
-  `feature_count`, `status` (`ok`, `error`, `capped`), `default_on`.
-- **`LayerFeature`** (GeoJSON Feature): `id`, `layer_id`, `hazard`, `severity`, `date`, `title`,
-  `summary`, `source_name`, `source_url`, `bbl` (nullable), `record_id`.
+- **Stages:** `pre_acquisition`, `design`, `pre_filing`, `construction`. **Roles:** `architect`,
+  `structural_engineer`.
+- **`LayerCatalogEntry`:** `layer_id`, `name`, `description`, `hazard`, `source_name`, `source_url`,
+  `updated_at`, `feature_count`, `status` (`ok`, `error`, `capped`), `default_on`.
+- **`LayerFeatureCollection`:** `layer` (its catalog entry) and `features[]`, each a GeoJSON Feature
+  whose `properties` are `id`, `layer_id`, `hazard`, `severity`, `date`, `title`, `summary`,
+  `source_name`, `source_url`, `bbl` (nullable), `record_id`.
+- **`SearchResult`:** `label`, `bbl`, `bin`, `lat`, `lon`.
 - **`Case`:** `id`, `title`, `address`, `bbl`, `lat`, `lon`, `date`, `hazards[]`, `severity`,
   `job_type`, `work_types[]`, `conditions` (`neighbor_year_built`, `attached`, `construction`, `soil`,
-  `flood_zone`, ...), `summary`, `cause_as_reported` (nullable), `cause_status` (`reported`,
-  `under_investigation`, `unknown`), `sources[]` (`name`, `url`, `date`).
-- **`SiteProfile`:** `bbl`, `bins[]`, `address_matched`, `lat`, `lon`, `lot` (zoning, FAR, year
-  built, floors, class, landmark), `neighbors[]` (`bbl`, `attached`, `year_built`, `floors`, `class`,
-  `height_ft`, `shared_wall_ft`), `job_type`, `work_types[]`, `work_types_inferred`, `soil`,
-  `bedrock_depth_ft`, `flood` (`fema_zone`, `stormwater`, `sandy`), `e_designation`, `signals[]`,
-  `structural_model` (nullable), `as_of`.
-- **`SimilarCase`:** `case_id`, `score`, `matched_on[]`, `differs_on[]`.
-- **`Warning`:** `id`, `rule_id`, `hazard`, `severity`, `title`, `explanation`,
+  `flood_zone`, `excavation_depth_ft`, and any other reported condition), `summary`,
+  `cause_as_reported` (null unless `cause_status` is `reported`), `cause_status` (`reported`,
+  `under_investigation`, `unknown`), `sources[]` (`name`, `url`, `date`; at least one).
+- **`SiteProfile`:** `bbl`, `bins[]`, `address_matched`, `lat`, `lon`, `lot` (`zoning`, `built_far`,
+  `max_far`, `lot_area_sqft`, `year_built`, `floors`, `building_class`, `landmark`,
+  `historic_district`), `neighbors[]` (`bbl`, `bins[]`, `address`, `attached`, `year_built`, `floors`,
+  `building_class`, `height_ft`, `shared_wall_ft`), `job_type`, `work_types[]`, `work_types_inferred`,
+  `stage`, `soil`, `bedrock_depth_ft`, `flood` (`fema_zone`, `stormwater`, `sandy_inundation`),
+  `e_designation`, `signals[]` (`id`, `hazard`, `severity`, `title`, `explanation`, `record_ids[]`,
+  `source_name`, `date`), `structural_model` (nullable), `datasets[]` (`key`, `name`, `status`,
+  `count`, `source_url`: an error is never shown as zero), `as_of`.
+- **`SimilarCases`:** `bbl` and `results[]`, each `case_id`, `case` (the full `Case`), `score` (0 to 1),
+  `matched_on[]`, `differs_on[]`.
+- **`EarlyWarning`:** `id`, `rule_id`, `hazard`, `severity`, `title`, `explanation`,
   `evidence_record_ids[]`, `first_seen`, `as_of`.
-- **`PatternScore`:** `score`, `percentile_vs_similar`, `top_factors[]` (`feature`, `contribution`),
-  `model_version`, `calibration_note`.
-- **`ActionItem`:** `id`, `discipline` (`architect`, `structural`, `geotech`, `contractor`), `title`,
-  `why`, `code_ref`, `proof_needed`, `status`, `owner_role`, `source_rule`, `life_safety`.
-- **`Project`:** `id`, `name`, `site_bbl`, `stage` (`pre_acquisition`, `design`, `pre_filing`,
-  `construction`), `members[]` (`name`, `role`), `items[]`, `notes[]`, `pins[]`.
+- **`PatternScore`:** `bbl`, `score`, `percentile_vs_similar`, `compared_with`, `top_factors[]`
+  (`feature`, `value`, `contribution`), `model_version`, `calibration_note`.
+- **`ActionItem`:** `id`, `discipline` (`architect`, `structural`, `geotech`, `contractor`), `hazard`,
+  `title`, `why`, `code_ref`, `proof_needed`, `status` (`open`, `in_progress`, `done`,
+  `not_applicable`), `owner_role`, `source_rule`, `life_safety`.
+- **`Project`:** `id`, `name`, `site_bbl`, `stage`, `members[]` (`name`, `role`), `items[]`
+  (`ActionItem`), `notes[]`, `pins[]`, `structural_model`, `created_at`.
 - **`StructuralModel`:** `source` (`revit`, `drawing`), `material`, `gravity_system`,
-  `lateral_system`, `foundation_type`, `bearing_walls_on_lot_line[]`, `levels`, `confidence`.
+  `lateral_system`, `foundation_type`, `bearing_walls_on_lot_line[]` (`id`, `side`, `material`,
+  `length_ft`), `levels`, `confidence`.
+- **`ChatRequest` / `ChatResponse`:** `question`, `bbl`, `project_id`, `as_of` in; `answer_parts[]`
+  (`kind`: `public_record`, `case`, `ai_suggestion`, `web`, `user_input`; `text`, source fields),
+  `actions[]` (`fly_to`, `toggle_layer`, `pin`), `offline` out.
 
 **API** (stubs serving fixtures in PR 0, made real by the owners):
 `GET /api/layers`, `GET /api/layers/{layer_id}?bbox=&as_of=`, `GET /api/search?q=`,
@@ -143,14 +161,19 @@ Everyone builds against these. JSON Schemas live in `contracts/schemas/`, one fi
 `POST /api/projects/{id}/notes`, `POST /api/projects/{id}/pins`, `POST /api/projects/{id}/model`,
 `POST /api/chat`.
 
+Stub answers carry the header `X-ForeSite-Fixture: true`, and the web client (`web/src/api/client.ts`)
+also falls back to the fixtures when the API is down; either way the UI shows "Sample data". To make a
+route real, include your router above `stubs.router` in `api/main.py` (the first matching route wins)
+and delete the stub from `api/stubs.py` in the same PR.
+
 ## Repo layout after PR 0
 
 ```
 contracts/        schemas and fixtures (Jacob)
-api/              ForeSite FastAPI app: main.py and contracts.py (Jacob), routers/ and store/ (Jahleel)
+api/              ForeSite FastAPI app: main.py, contracts.py, stubs.py (Jacob), routers/ and store/ (Jahleel)
 web/              ForeSite app: Vite, React, MapLibre, deck.gl (see feature owners below)
 city_layers/      citywide source pulls (Lise)
-profile/          site profile and similarity (Rishabh)
+site_profile/     site profile and similarity (Rishabh)
 foresight_model/  pattern model and sequence mining (Rishabh)
 model_input/      Revit and drawing input (Rishabh)
 early_warning/    sequence rules and watchlist (Jacob)
@@ -168,7 +191,7 @@ planning/         plan and transcripts
 
 ## Jacob: lead, integrator, merge captain
 
-**Owns:** `contracts/`, `api/main.py`, `api/contracts.py`, `web/src/contracts.ts`, `early_warning/`,
+**Owns:** `contracts/`, `api/main.py`, `api/contracts.py`, `api/stubs.py`, `web/src/contracts.ts`, `early_warning/`,
 `web/src/features/early_warnings/`, `.github/`, deploy config, `AGENTS.md`, `BUILD.md`.
 Also merges every PR in order and runs the end-to-end check after each wave.
 
@@ -343,7 +366,7 @@ the jahleel/ references where they fit.
 
 ## Rishabh: intelligence
 
-**Owns:** `profile/`, `foresight_model/`, `model_input/`.
+**Owns:** `site_profile/`, `foresight_model/`, `model_input/`.
 
 **References in `jahleel/`:** `api/brief/brief_build.py`, `api/chat/chat_model_call.py` (model call
 pattern). Also `checklist/neighbor_context.py` and `data_pull/lot_neighbors.py`.
@@ -351,7 +374,7 @@ pattern). Also `checklist/neighbor_context.py` and `data_pull/lot_neighbors.py`.
 **Before PR 0:** design the feature vector and the label; check how many touching-lot pairs with an
 earth-work filing the open data gives.
 
-**PR 6 (wave 2): profile and similarity.** `profile/` builds a `SiteProfile` from `data_pull`, PLUTO,
+**PR 6 (wave 2): profile and similarity.** `site_profile/` builds a `SiteProfile` from `data_pull`, PLUTO,
 footprints, `city_layers` and the work-type table; `GET /api/sites/{bbl}/similar` ranks cases and
 open-data incidents by a weighted, explainable similarity (neighbor age and attachment, construction,
 work types, soil, flood, signals) with `matched_on` and `differs_on`.
@@ -372,7 +395,7 @@ actions.
 ```text
 I'm Rishabh, intelligence for ForeSite. Read AGENTS.md, BUILD.md (my section and the shared rules) and
 the "Main build: Foresight" section of planning/foresite_build_plan.md. Build my next unmerged PR in
-profile/, foresight_model/ or model_input/. Every score must explain itself; the model is "compared with
+site_profile/, foresight_model/ or model_input/. Every score must explain itself; the model is "compared with
 similar sites", never a failure prediction; report the evaluation honestly in a model card.
 ```
 

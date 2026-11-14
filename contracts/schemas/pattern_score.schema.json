@@ -1,0 +1,85 @@
+{
+  "$defs": {
+    "PatternFactor": {
+      "additionalProperties": false,
+      "properties": {
+        "feature": {
+          "title": "Feature",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "contribution": {
+          "title": "Contribution",
+          "type": "number"
+        }
+      },
+      "required": [
+        "feature",
+        "contribution"
+      ],
+      "title": "PatternFactor",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Relative to similar sites, never a prediction that a building will fail.",
+  "properties": {
+    "bbl": {
+      "title": "Bbl",
+      "type": "string"
+    },
+    "score": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Score",
+      "type": "number"
+    },
+    "percentile_vs_similar": {
+      "maximum": 100,
+      "minimum": 0,
+      "title": "Percentile Vs Similar",
+      "type": "number"
+    },
+    "compared_with": {
+      "title": "Compared With",
+      "type": "string"
+    },
+    "top_factors": {
+      "items": {
+        "$ref": "#/$defs/PatternFactor"
+      },
+      "title": "Top Factors",
+      "type": "array"
+    },
+    "model_version": {
+      "title": "Model Version",
+      "type": "string"
+    },
+    "calibration_note": {
+      "title": "Calibration Note",
+      "type": "string"
+    }
+  },
+  "required": [
+    "bbl",
+    "score",
+    "percentile_vs_similar",
+    "compared_with",
+    "top_factors",
+    "model_version",
+    "calibration_note"
+  ],
+  "title": "PatternScore",
+  "type": "object"
+}

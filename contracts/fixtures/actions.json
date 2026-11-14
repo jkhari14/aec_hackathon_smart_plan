@@ -1,0 +1,41 @@
+[
+  {
+    "id": "act-bc-3309-4",
+    "discipline": "structural",
+    "hazard": "structural",
+    "title": "Protect adjoining footings and foundations",
+    "why": "DOB NOW filings on this lot list earth work and foundation work next to attached buildings.",
+    "code_ref": "BC 3309.4",
+    "proof_needed": "Protection design and the record of its installation",
+    "status": "open",
+    "owner_role": "structural_engineer",
+    "source_rule": "checklist:bc_3309_4",
+    "life_safety": true
+  },
+  {
+    "id": "act-bc-3309-1-1",
+    "discipline": "architect",
+    "hazard": "structural",
+    "title": "Notify the adjoining owners",
+    "why": "Written notice to adjoining owners is required before work that may affect them.",
+    "code_ref": "BC 3309.1.1",
+    "proof_needed": "Copies of the notices and the dates they were sent",
+    "status": "in_progress",
+    "owner_role": "architect",
+    "source_rule": "checklist:bc_3309_1_1",
+    "life_safety": false
+  },
+  {
+    "id": "act-weather-excavation",
+    "discipline": "geotech",
+    "hazard": "weather",
+    "title": "Plan for heavy rain during the open excavation",
+    "why": "Heavy rain and freeze-thaw cycles can change soil conditions around an open excavation.",
+    "code_ref": null,
+    "proof_needed": "Dewatering and monitoring plan",
+    "status": "open",
+    "owner_role": null,
+    "source_rule": "hazard:weather_open_excavation",
+    "life_safety": true
+  }
+]

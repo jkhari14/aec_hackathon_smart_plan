@@ -1,0 +1,138 @@
+{
+  "bbl": "3052110074",
+  "bins": [
+    "3328271",
+    "3430674"
+  ],
+  "address_matched": "2625 BEDFORD AVENUE, Brooklyn, NY, USA",
+  "lat": 40.63915,
+  "lon": -73.95381,
+  "lot": {
+    "address": "2625 BEDFORD AVENUE",
+    "zoning": null,
+    "built_far": null,
+    "max_far": null,
+    "lot_area_sqft": null,
+    "year_built": 1933,
+    "floors": 1,
+    "building_class": "K1",
+    "landmark": null,
+    "historic_district": null
+  },
+  "neighbors": [
+    {
+      "bbl": "3052110073",
+      "bins": [
+        "3120364"
+      ],
+      "address": "1321 FLATBUSH AVENUE",
+      "attached": true,
+      "year_built": 1930,
+      "floors": 3,
+      "building_class": "S4",
+      "height_ft": 32.15,
+      "shared_wall_ft": null
+    },
+    {
+      "bbl": "3052110079",
+      "bins": [
+        "3120365"
+      ],
+      "address": "2619 BEDFORD AVENUE",
+      "attached": true,
+      "year_built": 1931,
+      "floors": 4,
+      "building_class": "C1",
+      "height_ft": 44.0,
+      "shared_wall_ft": null
+    },
+    {
+      "bbl": "3052110044",
+      "bins": [
+        "3120351"
+      ],
+      "address": "2416 NEWKIRK AVENUE",
+      "attached": true,
+      "year_built": 1931,
+      "floors": 6,
+      "building_class": "D4",
+      "height_ft": 64.0,
+      "shared_wall_ft": null
+    }
+  ],
+  "job_type": "new_building",
+  "work_types": [
+    "earth_work",
+    "excavation",
+    "foundation",
+    "support_of_excavation"
+  ],
+  "work_types_inferred": true,
+  "stage": "construction",
+  "soil": "Urban land-Flatbush complex, 0 to 3 percent slopes",
+  "bedrock_depth_ft": null,
+  "flood": {
+    "fema_zone": null,
+    "stormwater": null,
+    "sandy_inundation": false
+  },
+  "e_designation": null,
+  "signals": [
+    {
+      "id": "sig-ecb-39552071X",
+      "hazard": "structural",
+      "severity": 1,
+      "title": "Protection for adjacent properties not installed",
+      "explanation": "An ECB violation says work did not conform to approved documents and protection for adjacent properties was not installed or provided.",
+      "record_ids": [
+        "ecb_violations:39552071X"
+      ],
+      "source_name": "DOB ECB Violations",
+      "date": "2026-03-20"
+    },
+    {
+      "id": "sig-ecb-39553409Z",
+      "hazard": "structural",
+      "severity": 1,
+      "title": "Work continued during a stop-work order",
+      "explanation": "An ECB violation for unlawfully continuing work while a stop-work order was in effect.",
+      "record_ids": [
+        "ecb_violations:39553409Z"
+      ],
+      "source_name": "DOB ECB Violations",
+      "date": "2026-04-23"
+    }
+  ],
+  "structural_model": null,
+  "datasets": [
+    {
+      "key": "dob_now_filings",
+      "name": "DOB NOW: Build - Job Application Filings",
+      "status": "ok",
+      "count": 9,
+      "source_url": "https://data.cityofnewyork.us/d/w9ak-ipjd"
+    },
+    {
+      "key": "ecb_violations",
+      "name": "DOB ECB Violations",
+      "status": "ok",
+      "count": 3,
+      "source_url": "https://data.cityofnewyork.us/d/6bgk-3dad"
+    },
+    {
+      "key": "dob_complaints",
+      "name": "DOB Complaints Received",
+      "status": "ok",
+      "count": 2,
+      "source_url": "https://data.cityofnewyork.us/d/eabe-havv"
+    },
+    {
+      "key": "dob_311_requests",
+      "name": "311 requests routed to DOB",
+      "status": "error",
+      "count": null,
+      "source_url": "https://data.cityofnewyork.us/d/erm2-nwe9"
+    }
+  ],
+  "as_of": "2026-06-01"
+}

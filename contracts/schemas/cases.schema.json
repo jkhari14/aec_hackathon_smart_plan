@@ -1,0 +1,287 @@
+{
+  "title": "Case list",
+  "type": "array",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "title": {
+        "title": "Title",
+        "type": "string"
+      },
+      "address": {
+        "title": "Address",
+        "type": "string"
+      },
+      "bbl": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Bbl"
+      },
+      "lat": {
+        "title": "Lat",
+        "type": "number"
+      },
+      "lon": {
+        "title": "Lon",
+        "type": "number"
+      },
+      "date": {
+        "title": "Date",
+        "type": "string"
+      },
+      "hazards": {
+        "items": {
+          "enum": [
+            "structural",
+            "geotech",
+            "fire",
+            "flood",
+            "contamination",
+            "facade",
+            "weather",
+            "construction_safety"
+          ],
+          "type": "string"
+        },
+        "minItems": 1,
+        "title": "Hazards",
+        "type": "array"
+      },
+      "severity": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "title": "Severity",
+        "type": "integer"
+      },
+      "job_type": {
+        "anyOf": [
+          {
+            "enum": [
+              "new_building",
+              "alteration",
+              "demolition"
+            ],
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Job Type"
+      },
+      "work_types": {
+        "items": {
+          "enum": [
+            "earth_work",
+            "excavation",
+            "foundation",
+            "support_of_excavation",
+            "underpinning",
+            "structural",
+            "facade",
+            "demolition",
+            "sprinkler",
+            "standpipe",
+            "plumbing",
+            "mechanical",
+            "sidewalk_shed",
+            "scaffold",
+            "construction_fence"
+          ],
+          "type": "string"
+        },
+        "title": "Work Types",
+        "type": "array"
+      },
+      "conditions": {
+        "$ref": "#/$defs/CaseConditions"
+      },
+      "summary": {
+        "title": "Summary",
+        "type": "string"
+      },
+      "cause_as_reported": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cause As Reported"
+      },
+      "cause_status": {
+        "enum": [
+          "reported",
+          "under_investigation",
+          "unknown"
+        ],
+        "title": "Cause Status",
+        "type": "string"
+      },
+      "sources": {
+        "items": {
+          "$ref": "#/$defs/Source"
+        },
+        "minItems": 1,
+        "title": "Sources",
+        "type": "array"
+      }
+    },
+    "required": [
+      "id",
+      "title",
+      "address",
+      "lat",
+      "lon",
+      "date",
+      "hazards",
+      "severity",
+      "work_types",
+      "conditions",
+      "summary",
+      "cause_status",
+      "sources"
+    ],
+    "title": "Case",
+    "type": "object"
+  },
+  "$defs": {
+    "CaseConditions": {
+      "additionalProperties": true,
+      "description": "Open on purpose: a case records whatever conditions were publicly reported.",
+      "properties": {
+        "neighbor_year_built": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Neighbor Year Built"
+        },
+        "attached": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attached"
+        },
+        "construction": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Construction"
+        },
+        "soil": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Soil"
+        },
+        "flood_zone": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Flood Zone"
+        },
+        "excavation_depth_ft": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Excavation Depth Ft"
+        }
+      },
+      "title": "CaseConditions",
+      "type": "object"
+    },
+    "Source": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        },
+        "date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Date"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Source",
+      "type": "object"
+    }
+  }
+}

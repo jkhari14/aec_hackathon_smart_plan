@@ -1,0 +1,86 @@
+[
+  {
+    "layer_id": "construction_incidents",
+    "name": "Construction incidents",
+    "description": "Accidents, incidents and notifications DOB records at construction sites, 2024 on, with injury and fatality counts.",
+    "hazard": "construction_safety",
+    "source_name": "DOB Construction-Related Incidents",
+    "source_url": "https://data.cityofnewyork.us/d/bf97-mjsy",
+    "updated_at": "2026-11-14",
+    "feature_count": 1511,
+    "status": "ok",
+    "default_on": true
+  },
+  {
+    "layer_id": "structural_complaints",
+    "name": "Structural complaints",
+    "description": "DOB complaints in the structural categories: adjacent building not protected (03), excavation undermining (14), inadequate shoring (16), structural stability (30), retaining wall (54), structurally compromised (2K), new building stability (5C).",
+    "hazard": "structural",
+    "source_name": "DOB Complaints Received",
+    "source_url": "https://data.cityofnewyork.us/d/eabe-havv",
+    "updated_at": "2026-11-14",
+    "feature_count": null,
+    "status": "ok",
+    "default_on": true
+  },
+  {
+    "layer_id": "vacate_orders",
+    "name": "Vacate orders",
+    "description": "HPD orders to vacate, with the primary reason (fire damage, habitability, illegal occupancy).",
+    "hazard": "fire",
+    "source_name": "HPD Order to Repair/Vacate Orders",
+    "source_url": "https://data.cityofnewyork.us/d/tb8q-a3ar",
+    "updated_at": "2026-11-14",
+    "feature_count": null,
+    "status": "ok",
+    "default_on": false
+  },
+  {
+    "layer_id": "unsafe_facades",
+    "name": "Unsafe facades",
+    "description": "Facade inspection filings marked UNSAFE or SWARMP (safe with a repair and maintenance program).",
+    "hazard": "facade",
+    "source_name": "DOB NOW: Safety - Facades Compliance Filings",
+    "source_url": "https://data.cityofnewyork.us/d/xubg-57si",
+    "updated_at": "2026-11-14",
+    "feature_count": 5627,
+    "status": "ok",
+    "default_on": false
+  },
+  {
+    "layer_id": "sandy_inundation",
+    "name": "Sandy inundation zone",
+    "description": "The area flooded by Hurricane Sandy in 2012.",
+    "hazard": "flood",
+    "source_name": "Sandy Inundation Zone",
+    "source_url": "https://data.cityofnewyork.us/d/uyj8-7rv5",
+    "updated_at": "2015-11-09",
+    "feature_count": null,
+    "status": "ok",
+    "default_on": false
+  },
+  {
+    "layer_id": "e_designations",
+    "name": "E-designations",
+    "description": "Lots with an environmental designation for hazardous materials, air or noise.",
+    "hazard": "contamination",
+    "source_name": "E-Designations",
+    "source_url": "https://data.cityofnewyork.us/d/hxm3-23vy",
+    "updated_at": "2026-11-14",
+    "feature_count": null,
+    "status": "ok",
+    "default_on": false
+  },
+  {
+    "layer_id": "watchlist",
+    "name": "Excavation next to older attached buildings",
+    "description": "Active earth-work, foundation or support-of-excavation filings on a lot that touches an attached building built before 1940.",
+    "hazard": "structural",
+    "source_name": "DOB NOW: Build - Job Application Filings, PLUTO",
+    "source_url": "https://data.cityofnewyork.us/d/w9ak-ipjd",
+    "updated_at": null,
+    "feature_count": null,
+    "status": "error",
+    "default_on": true
+  }
+]

@@ -24,7 +24,7 @@ todos:
     content: "Map home: MapLibre + deck.gl citywide layers, layer panel with toggles, site pick, 3D tiles with extruded-footprint fallback, chat docked"
     status: pending
   - id: profile-similarity
-    content: "Build profile/: site profile (neighbors, inferred work types, soil, flood, records, structural system) and explainable similar-case matching"
+    content: "Build site_profile/: site profile (neighbors, inferred work types, soil, flood, records, structural system) and explainable similar-case matching"
     status: pending
   - id: early-warning
     content: Early-warning sequence rules with as-of, plus a precomputed citywide watchlist of active excavation next to attached pre-1940 lots
@@ -272,7 +272,7 @@ This comes from the forensic advisor's feedback. It is shown in the pitch as the
 
 ## New code layout, beside the existing modules
 - `city_layers/`: citywide pulls into Parquet and GeoJSON. Covers incidents, vacates, facades, flood, E-designations, the watchlist and the case library.
-- `profile/`: site profile, similarity, explanations.
+- `site_profile/`: site profile, similarity, explanations.
 - `foresight_model/`: label building, features, training, evaluation, sequence mining, the early-warning rules.
 - `contracts/`: the shared schemas and fixtures from PR 0.
 - `api/`: the ForeSite FastAPI app, with routers for `layers`, `projects`, `foresight` and `chat`. Pieces from `jahleel/api/` can be ported here in PR 0 or later where they fit.
@@ -322,7 +322,7 @@ The team confirmed these 8: Jacob, Shandon, Camilo, Rishabh, Lise, Hongyu, Jahle
   - The table that infers work types from job type, following DOB NOW.
   - Caching.
 - **Rishabh: intelligence.**
-  - `profile/`: site profile and explainable similarity.
+  - `site_profile/`: site profile and explainable similarity.
   - `foresight_model/`: labels, gradient boosting with attributions and calibration, sequence mining that feeds the rules.
   - Model input: the Revit `structural_model.json` and drawing vision.
 - **Hongyu: domain lead (structural).**

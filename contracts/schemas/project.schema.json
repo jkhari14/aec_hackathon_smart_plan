@@ -1,0 +1,445 @@
+{
+  "$defs": {
+    "ActionItem": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "discipline": {
+          "enum": [
+            "architect",
+            "structural",
+            "geotech",
+            "contractor"
+          ],
+          "title": "Discipline",
+          "type": "string"
+        },
+        "hazard": {
+          "enum": [
+            "structural",
+            "geotech",
+            "fire",
+            "flood",
+            "contamination",
+            "facade",
+            "weather",
+            "construction_safety"
+          ],
+          "title": "Hazard",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "why": {
+          "title": "Why",
+          "type": "string"
+        },
+        "code_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Code Ref"
+        },
+        "proof_needed": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Proof Needed"
+        },
+        "status": {
+          "enum": [
+            "open",
+            "in_progress",
+            "done",
+            "not_applicable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "owner_role": {
+          "anyOf": [
+            {
+              "enum": [
+                "architect",
+                "structural_engineer"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner Role"
+        },
+        "source_rule": {
+          "title": "Source Rule",
+          "type": "string"
+        },
+        "life_safety": {
+          "title": "Life Safety",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "discipline",
+        "hazard",
+        "title",
+        "why",
+        "status",
+        "source_rule",
+        "life_safety"
+      ],
+      "title": "ActionItem",
+      "type": "object"
+    },
+    "BearingWall": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "side": {
+          "enum": [
+            "north",
+            "south",
+            "east",
+            "west",
+            "unknown"
+          ],
+          "title": "Side",
+          "type": "string"
+        },
+        "material": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Material"
+        },
+        "length_ft": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Length Ft"
+        }
+      },
+      "required": [
+        "id",
+        "side"
+      ],
+      "title": "BearingWall",
+      "type": "object"
+    },
+    "ProjectMember": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "architect",
+            "structural_engineer"
+          ],
+          "title": "Role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "role"
+      ],
+      "title": "ProjectMember",
+      "type": "object"
+    },
+    "ProjectNote": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "author_role": {
+          "enum": [
+            "architect",
+            "structural_engineer"
+          ],
+          "title": "Author Role",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "author_role",
+        "text",
+        "created_at"
+      ],
+      "title": "ProjectNote",
+      "type": "object"
+    },
+    "ProjectPin": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "record",
+            "case",
+            "warning",
+            "action",
+            "chat_answer"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "ref_id": {
+          "title": "Ref Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "by_role": {
+          "enum": [
+            "architect",
+            "structural_engineer"
+          ],
+          "title": "By Role",
+          "type": "string"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "ref_id",
+        "title",
+        "by_role",
+        "created_at"
+      ],
+      "title": "ProjectPin",
+      "type": "object"
+    },
+    "StructuralModel": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "enum": [
+            "revit",
+            "drawing"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "material": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Material"
+        },
+        "gravity_system": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gravity System"
+        },
+        "lateral_system": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lateral System"
+        },
+        "foundation_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Foundation Type"
+        },
+        "bearing_walls_on_lot_line": {
+          "items": {
+            "$ref": "#/$defs/BearingWall"
+          },
+          "title": "Bearing Walls On Lot Line",
+          "type": "array"
+        },
+        "levels": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Levels"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "source",
+        "bearing_walls_on_lot_line",
+        "confidence"
+      ],
+      "title": "StructuralModel",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "site_bbl": {
+      "title": "Site Bbl",
+      "type": "string"
+    },
+    "stage": {
+      "enum": [
+        "pre_acquisition",
+        "design",
+        "pre_filing",
+        "construction"
+      ],
+      "title": "Stage",
+      "type": "string"
+    },
+    "members": {
+      "items": {
+        "$ref": "#/$defs/ProjectMember"
+      },
+      "title": "Members",
+      "type": "array"
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/ActionItem"
+      },
+      "title": "Items",
+      "type": "array"
+    },
+    "notes": {
+      "items": {
+        "$ref": "#/$defs/ProjectNote"
+      },
+      "title": "Notes",
+      "type": "array"
+    },
+    "pins": {
+      "items": {
+        "$ref": "#/$defs/ProjectPin"
+      },
+      "title": "Pins",
+      "type": "array"
+    },
+    "structural_model": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/StructuralModel"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "site_bbl",
+    "stage",
+    "members",
+    "items",
+    "notes",
+    "pins",
+    "created_at"
+  ],
+  "title": "Project",
+  "type": "object"
+}
