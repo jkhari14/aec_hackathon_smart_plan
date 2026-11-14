@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import json
+import tempfile
 import unittest
 from datetime import date
 from pathlib import Path
 
-from checklist import applicability, neighbor_context, record_dates, record_evidence, row_proof
+from checklist import applicability, complaint_codes, neighbor_context, record_dates, record_evidence, row_proof
 from checklist.checklist_rules import PARTIES, RULES
 from checklist.build_checklist import build
 
@@ -159,6 +160,73 @@ class LeadTests(unittest.TestCase):
         self.assertEqual((row["proof"]["status"], row["open_gap"]), ("reported_not_read", True))
 
 
+class ComplaintCodeTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.imp, cls.meta = complaint_codes.category_key()
+        cls.table = {"A3": "FULL STOP WORK ORDER SERVED F"}
+
+    def _lot(self, *records, status="ok"):
+        return {"bbl": "3052110073", "datasets": {"dob_complaints": {"status": status, "records": list(records)}}}
+
+    def test_an_imported_meaning_is_its_own_tier_and_never_ok(self):
+        lot = self._lot({"complaint_number": "1", "date_entered": "11/01/2026", "complaint_category": "30"})
+        category = complaint_codes.lot_complaints(lot, None, self.imp, self.table)["records"][0]["category"]
+        self.assertEqual((category["kind"], category["status"]), ("manual_import", "imported_unchecked"))
+        self.assertIn("Structural Stability", category["description"])
+
+    def test_a_code_a_key_lacks_is_a_gap_and_keeps_the_raw_code(self):
+        lot = self._lot({"complaint_number": "1", "date_entered": "11/01/2026", "complaint_category": "7G",
+                         "disposition_code": "AF", "disposition_date": "11/02/2026"})
+        record = complaint_codes.lot_complaints(lot, None, self.imp, self.table)["records"][0]
+        self.assertEqual((record["category"]["code"], record["category"]["status"]), ("7G", "not_in_key"))
+        self.assertIn("may be older than the code", record["category"]["reason"])
+        self.assertEqual((record["disposition"]["code"], record["disposition"]["status"]), ("AF", "not_in_table"))
+        self.assertIsNone(record["disposition"]["description"])
+        missing = complaint_codes.codes_not_found([{"complaints": {"records": [record]}}])
+        self.assertEqual(missing, {"dob_complaint_categories": ["7G"], "dob_complaint_dispositions": ["AF"]})
+
+    def test_the_disposition_table_is_public_record_and_its_absence_is_said(self):
+        lot = self._lot({"complaint_number": "1", "date_entered": "11/01/2026", "disposition_code": "A3",
+                         "disposition_date": "11/02/2026"})
+        found = complaint_codes.lot_complaints(lot, None, self.imp, self.table)["records"][0]["disposition"]
+        self.assertEqual((found["kind"], found["status"], found["description"]),
+                         ("public_record", "ok", "FULL STOP WORK ORDER SERVED F"))
+        none = complaint_codes.lot_complaints(lot, None, None, None)["records"][0]
+        self.assertEqual((none["category"]["status"], none["disposition"]["status"]), ("not_recorded", "key_unavailable"))
+        self.assertEqual(complaint_codes.disposition_key({})[1]["status"], "not_pulled")
+        failed = {"reference_tables": {"dob_complaint_dispositions": {"status": "error", "error": "HTTP 503"}}}
+        self.assertEqual(complaint_codes.disposition_key(failed), (None, {"kind": "public_record", "status": "error",
+                                                                          "reason": "HTTP 503"}))
+
+    def test_as_of_withholds_later_dispositions_and_later_complaints(self):
+        lot = self._lot(
+            {"complaint_number": "early", "date_entered": "11/01/2026", "disposition_code": "A3", "disposition_date": "11/05/2026"},
+            {"complaint_number": "disposed_late", "date_entered": "11/02/2026", "disposition_code": "A3",
+             "disposition_date": "11/11/2026"},
+            {"complaint_number": "undated", "date_entered": "11/03/2026", "disposition_code": "A3"},
+            {"complaint_number": "late", "date_entered": "11/11/2026"})
+        records = complaint_codes.lot_complaints(lot, CUTOFF, self.imp, self.table)["records"]
+        by_number = {r["complaint_number"]: r["disposition"] for r in records}
+        self.assertNotIn("late", by_number)
+        self.assertEqual(by_number["early"]["code"], "A3")
+        self.assertEqual((by_number["disposed_late"]["code"], by_number["disposed_late"]["status"]), (None, "after_cutoff"))
+        self.assertEqual((by_number["undated"]["code"], by_number["undated"]["status"]), (None, "undated"))
+        self.assertEqual([r["complaint_number"] for r in records], ["undated", "disposed_late", "early"])
+
+    def test_a_failed_query_or_import_is_reported_not_empty(self):
+        self.assertEqual(complaint_codes.lot_complaints(self._lot(status="error"), None, self.imp, self.table)["status"], "error")
+        with tempfile.TemporaryDirectory() as root:
+            self.assertEqual(complaint_codes.category_key(Path(root))[1]["status"], "missing")
+            broken = Path(root) / "dob_complaint_categories" / "2026-11-14_broken"
+            broken.mkdir(parents=True)
+            (broken / "provenance.json").write_text("{}")
+            imp, meta = complaint_codes.category_key(Path(root))
+            self.assertIsNone(imp)
+            self.assertEqual((meta["kind"], meta["status"]), ("manual_import", "error"))
+            self.assertIn("broken", meta["reason"])
+
+
 class CachedHeroCaseTests(unittest.TestCase):
     """Structure only: numbers in the cache change whenever someone re-pulls."""
 
@@ -180,6 +248,16 @@ class CachedHeroCaseTests(unittest.TestCase):
         dates = [m["issue_date"] for m in self.result["site"]["stop_work_mentions"]]
         self.assertTrue(dates)
         self.assertTrue(all(record_dates.parse_record_date(d) < CUTOFF for d in dates))
+
+    def test_complaints_carry_refs_and_no_imported_meaning_reads_as_ok(self):
+        keys = self.result["code_keys"]
+        self.assertEqual(keys["dob_complaint_categories"]["kind"], "manual_import")
+        self.assertNotEqual(keys["dob_complaint_categories"]["status"], "ok")
+        records = [r for ctx in [self.result["site"], *self.result["adjacent_buildings"]]
+                   for r in ctx["complaints"]["records"]]
+        self.assertTrue(records)
+        self.assertTrue(all(r["ref"].startswith("dob_complaints:") for r in records))
+        self.assertNotIn("ok", {r["category"]["status"] for r in records})
 
     def test_provided_proof_closes_the_gap_but_stays_unverified(self):
         pull = json.loads((REPO / "data/cache/2625-bedford-ave-brooklyn.json").read_text())

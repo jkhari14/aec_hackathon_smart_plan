@@ -53,7 +53,11 @@ Every answer carries a `basis`, and each basis has a `kind`:
 
 - `public_record`: the records it came from;
 - `user_input`: a value the project team typed;
-- `code_text`: the threshold it applied.
+- `code_text`: the threshold it applied;
+- `manual_import`: a fact a person imported by hand from a document a crawler can't use
+  ([manual_imports/](../manual_imports/README.md)). Its status is `imported_unchecked` or
+  `imported_checked`, never `ok`, and it is never counted as a public-record pull. Today it is
+  used only for complaint category meanings.
 
 **Excavation is read from the record first.** If a DOB NOW filing on the lot says yes to earth
 work, foundation, or support of excavation, the excavation rows apply. A project input that says
@@ -88,13 +92,30 @@ Every record a row points to carries a `ref` in the brief's id format,
 - `citations`: violations on the site or a touching lot whose own text cites that section, or a
   more specific part of it.
 
+## Complaint codes, decoded
+
+The site and each adjacent building carry `complaints`: their DOB complaints dated before the
+cutoff, newest first. Each has a `ref`, its `status_at_pull`, and both codes decoded:
+
+- `category` comes from DOB's printed category list, imported by hand (`kind: manual_import`,
+  `status: imported_unchecked` until a second person checks every code against the PDF). It
+  carries the list's `priority` and `page`. The list doesn't say what priorities A to D mean.
+- `disposition` comes from Open Data `6v9u-ndjg` in the pull (`kind: public_record`, `status: ok`).
+
+A code the key lacks keeps its raw code, with `status: not_in_key` (category) or `not_in_table`
+(disposition) and a reason. It is never guessed. `code_keys` says where each key came from and
+lists every code it lacked. In the 2625 Bedford pull, ten category codes are missing from the list
+(Rev. 12/18), and two dispositions (AF, H8) from the table (last updated 2017-02-08). Both keys are
+probably older than those codes.
+
 ## The as-of view
 
 `--as-of DATE` keeps only records dated before DATE. **Counts still use each record's status at
 pull time**, because the datasets keep only the current status. A violation that was open on
 Nov 10 and closed on Nov 12 counts as closed. A filing whose current status is dated on or after
 the cutoff is marked `status_is_after_cutoff`. Records with no usable date are counted under
-`undated`.
+`undated`. A complaint's `status_at_pull` is also the status at pull time. Its disposition is
+withheld when dated on or after the cutoff (`after_cutoff`) or not dated at all (`undated`).
 
 ## Project inputs
 
@@ -125,12 +146,18 @@ the real-site checklists.
   is not known when it was filed.
 - **Five touching lots have buildings**, including 1321 Flatbush (built 1930). Lot 3052110054
   has a footprint but no PLUTO record.
-- **S3 and S4's current status**, "On Hold - Pending Withdrawal of Special Inspector", is dated
-  on or after the cutoff and is flagged as such.
+- **S3's current status**, "On Hold – Administrative Action", is dated 2026-11-13, after the
+  cutoff, and is flagged as such. Seven other filings on the site carry the same status and date.
+  An earlier pull showed "On Hold - Pending Withdrawal of Special Inspector" on S3 and S4.
 - **Two stop-work mentions** before the cutoff, on the site:
   - an ECB violation on 2026-04-23 for working while a stop-work order was in force;
   - a 311 complaint from 2026-03-18 about work beyond the approved plans. Its resolution,
     recorded 2026-05-08, says DOB removed the stop-work order.
+- **Complaint codes.** No complaint before the cutoff is coded 30 ("Building
+  Shaking/Vibrating/Structural Stability Affected"); every code-30 complaint on these lots was
+  entered on 2026-11-11. Three complaints on two touching lots, from December 2020 and January
+  2021, are coded 03 ("Adjacent Buildings - Not Protected"). One ended in an ECB violation (A8)
+  and two in no violation warranted (I2).
 - **Left out of this view:** the DOB violation issued on the day of the collapse (a full
   stop-work order), because it falls on the cutoff.
 

@@ -17,6 +17,8 @@ from pathlib import Path
 
 from checklist.applicability import evaluate, excavation_status, validate_inputs
 from checklist.checklist_rules import RULES
+from checklist.complaint_codes import (CATEGORIES, DISPOSITIONS, category_key, codes_not_found,
+                                       disposition_key, lot_complaints)
 from checklist.neighbor_context import lot_context
 from checklist.record_evidence import citations_for_row, code_citations, related_filings
 from checklist.row_proof import load_leads, row_proof
@@ -31,8 +33,11 @@ CAVEATS = [
     "does not hold. 'provided_unverified' means the project team supplied it; nobody checked it. "
     "'reported_not_read' means a public source reports it; nobody here has read it.",
     "related_records sit beside a row; they are not its proof.",
-    "Counts use each record's status at pull time, not on the as-of date.",
+    "Counts, and each complaint's status_at_pull, use status at pull time, not on the as-of date.",
     "dob_311_requests and dob_complaints can count the same complaint twice: never add them.",
+    "Complaint category meanings come from a list DOB published, imported by hand (kind manual_import; "
+    "its status says whether a second person checked it). Disposition meanings come from Open Data "
+    "(kind public_record). A code either key lacks is a gap, listed under code_keys.",
     "Requirements are paraphrased; read the linked code text before relying on a row.",
     "Nothing here establishes the cause of any incident.",
 ]
@@ -83,7 +88,11 @@ def build(pull: dict, raw_inputs: dict, cutoff: date | None, raw_leads: dict | N
     site, touching = pull["site"], pull["touching_lots"]
     site_filings = site["datasets"].get("dob_now_filings") or {}
     excavation = excavation_status(site_filings, inputs, cutoff)
-    contexts = {lot["bbl"]: lot_context(lot, cutoff) for lot in [site, *touching]}
+    category_import, category_meta = category_key()
+    dispositions, disposition_meta = disposition_key(pull)
+    contexts = {lot["bbl"]: {**lot_context(lot, cutoff), "complaints": lot_complaints(lot, cutoff, category_import, dispositions)}
+                for lot in [site, *touching]}
+    missing = codes_not_found(list(contexts.values()))
     adjacent = [contexts[lot["bbl"]] for lot in touching if contexts[lot["bbl"]]["building_presence"]["status"] != "no"]
     neighbors_known = (pull.get("touching_lots_lookup") or {}).get("status") == "ok"
     citations = code_citations([site, *touching], cutoff)
@@ -102,6 +111,8 @@ def build(pull: dict, raw_inputs: dict, cutoff: date | None, raw_leads: dict | N
         "adjacent_buildings": adjacent,
         "rows": rows,
         "site_signals": {"code_citations": citations},
+        "code_keys": {CATEGORIES: {**category_meta, "not_found": missing[CATEGORIES]},
+                      DISPOSITIONS: {**disposition_meta, "not_found": missing[DISPOSITIONS]}},
         "summary": {"rows": len(rows), **{s: statuses.count(s) for s in _ROLLUP_ORDER},
                     "open_gaps": sum(r["open_gap"] for r in rows),
                     "inputs_needed": sorted({n for r in rows for n in r["applies"]["needs"]})},
@@ -121,6 +132,8 @@ def _print_summary(result: dict) -> None:
         c = ctx["counts"]
         open_counts = " ".join(f"{k}={v['open'] if v['status'] == 'ok' else v['status']}" for k, v in c.items())
         print(f"  adjacent {ctx['bbl']} {ctx['address'] or '?'} built {ctx['year_built'] or '?'} | open: {open_counts}")
+    gaps = ", ".join(f"{key}={meta['not_found']}" for key, meta in result["code_keys"].items())
+    print(f"Codes not in their key: {gaps}")
     print(f"Summary: {summary}")
 
 

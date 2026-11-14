@@ -156,6 +156,10 @@ python3 -m unittest discover -s tests -t .    # includes tests/test_manual_impor
 
 These are requests. This branch does not touch `data_pull/` or `checklist/`.
 
+Done on 2026-11-14: 1 is in `data_pull/reference_tables.py`, and 2 and 3 are in
+`checklist/complaint_codes.py` ([checklist README](../checklist/README.md#complaint-codes-decoded)).
+4 stands.
+
 1. **Pull `6v9u-ndjg` (disposition codes) as a reference table.** It is keyless and needs no
    manual import. Show a code it lacks (AF, H8 today) as a gap.
 2. **Decode `complaint_category` with the import:**

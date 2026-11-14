@@ -1,8 +1,8 @@
 {
  "schema_version": 1,
- "built_at": "2026-11-14T22:19:10+00:00",
+ "built_at": "2026-11-14T22:53:46+00:00",
  "pull": {
-  "pulled_at": "2026-11-14T22:18:50+00:00",
+  "pulled_at": "2026-11-14T22:51:45+00:00",
   "site_bbl": "3052110074",
   "matched_label": "2625 BEDFORD AVENUE, Brooklyn, NY, USA"
  },
@@ -133,7 +133,233 @@
     "field": "section_law_description1",
     "text": "28-207.2.2 UNLAWFULLY CONTINUED WORK WHILE NOTICE OF A STOP WORK ORDER"
    }
-  ]
+  ],
+  "complaints": {
+   "status": "ok",
+   "records": [
+    {
+     "ref": "dob_complaints:3A89153",
+     "complaint_number": "3A89153",
+     "date_entered": "11/13/2026",
+     "status_at_pull": "ACTIVE",
+     "category": {
+      "code": "7G",
+      "kind": "manual_import",
+      "key": "dob_complaint_categories",
+      "status": "not_in_key",
+      "description": null,
+      "reason": "code '7G' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+     },
+     "disposition": {
+      "code": null,
+      "status": "not_recorded"
+     }
+    },
+    {
+     "ref": "dob_complaints:3A89041",
+     "complaint_number": "3A89041",
+     "date_entered": "11/13/2026",
+     "status_at_pull": "CLOSED",
+     "category": {
+      "code": "7G",
+      "kind": "manual_import",
+      "key": "dob_complaint_categories",
+      "status": "not_in_key",
+      "description": null,
+      "reason": "code '7G' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+     },
+     "disposition": {
+      "code": "I2",
+      "date": "11/13/2026",
+      "kind": "public_record",
+      "key": "dob_complaint_dispositions",
+      "status": "ok",
+      "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+     }
+    },
+    {
+     "ref": "dob_complaints:3A89031",
+     "complaint_number": "3A89031",
+     "date_entered": "11/13/2026",
+     "status_at_pull": "ACTIVE",
+     "category": {
+      "code": "83",
+      "kind": "manual_import",
+      "key": "dob_complaint_categories",
+      "status": "imported_unchecked",
+      "description": "Construction – Contrary/Beyond Approved Plans/Permits",
+      "priority": "B",
+      "page": 2
+     },
+     "disposition": {
+      "code": null,
+      "status": "not_recorded"
+     }
+    },
+    {
+     "ref": "dob_complaints:3A88700",
+     "complaint_number": "3A88700",
+     "date_entered": "11/12/2026",
+     "status_at_pull": "CLOSED",
+     "category": {
+      "code": "7S",
+      "kind": "manual_import",
+      "key": "dob_complaint_categories",
+      "status": "not_in_key",
+      "description": null,
+      "reason": "code '7S' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+     },
+     "disposition": {
+      "code": "H8",
+      "date": "11/13/2026",
+      "kind": "public_record",
+      "key": "dob_complaint_dispositions",
+      "status": "not_in_table",
+      "description": null,
+      "reason": "code 'H8' is not in Open Data 6v9u-ndjg, which may be older than the code"
+     }
+    },
+    {
+     "ref": "dob_complaints:3A88691",
+     "complaint_number": "3A88691",
+     "date_entered": "11/11/2026",
+     "status_at_pull": "CLOSED",
+     "category": {
+      "code": "83",
+      "kind": "manual_import",
+      "key": "dob_complaint_categories",
+      "status": "imported_unchecked",
+      "description": "Construction – Contrary/Beyond Approved Plans/Permits",
+      "priority": "B",
+      "page": 2
+     },
+     "disposition": {
+      "code": "I2",
+      "date": "11/13/2026",
+      "kind": "public_record",
+      "key": "dob_complaint_dispositions",
+      "status": "ok",
+      "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+     }
+    },
+    {
+     "ref": "dob_complaints:3A88653",
+     "complaint_number": "3A88653",
+     "date_entered": "11/11/2026",
+     "status_at_pull": "CLOSED",
+     "category": {
+      "code": "30",
+      "kind": "manual_import",
+      "key": "dob_complaint_categories",
+      "status": "imported_unchecked",
+      "description": "Building Shaking/Vibrating/Structural Stability Affected",
+      "priority": "A",
+      "page": 1
+     },
+     "disposition": {
+      "code": "A3",
+      "date": "11/12/2026",
+      "kind": "public_record",
+      "key": "dob_complaint_dispositions",
+      "status": "ok",
+      "description": "FULL STOP WORK ORDER SERVED F"
+     }
+    },
+    {
+     "ref": "dob_complaints:3A58886",
+     "complaint_number": "3A58886",
+     "date_entered": "04/23/2026",
+     "status_at_pull": "CLOSED",
+     "category": {
+      "code": "7F",
+      "kind": "manual_import",
+      "key": "dob_complaint_categories",
+      "status": "not_in_key",
+      "description": null,
+      "reason": "code '7F' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+     },
+     "disposition": {
+      "code": "AF",
+      "date": "06/30/2026",
+      "kind": "public_record",
+      "key": "dob_complaint_dispositions",
+      "status": "not_in_table",
+      "description": null,
+      "reason": "code 'AF' is not in Open Data 6v9u-ndjg, which may be older than the code"
+     }
+    },
+    {
+     "ref": "dob_complaints:3A53231",
+     "complaint_number": "3A53231",
+     "date_entered": "03/18/2026",
+     "status_at_pull": "CLOSED",
+     "category": {
+      "code": "83",
+      "kind": "manual_import",
+      "key": "dob_complaint_categories",
+      "status": "imported_unchecked",
+      "description": "Construction – Contrary/Beyond Approved Plans/Permits",
+      "priority": "B",
+      "page": 2
+     },
+     "disposition": {
+      "code": "AF",
+      "date": "05/19/2026",
+      "kind": "public_record",
+      "key": "dob_complaint_dispositions",
+      "status": "not_in_table",
+      "description": null,
+      "reason": "code 'AF' is not in Open Data 6v9u-ndjg, which may be older than the code"
+     }
+    },
+    {
+     "ref": "dob_complaints:3464574",
+     "complaint_number": "3464574",
+     "date_entered": "12/12/2013",
+     "status_at_pull": "CLOSED",
+     "category": {
+      "code": "59",
+      "kind": "manual_import",
+      "key": "dob_complaint_categories",
+      "status": "imported_unchecked",
+      "description": "Electrical Wiring – Defective/Exposed, In Progress",
+      "priority": "B",
+      "page": 1
+     },
+     "disposition": {
+      "code": "A8",
+      "date": "12/17/2013",
+      "kind": "public_record",
+      "key": "dob_complaint_dispositions",
+      "status": "ok",
+      "description": "ECB VIOLATION SERVED"
+     }
+    },
+    {
+     "ref": "dob_complaints:3107590",
+     "complaint_number": "3107590",
+     "date_entered": "12/26/2002",
+     "status_at_pull": "CLOSED",
+     "category": {
+      "code": "49",
+      "kind": "manual_import",
+      "key": "dob_complaint_categories",
+      "status": "imported_unchecked",
+      "description": "Storefront or Business Sign/Awning/Marquee/Canopy – Illegal",
+      "priority": "C",
+      "page": 1
+     },
+     "disposition": {
+      "code": "K1",
+      "date": "04/08/2003",
+      "kind": "public_record",
+      "key": "dob_complaint_dispositions",
+      "status": "ok",
+      "description": "INSUFFICIENT INFORMATION/UNABLE TO LOCATE ADDRESS"
+     }
+    }
+   ]
+  }
  },
  "adjacent_buildings": [
   {
@@ -215,7 +441,401 @@
      "truncated": false
     }
    },
-   "stop_work_mentions": []
+   "stop_work_mentions": [],
+   "complaints": {
+    "status": "ok",
+    "records": [
+     {
+      "ref": "dob_complaints:3961242",
+      "complaint_number": "3961242",
+      "date_entered": "05/20/2024",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "58",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Boiler – Defective/Non-operative/No Permit",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "C2",
+       "date": "05/24/2024",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "INSPECTOR UNABLE TO GAIN ACCESS - 2ND ATTEMPT"
+      }
+     },
+     {
+      "ref": "dob_complaints:3791541",
+      "complaint_number": "3791541",
+      "date_entered": "03/29/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "7J",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "not_in_key",
+       "description": null,
+       "reason": "code '7J' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "03/30/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3743053",
+      "complaint_number": "3743053",
+      "date_entered": "02/16/2020",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "6S",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "not_in_key",
+       "description": null,
+       "reason": "code '6S' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+      },
+      "disposition": {
+       "code": "A8",
+       "date": "02/19/2020",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "ECB VIOLATION SERVED"
+      }
+     },
+     {
+      "ref": "dob_complaints:3572547",
+      "complaint_number": "3572547",
+      "date_entered": "09/01/2016",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "80",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Elevator Not Inspected/Illegal/No Permit",
+       "priority": "D",
+       "page": 2
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "09/06/2016",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3572481",
+      "complaint_number": "3572481",
+      "date_entered": "08/31/2016",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "63",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Elevator-Danger Condition/Shaft Open/Unguarded",
+       "priority": "B",
+       "page": 2
+      },
+      "disposition": {
+       "code": "H1",
+       "date": "09/06/2016",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "PLEASE SEE COMPLAINT NUMBER"
+      }
+     },
+     {
+      "ref": "dob_complaints:3571776",
+      "complaint_number": "3571776",
+      "date_entered": "08/25/2016",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "63",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Elevator-Danger Condition/Shaft Open/Unguarded",
+       "priority": "B",
+       "page": 2
+      },
+      "disposition": {
+       "code": "H1",
+       "date": "09/06/2016",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "PLEASE SEE COMPLAINT NUMBER"
+      }
+     },
+     {
+      "ref": "dob_complaints:3568189",
+      "complaint_number": "3568189",
+      "date_entered": "07/29/2016",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "63",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Elevator-Danger Condition/Shaft Open/Unguarded",
+       "priority": "B",
+       "page": 2
+      },
+      "disposition": {
+       "code": "A8",
+       "date": "08/24/2016",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "ECB VIOLATION SERVED"
+      }
+     },
+     {
+      "ref": "dob_complaints:3509446",
+      "complaint_number": "3509446",
+      "date_entered": "03/24/2015",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "63",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Elevator-Danger Condition/Shaft Open/Unguarded",
+       "priority": "B",
+       "page": 2
+      },
+      "disposition": {
+       "code": "A8",
+       "date": "07/08/2015",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "ECB VIOLATION SERVED"
+      }
+     },
+     {
+      "ref": "dob_complaints:3292110",
+      "complaint_number": "3292110",
+      "date_entered": "01/13/2009",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "31",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Certificate of Occupancy – None/Illegal/Contrary to Co",
+       "priority": "C",
+       "page": 1
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "01/21/2009",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3289663",
+      "complaint_number": "3289663",
+      "date_entered": "12/12/2008",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "31",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Certificate of Occupancy – None/Illegal/Contrary to Co",
+       "priority": "C",
+       "page": 1
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "12/24/2008",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3289630",
+      "complaint_number": "3289630",
+      "date_entered": "12/12/2008",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "71",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "SRO – Illegal Work/No Permit/Change In Occupancy Use",
+       "priority": "B",
+       "page": 2
+      },
+      "disposition": {
+       "code": "Y3",
+       "date": "09/01/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "PARTIAL VACATE ORDER ISSUED P"
+      }
+     },
+     {
+      "ref": "dob_complaints:3280288",
+      "complaint_number": "3280288",
+      "date_entered": "09/18/2008",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "63",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Elevator-Danger Condition/Shaft Open/Unguarded",
+       "priority": "B",
+       "page": 2
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "12/29/2008",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3226835",
+      "complaint_number": "3226835",
+      "date_entered": "05/29/2007",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "37",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Egress – Locked/Blocked/Improper/No Secondary Means",
+       "priority": "A",
+       "page": 1
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "06/04/2007",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3179055",
+      "complaint_number": "3179055",
+      "date_entered": "12/30/2005",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "37",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Egress – Locked/Blocked/Improper/No Secondary Means",
+       "priority": "A",
+       "page": 1
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "01/04/2006",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3143274",
+      "complaint_number": "3143274",
+      "date_entered": "10/23/2004",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "63",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Elevator-Danger Condition/Shaft Open/Unguarded",
+       "priority": "B",
+       "page": 2
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "12/22/2004",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3143238",
+      "complaint_number": "3143238",
+      "date_entered": "10/22/2004",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "63",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Elevator-Danger Condition/Shaft Open/Unguarded",
+       "priority": "B",
+       "page": 2
+      },
+      "disposition": {
+       "code": "H1",
+       "date": "12/22/2004",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "PLEASE SEE COMPLAINT NUMBER"
+      }
+     },
+     {
+      "ref": "dob_complaints:3060672",
+      "complaint_number": "3060672",
+      "date_entered": "12/16/1997",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "76",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Unlicensed/Illegal/Improper Plumbing Work In Progress",
+       "priority": "A",
+       "page": 2
+      },
+      "disposition": {
+       "code": "I1",
+       "date": "12/16/1997",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "COMPLAINT UNSUBSTANTIATED BASED ON DEPARTMENT RECORDS"
+      }
+     }
+    ]
+   }
   },
   {
    "bbl": "3052110052",
@@ -296,7 +916,391 @@
      "truncated": false
     }
    },
-   "stop_work_mentions": []
+   "stop_work_mentions": [],
+   "complaints": {
+    "status": "ok",
+    "records": [
+     {
+      "ref": "dob_complaints:3A88886",
+      "complaint_number": "3A88886",
+      "date_entered": "11/12/2026",
+      "status_at_pull": "ACTIVE",
+      "category": {
+       "code": "1X",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "not_in_key",
+       "description": null,
+       "reason": "code '1X' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+      },
+      "disposition": {
+       "code": null,
+       "status": "not_recorded"
+      }
+     },
+     {
+      "ref": "dob_complaints:3A88882",
+      "complaint_number": "3A88882",
+      "date_entered": "11/12/2026",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "1X",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "not_in_key",
+       "description": null,
+       "reason": "code '1X' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+      },
+      "disposition": {
+       "code": "I3",
+       "date": "11/13/2026",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "COMPLIANCE INSPECTION PERFORMED"
+      }
+     },
+     {
+      "ref": "dob_complaints:3A88676",
+      "complaint_number": "3A88676",
+      "date_entered": "11/11/2026",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "30",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Building Shaking/Vibrating/Structural Stability Affected",
+       "priority": "A",
+       "page": 1
+      },
+      "disposition": {
+       "code": "Y3",
+       "date": "11/12/2026",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "PARTIAL VACATE ORDER ISSUED P"
+      }
+     },
+     {
+      "ref": "dob_complaints:3A88673",
+      "complaint_number": "3A88673",
+      "date_entered": "11/11/2026",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "30",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Building Shaking/Vibrating/Structural Stability Affected",
+       "priority": "A",
+       "page": 1
+      },
+      "disposition": {
+       "code": "Y1",
+       "date": "11/12/2026",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "FULL VACATE ORDER ISSUED F"
+      }
+     },
+     {
+      "ref": "dob_complaints:3A87501",
+      "complaint_number": "3A87501",
+      "date_entered": "11/03/2026",
+      "status_at_pull": "ACTIVE",
+      "category": {
+       "code": "15",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Fence - None/Inadequate/Illegal",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": null,
+       "status": "not_recorded"
+      }
+     },
+     {
+      "ref": "dob_complaints:3950420",
+      "complaint_number": "3950420",
+      "date_entered": "03/07/2024",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "45",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Illegal Conversion",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "C2",
+       "date": "05/08/2024",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "INSPECTOR UNABLE TO GAIN ACCESS - 2ND ATTEMPT"
+      }
+     },
+     {
+      "ref": "dob_complaints:3778571",
+      "complaint_number": "3778571",
+      "date_entered": "12/02/2020",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "4A",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Illegal Hotel Rooms In Residential Buildings",
+       "priority": "B",
+       "page": 3
+      },
+      "disposition": {
+       "code": "C2",
+       "date": "03/01/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "INSPECTOR UNABLE TO GAIN ACCESS - 2ND ATTEMPT"
+      }
+     },
+     {
+      "ref": "dob_complaints:3778567",
+      "complaint_number": "3778567",
+      "date_entered": "12/01/2020",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "04",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "After Hours Work – Illegal",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "12/04/2020",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3778566",
+      "complaint_number": "3778566",
+      "date_entered": "12/01/2020",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "2N",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "not_in_key",
+       "description": null,
+       "reason": "code '2N' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "12/02/2020",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3778565",
+      "complaint_number": "3778565",
+      "date_entered": "12/01/2020",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "71",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "SRO – Illegal Work/No Permit/Change In Occupancy Use",
+       "priority": "B",
+       "page": 2
+      },
+      "disposition": {
+       "code": "C2",
+       "date": "02/02/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "INSPECTOR UNABLE TO GAIN ACCESS - 2ND ATTEMPT"
+      }
+     },
+     {
+      "ref": "dob_complaints:3778564",
+      "complaint_number": "3778564",
+      "date_entered": "12/01/2020",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "7J",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "not_in_key",
+       "description": null,
+       "reason": "code '7J' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+      },
+      "disposition": {
+       "code": "C2",
+       "date": "12/03/2020",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "INSPECTOR UNABLE TO GAIN ACCESS - 2ND ATTEMPT"
+      }
+     },
+     {
+      "ref": "dob_complaints:3778563",
+      "complaint_number": "3778563",
+      "date_entered": "12/01/2020",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "45",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Illegal Conversion",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "C2",
+       "date": "02/11/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "INSPECTOR UNABLE TO GAIN ACCESS - 2ND ATTEMPT"
+      }
+     },
+     {
+      "ref": "dob_complaints:3778474",
+      "complaint_number": "3778474",
+      "date_entered": "12/01/2020",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "03",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Adjacent Buildings - Not Protected",
+       "priority": "A",
+       "page": 1
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "12/02/2020",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3762718",
+      "complaint_number": "3762718",
+      "date_entered": "08/02/2020",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "45",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Illegal Conversion",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "C2",
+       "date": "11/02/2020",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "INSPECTOR UNABLE TO GAIN ACCESS - 2ND ATTEMPT"
+      }
+     },
+     {
+      "ref": "dob_complaints:3218993",
+      "complaint_number": "3218993",
+      "date_entered": "03/16/2007",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "59",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Electrical Wiring – Defective/Exposed, In Progress",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "A1",
+       "date": "03/19/2007",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "BUILDINGS VIOLATION(S) SERVED"
+      }
+     },
+     {
+      "ref": "dob_complaints:3201983",
+      "complaint_number": "3201983",
+      "date_entered": "09/06/2006",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "05",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Permit – None (Building/PA/Demo etc.)",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "L2",
+       "date": "11/20/2006",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "STOP WORK ORDER FULLY RESCINDED N"
+      }
+     },
+     {
+      "ref": "dob_complaints:3133306",
+      "complaint_number": "3133306",
+      "date_entered": "06/08/2004",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "29",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Building – Vacant, Open and Unguarded",
+       "priority": "C",
+       "page": 1
+      },
+      "disposition": {
+       "code": "A1",
+       "date": "06/18/2004",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "BUILDINGS VIOLATION(S) SERVED"
+      }
+     }
+    ]
+   }
   },
   {
    "bbl": "3052110054",
@@ -413,7 +1417,627 @@
      "field": "descriptor",
      "text": "Working Contrary To Stop Work Order"
     }
-   ]
+   ],
+   "complaints": {
+    "status": "ok",
+    "records": [
+     {
+      "ref": "dob_complaints:3A88672",
+      "complaint_number": "3A88672",
+      "date_entered": "11/11/2026",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "30",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Building Shaking/Vibrating/Structural Stability Affected",
+       "priority": "A",
+       "page": 1
+      },
+      "disposition": {
+       "code": "Y3",
+       "date": "11/12/2026",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "PARTIAL VACATE ORDER ISSUED P"
+      }
+     },
+     {
+      "ref": "dob_complaints:3811474",
+      "complaint_number": "3811474",
+      "date_entered": "08/26/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "88",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Safety Net/Guard Rail-Dam/Inadequate/None(6fl.75ft. or less)",
+       "priority": "B",
+       "page": 2
+      },
+      "disposition": {
+       "code": "L2",
+       "date": "09/18/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "STOP WORK ORDER FULLY RESCINDED N"
+      }
+     },
+     {
+      "ref": "dob_complaints:3807449",
+      "complaint_number": "3807449",
+      "date_entered": "07/25/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "05",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Permit – None (Building/PA/Demo etc.)",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "07/26/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3801131",
+      "complaint_number": "3801131",
+      "date_entered": "06/09/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "86",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Work Contrary to Stop Work Order",
+       "priority": "A",
+       "page": 2
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "06/09/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3800957",
+      "complaint_number": "3800957",
+      "date_entered": "06/08/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "91",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Site Conditions Endangering Workers",
+       "priority": "A",
+       "page": 2
+      },
+      "disposition": {
+       "code": "L2",
+       "date": "06/10/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "STOP WORK ORDER FULLY RESCINDED N"
+      }
+     },
+     {
+      "ref": "dob_complaints:3800861",
+      "complaint_number": "3800861",
+      "date_entered": "06/07/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "2N",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "not_in_key",
+       "description": null,
+       "reason": "code '2N' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "06/08/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3800784",
+      "complaint_number": "3800784",
+      "date_entered": "06/07/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "6X",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "not_in_key",
+       "description": null,
+       "reason": "code '6X' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "06/08/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3800782",
+      "complaint_number": "3800782",
+      "date_entered": "06/07/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "6X",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "not_in_key",
+       "description": null,
+       "reason": "code '6X' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "06/08/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3800728",
+      "complaint_number": "3800728",
+      "date_entered": "06/06/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "05",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Permit – None (Building/PA/Demo etc.)",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "A8",
+       "date": "06/09/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "ECB VIOLATION SERVED"
+      }
+     },
+     {
+      "ref": "dob_complaints:3800139",
+      "complaint_number": "3800139",
+      "date_entered": "06/02/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "7G",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "not_in_key",
+       "description": null,
+       "reason": "code '7G' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+      },
+      "disposition": {
+       "code": "L2",
+       "date": "07/11/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "STOP WORK ORDER FULLY RESCINDED N"
+      }
+     },
+     {
+      "ref": "dob_complaints:3795623",
+      "complaint_number": "3795623",
+      "date_entered": "05/03/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "4S",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "not_in_key",
+       "description": null,
+       "reason": "code '4S' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "07/12/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3789637",
+      "complaint_number": "3789637",
+      "date_entered": "03/11/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "09",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Debris – Excessive",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "03/15/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3789444",
+      "complaint_number": "3789444",
+      "date_entered": "03/09/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "04",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "After Hours Work – Illegal",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "03/10/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3787987",
+      "complaint_number": "3787987",
+      "date_entered": "02/25/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "04",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "After Hours Work – Illegal",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "03/01/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3786970",
+      "complaint_number": "3786970",
+      "date_entered": "02/17/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "09",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Debris – Excessive",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "03/04/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3786884",
+      "complaint_number": "3786884",
+      "date_entered": "02/17/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "09",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Debris – Excessive",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "02/23/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3785041",
+      "complaint_number": "3785041",
+      "date_entered": "01/28/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "86",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Work Contrary to Stop Work Order",
+       "priority": "A",
+       "page": 2
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "01/28/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3784770",
+      "complaint_number": "3784770",
+      "date_entered": "01/26/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "86",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Work Contrary to Stop Work Order",
+       "priority": "A",
+       "page": 2
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "01/26/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3783298",
+      "complaint_number": "3783298",
+      "date_entered": "01/13/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "14",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Excavation - Undermining Adjacent Building",
+       "priority": "A",
+       "page": 1
+      },
+      "disposition": {
+       "code": "L2",
+       "date": "08/06/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "STOP WORK ORDER FULLY RESCINDED N"
+      }
+     },
+     {
+      "ref": "dob_complaints:3782359",
+      "complaint_number": "3782359",
+      "date_entered": "01/06/2021",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "03",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Adjacent Buildings - Not Protected",
+       "priority": "A",
+       "page": 1
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "01/06/2021",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3778633",
+      "complaint_number": "3778633",
+      "date_entered": "12/02/2020",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "03",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Adjacent Buildings - Not Protected",
+       "priority": "A",
+       "page": 1
+      },
+      "disposition": {
+       "code": "A8",
+       "date": "12/02/2020",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "ECB VIOLATION SERVED"
+      }
+     },
+     {
+      "ref": "dob_complaints:3721892",
+      "complaint_number": "3721892",
+      "date_entered": "09/17/2019",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "83",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Construction – Contrary/Beyond Approved Plans/Permits",
+       "priority": "B",
+       "page": 2
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "10/08/2019",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3716435",
+      "complaint_number": "3716435",
+      "date_entered": "08/13/2019",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "2E",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Demolition Notification Received",
+       "priority": "A",
+       "page": 3
+      },
+      "disposition": {
+       "code": "P6",
+       "date": "08/13/2019",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "INITIAL NOTIFICATION ACCEPTED"
+      }
+     },
+     {
+      "ref": "dob_complaints:3681100",
+      "complaint_number": "3681100",
+      "date_entered": "12/31/2018",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "4A",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Illegal Hotel Rooms In Residential Buildings",
+       "priority": "B",
+       "page": 3
+      },
+      "disposition": {
+       "code": "Y2",
+       "date": "09/11/2020",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "VACATE ORDER FULLY RESCINDED N"
+      }
+     },
+     {
+      "ref": "dob_complaints:3627948",
+      "complaint_number": "3627948",
+      "date_entered": "11/17/2017",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "1L",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "not_in_key",
+       "description": null,
+       "reason": "code '1L' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+      },
+      "disposition": {
+       "code": "C2",
+       "date": "11/28/2017",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "INSPECTOR UNABLE TO GAIN ACCESS - 2ND ATTEMPT"
+      }
+     },
+     {
+      "ref": "dob_complaints:3137568",
+      "complaint_number": "3137568",
+      "date_entered": "08/02/2004",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "15",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Fence - None/Inadequate/Illegal",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "A9",
+       "date": "08/20/2004",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "ECB & BUILDINGS VIOLATIONS SERVED"
+      }
+     },
+     {
+      "ref": "dob_complaints:3135790",
+      "complaint_number": "3135790",
+      "date_entered": "07/10/2004",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "29",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Building – Vacant, Open and Unguarded",
+       "priority": "C",
+       "page": 1
+      },
+      "disposition": {
+       "code": "A9",
+       "date": "08/20/2004",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "ECB & BUILDINGS VIOLATIONS SERVED"
+      }
+     }
+    ]
+   }
   },
   {
    "bbl": "3052110073",
@@ -502,7 +2126,103 @@
      "field": "description",
      "text": "FULL STOP WORK ORDER DUE TO COLLAPSE"
     }
-   ]
+   ],
+   "complaints": {
+    "status": "ok",
+    "records": [
+     {
+      "ref": "dob_complaints:3A89019",
+      "complaint_number": "3A89019",
+      "date_entered": "11/13/2026",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "1X",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "not_in_key",
+       "description": null,
+       "reason": "code '1X' is not in DOB complaint category codes, from a list DOB published as imported (2026-11-14_category-list-rev-12-18); the key may be older than the code"
+      },
+      "disposition": {
+       "code": "I3",
+       "date": "11/13/2026",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "COMPLIANCE INSPECTION PERFORMED"
+      }
+     },
+     {
+      "ref": "dob_complaints:3A88671",
+      "complaint_number": "3A88671",
+      "date_entered": "11/11/2026",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "30",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Building Shaking/Vibrating/Structural Stability Affected",
+       "priority": "A",
+       "page": 1
+      },
+      "disposition": {
+       "code": "Y1",
+       "date": "11/12/2026",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "FULL VACATE ORDER ISSUED F"
+      }
+     },
+     {
+      "ref": "dob_complaints:3721286",
+      "complaint_number": "3721286",
+      "date_entered": "09/12/2019",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "2G",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Advertising Sign/Billboard/Posters/Flexible Fabric – Illegal",
+       "priority": "C",
+       "page": 3
+      },
+      "disposition": {
+       "code": "A8",
+       "date": "09/12/2019",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "ECB VIOLATION SERVED"
+      }
+     },
+     {
+      "ref": "dob_complaints:3709033",
+      "complaint_number": "3709033",
+      "date_entered": "06/27/2019",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "2G",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Advertising Sign/Billboard/Posters/Flexible Fabric – Illegal",
+       "priority": "C",
+       "page": 3
+      },
+      "disposition": {
+       "code": "A8",
+       "date": "06/27/2019",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "ECB VIOLATION SERVED"
+      }
+     }
+    ]
+   }
   },
   {
    "bbl": "3052110079",
@@ -583,7 +2303,104 @@
      "truncated": false
     }
    },
-   "stop_work_mentions": []
+   "stop_work_mentions": [],
+   "complaints": {
+    "status": "ok",
+    "records": [
+     {
+      "ref": "dob_complaints:3766512",
+      "complaint_number": "3766512",
+      "date_entered": "08/26/2020",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "45",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Illegal Conversion",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "C4",
+       "date": "11/17/2020",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "ACCESS DENIED - 2ND ATTEMPT"
+      }
+     },
+     {
+      "ref": "dob_complaints:3751087",
+      "complaint_number": "3751087",
+      "date_entered": "04/28/2020",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "45",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Illegal Conversion",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "I2",
+       "date": "06/24/2020",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "NO VIOLATION WARRANTED FOR COMPLAINT AT TIME OF INSPECTION"
+      }
+     },
+     {
+      "ref": "dob_complaints:3692828",
+      "complaint_number": "3692828",
+      "date_entered": "03/25/2019",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "45",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Illegal Conversion",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "C2",
+       "date": "04/11/2019",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "INSPECTOR UNABLE TO GAIN ACCESS - 2ND ATTEMPT"
+      }
+     },
+     {
+      "ref": "dob_complaints:3472962",
+      "complaint_number": "3472962",
+      "date_entered": "03/19/2014",
+      "status_at_pull": "CLOSED",
+      "category": {
+       "code": "45",
+       "kind": "manual_import",
+       "key": "dob_complaint_categories",
+       "status": "imported_unchecked",
+       "description": "Illegal Conversion",
+       "priority": "B",
+       "page": 1
+      },
+      "disposition": {
+       "code": "C2",
+       "date": "09/20/2014",
+       "kind": "public_record",
+       "key": "dob_complaint_dispositions",
+       "status": "ok",
+       "description": "INSPECTOR UNABLE TO GAIN ACCESS - 2ND ATTEMPT"
+      }
+     }
+    ]
+   }
   }
  ],
  "rows": [
@@ -1421,6 +3238,44 @@
    }
   ]
  },
+ "code_keys": {
+  "dob_complaint_categories": {
+   "kind": "manual_import",
+   "status": "imported_unchecked",
+   "name": "DOB complaint category codes, from a list DOB published",
+   "import_id": "2026-11-14_category-list-rev-12-18",
+   "source_url": "https://data.cityofnewyork.us/api/views/eabe-havv/files/dc709ed2-7af1-429c-92c9-71ec3a4c23fa?download=true&filename=DOBComplaints_complaint_category_list.pdf",
+   "landing_url": "https://data.cityofnewyork.us/d/eabe-havv",
+   "document_date": null,
+   "document_date_note": "The list carries no full date. Its footer reads 'Rev. 12/18' (a month, no day). The PDF's own metadata says created 2018-12-28 and modified 2019-01-03.",
+   "codes": 97,
+   "not_found": [
+    "1L",
+    "1X",
+    "2N",
+    "4S",
+    "6S",
+    "6X",
+    "7F",
+    "7G",
+    "7J",
+    "7S"
+   ]
+  },
+  "dob_complaint_dispositions": {
+   "kind": "public_record",
+   "status": "ok",
+   "name": "DOB complaint disposition codes",
+   "dataset_id": "6v9u-ndjg",
+   "url": "https://data.cityofnewyork.us/d/6v9u-ndjg",
+   "rows_updated_at": "2017-02-08",
+   "codes": 160,
+   "not_found": [
+    "AF",
+    "H8"
+   ]
+  }
+ },
  "summary": {
   "rows": 12,
   "applies": 3,
@@ -1439,8 +3294,9 @@
  "caveats": [
   "A row is never marked done from public data: its proof is a document the public record does not hold. 'provided_unverified' means the project team supplied it; nobody checked it. 'reported_not_read' means a public source reports it; nobody here has read it.",
   "related_records sit beside a row; they are not its proof.",
-  "Counts use each record's status at pull time, not on the as-of date.",
+  "Counts, and each complaint's status_at_pull, use status at pull time, not on the as-of date.",
   "dob_311_requests and dob_complaints can count the same complaint twice: never add them.",
+  "Complaint category meanings come from a list DOB published, imported by hand (kind manual_import; its status says whether a second person checked it). Disposition meanings come from Open Data (kind public_record). A code either key lacks is a gap, listed under code_keys.",
   "Requirements are paraphrased; read the linked code text before relying on a row.",
   "Nothing here establishes the cause of any incident."
  ]
