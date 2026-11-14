@@ -4,3 +4,5 @@ __pycache__/
 node_modules/
 **/web/dist/
 .DS_Store
+# Files imported by hand stay on the machine that fetched them; only provenance and facts are committed.
+data/manual_imports/**/raw/

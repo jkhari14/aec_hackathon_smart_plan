@@ -1,0 +1,29 @@
+{
+ "schema": "manual_import/1",
+ "source_key": "dob_complaint_categories",
+ "fetched_by": "claude-agent",
+ "fetch_method": "script_with_approval",
+ "fetched_at": "2026-11-14T16:33:31-05:00",
+ "source_url": "https://data.cityofnewyork.us/api/views/eabe-havv/files/dc709ed2-7af1-429c-92c9-71ec3a4c23fa?download=true&filename=DOBComplaints_complaint_category_list.pdf",
+ "landing_url": "https://data.cityofnewyork.us/d/eabe-havv",
+ "terms": {
+  "url": "https://nycadmincode.readthedocs.io/t23/c05/#section-23-502",
+  "clause": "NYC Admin. Code 23-502(d): public data sets \"shall be made available without any registration requirement, license requirement or restrictions on their use\".",
+  "read_on": "2026-11-14",
+  "verdict": "a",
+  "note": "Read on an unofficial mirror of the Administrative Code; the official host (codelibrary.amlegal.com) disallows Anthropic's crawlers in its robots.txt."
+ },
+ "file": {
+  "name": "DOBComplaints_complaint_category_list.pdf",
+  "bytes": 270917,
+  "sha256": "e8751c6c1119f3424bdcc274b989459a226db3a3726f6ce817135baf8fa0974d",
+  "media_type": "application/pdf"
+ },
+ "document_date": null,
+ "document_date_note": "The list carries no full date. Its footer reads 'Rev. 12/18' (a month, no day). The PDF's own metadata says created 2018-12-28 and modified 2019-01-03.",
+ "extracted_by": "claude-agent",
+ "extraction_method": "pdftotext -layout, page by page; a one-time script read the CODE, DESCRIPTION and PRIORITY columns (row 23's description wraps over two lines and was joined). 97 rows, matching a page-by-page look at the rendered PDF by the same agent. Text kept as printed, including dashes and quotes.",
+ "checked": null,
+ "approved_by": "project-lead",
+ "notes": "Codes 62 and 63 carry the same description in the source, with priorities A and B; kept as printed. The list does not say what priorities A to D mean. Codes seen in the pulled complaint data but missing from this list (1L, 1X, 2N, 4S, 6S, 6X, 7F, 7G, 7J, 7S on 2026-11-14) decode as not_in_key."
+}
