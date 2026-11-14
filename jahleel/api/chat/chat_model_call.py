@@ -1,8 +1,8 @@
 """The live model call: Claude with Anthropic's server-side web search, answering through one strict tool.
 
 The key stays on the server: it is read from the environment by the SDK, never logged, and never part
-of a response. With no key or no SDK installed, `default_model()` returns None and the chat serves its
-saved examples.
+of a response. With no key or no SDK installed, `default_model()` returns None and the chat gives mock
+answers (chat_mock_answers.py).
 """
 
 import os

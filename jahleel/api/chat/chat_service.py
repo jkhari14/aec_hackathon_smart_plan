@@ -9,6 +9,7 @@ import re
 from typing import Optional
 
 from jahleel.api.brief.brief_build import build_brief
+from jahleel.api.chat import chat_mock_answers
 from jahleel.api.chat.chat_answer_build import build_parts, notice, plain_text, without_repeats
 from jahleel.api.chat.chat_brief_view import BriefView
 from jahleel.api.chat.chat_models import AnswerPart, ChatAnswer, ChatRequest, ChatUsage
@@ -25,7 +26,8 @@ _ASKS_NAME = re.compile(r"\bwho\b|\b(?:owner|contractor|applicant|engineer|archi
 
 
 def answer(request: ChatRequest, model=None) -> ChatAnswer:
-    """`model` is a chat_model_call.AnthropicChatModel, or None when live answers cannot run.
+    """`model` is a chat_model_call.AnthropicChatModel, or None when live answers cannot run: the
+    question then gets a mock answer (chat_mock_answers), labeled as one.
 
     Raises FileNotFoundError or ValueError for an unknown or malformed site, LookupError for an
     unknown saved example.
@@ -34,12 +36,12 @@ def answer(request: ChatRequest, model=None) -> ChatAnswer:
     if request.example_id:
         return _saved(request, view)
     if model is None:
-        return _finish(request, view, "unavailable", [notice("live_off")], "off")
+        return _mock(request, view, [])
     try:
         return _live(request, view, model)
     except Exception as error:  # the demo must not crash on a failed call; the reason is logged, never shown
         log.warning("live chat call failed: %s: %s", type(error).__name__, error)
-        return _finish(request, view, "unavailable", [notice("live_failed")], "off")
+        return _mock(request, view, [notice("live_failed")])
 
 
 def _live(request: ChatRequest, view: BriefView, model) -> ChatAnswer:
@@ -50,12 +52,7 @@ def _live(request: ChatRequest, view: BriefView, model) -> ChatAnswer:
     if built.problems:  # one correction round, with the reasons
         turn = session.turn(built.problems)
         built = build_parts(view, turn.proposal, turn.web_results, turn.searched)
-    parts: list[AnswerPart] = []
-    if _ASKS_VERDICT.search(question):
-        parts.append(notice("not_a_determination"))
-    if _ASKS_NAME.search(question):
-        parts.append(notice("names_withheld"))
-    parts += built.parts
+    parts = _question_notices(question) + built.parts
     if built.problems:
         log.info("chat held back %d item(s): %s", len(built.problems), built.problems)
         parts.append(notice("held_back"))
@@ -65,6 +62,32 @@ def _live(request: ChatRequest, view: BriefView, model) -> ChatAnswer:
         parts.append(notice("web_off_as_of"))
     web = "off_as_of" if view.as_of else ("used" if turn.searched else "not_used")
     return _finish(request, view, "live", parts, web, session.usage)
+
+
+def _question_notices(question: str) -> list[AnswerPart]:
+    parts: list[AnswerPart] = []
+    if _ASKS_VERDICT.search(question):
+        parts.append(notice("not_a_determination"))
+    if _ASKS_NAME.search(question):
+        parts.append(notice("names_withheld"))
+    return parts
+
+
+def _mock(request: ChatRequest, view: BriefView, first: list[AnswerPart]) -> ChatAnswer:
+    """No model: a prepared answer matched by keyword, through the same checks as a live one."""
+    question = request.question.strip()
+    parts = first + [notice("mock_answer")] + _question_notices(question)
+    items = chat_mock_answers.propose(view, request.slug, question)
+    if not items:
+        return _finish(request, view, "mock", parts + [notice("mock_no_match")], "off", with_examples=True)
+    built = build_parts(view, {"items": items}, [])
+    parts += built.parts
+    if built.after_as_of:
+        parts.append(notice("after_as_of"))
+    if len(built.problems) > built.after_as_of:
+        log.warning("mock answer for %s out of step with the brief: %s", request.slug, built.problems)
+        parts.append(notice("held_back"))
+    return _finish(request, view, "mock", parts, "off")
 
 
 def _saved(request: ChatRequest, view: BriefView) -> ChatAnswer:
@@ -82,8 +105,8 @@ def _saved(request: ChatRequest, view: BriefView) -> ChatAnswer:
 
 
 def _finish(request: ChatRequest, view: BriefView, mode: str, parts: list[AnswerPart], web: str,
-            usage: Optional[ChatUsage] = None, question: Optional[str] = None) -> ChatAnswer:
+            usage: Optional[ChatUsage] = None, question: Optional[str] = None, with_examples: bool = False) -> ChatAnswer:
     parts = without_repeats(parts)
     return ChatAnswer(mode=mode, question=question or request.question.strip(), parts=parts, plain_text=plain_text(parts),
                       as_of=view.as_of, web_search=web, usage=usage,
-                      examples=examples_for(request.slug) if mode == "unavailable" else [])
+                      examples=examples_for(request.slug) if with_examples else [])

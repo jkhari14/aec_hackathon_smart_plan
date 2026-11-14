@@ -36,12 +36,15 @@ NOTICES = {
     "web_off_as_of": "Web search is off in an as-of view: the web holds what is known today, not what was "
     "knowable on that day.",
     "held_back": "Part of the draft answer was held back because it could not be tied to a source.",
-    "after_as_of": "Some of this saved answer is not shown: it rests on records dated on or after the as-of day.",
+    "after_as_of": "Some of this prepared answer is not shown: it rests on records dated on or after the as-of day.",
     "no_answer": "No answer could be drawn from the brief or the web for this question.",
     "saved_example": "A saved example, written ahead of time and checked against this brief. It is not a live answer, "
     "and it uses no web search.",
-    "live_off": "Live answers are off (no model key on the server). The saved examples can be opened instead.",
-    "live_failed": "The live model call did not complete. The saved examples can be opened instead.",
+    "mock_answer": "A mock answer: no model was called. The question was matched by keyword to a prepared answer, "
+    "which was checked against this brief. It uses no web search.",
+    "mock_no_match": "No prepared answer matches this question, and the mock does not make one up. It can count "
+    "records in a dataset, report checklist rows, and open the saved examples.",
+    "live_failed": "The live model call did not complete, so this is a mock answer.",
 }
 # The codes a model may ask for. The rest are the server's own.
 MODEL_NOTICES = ("not_a_determination", "names_withheld", "cause_not_established", "out_of_scope", "status_is_todays")

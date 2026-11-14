@@ -36,9 +36,7 @@ export function answerText(parts: AnswerPart[]): string {
 }
 
 export function historyOf(exchanges: Exchange[]) {
-  return exchanges
-    .filter((exchange) => exchange.answer.mode !== "unavailable")
-    .map((exchange) => ({ question: exchange.question, answer: answerText(exchange.answer.parts) }));
+  return exchanges.map((exchange) => ({ question: exchange.question, answer: answerText(exchange.answer.parts) }));
 }
 
 // Why another question cannot be sent, or null. The server refuses over these limits; it never cuts.

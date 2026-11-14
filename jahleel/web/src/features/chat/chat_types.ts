@@ -36,7 +36,7 @@ export type AnswerPart =
 export type ExampleQuestion = { id: string; question: string };
 
 export type ChatAnswer = {
-  mode: "live" | "saved" | "unavailable";
+  mode: "live" | "saved" | "mock";
   question: string;
   parts: AnswerPart[];
   plain_text: string;

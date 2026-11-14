@@ -143,7 +143,7 @@ class UnknownPart(_Closed):
 NoticeCode = Literal[
     "not_a_determination", "names_withheld", "cause_not_established", "out_of_scope", "status_is_todays",
     "complaints_overlap", "web_off_as_of", "held_back", "after_as_of", "no_answer", "saved_example",
-    "live_off", "live_failed",
+    "mock_answer", "mock_no_match", "live_failed",
 ]
 
 
@@ -171,9 +171,10 @@ class ChatUsage(_Closed):
 
 
 class ChatAnswer(_Closed):
-    mode: Literal["live", "saved", "unavailable"] = Field(
+    mode: Literal["live", "saved", "mock"] = Field(
         description="live: a model answered now. saved: an example written ahead of time, checked against this "
-        "brief. unavailable: no live answer; `examples` lists what can be opened.")
+        "brief. mock: no model was called (no key on the server, or the call failed); the question was matched by "
+        "keyword to a prepared answer, and `examples` lists what else can be opened when nothing matched.")
     question: str
     parts: list[AnswerPart]
     plain_text: str = Field(description="The parts as one text, each prefixed by where it came from. For a voice client.")

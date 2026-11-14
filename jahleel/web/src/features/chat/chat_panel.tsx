@@ -82,9 +82,10 @@ export function ChatPanel({ brief, projectType, asOf, offline }: Props) {
   const full = setup ? chatIsFull(exchanges, setup) : null;
   // A disabled box always says why.
   const whyDisabled = !setup ? "Checking whether live answers are available…"
-    : !apiUp ? "Live questions need the API running. The saved examples above work offline."
-    : !setup.live ? "Live answers are off: the server has no model key. Open a saved example above."
+    : !apiUp ? "Typed questions need the API running. The saved examples above work offline."
     : full;
+  // Mock mode: the API is up with no model key, so a typed question gets a prepared answer and no model runs.
+  const mock = setup != null && apiUp && !setup.live;
   const examples = setup?.examples ?? [];
 
   return (
@@ -96,8 +97,8 @@ export function ChatPanel({ brief, projectType, asOf, offline }: Props) {
         )}
       </div>
       <p className="text-xs text-stone-600">
-        Answers rest on the brief on this page{asOf ? ` (records dated before ${asOf})` : ""} and, outside an as-of
-        view, on web search. Each part shows where it came from. A coordination aid, not a compliance or safety
+        Answers rest on the brief on this page{asOf ? ` (records dated before ${asOf})` : ""}
+        {mock ? "" : " and, outside an as-of view, on web search"}. Each part shows where it came from. A coordination aid, not a compliance or safety
         determination.
       </p>
 
@@ -113,7 +114,9 @@ export function ChatPanel({ brief, projectType, asOf, offline }: Props) {
         ))}
         {waiting && (
           <p className="text-sm text-stone-600">
-            {waiting === "saved" ? "Checking the saved example against the brief…" : `Reading the brief${asOf ? "" : " and searching the web"}…`}
+            {waiting === "saved" ? "Checking the saved example against the brief…"
+              : mock ? "Matching the question to a prepared answer…"
+              : `Reading the brief${asOf ? "" : " and searching the web"}…`}
           </p>
         )}
         {error && <p className="bg-red-100 px-2 py-1 text-xs">{error}</p>}
@@ -121,7 +124,7 @@ export function ChatPanel({ brief, projectType, asOf, offline }: Props) {
 
       {examples.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-1">
-          <span className="text-xs text-stone-600">{setup?.live && apiUp ? "Saved examples:" : "Saved examples (no live model needed):"}</span>
+          <span className="text-xs text-stone-600">{apiUp ? "Saved examples:" : "Saved examples (these work offline):"}</span>
           {examples.map((example) => (
             <button key={example.id} disabled={waiting != null} onClick={() => ask({ exampleId: example.id })}
               className="rounded border border-lead bg-white px-2 py-0.5 text-left text-xs">
@@ -143,6 +146,13 @@ export function ChatPanel({ brief, projectType, asOf, offline }: Props) {
           disabled={whyDisabled != null || waiting != null || !question.trim()}>Ask</button>
       </form>
       {whyDisabled && <p className="mt-1 text-xs text-stone-600">{whyDisabled}</p>}
+      {mock && !whyDisabled && (
+        <p className="mt-1 text-xs text-stone-600">
+          <span className="font-semibold">Mock mode:</span> the server has no model key, so no model is called and
+          there is no web search. A typed question is matched by keyword to a prepared answer built from this brief:
+          try "how many ECB violations", "which duties apply" or "what are the open gaps".
+        </p>
+      )}
     </section>
   );
 }

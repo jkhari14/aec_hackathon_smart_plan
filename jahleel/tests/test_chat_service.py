@@ -92,15 +92,15 @@ class AsOfTests(unittest.TestCase):
 
 
 class FallbackTests(unittest.TestCase):
-    def test_no_model_gives_the_saved_examples_not_a_crash(self):
+    def test_no_model_gives_a_labeled_mock_answer_not_a_crash(self):
         answer = ask("Anything at all?")
-        self.assertEqual((answer.mode, kinds(answer), answer.web_search), ("unavailable", ["live_off"], "off"))
+        self.assertEqual((answer.mode, kinds(answer), answer.web_search), ("mock", ["mock_answer", "mock_no_match"], "off"))
         self.assertEqual([e.id for e in answer.examples], [e["id"] for e in SAVED[SITE]])
 
     def test_a_failed_live_call_gives_the_fallback_and_shows_no_error_text(self):
         with self.assertLogs("preflight.chat", level="WARNING"):
             answer = ask(model=ScriptedModel(fails=RuntimeError("sk-secret-looking-detail")))
-        self.assertEqual((answer.mode, kinds(answer)), ("unavailable", ["live_failed"]))
+        self.assertEqual((answer.mode, kinds(answer)[:2]), ("mock", ["live_failed", "mock_answer"]))
         self.assertNotIn("secret", answer.model_dump_json())
 
     def test_every_saved_example_is_fully_sourced_as_pulled(self):

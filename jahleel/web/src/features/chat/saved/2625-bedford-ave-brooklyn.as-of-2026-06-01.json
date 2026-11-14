@@ -184,10 +184,10 @@
    {
     "kind": "notice",
     "code": "after_as_of",
-    "text": "Some of this saved answer is not shown: it rests on records dated on or after the as-of day."
+    "text": "Some of this prepared answer is not shown: it rests on records dated on or after the as-of day."
    }
   ],
-  "plain_text": "A saved example, written ahead of time and checked against this brief. It is not a live answer, and it uses no web search.\nFrom the public record: An ECB violation dated 2026-04-23 reads \"UNLAWFULLY CONTINUED WORK WHILE NOTICE OF A STOP WORK ORDER\".\nFrom the public record: A 311 request dated 2026-03-18 is about work contrary to or beyond approved plans. DOB's resolution, recorded 2026-05-08, says it removed the stop work order.\nNot found in what we queried: a complete list of stop-work orders (we have not found them published as their own dataset).\nNothing in the public record here establishes the cause of any incident. Where officials say a cause is under investigation, that is the state.\nSome of this saved answer is not shown: it rests on records dated on or after the as-of day.",
+  "plain_text": "A saved example, written ahead of time and checked against this brief. It is not a live answer, and it uses no web search.\nFrom the public record: An ECB violation dated 2026-04-23 reads \"UNLAWFULLY CONTINUED WORK WHILE NOTICE OF A STOP WORK ORDER\".\nFrom the public record: A 311 request dated 2026-03-18 is about work contrary to or beyond approved plans. DOB's resolution, recorded 2026-05-08, says it removed the stop work order.\nNot found in what we queried: a complete list of stop-work orders (we have not found them published as their own dataset).\nNothing in the public record here establishes the cause of any incident. Where officials say a cause is under investigation, that is the state.\nSome of this prepared answer is not shown: it rests on records dated on or after the as-of day.",
   "as_of": "2026-06-01",
   "web_search": "off",
   "examples": [],

@@ -563,10 +563,10 @@
       "enum": [
        "live",
        "saved",
-       "unavailable"
+       "mock"
       ],
       "title": "Mode",
-      "description": "live: a model answered now. saved: an example written ahead of time, checked against this brief. unavailable: no live answer; `examples` lists what can be opened."
+      "description": "live: a model answered now. saved: an example written ahead of time, checked against this brief. mock: no model was called (no key on the server, or the call failed); the question was matched by keyword to a prepared answer, and `examples` lists what else can be opened when nothing matched."
      },
      "question": {
       "type": "string",
@@ -1434,7 +1434,8 @@
        "after_as_of",
        "no_answer",
        "saved_example",
-       "live_off",
+       "mock_answer",
+       "mock_no_match",
        "live_failed"
       ],
       "title": "Code"

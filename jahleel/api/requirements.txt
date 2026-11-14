@@ -1,4 +1,4 @@
 fastapi==0.141.1
 uvicorn==0.53.0
-# The chat's live answers (jahleel/api/chat). Without it, or without a key, the chat serves saved examples.
+# The chat's live answers (jahleel/api/chat). Without it, or without a key, the chat gives mock answers.
 anthropic==2.8.0

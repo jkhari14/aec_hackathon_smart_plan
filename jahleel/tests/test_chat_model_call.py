@@ -144,9 +144,9 @@ class RouteTests(unittest.TestCase):
         with mock.patch.object(chat_model_call, "default_model", return_value=model):
             return chat_router.chat_answer(ChatRequest(slug=fields.pop("slug", SITE), **fields))
 
-    def test_with_no_key_the_route_serves_the_fallback(self):
-        answer = self.post(question="What is on file?")
-        self.assertEqual((answer.mode, answer.parts[0].code), ("unavailable", "live_off"))
+    def test_with_no_key_the_route_serves_a_mock_answer(self):
+        answer = self.post(question="How many ECB violations?")
+        self.assertEqual((answer.mode, answer.parts[0].code, answer.usage), ("mock", "mock_answer", None))
 
     def test_a_saved_example_never_touches_the_model(self):
         with mock.patch.object(chat_model_call, "default_model", side_effect=AssertionError("not for a saved example")):
@@ -165,7 +165,7 @@ class RouteTests(unittest.TestCase):
         with self.assertRaises(HTTPException) as caught:
             self.post(model=ScriptedModel(ITEMS), question="x")
         self.assertEqual(caught.exception.status_code, 429)
-        self.assertEqual(self.post(question="x").mode, "unavailable")  # the fallback is never capped
+        self.assertEqual(self.post(question="x").mode, "mock")  # a mock answer is never capped
 
     def test_setup_says_whether_live_answers_are_on_and_lists_the_examples(self):
         with mock.patch.object(chat_model_call, "default_model", return_value=None):

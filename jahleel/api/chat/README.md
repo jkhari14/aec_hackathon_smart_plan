@@ -9,6 +9,11 @@ and changes nothing in `data_pull/`, `checklist/` or the brief itself.
 PreFlight is a coordination aid. The chat does not decide code compliance, structural adequacy or
 safety, and it says so when asked.
 
+**Right now it runs in mock mode.** The server has no model key yet, so no model is called and there
+is no web search. A typed question is matched by keyword to a prepared answer built from the brief,
+and that answer goes through the same checks as a live one (see "Mock mode"). Everything about the
+live call below is built and tested offline, and has not been run against a real model.
+
 ## What an answer is
 
 `POST /api/chat/answer` returns a list of **parts**. Each part has a kind, and the kind says where
@@ -47,6 +52,26 @@ All in `chat_answer_build.py` and `chat_wording_checks.py`, with a test for each
 - **One correction round.** Held-back statements go back to the model once with the reasons. What
   still fails is dropped, and the answer says part of it was held back.
 
+## Mock mode
+
+With no key on the server (or `PREFLIGHT_CHAT_LIVE=0`, or a live call that fails), a typed question
+gets a **mock answer**: `mode` is `mock` and the first part says no model was called. The mock, in
+`chat_mock_answers.py`, matches keywords in the question to one of three things:
+
+- **A count**: "how many ECB violations", "complaints at 1321 Flatbush Avenue", "what violations do
+  the neighbors have". The server writes the count, "none found" or "unknown" for the lot and
+  dataset named, exactly as it does for a live answer.
+- **Checklist rows**: "which duties apply", "what are the open gaps", "was the adjoining owner
+  notified". Each row is reported with its status and cited; a reported document comes back as a
+  lead, not a record.
+- **A saved example**, when the question is close to one.
+
+The mock proposes; the same checks decide what is shown. So the part kinds, the sources, the
+as-of rules and the "not zero" wording all behave as they will with a model. What the mock cannot
+show is a model's judgment or a web lead: it does not search, and it does not invent a search
+result. A question nothing matches gets "No prepared answer matches this question" and the list
+of saved examples, never a made-up answer.
+
 ## The as-of view
 
 When the page is on an as-of day, the chat uses the same rule as the checklist engine: dated before
@@ -74,20 +99,20 @@ that day.
 From the repo root, after the [app's own setup](../../README.md):
 
 ```bash
-export ANTHROPIC_API_KEY=...        # the server only; never in the web app, never committed
-.venv/bin/pip install -r jahleel/api/requirements.txt   # without the anthropic package, or without a key, the chat serves saved examples
+export ANTHROPIC_API_KEY=...        # optional: live answers. The server only; never in the web app, never committed
+.venv/bin/pip install -r jahleel/api/requirements.txt   # without the anthropic package, or without a key, the chat runs in mock mode
 .venv/bin/uvicorn jahleel.api.preflight_api:app --port 8000
 .venv/bin/python -m unittest discover -s jahleel/tests -t .       # offline: a scripted model, no key
 .venv/bin/python -m jahleel.api.chat.chat_saved_export            # after a brief change: the panel's offline copies
 ```
 
-- `PREFLIGHT_CHAT_LIVE=0` turns live answers off even with a key.
+- `PREFLIGHT_CHAT_LIVE=0` keeps the chat in mock mode even with a key.
 - `PREFLIGHT_CHAT_MODEL` (default `claude-opus-5-5`) and `PREFLIGHT_CHAT_EFFORT` (default `medium`) change the model call.
 - With the API down, the panel still opens the saved examples from `web/src/features/chat/saved/`.
 
 **Cost, estimated and not measured:** roughly $0.10 to $0.25 a live question (the brief as input, the
 answer, up to three searches). Follow-up questions on the same site within a few minutes reuse a
-cached copy of the brief and cost less. Saved examples cost nothing.
+cached copy of the brief and cost less. Saved examples and mock answers cost nothing.
 
 ## Calling it from somewhere else (voice, a script)
 
@@ -103,7 +128,8 @@ POST /api/chat/answer
   public record:", "From the web, not checked by us:").
 - `history` is the earlier questions and the answers as they were shown. Send `example_id` instead of
   `question` to get a saved example.
-- `mode` is `live`, `saved`, or `unavailable` (no key, or the call failed; the parts say which).
+- `mode` is `live`, `saved`, or `mock` (no key, or the live call failed; the first part says which).
+  `GET /api/chat/setup/<slug>` returns `live: false` while the chat is in mock mode.
 - HTTP 422 means the question or history is over a cap, 429 that the per-minute limit was reached.
 
 ## Where it plugs in
@@ -128,7 +154,8 @@ jahleel/api/chat/
   chat_model_call.py      the model call with web search; pauses, refusals, one correction round
   chat_saved_examples.py  saved example answers for the two demo sites
   chat_saved_export.py    writes the panel's offline copies
-  chat_service.py         saved, live or unavailable: one answer
+  chat_mock_answers.py    mock mode: a typed question matched by keyword to a prepared answer
+  chat_service.py         saved, live or mock: one answer
   chat_router.py          the two routes and the per-minute limit
 jahleel/web/src/features/chat/
   chat_panel.tsx, chat_answer_parts.tsx, chat_api.ts, chat_types.ts, saved/
@@ -138,6 +165,8 @@ jahleel/web/src/features/chat/
 
 - **No live question has been run against a real model yet.** The tests use a scripted model, and the
   request was run through the real SDK against a local stand-in. Answer quality is not measured.
+- **Mock answers match keywords, not meaning.** A question can match the wrong prepared answer, and
+  most questions match none. Every mock answer is labeled as one.
 - **No stored conversations.** The conversation lives in the browser tab and is sent with each
   question; the server keeps nothing.
 - **Hard caps, refused and never cut:** 8 earlier exchanges, 1,000 characters a question, 12,000 for

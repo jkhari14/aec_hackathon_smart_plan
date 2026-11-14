@@ -222,10 +222,10 @@ export interface components {
         ChatAnswer: {
             /**
              * Mode
-             * @description live: a model answered now. saved: an example written ahead of time, checked against this brief. unavailable: no live answer; `examples` lists what can be opened.
+             * @description live: a model answered now. saved: an example written ahead of time, checked against this brief. mock: no model was called (no key on the server, or the call failed); the question was matched by keyword to a prepared answer, and `examples` lists what else can be opened when nothing matched.
              * @enum {string}
              */
-            mode: "live" | "saved" | "unavailable";
+            mode: "live" | "saved" | "mock";
             /** Question */
             question: string;
             /** Parts */
@@ -557,7 +557,7 @@ export interface components {
              * Code
              * @enum {string}
              */
-            code: "not_a_determination" | "names_withheld" | "cause_not_established" | "out_of_scope" | "status_is_todays" | "complaints_overlap" | "web_off_as_of" | "held_back" | "after_as_of" | "no_answer" | "saved_example" | "live_off" | "live_failed";
+            code: "not_a_determination" | "names_withheld" | "cause_not_established" | "out_of_scope" | "status_is_todays" | "complaints_overlap" | "web_off_as_of" | "held_back" | "after_as_of" | "no_answer" | "saved_example" | "mock_answer" | "mock_no_match" | "live_failed";
             /** Text */
             text: string;
         };
