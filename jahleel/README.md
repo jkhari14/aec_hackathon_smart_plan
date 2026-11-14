@@ -106,5 +106,8 @@ Try the demo replay: `http://localhost:5173/?site=2625-bedford-ave-brooklyn&as_o
 - **Project inputs are not wired.** The engine takes `--inputs` (excavation depth, exposed wall,
   access, underpinning); the API passes none yet, so 8 rows read "needs project input". The
   project-type picker is not wired either.
+- **Project types stay open for now.** The second team meeting named alteration as a focus; it is
+  noted for later. Until then the picker keeps every type (excavation next to existing, the hero
+  site's case, stays the default), and types the demo doesn't need are retired once that's clear.
 - **A filing's summary can name a later date** (for example "Approved: 2026-06-03" on a June 1
   replay), because a filing is one row with its current status.
