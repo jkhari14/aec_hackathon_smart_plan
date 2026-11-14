@@ -30,6 +30,8 @@ class DatasetStatus(BaseModel):
         description="ok: queried (count 0 means none found). error: nothing is known; never show as zero."
     )
     count: Optional[int] = None
+    truncated: bool = Field(False, description="The query hit the row cap: count is a floor (at least this many), "
+                            "and the oldest rows are missing.")
     reason: Optional[str] = None
     query_url: Optional[str] = None
 
@@ -87,6 +89,9 @@ class PublicRecord(BaseModel):
     stop_work_first_mentioned: Optional[str] = Field(
         None, description="ISO date the earliest stop-work mention on this record was written, which can be "
         "after `date`; None if undated. An as-of view shows the mention only from the day after.")
+    approved_on: Optional[str] = Field(
+        None, description="ISO date DOB approved this filing (DOB NOW filings); None if not approved. An as-of view "
+        "treats a later approval as not yet approved.")
     resolution: Optional[str] = Field(
         None, description="DOB's resolution text (311 requests), written when DOB acted, after `date`.")
     resolution_recorded: Optional[str] = Field(

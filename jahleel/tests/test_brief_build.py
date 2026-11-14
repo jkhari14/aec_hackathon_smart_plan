@@ -35,6 +35,13 @@ class BriefFromCacheTests(unittest.TestCase):
         self.assertTrue(request.mentions_stop_work)
         self.assertEqual(request.stop_work_first_mentioned, "2026-05-08")
 
+    def test_filing_approval_is_its_own_date_not_summary_text(self):
+        records = {r.id: r for r in build_brief("2625-bedford-ave-brooklyn").records}
+        earth_work = records["dob_now_filings:B01330433-S3"]
+        self.assertEqual(earth_work.date, "2026-02-24")
+        self.assertEqual(earth_work.approved_on, "2026-06-03")
+        self.assertNotIn("2026-06-03", earth_work.summary)
+
     def test_checklist_comes_from_the_engine_and_never_claims_proof(self):
         brief = build_brief("2625-bedford-ave-brooklyn")
         self.assertEqual(len(brief.checklist), brief.checklist_summary.rows)
@@ -69,6 +76,14 @@ class LotFactsTests(unittest.TestCase):
         self.assertEqual((listed.landmark, listed.historic_district), ("OLD MILL", "Park Slope Historic District"))
         blank = brief_build._facts(lot({"landmark": "  "}))
         self.assertEqual((blank.landmark, blank.historic_district), (None, None))
+
+
+    def test_a_capped_dataset_is_marked_truncated(self):
+        lot = {"bbl": "3052110074", "datasets": {
+            "dob_violations": {"status": "ok", "count": 5000, "truncated": True},
+            "ecb_violations": {"status": "ok", "count": 2}}}
+        statuses = {d.key: d.truncated for d in brief_build._lot(lot, "site", {}, {}, []).datasets}
+        self.assertEqual(statuses, {"dob_violations": True, "ecb_violations": False})
 
 
 class RecordTests(unittest.TestCase):

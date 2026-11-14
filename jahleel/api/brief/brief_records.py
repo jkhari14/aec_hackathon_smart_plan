@@ -25,8 +25,9 @@ _FIELDS = {
     "dob_now_filings": (
         "job_filing_number",
         "filing_status",
+        # The approval date is its own field (approved_on), so a replay can't show a later approval.
         lambda r: f"{r.get('job_type', '')} filing. Earth work: {r.get('earth_work_work_type_', '?')}. "
-        f"Approved: {iso_date(r.get('approved_date')) or 'no'}. {r.get('job_description', '')}",
+        f"{r.get('job_description', '')}",
     ),
     "dob_violations": (
         "isn_dob_bis_viol",
@@ -64,6 +65,8 @@ _FIELDS = {
 _NOT_A_STATUS = {"unspecified"}
 # Text written when DOB acted, later than the record's own date: (text field, date field).
 _LATER_TEXT = {"dob_311_requests": ("resolution_description", "resolution_action_updated_date")}
+# Approval date field, per dataset.
+_APPROVED = {"dob_now_filings": "approved_date"}
 
 
 def _first_stop_work_mentions(lot: dict) -> dict[tuple[str, str], Optional[str]]:
@@ -109,6 +112,7 @@ def lot_records(lot: dict, sources: dict) -> list[PublicRecord]:
                     query_url=pulled.get("query_url"),
                     mentions_stop_work=(key, record_id) in stop_work,
                     stop_work_first_mentioned=stop_work.get((key, record_id)),
+                    approved_on=iso_date(row.get(_APPROVED[key])) if key in _APPROVED else None,
                     resolution=later_text or None,
                     resolution_recorded=iso_date(row.get(text_date_field)) if later_text else None,
                 )

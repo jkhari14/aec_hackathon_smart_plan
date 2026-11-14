@@ -10,6 +10,9 @@ export function NeighborCards({ lots, visible, asOf, selectedBbl, onSelect }: Pr
         const records = visible.filter((r) => r.bbl === lot.bbl);
         // 311 requests can repeat a DOB complaint (no shared key), so they're counted apart, never added.
         const requests311 = records.filter((r) => r.dataset_key === "dob_311_requests").length;
+        // A dataset that hit the row cap makes its count a floor.
+        const capped = new Set(lot.datasets.filter((d) => d.status === "ok" && d.truncated).map((d) => d.key));
+        const cappedOther = [...capped].some((key) => key !== "dob_311_requests");
         const failed = lot.datasets.filter((d) => d.status !== "ok");
         const tallest = Math.max(0, ...lot.buildings.map((b) => b.height_roof_ft ?? 0));
         return (
@@ -28,8 +31,8 @@ export function NeighborCards({ lots, visible, asOf, selectedBbl, onSelect }: Pr
               </p>
             )}
             <p className="mt-1 text-xs">
-              {records.length - requests311} records dated {asOf ? `before ${asOf}` : "to date"}
-              {requests311 > 0 ? ` · ${requests311} 311 requests, which may repeat a DOB complaint` : ""}
+              {cappedOther ? "at least " : ""}{records.length - requests311} records dated {asOf ? `before ${asOf}` : "to date"}
+              {requests311 > 0 ? ` · ${capped.has("dob_311_requests") ? "at least " : ""}${requests311} 311 requests, which may repeat a DOB complaint` : ""}
               {records.some((r) => mentionsStopWorkAsOf(r, asOf)) ? " · mentions a stop-work order" : ""}
             </p>
             {failed.length > 0 && (

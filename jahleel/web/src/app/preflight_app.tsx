@@ -79,7 +79,8 @@ export function PreflightApp() {
             <h2 className="font-semibold">Touching lots</h2>
             <NeighborCards lots={brief.touching_lots} visible={visible} asOf={asOf} selectedBbl={selectedBbl} onSelect={setSelectedBbl} />
             <h2 className="font-semibold">Site record {asOf ? `as of ${asOf}` : ""}</h2>
-            <SiteRecordList records={visible.filter((r) => r.bbl === brief.site.bbl)} asOf={asOf} />
+            <SiteRecordList records={visible.filter((r) => r.bbl === brief.site.bbl)} asOf={asOf}
+              capped={brief.site.datasets.filter((d) => d.status === "ok" && d.truncated).map((d) => d.name)} />
           </div>
           <div className="space-y-4">
             <div className="flex items-center justify-between">

@@ -1,14 +1,23 @@
 import { OVERLAP_311_NOTE, mentionsStopWorkAsOf, writtenBefore } from "../../brief/brief_as_of";
 import type { PublicRecord } from "../../brief/brief_types";
 
-type Props = { records: PublicRecord[]; asOf: string | null; limit?: number };
+type Props = { records: PublicRecord[]; asOf: string | null; capped?: string[]; limit?: number };
+
+function approvalText(r: PublicRecord, asOf: string | null): string {
+  if (r.approved_on && writtenBefore(r.approved_on, asOf)) return `Approved ${r.approved_on}.`;
+  return asOf ? "Not approved before this day." : "Not approved.";
+}
 
 // Status is today's; the date is when the record was issued or filed.
-export function SiteRecordList({ records, asOf, limit = 40 }: Props) {
-  if (records.length === 0) return <p className="text-sm text-gap">No records dated before this day.</p>;
+export function SiteRecordList({ records, asOf, capped = [], limit = 40 }: Props) {
+  const cappedNote = capped.length > 0 && (
+    <p className="mb-1 text-xs text-site">Hit the 5,000-row cap, so the oldest records are missing: {capped.join(", ")}.</p>
+  );
+  if (records.length === 0) return <>{cappedNote}<p className="text-sm text-gap">No records dated before this day.</p></>;
   const keys = new Set(records.map((r) => r.dataset_key));
   return (
     <>
+      {cappedNote}
       {keys.has("dob_311_requests") && keys.has("dob_complaints") && (
         <p className="mb-1 text-xs text-stone-600">{OVERLAP_311_NOTE}</p>
       )}
@@ -20,6 +29,7 @@ export function SiteRecordList({ records, asOf, limit = 40 }: Props) {
               {r.query_url && <> · <a className="underline" href={r.query_url} target="_blank" rel="noreferrer">source</a></>}
             </p>
             <p>{r.summary}</p>
+            {r.dataset_key === "dob_now_filings" && <p className="mt-1 text-xs">{approvalText(r, asOf)}</p>}
             {r.resolution && (writtenBefore(r.resolution_recorded, asOf) ? (
               <p className="mt-1 text-xs">
                 DOB's resolution, recorded {r.resolution_recorded ?? "on an unknown day"}: {r.resolution}

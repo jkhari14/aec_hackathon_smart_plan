@@ -234,6 +234,12 @@ export interface components {
             status: "ok" | "error" | "skipped";
             /** Count */
             count?: number | null;
+            /**
+             * Truncated
+             * @description The query hit the row cap: count is a floor (at least this many), and the oldest rows are missing.
+             * @default false
+             */
+            truncated: boolean;
             /** Reason */
             reason?: string | null;
             /** Query Url */
@@ -387,6 +393,11 @@ export interface components {
              * @description ISO date the earliest stop-work mention on this record was written, which can be after `date`; None if undated. An as-of view shows the mention only from the day after.
              */
             stop_work_first_mentioned?: string | null;
+            /**
+             * Approved On
+             * @description ISO date DOB approved this filing (DOB NOW filings); None if not approved. An as-of view treats a later approval as not yet approved.
+             */
+            approved_on?: string | null;
             /**
              * Resolution
              * @description DOB's resolution text (311 requests), written when DOB acted, after `date`.

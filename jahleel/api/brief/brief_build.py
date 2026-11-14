@@ -55,7 +55,8 @@ def _lot(lot: dict, role: str, sources: dict, geometry: dict, record_ids: list[s
         datasets=[
             DatasetStatus(
                 key=key, name=sources.get(key, {}).get("name", key), status=pulled["status"],
-                count=pulled.get("count"), reason=pulled.get("reason"), query_url=pulled.get("query_url"),
+                count=pulled.get("count"), truncated=bool(pulled.get("truncated")), reason=pulled.get("reason"),
+                query_url=pulled.get("query_url"),
             )
             for key, pulled in lot["datasets"].items()
         ],

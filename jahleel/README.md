@@ -58,11 +58,13 @@ jahleel/
   Records beside a row are labeled "not proof". An open gap (the duty applies, no proof) gets a red
   edge. The statuses are closed sets in `brief_models.py`, so the API refuses anything else.
 - **A failed query is not zero.** A dataset with status `error` shows "couldn't load", never a count.
+- **A capped query is a floor.** A dataset that hit the 5,000-row cap shows "at least", and the
+  record list says its oldest records are missing (which a replay needs most).
 - **Show what the address matched**, not what was typed.
 - **As-of means "dated before that day"**, the same rule as the engine. Status is today's, so the
   screen never says a record was open on that date.
-- **Text written later shows only once it existed.** A stop-work mention, or DOB's resolution of
-  a 311 request, is dated when it was written, which can be weeks after the record's own date.
+- **Text written later shows only once it existed.** A stop-work mention, DOB's resolution of
+  a 311 request, or a filing's approval is dated when it was written, which can be weeks after the record's own date.
   The replay shows the record but hides that text until its own date.
 - **311 requests and DOB complaints are never added.** The same complaint can be in both and they
   share no key, so the neighbor cards count 311 requests apart and the record list says so.
@@ -109,5 +111,3 @@ Try the demo replay: `http://localhost:5173/?site=2625-bedford-ave-brooklyn&as_o
 - **Project types stay open for now.** The second team meeting named alteration as a focus; it is
   noted for later. Until then the picker keeps every type (excavation next to existing, the hero
   site's case, stays the default), and types the demo doesn't need are retired once that's clear.
-- **A filing's summary can name a later date** (for example "Approved: 2026-06-03" on a June 1
-  replay), because a filing is one row with its current status.
