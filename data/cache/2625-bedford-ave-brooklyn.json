@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "pulled_at": "2026-11-14T19:09:57+00:00",
+ "pulled_at": "2026-11-14T20:56:22+00:00",
  "address_lookup": {
   "input": "2625 Bedford Ave, Brooklyn",
   "matched_label": "2625 BEDFORD AVENUE, Brooklyn, NY, USA",
@@ -506,6 +506,41 @@
      }
     ],
     "held_back_other_lot": []
+   },
+   "dob_311_requests": {
+    "status": "ok",
+    "count": 2,
+    "truncated": false,
+    "query_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?%24limit=5000&%24select=unique_key%2Ccreated_date%2Cclosed_date%2Cagency%2Ccomplaint_type%2Cdescriptor%2Cdescriptor_2%2Cstatus%2Cresolution_description%2Cresolution_action_updated_date%2Cincident_address%2Cbbl&%24where=agency%3D%27DOB%27+AND+bbl%3D%273052110074%27&%24order=created_date+DESC",
+    "records": [
+     {
+      "unique_key": "71101235",
+      "created_date": "2026-11-11T21:09:34.000",
+      "closed_date": "2026-11-12T00:00:00.000",
+      "agency": "DOB",
+      "complaint_type": "General Construction/Plumbing",
+      "descriptor": "Cons - Contrary/Beyond Approved Plans/Permits",
+      "status": "Assigned",
+      "resolution_description": "The Department of Buildings has reviewed this complaint and determnined that it would be best addressed by the Construction Safety Enforcement Unit.",
+      "resolution_action_updated_date": "2026-11-12T00:00:00.000",
+      "incident_address": "2625 BEDFORD AVENUE",
+      "bbl": "3052110074"
+     },
+     {
+      "unique_key": "68381531",
+      "created_date": "2026-03-18T13:54:45.000",
+      "closed_date": "2026-05-08T00:00:00.000",
+      "agency": "DOB",
+      "complaint_type": "General Construction/Plumbing",
+      "descriptor": "Cons - Contrary/Beyond Approved Plans/Permits",
+      "status": "Closed",
+      "resolution_description": "The Department of Buildings investigated this complaint and removed the stop work order.",
+      "resolution_action_updated_date": "2026-05-08T00:00:00.000",
+      "incident_address": "2625 BEDFORD AVENUE",
+      "bbl": "3052110074"
+     }
+    ],
+    "held_back_other_lot": []
    }
   },
   "role": "site",
@@ -521,6 +556,13 @@
     "issue_date": "20261111",
     "field": "description",
     "text": "FULL STOP WORK ORDER DUE TO COLLAPSE"
+   },
+   {
+    "dataset": "dob_311_requests",
+    "record_id": "68381531",
+    "issue_date": "2026-05-08T00:00:00.000",
+    "field": "resolution_description",
+    "text": "The Department of Buildings investigated this complaint and removed the stop work order."
    },
    {
     "dataset": "ecb_violations",
@@ -3523,6 +3565,41 @@
       }
      ],
      "held_back_other_lot": []
+    },
+    "dob_311_requests": {
+     "status": "ok",
+     "count": 2,
+     "truncated": false,
+     "query_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?%24limit=5000&%24select=unique_key%2Ccreated_date%2Cclosed_date%2Cagency%2Ccomplaint_type%2Cdescriptor%2Cdescriptor_2%2Cstatus%2Cresolution_description%2Cresolution_action_updated_date%2Cincident_address%2Cbbl&%24where=agency%3D%27DOB%27+AND+bbl%3D%273052110044%27&%24order=created_date+DESC",
+     "records": [
+      {
+       "unique_key": "53543903",
+       "created_date": "2021-03-29T10:16:33.000",
+       "closed_date": "2021-03-30T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "Real Time Enforcement",
+       "descriptor": "Work Without A Permit - Occupied Multiple Dwelling",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and determined that no further action was necessary.",
+       "resolution_action_updated_date": "2021-03-30T00:00:00.000",
+       "incident_address": "2416 NEWKIRK AVENUE",
+       "bbl": "3052110044"
+      },
+      {
+       "unique_key": "45630514",
+       "created_date": "2020-02-16T14:12:25.000",
+       "closed_date": "2020-02-19T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "Elevator",
+       "descriptor": "Elevator - Single Device On Property/No Alternate Service",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and issued an Office of Administrative Trials and Hearings (OATH) summons.",
+       "resolution_action_updated_date": "2020-02-19T00:00:00.000",
+       "incident_address": "2414 NEWKIRK AVENUE",
+       "bbl": "3052110044"
+      }
+     ],
+     "held_back_other_lot": []
     }
    },
    "role": "touching lot",
@@ -4265,6 +4342,145 @@
        "disposition_code": "A1",
        "inspection_date": "06/15/2004",
        "unit": "BKLYN"
+      }
+     ],
+     "held_back_other_lot": []
+    },
+    "dob_311_requests": {
+     "status": "ok",
+     "count": 10,
+     "truncated": false,
+     "query_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?%24limit=5000&%24select=unique_key%2Ccreated_date%2Cclosed_date%2Cagency%2Ccomplaint_type%2Cdescriptor%2Cdescriptor_2%2Cstatus%2Cresolution_description%2Cresolution_action_updated_date%2Cincident_address%2Cbbl&%24where=agency%3D%27DOB%27+AND+bbl%3D%273052110052%27&%24order=created_date+DESC",
+     "records": [
+      {
+       "unique_key": "71000435",
+       "created_date": "2026-11-03T07:25:02.000",
+       "closed_date": "2026-11-03T07:25:02.000",
+       "agency": "DOB",
+       "complaint_type": "General Construction/Plumbing",
+       "descriptor": "Fence - None/Inadequate",
+       "status": "Open",
+       "resolution_description": "Your Service Request has been submitted to the Department of Buildings.  Please check back later for status.",
+       "resolution_action_updated_date": "2026-11-03T00:00:00.000",
+       "incident_address": "454 EAST   25 STREET",
+       "bbl": "3052110052"
+      },
+      {
+       "unique_key": "60516022",
+       "created_date": "2024-03-07T10:43:33.000",
+       "closed_date": "2024-05-08T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "Building/Use",
+       "descriptor": "Illegal Conversion Of Residential Building/Space",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings attempted to investigate this complaint twice but could not gain access to the location. If the problem still exists, please call 311 and file a new complaint with additional access information. If you are outside of New York City, please call (212) NEW-YORK (212-639-9675).",
+       "resolution_action_updated_date": "2024-05-08T00:00:00.000",
+       "incident_address": "454 EAST   25 STREET",
+       "bbl": "3052110052"
+      },
+      {
+       "unique_key": "48307902",
+       "created_date": "2020-12-02T00:16:13.000",
+       "closed_date": "2021-03-01T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "Special Projects Inspection Team (SPIT)",
+       "descriptor": "Illegal Hotel Rooms In Residential Building",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings attempted to investigate this complaint twice but could not gain access to the location. If the problem still exists, please call 311 and file a new complaint with additional access information. If you are outside of New York City, please call (212) NEW-YORK (212-639-9675).",
+       "resolution_action_updated_date": "2021-03-01T00:00:00.000",
+       "incident_address": "454 EAST   25 STREET",
+       "bbl": "3052110052"
+      },
+      {
+       "unique_key": "48307966",
+       "created_date": "2020-12-01T23:48:53.000",
+       "closed_date": "2020-12-04T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "Emergency Response Team (ERT)",
+       "descriptor": "After Hours Work - Illegal",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and determined that no further action was necessary.",
+       "resolution_action_updated_date": "2020-12-04T00:00:00.000",
+       "incident_address": "454 EAST   25 STREET",
+       "bbl": "3052110052"
+      },
+      {
+       "unique_key": "48303818",
+       "created_date": "2020-12-01T23:36:48.000",
+       "closed_date": "2020-12-02T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "COVID-19 Non-essential Construction",
+       "descriptor": "Construction",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and determined that no further action was necessary.",
+       "resolution_action_updated_date": "2020-12-02T00:00:00.000",
+       "incident_address": "454 EAST   25 STREET",
+       "bbl": "3052110052"
+      },
+      {
+       "unique_key": "48303727",
+       "created_date": "2020-12-01T23:24:49.000",
+       "closed_date": "2021-02-02T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "Building/Use",
+       "descriptor": "SRO - Illegal Work/No Permit/Change In Occupancy/Use",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings attempted to investigate this complaint twice but could not gain access to the location. If the problem still exists, please call 311 and file a new complaint with additional access information. If you are outside of New York City, please call (212) NEW-YORK (212-639-9675).",
+       "resolution_action_updated_date": "2021-02-02T00:00:00.000",
+       "incident_address": "454 EAST   25 STREET",
+       "bbl": "3052110052"
+      },
+      {
+       "unique_key": "53522792",
+       "created_date": "2020-12-01T23:00:00.000",
+       "closed_date": "2020-12-03T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "Real Time Enforcement",
+       "descriptor": "Work Without A Permit - Occupied Multiple Dwelling",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings attempted to investigate this complaint twice but could not gain access to the location. If the problem still exists, please call 311 and file a new complaint with additional access information. If you are outside of New York City, please call (212) NEW-YORK (212-639-9675).",
+       "resolution_action_updated_date": "2020-12-03T00:00:00.000",
+       "incident_address": "454 EAST   25 STREET",
+       "bbl": "3052110052"
+      },
+      {
+       "unique_key": "48310023",
+       "created_date": "2020-12-01T22:38:26.000",
+       "closed_date": "2021-02-11T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "Building/Use",
+       "descriptor": "Illegal Conversion Of Residential Building/Space",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings attempted to investigate this complaint twice but could not gain access to the location. If the problem still exists, please call 311 and file a new complaint with additional access information. If you are outside of New York City, please call (212) NEW-YORK (212-639-9675).",
+       "resolution_action_updated_date": "2021-02-11T00:00:00.000",
+       "incident_address": "454 EAST   25 STREET",
+       "bbl": "3052110052"
+      },
+      {
+       "unique_key": "48293742",
+       "created_date": "2020-12-01T12:50:03.000",
+       "closed_date": "2020-12-02T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "General Construction/Plumbing",
+       "descriptor": "Adjacent Buildings Not Protected",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and determined that no further action was necessary.",
+       "resolution_action_updated_date": "2020-12-02T00:00:00.000",
+       "incident_address": "454 EAST   25 STREET",
+       "bbl": "3052110052"
+      },
+      {
+       "unique_key": "47073003",
+       "created_date": "2020-08-02T11:23:26.000",
+       "closed_date": "2020-11-02T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "Building/Use",
+       "descriptor": "Illegal Conversion Of Residential Building/Space",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings attempted to investigate this complaint twice but could not gain access to the location. If the problem still exists, please call 311 and file a new complaint with additional access information. If you are outside of New York City, please call (212) NEW-YORK (212-639-9675).",
+       "resolution_action_updated_date": "2020-11-02T00:00:00.000",
+       "incident_address": "454 EAST   25 STREET",
+       "bbl": "3052110052"
       }
      ],
      "held_back_other_lot": []
@@ -5124,6 +5340,197 @@
       }
      ],
      "held_back_other_lot": []
+    },
+    "dob_311_requests": {
+     "status": "ok",
+     "count": 14,
+     "truncated": false,
+     "query_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?%24limit=5000&%24select=unique_key%2Ccreated_date%2Cclosed_date%2Cagency%2Ccomplaint_type%2Cdescriptor%2Cdescriptor_2%2Cstatus%2Cresolution_description%2Cresolution_action_updated_date%2Cincident_address%2Cbbl&%24where=agency%3D%27DOB%27+AND+bbl%3D%273052110054%27&%24order=created_date+DESC",
+     "records": [
+      {
+       "unique_key": "51643022",
+       "created_date": "2021-08-26T14:58:06.000",
+       "closed_date": "2021-09-18T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "General Construction/Plumbing",
+       "descriptor": "Safety Netting/Guard Rails - Damaged/Inadequate/None (6 Stories/75 Feet Or Less)",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and removed the stop work order.",
+       "resolution_action_updated_date": "2021-09-18T00:00:00.000",
+       "incident_address": "458 EAST   25 STREET",
+       "bbl": "3052110054"
+      },
+      {
+       "unique_key": "51330588",
+       "created_date": "2021-07-25T10:49:31.000",
+       "closed_date": "2021-07-26T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "General Construction/Plumbing",
+       "descriptor": "Building Permit - None",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and determined that no further action was necessary.",
+       "resolution_action_updated_date": "2021-07-26T00:00:00.000",
+       "incident_address": "458 EAST   25 STREET",
+       "bbl": "3052110054"
+      },
+      {
+       "unique_key": "50827627",
+       "created_date": "2021-06-09T13:39:30.000",
+       "closed_date": "2021-06-09T13:39:30.000",
+       "agency": "DOB",
+       "complaint_type": "General Construction/Plumbing",
+       "descriptor": "Working Contrary To Stop Work Order",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings has reviewed this complaint and determnined that it would be best addressed by the Construction Safety Enforcement Unit.",
+       "resolution_action_updated_date": "2021-06-09T00:00:00.000",
+       "incident_address": "458 EAST   25 STREET",
+       "bbl": "3052110054"
+      },
+      {
+       "unique_key": "50810772",
+       "created_date": "2021-06-07T12:17:49.000",
+       "closed_date": "2021-06-08T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "COVID-19 Non-essential Construction",
+       "descriptor": "Construction",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and determined that no further action was necessary.",
+       "resolution_action_updated_date": "2021-06-08T00:00:00.000",
+       "incident_address": "458 EAST   25 STREET",
+       "bbl": "3052110054"
+      },
+      {
+       "unique_key": "50795088",
+       "created_date": "2021-06-06T09:54:53.000",
+       "closed_date": "2021-06-09T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "General Construction/Plumbing",
+       "descriptor": "Building Permit - None",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and issued an Office of Administrative Trials and Hearings (OATH) summons.",
+       "resolution_action_updated_date": "2021-06-09T00:00:00.000",
+       "incident_address": "458 EAST   25 STREET",
+       "bbl": "3052110054"
+      },
+      {
+       "unique_key": "49989288",
+       "created_date": "2021-03-11T10:12:42.000",
+       "closed_date": "2021-03-15T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "General Construction/Plumbing",
+       "descriptor": "Debris - Excessive",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and determined that no further action was necessary.",
+       "resolution_action_updated_date": "2021-03-15T00:00:00.000",
+       "incident_address": "458 EAST   25 STREET",
+       "bbl": "3052110054"
+      },
+      {
+       "unique_key": "49971702",
+       "created_date": "2021-03-09T18:45:12.000",
+       "closed_date": "2021-03-10T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "Emergency Response Team (ERT)",
+       "descriptor": "After Hours Work - Illegal",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and determined that no further action was necessary.",
+       "resolution_action_updated_date": "2021-03-10T00:00:00.000",
+       "incident_address": "458 EAST   25 STREET",
+       "bbl": "3052110054"
+      },
+      {
+       "unique_key": "49872797",
+       "created_date": "2021-02-25T19:34:02.000",
+       "closed_date": "2021-03-01T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "Emergency Response Team (ERT)",
+       "descriptor": "After Hours Work - Illegal",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and determined that no further action was necessary.",
+       "resolution_action_updated_date": "2021-03-01T00:00:00.000",
+       "incident_address": "458 EAST   25 STREET",
+       "bbl": "3052110054"
+      },
+      {
+       "unique_key": "49804885",
+       "created_date": "2021-02-17T14:01:41.000",
+       "closed_date": "2021-03-04T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "General Construction/Plumbing",
+       "descriptor": "Debris - Excessive",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and determined that no further action was necessary.",
+       "resolution_action_updated_date": "2021-03-04T00:00:00.000",
+       "incident_address": "458 EAST   25 STREET",
+       "bbl": "3052110054"
+      },
+      {
+       "unique_key": "49806738",
+       "created_date": "2021-02-17T08:31:21.000",
+       "closed_date": "2021-02-23T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "General Construction/Plumbing",
+       "descriptor": "Debris - Excessive",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and determined that no further action was necessary.",
+       "resolution_action_updated_date": "2021-02-23T00:00:00.000",
+       "incident_address": "458 EAST   25 STREET",
+       "bbl": "3052110054"
+      },
+      {
+       "unique_key": "49647447",
+       "created_date": "2021-01-28T09:10:15.000",
+       "closed_date": "2021-01-28T09:10:15.000",
+       "agency": "DOB",
+       "complaint_type": "General Construction/Plumbing",
+       "descriptor": "Working Contrary To Stop Work Order",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and determined that no further action was necessary.",
+       "resolution_action_updated_date": "2021-01-28T00:00:00.000",
+       "incident_address": "458 EAST   25 STREET",
+       "bbl": "3052110054"
+      },
+      {
+       "unique_key": "49629916",
+       "created_date": "2021-01-26T09:23:58.000",
+       "closed_date": "2021-01-26T09:23:58.000",
+       "agency": "DOB",
+       "complaint_type": "General Construction/Plumbing",
+       "descriptor": "Working Contrary To Stop Work Order",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings has reviewed this complaint and determnined that it would be best addressed by the Construction Safety Enforcement Unit.",
+       "resolution_action_updated_date": "2021-01-26T00:00:00.000",
+       "incident_address": "458 EAST   25 STREET",
+       "bbl": "3052110054"
+      },
+      {
+       "unique_key": "49528502",
+       "created_date": "2021-01-13T10:56:05.000",
+       "closed_date": "2021-08-06T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "General Construction/Plumbing",
+       "descriptor": "Excavation Undermining Adjacent Building",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and removed the stop work order.",
+       "resolution_action_updated_date": "2021-08-06T00:00:00.000",
+       "incident_address": "458 EAST   25 STREET",
+       "bbl": "3052110054"
+      },
+      {
+       "unique_key": "48582434",
+       "created_date": "2021-01-06T07:38:33.000",
+       "closed_date": "2021-01-06T07:38:33.000",
+       "agency": "DOB",
+       "complaint_type": "General Construction/Plumbing",
+       "descriptor": "Adjacent Buildings Not Protected",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings has reviewed this complaint and determnined that it would be best addressed by the Construction Safety Enforcement Unit.",
+       "resolution_action_updated_date": "2021-01-06T00:00:00.000",
+       "incident_address": "458 EAST   25 STREET",
+       "bbl": "3052110054"
+      }
+     ],
+     "held_back_other_lot": []
     }
    },
    "role": "touching lot",
@@ -5140,7 +5547,43 @@
      }
     ]
    },
-   "stop_work_mentions": []
+   "stop_work_mentions": [
+    {
+     "dataset": "dob_311_requests",
+     "record_id": "51643022",
+     "issue_date": "2021-09-18T00:00:00.000",
+     "field": "resolution_description",
+     "text": "The Department of Buildings investigated this complaint and removed the stop work order."
+    },
+    {
+     "dataset": "dob_311_requests",
+     "record_id": "49528502",
+     "issue_date": "2021-08-06T00:00:00.000",
+     "field": "resolution_description",
+     "text": "The Department of Buildings investigated this complaint and removed the stop work order."
+    },
+    {
+     "dataset": "dob_311_requests",
+     "record_id": "50827627",
+     "issue_date": "2021-06-09T13:39:30.000",
+     "field": "descriptor",
+     "text": "Working Contrary To Stop Work Order"
+    },
+    {
+     "dataset": "dob_311_requests",
+     "record_id": "49647447",
+     "issue_date": "2021-01-28T09:10:15.000",
+     "field": "descriptor",
+     "text": "Working Contrary To Stop Work Order"
+    },
+    {
+     "dataset": "dob_311_requests",
+     "record_id": "49629916",
+     "issue_date": "2021-01-26T09:23:58.000",
+     "field": "descriptor",
+     "text": "Working Contrary To Stop Work Order"
+    }
+   ]
   },
   {
    "bbl": "3052110073",
@@ -6912,6 +7355,14 @@
       }
      ],
      "held_back_other_lot": []
+    },
+    "dob_311_requests": {
+     "status": "ok",
+     "count": 0,
+     "truncated": false,
+     "query_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?%24limit=5000&%24select=unique_key%2Ccreated_date%2Cclosed_date%2Cagency%2Ccomplaint_type%2Cdescriptor%2Cdescriptor_2%2Cstatus%2Cresolution_description%2Cresolution_action_updated_date%2Cincident_address%2Cbbl&%24where=agency%3D%27DOB%27+AND+bbl%3D%273052110073%27&%24order=created_date+DESC",
+     "records": [],
+     "held_back_other_lot": []
     }
    },
    "role": "touching lot",
@@ -7167,14 +7618,26 @@
        "story": "2"
       },
       {
-       "violationid": "18441031",
+       "violationid": "18441033",
        "inspectiondate": "2025-11-25T00:00:00.000",
        "novissueddate": "2025-12-01T00:00:00.000",
        "class": "B",
        "violationstatus": "Close",
        "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2026-02-13T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE PORCELAIN GLAZE AT BATHTUB IN THE BATHROOM LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM EAST AT SOUTH",
+       "currentstatusdate": "2026-02-17T00:00:00.000",
+       "novdescription": "§ 27-2045(B)(1)(B) HMC, § 12-06, § 12-07, § 12-09 RCNY REPAIR, REPLACE OR PROVIDE AN APPROVED AND OPERATIONAL CARBON MONOXIDE DETECTING DEVICE, INSTALLED IN ACCORDANCE WITH APPLICABLE LAW AND RULES INOPERABLE IN THE ENTIRE APARTMENT LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM EAST AT SOUTH",
+       "apartment": "2B",
+       "story": "2"
+      },
+      {
+       "violationid": "18441030",
+       "inspectiondate": "2025-11-25T00:00:00.000",
+       "novissueddate": "2025-12-01T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2026-02-17T00:00:00.000",
+       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD FLOOR IN THE 4th ROOM FROM EAST LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM EAST AT SOUTH",
        "apartment": "2B",
        "story": "2"
       },
@@ -7203,26 +7666,14 @@
        "story": "2"
       },
       {
-       "violationid": "18441030",
+       "violationid": "18441031",
        "inspectiondate": "2025-11-25T00:00:00.000",
        "novissueddate": "2025-12-01T00:00:00.000",
        "class": "B",
        "violationstatus": "Close",
        "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2026-02-17T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD FLOOR IN THE 4th ROOM FROM EAST LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM EAST AT SOUTH",
-       "apartment": "2B",
-       "story": "2"
-      },
-      {
-       "violationid": "18441033",
-       "inspectiondate": "2025-11-25T00:00:00.000",
-       "novissueddate": "2025-12-01T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2026-02-17T00:00:00.000",
-       "novdescription": "§ 27-2045(B)(1)(B) HMC, § 12-06, § 12-07, § 12-09 RCNY REPAIR, REPLACE OR PROVIDE AN APPROVED AND OPERATIONAL CARBON MONOXIDE DETECTING DEVICE, INSTALLED IN ACCORDANCE WITH APPLICABLE LAW AND RULES INOPERABLE IN THE ENTIRE APARTMENT LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM EAST AT SOUTH",
+       "currentstatusdate": "2026-02-13T00:00:00.000",
+       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE PORCELAIN GLAZE AT BATHTUB IN THE BATHROOM LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM EAST AT SOUTH",
        "apartment": "2B",
        "story": "2"
       },
@@ -7238,14 +7689,14 @@
        "story": "1"
       },
       {
-       "violationid": "18170475",
+       "violationid": "18170476",
        "inspectiondate": "2025-08-19T00:00:00.000",
        "novissueddate": "2025-08-20T00:00:00.000",
-       "class": "C",
+       "class": "B",
        "violationstatus": "Close",
        "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2025-11-05T00:00:00.000",
-       "novdescription": "HMC ADM CODE: § 27-2017.4 ABATE THE INFESTATION CONSISTING OF ROACHES IN THE ENTIRE APARTMENT LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
+       "currentstatusdate": "2025-11-25T00:00:00.000",
+       "novdescription": "§ 27-2005 HMC: REFIT\u001a ENTRANCE DOOR IN THE BATHROOM LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
        "apartment": "2D",
        "story": "2"
       },
@@ -7262,6 +7713,18 @@
        "story": "2"
       },
       {
+       "violationid": "18170475",
+       "inspectiondate": "2025-08-19T00:00:00.000",
+       "novissueddate": "2025-08-20T00:00:00.000",
+       "class": "C",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2025-11-05T00:00:00.000",
+       "novdescription": "HMC ADM CODE: § 27-2017.4 ABATE THE INFESTATION CONSISTING OF ROACHES IN THE ENTIRE APARTMENT LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
+       "apartment": "2D",
+       "story": "2"
+      },
+      {
        "violationid": "18170477",
        "inspectiondate": "2025-08-19T00:00:00.000",
        "novissueddate": "2025-08-20T00:00:00.000",
@@ -7270,138 +7733,6 @@
        "currentstatus": "VIOLATION DISMISSED",
        "currentstatusdate": "2025-11-25T00:00:00.000",
        "novdescription": "§ 27-2005 HMC: PROPERLY REPAIR OR REPLACE THE BROKEN OR DEFECTIVE WALL CABINET DOOR AT WEST WALL IN THE KITCHEN LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
-       "apartment": "2D",
-       "story": "2"
-      },
-      {
-       "violationid": "18170476",
-       "inspectiondate": "2025-08-19T00:00:00.000",
-       "novissueddate": "2025-08-20T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2025-11-25T00:00:00.000",
-       "novdescription": "§ 27-2005 HMC: REFIT\u001a ENTRANCE DOOR IN THE BATHROOM LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
-       "apartment": "2D",
-       "story": "2"
-      },
-      {
-       "violationid": "18056757",
-       "inspectiondate": "2025-06-28T00:00:00.000",
-       "novissueddate": "2025-06-30T00:00:00.000",
-       "class": "C",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2025-10-08T00:00:00.000",
-       "novdescription": "HMC ADM CODE: § 27-2017.4 ABATE THE INFESTATION CONSISTING OF ROACHES IN THE ENTIRE APARTMENT LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
-       "apartment": "2D",
-       "story": "2"
-      },
-      {
-       "violationid": "18056759",
-       "inspectiondate": "2025-06-28T00:00:00.000",
-       "novissueddate": "2025-06-30T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2025-09-12T00:00:00.000",
-       "novdescription": "§ 27-2045 ADM CODE REPAIR OR REPLACE THE SMOKE DETECTOR INOPERABLE IN THE ENTIRE APARTMENT LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
-       "apartment": "2D",
-       "story": "2"
-      },
-      {
-       "violationid": "18056758",
-       "inspectiondate": "2025-06-28T00:00:00.000",
-       "novissueddate": "2025-06-30T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2025-09-12T00:00:00.000",
-       "novdescription": "§ 27-2046.1 HMC: REPAIR OR REPLACE THE CARBON MONOXIDE DETECTING DEVICE(S). INOPERABLE IN THE ENTIRE APARTMENT LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
-       "apartment": "2D",
-       "story": "2"
-      },
-      {
-       "violationid": "18056756",
-       "inspectiondate": "2025-06-28T00:00:00.000",
-       "novissueddate": "2025-06-30T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2025-09-25T00:00:00.000",
-       "novdescription": "§ 27-2005 HMC: PROPERLY REPAIR OR REPLACE THE BROKEN OR DEFECTIVE DOOR KNOB IN THE ENTRANCE LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
-       "apartment": "2D",
-       "story": "2"
-      },
-      {
-       "violationid": "18056755",
-       "inspectiondate": "2025-06-28T00:00:00.000",
-       "novissueddate": "2025-06-30T00:00:00.000",
-       "class": "C",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2025-09-11T00:00:00.000",
-       "novdescription": "§ 27-2005, 27-2007, 27-2041.1 HMC, §238, § 309; § 107 (2) ( C) MDL AND 28 RCNY §25-171: REPLACE OR REPAIR THE SELF-CLOSING DOORS THAT IS MISSING OR DEFECTIVE HINGES IN THE ENTRANCE LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
-       "apartment": "2D",
-       "story": "2"
-      },
-      {
-       "violationid": "18056761",
-       "inspectiondate": "2025-06-28T00:00:00.000",
-       "novissueddate": "2025-07-01T00:00:00.000",
-       "class": "A",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2025-10-08T00:00:00.000",
-       "novdescription": "§ 27-2013 ADM CODE PAINT WITH LIGHT COLORED PAINT TO THE SATISFACTION OF THIS DEPARTMENT CEILING AND ALL WALLS IN THE PRIVATE HALLWAY LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
-       "apartment": "2D",
-       "story": "2"
-      },
-      {
-       "violationid": "18056760",
-       "inspectiondate": "2025-06-28T00:00:00.000",
-       "novissueddate": "2025-07-01T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2025-10-08T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD FLOOR IN THE PRIVATE HALLWAY LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
-       "apartment": "2D",
-       "story": "2"
-      },
-      {
-       "violationid": "18056754",
-       "inspectiondate": "2025-06-28T00:00:00.000",
-       "novissueddate": "2025-06-30T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2025-10-08T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR AT EAST WALL IN THE KITCHEN LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
-       "apartment": "2D",
-       "story": "2"
-      },
-      {
-       "violationid": "18056743",
-       "inspectiondate": "2025-06-28T00:00:00.000",
-       "novissueddate": "2025-06-30T00:00:00.000",
-       "class": "A",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2025-10-08T00:00:00.000",
-       "novdescription": "§ 27-2013 ADM CODE PAINT WITH LIGHT COLORED PAINT TO THE SATISFACTION OF THIS DEPARTMENT CEILING AND ALL WALLS IN THE KITCHEN LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
-       "apartment": "2D",
-       "story": "2"
-      },
-      {
-       "violationid": "18056742",
-       "inspectiondate": "2025-06-28T00:00:00.000",
-       "novissueddate": "2025-06-30T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2025-10-08T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD FLOOR IN THE KITCHEN LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
        "apartment": "2D",
        "story": "2"
       },
@@ -7418,6 +7749,30 @@
        "story": "2"
       },
       {
+       "violationid": "18056759",
+       "inspectiondate": "2025-06-28T00:00:00.000",
+       "novissueddate": "2025-06-30T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2025-09-12T00:00:00.000",
+       "novdescription": "§ 27-2045 ADM CODE REPAIR OR REPLACE THE SMOKE DETECTOR INOPERABLE IN THE ENTIRE APARTMENT LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
+       "apartment": "2D",
+       "story": "2"
+      },
+      {
+       "violationid": "18056750",
+       "inspectiondate": "2025-06-28T00:00:00.000",
+       "novissueddate": "2025-06-30T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2025-10-08T00:00:00.000",
+       "novdescription": "§ 27-2026, 2027 HMC: PROPERLY REPAIR THE SOURCE AND ABATE THE EVIDENCE OF A WATER LEAK WOOD FLOOR IN THE 4th ROOM FROM EAST LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
+       "apartment": "2D",
+       "story": "2"
+      },
+      {
        "violationid": "18056745",
        "inspectiondate": "2025-06-28T00:00:00.000",
        "novissueddate": "2025-06-30T00:00:00.000",
@@ -7430,18 +7785,6 @@
        "story": "2"
       },
       {
-       "violationid": "18056747",
-       "inspectiondate": "2025-06-28T00:00:00.000",
-       "novissueddate": "2025-06-30T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2025-10-08T00:00:00.000",
-       "novdescription": "§ 27-2026, 2027 HMC: PROPERLY REPAIR THE SOURCE AND ABATE THE EVIDENCE OF A WATER LEAK AT CEILING IN THE 4th ROOM FROM EAST LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
-       "apartment": "2D",
-       "story": "2"
-      },
-      {
        "violationid": "18056753",
        "inspectiondate": "2025-06-28T00:00:00.000",
        "novissueddate": "2025-06-30T00:00:00.000",
@@ -7450,18 +7793,6 @@
        "currentstatus": "VIOLATION DISMISSED",
        "currentstatusdate": "2025-10-08T00:00:00.000",
        "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR AT CEILING AND NORTH WALL IN THE 1st ROOM FROM EAST LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
-       "apartment": "2D",
-       "story": "2"
-      },
-      {
-       "violationid": "18056744",
-       "inspectiondate": "2025-06-28T00:00:00.000",
-       "novissueddate": "2025-07-03T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2025-10-02T00:00:00.000",
-       "novdescription": "§ 27-2005 HMC: PROPERLY REPAIR OR REPLACE THE BROKEN OR DEFECTIVE UPPER CABINET DOOR AT WEST WALL IN THE KITCHEN LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
        "apartment": "2D",
        "story": "2"
       },
@@ -7490,18 +7821,6 @@
        "story": "2"
       },
       {
-       "violationid": "18056750",
-       "inspectiondate": "2025-06-28T00:00:00.000",
-       "novissueddate": "2025-06-30T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2025-10-08T00:00:00.000",
-       "novdescription": "§ 27-2026, 2027 HMC: PROPERLY REPAIR THE SOURCE AND ABATE THE EVIDENCE OF A WATER LEAK WOOD FLOOR IN THE 4th ROOM FROM EAST LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
-       "apartment": "2D",
-       "story": "2"
-      },
-      {
        "violationid": "18056749",
        "inspectiondate": "2025-06-28T00:00:00.000",
        "novissueddate": "2025-06-30T00:00:00.000",
@@ -7522,6 +7841,138 @@
        "currentstatus": "VIOLATION DISMISSED",
        "currentstatusdate": "2025-10-08T00:00:00.000",
        "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR AT CEILING WEST, EAST WALLS IN THE 4th ROOM FROM EAST LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
+       "apartment": "2D",
+       "story": "2"
+      },
+      {
+       "violationid": "18056747",
+       "inspectiondate": "2025-06-28T00:00:00.000",
+       "novissueddate": "2025-06-30T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2025-10-08T00:00:00.000",
+       "novdescription": "§ 27-2026, 2027 HMC: PROPERLY REPAIR THE SOURCE AND ABATE THE EVIDENCE OF A WATER LEAK AT CEILING IN THE 4th ROOM FROM EAST LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
+       "apartment": "2D",
+       "story": "2"
+      },
+      {
+       "violationid": "18056744",
+       "inspectiondate": "2025-06-28T00:00:00.000",
+       "novissueddate": "2025-07-03T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2025-10-02T00:00:00.000",
+       "novdescription": "§ 27-2005 HMC: PROPERLY REPAIR OR REPLACE THE BROKEN OR DEFECTIVE UPPER CABINET DOOR AT WEST WALL IN THE KITCHEN LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
+       "apartment": "2D",
+       "story": "2"
+      },
+      {
+       "violationid": "18056756",
+       "inspectiondate": "2025-06-28T00:00:00.000",
+       "novissueddate": "2025-06-30T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2025-09-25T00:00:00.000",
+       "novdescription": "§ 27-2005 HMC: PROPERLY REPAIR OR REPLACE THE BROKEN OR DEFECTIVE DOOR KNOB IN THE ENTRANCE LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
+       "apartment": "2D",
+       "story": "2"
+      },
+      {
+       "violationid": "18056758",
+       "inspectiondate": "2025-06-28T00:00:00.000",
+       "novissueddate": "2025-06-30T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2025-09-12T00:00:00.000",
+       "novdescription": "§ 27-2046.1 HMC: REPAIR OR REPLACE THE CARBON MONOXIDE DETECTING DEVICE(S). INOPERABLE IN THE ENTIRE APARTMENT LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
+       "apartment": "2D",
+       "story": "2"
+      },
+      {
+       "violationid": "18056755",
+       "inspectiondate": "2025-06-28T00:00:00.000",
+       "novissueddate": "2025-06-30T00:00:00.000",
+       "class": "C",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2025-09-11T00:00:00.000",
+       "novdescription": "§ 27-2005, 27-2007, 27-2041.1 HMC, §238, § 309; § 107 (2) ( C) MDL AND 28 RCNY §25-171: REPLACE OR REPAIR THE SELF-CLOSING DOORS THAT IS MISSING OR DEFECTIVE HINGES IN THE ENTRANCE LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
+       "apartment": "2D",
+       "story": "2"
+      },
+      {
+       "violationid": "18056760",
+       "inspectiondate": "2025-06-28T00:00:00.000",
+       "novissueddate": "2025-07-01T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2025-10-08T00:00:00.000",
+       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD FLOOR IN THE PRIVATE HALLWAY LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
+       "apartment": "2D",
+       "story": "2"
+      },
+      {
+       "violationid": "18056743",
+       "inspectiondate": "2025-06-28T00:00:00.000",
+       "novissueddate": "2025-06-30T00:00:00.000",
+       "class": "A",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2025-10-08T00:00:00.000",
+       "novdescription": "§ 27-2013 ADM CODE PAINT WITH LIGHT COLORED PAINT TO THE SATISFACTION OF THIS DEPARTMENT CEILING AND ALL WALLS IN THE KITCHEN LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
+       "apartment": "2D",
+       "story": "2"
+      },
+      {
+       "violationid": "18056742",
+       "inspectiondate": "2025-06-28T00:00:00.000",
+       "novissueddate": "2025-06-30T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2025-10-08T00:00:00.000",
+       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD FLOOR IN THE KITCHEN LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
+       "apartment": "2D",
+       "story": "2"
+      },
+      {
+       "violationid": "18056761",
+       "inspectiondate": "2025-06-28T00:00:00.000",
+       "novissueddate": "2025-07-01T00:00:00.000",
+       "class": "A",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2025-10-08T00:00:00.000",
+       "novdescription": "§ 27-2013 ADM CODE PAINT WITH LIGHT COLORED PAINT TO THE SATISFACTION OF THIS DEPARTMENT CEILING AND ALL WALLS IN THE PRIVATE HALLWAY LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
+       "apartment": "2D",
+       "story": "2"
+      },
+      {
+       "violationid": "18056757",
+       "inspectiondate": "2025-06-28T00:00:00.000",
+       "novissueddate": "2025-06-30T00:00:00.000",
+       "class": "C",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2025-10-08T00:00:00.000",
+       "novdescription": "HMC ADM CODE: § 27-2017.4 ABATE THE INFESTATION CONSISTING OF ROACHES IN THE ENTIRE APARTMENT LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
+       "apartment": "2D",
+       "story": "2"
+      },
+      {
+       "violationid": "18056754",
+       "inspectiondate": "2025-06-28T00:00:00.000",
+       "novissueddate": "2025-06-30T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2025-10-08T00:00:00.000",
+       "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR AT EAST WALL IN THE KITCHEN LOCATED AT APT 2D, 2nd STORY, 1st APARTMENT FROM WEST AT NORTH",
        "apartment": "2D",
        "story": "2"
       },
@@ -7550,14 +8001,14 @@
        "story": "3"
       },
       {
-       "violationid": "17401547",
+       "violationid": "17401549",
        "inspectiondate": "2024-11-06T00:00:00.000",
        "novissueddate": "2024-11-07T00:00:00.000",
-       "class": "B",
+       "class": "A",
        "violationstatus": "Close",
        "currentstatus": "VIOLATION DISMISSED",
        "currentstatusdate": "2025-02-18T00:00:00.000",
-       "novdescription": "§ 27-2005, 2007 ADM CODE REMOVE ALL ENCUMBRANCES CONSISTING OF CONSTRUCTION ITEMS AND LADDER AT PUBLIC HALL, 1st STORY",
+       "novdescription": "§ 27-2005 HMC: POST, IN A FORM APPROVED BY THE COMMISSIONER, AND MAINTAIN A NOTICE IN A COMMON AREA OF THE BUILDING REGARDING THE PROCEDURES THAT SHOULD BE FOLLOWED WHEN A GAS LEAK IS SUSPECTED AT PUBLIC HALL, 1st STORY",
        "story": "1"
       },
       {
@@ -7572,14 +8023,14 @@
        "story": "3"
       },
       {
-       "violationid": "17401549",
+       "violationid": "17401547",
        "inspectiondate": "2024-11-06T00:00:00.000",
        "novissueddate": "2024-11-07T00:00:00.000",
-       "class": "A",
+       "class": "B",
        "violationstatus": "Close",
        "currentstatus": "VIOLATION DISMISSED",
        "currentstatusdate": "2025-02-18T00:00:00.000",
-       "novdescription": "§ 27-2005 HMC: POST, IN A FORM APPROVED BY THE COMMISSIONER, AND MAINTAIN A NOTICE IN A COMMON AREA OF THE BUILDING REGARDING THE PROCEDURES THAT SHOULD BE FOLLOWED WHEN A GAS LEAK IS SUSPECTED AT PUBLIC HALL, 1st STORY",
+       "novdescription": "§ 27-2005, 2007 ADM CODE REMOVE ALL ENCUMBRANCES CONSISTING OF CONSTRUCTION ITEMS AND LADDER AT PUBLIC HALL, 1st STORY",
        "story": "1"
       },
       {
@@ -7604,14 +8055,14 @@
        "novdescription": "(A) § HMC:FILE ANNUAL BEDBUG REPORT IN ACCORDANCE WITH HPD RULE AS DESCRIBED ON THE BACK OF THIS NOTICE OF VIOLATION OR AS DESCRIBED ON HPD\u001aS WEBSITE, WWW.NYC.GOV\\HPD, SEARCH BED BUGS."
       },
       {
-       "violationid": "16314465",
+       "violationid": "16314464",
        "inspectiondate": "2023-10-17T00:00:00.000",
        "novissueddate": "2023-10-18T00:00:00.000",
        "class": "B",
-       "violationstatus": "Open",
-       "currentstatus": "INVALID CERTIFICATION",
-       "currentstatusdate": "2023-11-09T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR AT CEILING IN THE BATHROOM LOCATED AT APT 4A, 4th STORY, 1st APARTMENT FROM EAST AT SOUTH",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2024-01-23T00:00:00.000",
+       "novdescription": "§ 27-2005 ADM CODE REPAIR THE ROOF SO THAT IT WILL NOT LEAK ABOVE CEILING IN THE BATHROOM LOCATED AT APT 4A, 4th STORY, 1st APARTMENT FROM EAST AT SOUTH",
        "apartment": "4A",
        "story": "4"
       },
@@ -7676,14 +8127,14 @@
        "story": "4"
       },
       {
-       "violationid": "16314464",
+       "violationid": "16314465",
        "inspectiondate": "2023-10-17T00:00:00.000",
        "novissueddate": "2023-10-18T00:00:00.000",
        "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2024-01-23T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE REPAIR THE ROOF SO THAT IT WILL NOT LEAK ABOVE CEILING IN THE BATHROOM LOCATED AT APT 4A, 4th STORY, 1st APARTMENT FROM EAST AT SOUTH",
+       "violationstatus": "Open",
+       "currentstatus": "INVALID CERTIFICATION",
+       "currentstatusdate": "2023-11-09T00:00:00.000",
+       "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR AT CEILING IN THE BATHROOM LOCATED AT APT 4A, 4th STORY, 1st APARTMENT FROM EAST AT SOUTH",
        "apartment": "4A",
        "story": "4"
       },
@@ -7696,18 +8147,6 @@
        "currentstatus": "VIOLATION DISMISSED",
        "currentstatusdate": "2023-05-01T00:00:00.000",
        "novdescription": "(A) § HMC:FILE ANNUAL BEDBUG REPORT IN ACCORDANCE WITH HPD RULE AS DESCRIBED ON THE BACK OF THIS NOTICE OF VIOLATION OR AS DESCRIBED ON HPD\u001aS WEBSITE, WWW.NYC.GOV\\HPD, SEARCH BED BUGS."
-      },
-      {
-       "violationid": "15636068",
-       "inspectiondate": "2022-12-29T00:00:00.000",
-       "novissueddate": "2022-12-30T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2023-04-05T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR AT SOUTH WALL IN THE PRIVATE HALLWAY LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM NORTH AT EAST",
-       "apartment": "2B",
-       "story": "2"
       },
       {
        "violationid": "15636066",
@@ -7734,6 +8173,30 @@
        "story": "2"
       },
       {
+       "violationid": "15636068",
+       "inspectiondate": "2022-12-29T00:00:00.000",
+       "novissueddate": "2022-12-30T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2023-04-05T00:00:00.000",
+       "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR AT SOUTH WALL IN THE PRIVATE HALLWAY LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM NORTH AT EAST",
+       "apartment": "2B",
+       "story": "2"
+      },
+      {
+       "violationid": "14021494",
+       "inspectiondate": "2021-02-09T00:00:00.000",
+       "novissueddate": "2021-02-16T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2021-05-24T00:00:00.000",
+       "novdescription": "§ 27-2026, 2027 HMC: PROPERLY REPAIR THE SOURCE AND ABATE THE EVIDENCE OF A WATER LEAK AT CEILING IN THE BATHROOM LOCATED AT APT A2, 1st STORY, 4th APARTMENT FROM NORTH AT EAST",
+       "apartment": "A2",
+       "story": "1"
+      },
+      {
        "violationid": "14021499",
        "inspectiondate": "2021-02-09T00:00:00.000",
        "novissueddate": "2021-02-16T00:00:00.000",
@@ -7742,6 +8205,18 @@
        "currentstatus": "VIOLATION DISMISSED",
        "currentstatusdate": "2021-05-24T00:00:00.000",
        "novdescription": "§ 27-2005 ADM CODE REPLACE WITH NEW THE MISSING ESCUTCHEON PLATE AT HEAT RISER IN THE KITCHEN LOCATED AT APT A2, 1st STORY, 4th APARTMENT FROM NORTH AT EAST",
+       "apartment": "A2",
+       "story": "1"
+      },
+      {
+       "violationid": "14021497",
+       "inspectiondate": "2021-02-09T00:00:00.000",
+       "novissueddate": "2021-02-16T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2021-05-24T00:00:00.000",
+       "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR AT CEILING IN THE KITCHEN LOCATED AT APT A2, 1st STORY, 4th APARTMENT FROM NORTH AT EAST",
        "apartment": "A2",
        "story": "1"
       },
@@ -7770,27 +8245,14 @@
        "story": "1"
       },
       {
-       "violationid": "14021494",
-       "inspectiondate": "2021-02-09T00:00:00.000",
-       "novissueddate": "2021-02-16T00:00:00.000",
-       "class": "B",
+       "violationid": "13564730",
+       "inspectiondate": "2020-01-24T00:00:00.000",
+       "novissueddate": "2020-01-29T00:00:00.000",
+       "class": "A",
        "violationstatus": "Close",
        "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2021-05-24T00:00:00.000",
-       "novdescription": "§ 27-2026, 2027 HMC: PROPERLY REPAIR THE SOURCE AND ABATE THE EVIDENCE OF A WATER LEAK AT CEILING IN THE BATHROOM LOCATED AT APT A2, 1st STORY, 4th APARTMENT FROM NORTH AT EAST",
-       "apartment": "A2",
-       "story": "1"
-      },
-      {
-       "violationid": "14021497",
-       "inspectiondate": "2021-02-09T00:00:00.000",
-       "novissueddate": "2021-02-16T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2021-05-24T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR AT CEILING IN THE KITCHEN LOCATED AT APT A2, 1st STORY, 4th APARTMENT FROM NORTH AT EAST",
-       "apartment": "A2",
+       "currentstatusdate": "2020-04-22T00:00:00.000",
+       "novdescription": "§ 27-2104 ADM CODE POST AND MAINTAIN A PROPER SIGN ON WALL OF ENTRANCE STORY SHOWING THE REGISTRATION NUMBER ASSIGNED BY THE DEPARTMENT AND THE ADDRESS OF THE BUILDING. AT PUBLIC HALL, 1st STORY",
        "story": "1"
       },
       {
@@ -7803,17 +8265,6 @@
        "currentstatusdate": "2020-04-15T00:00:00.000",
        "novdescription": "§ 27-2005, 2007 ADM CODE AND DEPT. RULES AND REGULATIONS. REMOVE THE ENCUMBRANCE OBSTRUCTING EGRESS FROM FIRE ESCAPES CONSISTING OF HOUSEHOLD ITEMS ON THE 4TH AND 3RD STORY BALCONY, NORTH STACK AT WEST EXTERIOR WALL AT FIRE ESCAPE",
        "story": "0"
-      },
-      {
-       "violationid": "13564730",
-       "inspectiondate": "2020-01-24T00:00:00.000",
-       "novissueddate": "2020-01-29T00:00:00.000",
-       "class": "A",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2020-04-22T00:00:00.000",
-       "novdescription": "§ 27-2104 ADM CODE POST AND MAINTAIN A PROPER SIGN ON WALL OF ENTRANCE STORY SHOWING THE REGISTRATION NUMBER ASSIGNED BY THE DEPARTMENT AND THE ADDRESS OF THE BUILDING. AT PUBLIC HALL, 1st STORY",
-       "story": "1"
       },
       {
        "violationid": "13379019",
@@ -7849,14 +8300,14 @@
        "story": "2"
       },
       {
-       "violationid": "12790394",
+       "violationid": "12790391",
        "inspectiondate": "2018-12-04T00:00:00.000",
-       "novissueddate": "2020-08-05T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Open",
-       "currentstatus": "NOT COMPLIED WITH",
-       "currentstatusdate": "2020-09-09T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR THE WALLS AND CEILING IN THE BATHROOM LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM NORTH AT EAST",
+       "novissueddate": "2018-12-11T00:00:00.000",
+       "class": "C",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION CLOSED",
+       "currentstatusdate": "2019-02-20T00:00:00.000",
+       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD FLOOR IN THE KITCHEN LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM NORTH AT EAST",
        "apartment": "2B",
        "story": "2"
       },
@@ -7945,14 +8396,14 @@
        "story": "2"
       },
       {
-       "violationid": "12790391",
+       "violationid": "12790394",
        "inspectiondate": "2018-12-04T00:00:00.000",
-       "novissueddate": "2018-12-11T00:00:00.000",
-       "class": "C",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION CLOSED",
-       "currentstatusdate": "2019-02-20T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD FLOOR IN THE KITCHEN LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM NORTH AT EAST",
+       "novissueddate": "2020-08-05T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Open",
+       "currentstatus": "NOT COMPLIED WITH",
+       "currentstatusdate": "2020-09-09T00:00:00.000",
+       "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR THE WALLS AND CEILING IN THE BATHROOM LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM NORTH AT EAST",
        "apartment": "2B",
        "story": "2"
       },
@@ -8111,18 +8562,6 @@
        "story": "2"
       },
       {
-       "violationid": "12615159",
-       "inspectiondate": "2018-10-01T00:00:00.000",
-       "novissueddate": "2020-08-05T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION CLOSED",
-       "currentstatusdate": "2020-09-09T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR THE BROKEN OR DEFECTIVE COUNTER BALANCE LOWER AND UPPER SASHES WINDOW AT EAST WALL IN THE 2nd ROOM FROM EAST LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM NORTH AT EAST",
-       "apartment": "2B",
-       "story": "2"
-      },
-      {
        "violationid": "12615164",
        "inspectiondate": "2018-10-01T00:00:00.000",
        "novissueddate": "2020-08-05T00:00:00.000",
@@ -8131,6 +8570,18 @@
        "currentstatus": "VIOLATION CLOSED",
        "currentstatusdate": "2020-09-09T00:00:00.000",
        "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD FLOOR BY RADIATOR IN THE KITCHEN LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM NORTH AT EAST",
+       "apartment": "2B",
+       "story": "2"
+      },
+      {
+       "violationid": "12615212",
+       "inspectiondate": "2018-10-01T00:00:00.000",
+       "novissueddate": "2020-08-05T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION CLOSED",
+       "currentstatusdate": "2020-09-09T00:00:00.000",
+       "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR CEILING AND WEST WALL IN THE 1st ROOM FROM EAST AT NORTH LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM NORTH AT EAST",
        "apartment": "2B",
        "story": "2"
       },
@@ -8147,14 +8598,14 @@
        "story": "2"
       },
       {
-       "violationid": "12615212",
+       "violationid": "12615159",
        "inspectiondate": "2018-10-01T00:00:00.000",
        "novissueddate": "2020-08-05T00:00:00.000",
        "class": "B",
        "violationstatus": "Close",
        "currentstatus": "VIOLATION CLOSED",
        "currentstatusdate": "2020-09-09T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR CEILING AND WEST WALL IN THE 1st ROOM FROM EAST AT NORTH LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM NORTH AT EAST",
+       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR THE BROKEN OR DEFECTIVE COUNTER BALANCE LOWER AND UPPER SASHES WINDOW AT EAST WALL IN THE 2nd ROOM FROM EAST LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM NORTH AT EAST",
        "apartment": "2B",
        "story": "2"
       },
@@ -8181,18 +8632,6 @@
        "story": "1"
       },
       {
-       "violationid": "11348948",
-       "inspectiondate": "2016-08-10T00:00:00.000",
-       "novissueddate": "2016-08-12T00:00:00.000",
-       "class": "A",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2017-01-13T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE REFIT HINGES AT DOOR IN THE ENTRANCE LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM NORTH AT EAST",
-       "apartment": "2B",
-       "story": "2"
-      },
-      {
        "violationid": "11348949",
        "inspectiondate": "2016-08-10T00:00:00.000",
        "novissueddate": "2020-08-05T00:00:00.000",
@@ -8201,6 +8640,18 @@
        "currentstatus": "VIOLATION CLOSED",
        "currentstatusdate": "2020-09-09T00:00:00.000",
        "novdescription": "§ 27-2026 ADM CODE REPLACE THE BROKEN OR DEFECTIVE WATER CLOSET IN THE BATHROOM LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM NORTH AT EAST",
+       "apartment": "2B",
+       "story": "2"
+      },
+      {
+       "violationid": "11348948",
+       "inspectiondate": "2016-08-10T00:00:00.000",
+       "novissueddate": "2016-08-12T00:00:00.000",
+       "class": "A",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2017-01-13T00:00:00.000",
+       "novdescription": "§ 27-2005 ADM CODE REFIT HINGES AT DOOR IN THE ENTRANCE LOCATED AT APT 2B, 2nd STORY, 2nd APARTMENT FROM NORTH AT EAST",
        "apartment": "2B",
        "story": "2"
       },
@@ -8228,18 +8679,6 @@
        "story": "3"
       },
       {
-       "violationid": "10681124",
-       "inspectiondate": "2015-04-17T00:00:00.000",
-       "novissueddate": "2015-04-22T00:00:00.000",
-       "class": "B",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION CLOSED",
-       "currentstatusdate": "2015-06-24T00:00:00.000",
-       "novdescription": "SECTION 27-2005 ADM CODE PROPERLY REPAIR THE BROKEN OR DEFECTIVE BASE CABINET UNDER SINK IN THE KITCHEN LOCATED AT APT 4A, 4th STORY, 1st APARTMENT FROM EAST AT SOUTH",
-       "apartment": "4A",
-       "story": "4"
-      },
-      {
        "violationid": "10681120",
        "inspectiondate": "2015-04-17T00:00:00.000",
        "novissueddate": "2015-04-22T00:00:00.000",
@@ -8248,18 +8687,6 @@
        "currentstatus": "VIOLATION CLOSED",
        "currentstatusdate": "2015-06-24T00:00:00.000",
        "novdescription": "SECTION 27-2005 ADM CODE PROPERLY REPAIR THE BROKEN OR DEFECTIVE NORTH WALL BASE CABINET IN THE KITCHEN LOCATED AT APT 4A, 4th STORY, 1st APARTMENT FROM EAST AT SOUTH",
-       "apartment": "4A",
-       "story": "4"
-      },
-      {
-       "violationid": "10681174",
-       "inspectiondate": "2015-04-17T00:00:00.000",
-       "novissueddate": "2020-08-05T00:00:00.000",
-       "class": "A",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION DISMISSED",
-       "currentstatusdate": "2020-11-05T00:00:00.000",
-       "novdescription": "§ 27-2013 ADM CODE PAINT WITH LIGHT COLORED PAINT TO THE SATISFACTION OF THIS DEPARTMENT ALL WALLS AND CEILING IN THE ENTIRE APARTMENT LOCATED AT APT 4A, 4th STORY, 1st APARTMENT FROM EAST AT SOUTH",
        "apartment": "4A",
        "story": "4"
       },
@@ -8285,6 +8712,30 @@
        "currentstatusdate": "2020-09-09T00:00:00.000",
        "novdescription": "§ 26-1103 ADMIN. CODE: POST AND MAINTAIN A PROPER NOTICE ON WALL OF THE ENTRANCE STORY IN ENGLISH AND SPANISH ON THE AVAILABILITY OF THE AGENCY\u001aS HOUSING INFORMATION GUIDE. A SAMPLE NOTICE CAN BE FOUND AT WWW.NYC.GOV/HPD., 1st STORY",
        "story": "1"
+      },
+      {
+       "violationid": "10681124",
+       "inspectiondate": "2015-04-17T00:00:00.000",
+       "novissueddate": "2015-04-22T00:00:00.000",
+       "class": "B",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION CLOSED",
+       "currentstatusdate": "2015-06-24T00:00:00.000",
+       "novdescription": "SECTION 27-2005 ADM CODE PROPERLY REPAIR THE BROKEN OR DEFECTIVE BASE CABINET UNDER SINK IN THE KITCHEN LOCATED AT APT 4A, 4th STORY, 1st APARTMENT FROM EAST AT SOUTH",
+       "apartment": "4A",
+       "story": "4"
+      },
+      {
+       "violationid": "10681174",
+       "inspectiondate": "2015-04-17T00:00:00.000",
+       "novissueddate": "2020-08-05T00:00:00.000",
+       "class": "A",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION DISMISSED",
+       "currentstatusdate": "2020-11-05T00:00:00.000",
+       "novdescription": "§ 27-2013 ADM CODE PAINT WITH LIGHT COLORED PAINT TO THE SATISFACTION OF THIS DEPARTMENT ALL WALLS AND CEILING IN THE ENTIRE APARTMENT LOCATED AT APT 4A, 4th STORY, 1st APARTMENT FROM EAST AT SOUTH",
+       "apartment": "4A",
+       "story": "4"
       },
       {
        "violationid": "10517688",
@@ -8611,6 +9062,41 @@
       }
      ],
      "held_back_other_lot": []
+    },
+    "dob_311_requests": {
+     "status": "ok",
+     "count": 2,
+     "truncated": false,
+     "query_url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?%24limit=5000&%24select=unique_key%2Ccreated_date%2Cclosed_date%2Cagency%2Ccomplaint_type%2Cdescriptor%2Cdescriptor_2%2Cstatus%2Cresolution_description%2Cresolution_action_updated_date%2Cincident_address%2Cbbl&%24where=agency%3D%27DOB%27+AND+bbl%3D%273052110079%27&%24order=created_date+DESC",
+     "records": [
+      {
+       "unique_key": "47376022",
+       "created_date": "2020-08-26T21:49:57.000",
+       "closed_date": "2020-11-17T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "Building/Use",
+       "descriptor": "Illegal Conversion Of Residential Building/Space",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings has made a second attempt to conduct an inspection of this premises and was denied access. No further attempts will be made.",
+       "resolution_action_updated_date": "2020-11-17T00:00:00.000",
+       "incident_address": "2619 BEDFORD AVENUE",
+       "bbl": "3052110079"
+      },
+      {
+       "unique_key": "46084478",
+       "created_date": "2020-04-28T10:10:36.000",
+       "closed_date": "2020-06-24T00:00:00.000",
+       "agency": "DOB",
+       "complaint_type": "Building/Use",
+       "descriptor": "Illegal Conversion Of Residential Building/Space",
+       "status": "Closed",
+       "resolution_description": "The Department of Buildings investigated this complaint and determined that no further action was necessary.",
+       "resolution_action_updated_date": "2020-06-24T00:00:00.000",
+       "incident_address": "2619 BEDFORD AVENUE",
+       "bbl": "3052110079"
+      }
+     ],
+     "held_back_other_lot": []
     }
    },
    "role": "touching lot",
@@ -8666,6 +9152,11 @@
    "dataset_id": "eabe-havv",
    "url": "https://data.cityofnewyork.us/d/eabe-havv"
   },
+  "dob_311_requests": {
+   "name": "311 service requests routed to DOB (2020 on)",
+   "dataset_id": "erm2-nwe9",
+   "url": "https://data.cityofnewyork.us/d/erm2-nwe9"
+  },
   "tax_lot_polygons": {
    "name": "Tax lot polygons",
    "dataset_id": "i38t-6if2",
@@ -8687,6 +9178,7 @@
   "PLUTO and the building footprints can lag a demolition or a collapse.",
   "Touching lots share an edge or a corner on the city's tax map.",
   "stop_work_mentions lists records whose text mentions a stop-work order. It is not a complete list: we have not found stop-work orders published as their own dataset.",
+  "dob_311_requests and dob_complaints can hold the same complaint, and they share no key: never add their counts. 311 rows filed by street or intersection, and rows before 2020, are missed.",
   "DOB violations filed under a letter borough code (a few thousand of 2.5 million rows) are found only through a BIN."
  ]
 }

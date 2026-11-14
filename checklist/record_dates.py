@@ -15,6 +15,7 @@ DATE_FIELDS = {
     "dob_safety_violations": "violation_issue_date",
     "hpd_violations": "inspectiondate",
     "dob_complaints": "date_entered",
+    "dob_311_requests": "created_date",
 }
 
 

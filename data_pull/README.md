@@ -25,10 +25,11 @@ NYC Open Data app token for higher rate limits.
    every other tax-lot polygon. A shared edge or corner counts as touching.
 3. **BINs per lot.** These come from building footprints (`5zhs-2jue`), the address lookup, and
    DOB NOW filings that state this lot.
-4. **Seven datasets per lot:** PLUTO, DOB NOW filings, DOB violations, ECB violations, DOB
-   safety violations, HPD violations and DOB complaints. The
+4. **Eight datasets per lot:** PLUTO, DOB NOW filings, DOB violations, ECB violations, DOB
+   safety violations, HPD violations, DOB complaints, and 311 requests routed to DOB. The
    [data notes](../docs/data_and_code_notes.md) list their IDs and traps.
-5. **Stop-work mentions.** These are violation records whose own text mentions a stop-work order.
+5. **Stop-work mentions.** These are violation records and 311 resolutions whose own text
+   mentions a stop-work order. A 311 resolution is dated by when DOB recorded it.
 
 ## Output shape
 
@@ -43,7 +44,7 @@ NYC Open Data app token for higher rate limits.
 LOT = {
   "bbl", "role", "bins", "footprint_buildings": {status, records},
   "datasets": {pluto | dob_now_filings | dob_violations | ecb_violations | dob_safety_violations |
-               hpd_violations | dob_complaints:
+               hpd_violations | dob_complaints | dob_311_requests:
                {status, count, truncated, query_url, records, held_back_other_lot}},
   "stop_work_mentions": [{dataset, record_id, issue_date, field, text}]
 }
@@ -58,6 +59,8 @@ LOT = {
 - **Show `address_lookup.matched_label`.** GeoSearch matches loosely, so show what was found, not
   what was typed.
 - **Every record has a source:** `query_url` reproduces the query exactly.
+- **Never add `dob_complaints` and `dob_311_requests`.** The same complaint can be in both, and
+  they share no key to match on.
 - **`held_back_other_lot` rows are not counted.** They were reached through a BIN, but the record
   itself names a different lot.
 - **`stop_work_mentions` is not a list of stop-work orders.** We have not found them published as

@@ -89,6 +89,9 @@ class ContextTests(unittest.TestCase):
         inactive = {"violation_category": "V-DOB VIOLATION - INACTIVE"}  # contains "ACTIVE"
         self.assertEqual(neighbor_context.classify("dob_violations", inactive), "not_stated")
         self.assertEqual(neighbor_context.classify("hpd_violations", {"violationstatus": "Close"}), "closed")
+        self.assertEqual(neighbor_context.classify("dob_311_requests", {"status": "In Progress"}), "open")
+        self.assertEqual(neighbor_context.classify("dob_311_requests", {"status": "Closed"}), "closed")
+        self.assertEqual(neighbor_context.classify("dob_311_requests", {"status": "Unspecified"}), "not_stated")
 
     def test_a_failed_dataset_reports_its_status_not_zero(self):
         counts = neighbor_context.count_statuses("hpd_violations", {"status": "error", "error": "HTTP 503"}, None)

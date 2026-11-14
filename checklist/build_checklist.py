@@ -32,6 +32,7 @@ CAVEATS = [
     "'reported_not_read' means a public source reports it; nobody here has read it.",
     "related_records sit beside a row; they are not its proof.",
     "Counts use each record's status at pull time, not on the as-of date.",
+    "dob_311_requests and dob_complaints can count the same complaint twice: never add them.",
     "Requirements are paraphrased; read the linked code text before relying on a row.",
     "Nothing here establishes the cause of any incident.",
 ]

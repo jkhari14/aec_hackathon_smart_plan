@@ -18,6 +18,7 @@ _STATUS_RULES = {
     "dob_safety_violations": ("violation_status", r"ACTIVE", r"DISMISSED"),
     "hpd_violations": ("violationstatus", r"OPEN", r"CLOSE"),
     "dob_complaints": ("status", r"ACTIVE", r"CLOSED"),
+    "dob_311_requests": ("status", r"OPEN|ASSIGNED|IN PROGRESS|PENDING|STARTED", r"CLOSED"),
 }
 
 

@@ -1,4 +1,4 @@
-"""The public record for one lot: seven NYC Open Data datasets, each reported honestly.
+"""The public record for one lot: eight NYC Open Data datasets, each reported honestly.
 
 Each dataset comes back as one of three statuses, never blurred together:
 - "ok": queried; `count` may be 0, which means "queried and none found";
@@ -56,6 +56,12 @@ DATASETS = {
         "complaint_number,bin,date_entered,complaint_category,status,disposition_date,"
         "disposition_code,inspection_date,unit",
         "complaint_number DESC",
+    ),
+    "dob_311_requests": (
+        "erm2-nwe9", "311 service requests routed to DOB (2020 on)",
+        "unique_key,created_date,closed_date,agency,complaint_type,descriptor,descriptor_2,status,"
+        "resolution_description,resolution_action_updated_date,incident_address,bbl",
+        "created_date DESC",
     ),
 }
 
@@ -134,5 +140,7 @@ def pull_lot(bbl: str, seed_bins: list[str]) -> dict:
         datasets["dob_complaints"] = _run("dob_complaints", complaints_where, bbl)
     else:
         datasets["dob_complaints"] = _skipped("no BIN found for this lot; complaints join by BIN only")
+    # 311 rows filed by street or intersection carry no bbl, so they are missed here.
+    datasets["dob_311_requests"] = _run("dob_311_requests", f"agency='DOB' AND bbl='{bbl}'", bbl)
 
     return {"bbl": bbl, "bins": bins, "datasets": datasets}

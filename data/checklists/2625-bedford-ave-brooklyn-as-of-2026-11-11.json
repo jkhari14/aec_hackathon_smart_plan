@@ -1,8 +1,8 @@
 {
  "schema_version": 1,
- "built_at": "2026-11-14T19:18:35+00:00",
+ "built_at": "2026-11-14T20:56:47+00:00",
  "pull": {
-  "pulled_at": "2026-11-14T19:09:57+00:00",
+  "pulled_at": "2026-11-14T20:56:22+00:00",
   "site_bbl": "3052110074",
   "matched_label": "2625 BEDFORD AVENUE, Brooklyn, NY, USA"
  },
@@ -90,9 +90,25 @@
     "dated_on_or_after_cutoff": 6,
     "undated": 0,
     "truncated": false
+   },
+   "dob_311_requests": {
+    "status": "ok",
+    "open": 0,
+    "closed": 1,
+    "not_stated": 0,
+    "dated_on_or_after_cutoff": 1,
+    "undated": 0,
+    "truncated": false
    }
   },
   "stop_work_mentions": [
+   {
+    "dataset": "dob_311_requests",
+    "record_id": "68381531",
+    "issue_date": "2026-05-08T00:00:00.000",
+    "field": "resolution_description",
+    "text": "The Department of Buildings investigated this complaint and removed the stop work order."
+   },
    {
     "dataset": "ecb_violations",
     "record_id": "39553409Z",
@@ -161,6 +177,15 @@
      "dated_on_or_after_cutoff": 0,
      "undated": 0,
      "truncated": false
+    },
+    "dob_311_requests": {
+     "status": "ok",
+     "open": 0,
+     "closed": 2,
+     "not_stated": 0,
+     "dated_on_or_after_cutoff": 0,
+     "undated": 0,
+     "truncated": false
     }
    },
    "stop_work_mentions": []
@@ -221,6 +246,15 @@
      "closed": 12,
      "not_stated": 0,
      "dated_on_or_after_cutoff": 4,
+     "undated": 0,
+     "truncated": false
+    },
+    "dob_311_requests": {
+     "status": "ok",
+     "open": 1,
+     "closed": 9,
+     "not_stated": 0,
+     "dated_on_or_after_cutoff": 0,
      "undated": 0,
      "truncated": false
     }
@@ -285,9 +319,54 @@
      "dated_on_or_after_cutoff": 1,
      "undated": 0,
      "truncated": false
+    },
+    "dob_311_requests": {
+     "status": "ok",
+     "open": 0,
+     "closed": 14,
+     "not_stated": 0,
+     "dated_on_or_after_cutoff": 0,
+     "undated": 0,
+     "truncated": false
     }
    },
-   "stop_work_mentions": []
+   "stop_work_mentions": [
+    {
+     "dataset": "dob_311_requests",
+     "record_id": "51643022",
+     "issue_date": "2021-09-18T00:00:00.000",
+     "field": "resolution_description",
+     "text": "The Department of Buildings investigated this complaint and removed the stop work order."
+    },
+    {
+     "dataset": "dob_311_requests",
+     "record_id": "49528502",
+     "issue_date": "2021-08-06T00:00:00.000",
+     "field": "resolution_description",
+     "text": "The Department of Buildings investigated this complaint and removed the stop work order."
+    },
+    {
+     "dataset": "dob_311_requests",
+     "record_id": "50827627",
+     "issue_date": "2021-06-09T13:39:30.000",
+     "field": "descriptor",
+     "text": "Working Contrary To Stop Work Order"
+    },
+    {
+     "dataset": "dob_311_requests",
+     "record_id": "49647447",
+     "issue_date": "2021-01-28T09:10:15.000",
+     "field": "descriptor",
+     "text": "Working Contrary To Stop Work Order"
+    },
+    {
+     "dataset": "dob_311_requests",
+     "record_id": "49629916",
+     "issue_date": "2021-01-26T09:23:58.000",
+     "field": "descriptor",
+     "text": "Working Contrary To Stop Work Order"
+    }
+   ]
   },
   {
    "bbl": "3052110073",
@@ -345,6 +424,15 @@
      "closed": 2,
      "not_stated": 0,
      "dated_on_or_after_cutoff": 2,
+     "undated": 0,
+     "truncated": false
+    },
+    "dob_311_requests": {
+     "status": "ok",
+     "open": 0,
+     "closed": 0,
+     "not_stated": 0,
+     "dated_on_or_after_cutoff": 0,
      "undated": 0,
      "truncated": false
     }
@@ -405,6 +493,15 @@
      "status": "ok",
      "open": 0,
      "closed": 4,
+     "not_stated": 0,
+     "dated_on_or_after_cutoff": 0,
+     "undated": 0,
+     "truncated": false
+    },
+    "dob_311_requests": {
+     "status": "ok",
+     "open": 0,
+     "closed": 2,
      "not_stated": 0,
      "dated_on_or_after_cutoff": 0,
      "undated": 0,
@@ -1281,6 +1378,7 @@
   "A row is never marked done from public data: its proof is a document the public record does not hold. 'provided_unverified' means the project team supplied it; nobody checked it. 'reported_not_read' means a public source reports it; nobody here has read it.",
   "related_records sit beside a row; they are not its proof.",
   "Counts use each record's status at pull time, not on the as-of date.",
+  "dob_311_requests and dob_complaints can count the same complaint twice: never add them.",
   "Requirements are paraphrased; read the linked code text before relying on a row.",
   "Nothing here establishes the cause of any incident."
  ]

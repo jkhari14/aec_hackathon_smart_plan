@@ -62,6 +62,7 @@ open, keyless SODA endpoints (`https://data.cityofnewyork.us/resource/<ID>.json`
 | DOB safety violations | `855j-jady` | `bbl`, `bin` | The newer civil-penalty set. It holds 1321 Flatbush's open violation; the two older sets do not |
 | HPD violations (housing agency) | `wvxf-dwi5` | `bbl` | Not DOB. "Open" includes items decades old |
 | DOB complaints | `eabe-havv` | `bin` only | Categories are 2-character codes; DOB publishes the key separately |
+| 311 requests routed to DOB | `erm2-nwe9` | `bbl`, with `agency='DOB'` | The complaint in words and DOB's resolution. Can repeat a DOB complaint with no shared key, so never add the two. Rows filed by street or intersection have no `bbl`; starts in 2020 |
 
 - **We have not found stop-work orders as their own dataset**, so the plan's data row needs
   adjusting. They surface indirectly: a DOB violation that says so, or an ECB violation for

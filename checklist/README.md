@@ -127,9 +127,12 @@ the real-site checklists.
   has a footprint but no PLUTO record.
 - **S3 and S4's current status**, "On Hold - Pending Withdrawal of Special Inspector", is dated
   on or after the cutoff and is flagged as such.
-- **One stop-work mention** before the cutoff, on the site: ECB, 2026-04-23, worked while a
-  stop-work order was in force. The DOB violation issued on the day of the collapse (a full
-  stop-work order) falls on the cutoff, so it is left out.
+- **Two stop-work mentions** before the cutoff, on the site:
+  - an ECB violation on 2026-04-23 for working while a stop-work order was in force;
+  - a 311 complaint from 2026-03-18 about work beyond the approved plans. Its resolution,
+    recorded 2026-05-08, says DOB removed the stop-work order.
+- **Left out of this view:** the DOB violation issued on the day of the collapse (a full
+  stop-work order), because it falls on the cutoff.
 
 ## Not checked
 

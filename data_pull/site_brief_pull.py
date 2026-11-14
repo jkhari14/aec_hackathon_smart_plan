@@ -32,6 +32,8 @@ CAVEATS = [
     "Touching lots share an edge or a corner on the city's tax map.",
     "stop_work_mentions lists records whose text mentions a stop-work order. It is not a "
     "complete list: we have not found stop-work orders published as their own dataset.",
+    "dob_311_requests and dob_complaints can hold the same complaint, and they share no key: "
+    "never add their counts. 311 rows filed by street or intersection, and rows before 2020, are missed.",
     "DOB violations filed under a letter borough code (a few thousand of 2.5 million rows) "
     "are found only through a BIN.",
 ]

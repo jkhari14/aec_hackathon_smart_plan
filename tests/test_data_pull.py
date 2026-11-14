@@ -96,6 +96,12 @@ class PullLotTests(unittest.TestCase):
             lot = lot_records.pull_lot(BBL, seed_bins=[])
         self.assertEqual(lot["datasets"]["dob_complaints"]["status"], "skipped")
 
+    def test_311_is_asked_for_dob_rows_on_this_lot_only(self):
+        fake, calls = _fake_query({})
+        with mock.patch.object(soda_client, "query", side_effect=fake):
+            lot_records.pull_lot(BBL, seed_bins=[])
+        self.assertEqual([p["where"] for d, p in calls if d == "erm2-nwe9"], [f"agency='DOB' AND bbl='{BBL}'"])
+
 
 class StopWorkMentionTests(unittest.TestCase):
     def test_finds_mentions_in_record_text_only(self):
@@ -111,6 +117,21 @@ class StopWorkMentionTests(unittest.TestCase):
         }
         mentions = find_stop_work_mentions(datasets)
         self.assertEqual([m["record_id"] for m in mentions], ["1", "9"])
+
+    def test_a_311_resolution_is_dated_when_dob_acted_and_sorts_with_other_formats(self):
+        datasets = {
+            "dob_311_requests": {"records": [
+                {"unique_key": "311-1", "created_date": "2026-03-18T13:54:00.000",
+                 "resolution_action_updated_date": "2026-05-02T09:00:00.000",
+                 "resolution_description": "The Department of Buildings investigated this complaint and removed the stop work order."},
+            ]},
+            "ecb_violations": {"records": [
+                {"ecb_violation_number": "9", "issue_date": "20260423", "section_law_description1": "28-207.2.2"},
+            ]},
+        }
+        mentions = find_stop_work_mentions(datasets)
+        self.assertEqual([(m["record_id"], m["issue_date"][:10]) for m in mentions],
+                         [("311-1", "2026-05-02"), ("9", "20260423")])
 
 
 if __name__ == "__main__":
