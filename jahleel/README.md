@@ -3,7 +3,7 @@
 One teammate's working proposal for the web app and API, kept in its own folder for now so the
 team can react before anything moves to the top level. Everything here reads the shared
 `data_pull/` cache and the `checklist/` engine; it changes neither. Companion to the
-[plan](../README-Camilo), the [data notes](../docs/data_and_code_notes.md), the
+[ForeSite build plan](../docs/foresite_build_plan.md), the [data notes](../docs/data_and_code_notes.md), the
 [data sources](../docs/api_data_sources.md) and the [checklist engine](../checklist/README.md).
 The page also has a [chat](api/chat/README.md) that answers questions about one site from the brief
 and web search.
