@@ -370,6 +370,21 @@ export interface components {
              * @default false
              */
             mentions_stop_work: boolean;
+            /**
+             * Stop Work First Mentioned
+             * @description ISO date the earliest stop-work mention on this record was written, which can be after `date`; None if undated. An as-of view shows the mention only from the day after.
+             */
+            stop_work_first_mentioned?: string | null;
+            /**
+             * Resolution
+             * @description DOB's resolution text (311 requests), written when DOB acted, after `date`.
+             */
+            resolution?: string | null;
+            /**
+             * Resolution Recorded
+             * @description ISO date DOB recorded `resolution`; None if undated. An as-of view shows it only from the day after.
+             */
+            resolution_recorded?: string | null;
         };
         /** RelatedFilings */
         RelatedFilings: {

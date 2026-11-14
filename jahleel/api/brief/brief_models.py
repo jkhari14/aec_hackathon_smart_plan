@@ -80,6 +80,14 @@ class PublicRecord(BaseModel):
     summary: str
     query_url: Optional[str] = None
     mentions_stop_work: bool = False
+    stop_work_first_mentioned: Optional[str] = Field(
+        None, description="ISO date the earliest stop-work mention on this record was written, which can be "
+        "after `date`; None if undated. An as-of view shows the mention only from the day after.")
+    resolution: Optional[str] = Field(
+        None, description="DOB's resolution text (311 requests), written when DOB acted, after `date`.")
+    resolution_recorded: Optional[str] = Field(
+        None, description="ISO date DOB recorded `resolution`; None if undated. An as-of view shows it only "
+        "from the day after.")
 
 
 ApplyStatus = Literal["applies", "needs_input", "unknown", "set_by_dob", "does_not_apply"]

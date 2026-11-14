@@ -1,3 +1,4 @@
+import { mentionsStopWorkAsOf } from "../../brief/brief_as_of";
 import type { Lot, PublicRecord } from "../../brief/brief_types";
 
 type Props = { lots: Lot[]; visible: PublicRecord[]; asOf: string | null; selectedBbl: string | null; onSelect: (bbl: string) => void };
@@ -7,6 +8,8 @@ export function NeighborCards({ lots, visible, asOf, selectedBbl, onSelect }: Pr
     <div className="grid gap-2 sm:grid-cols-2">
       {lots.map((lot) => {
         const records = visible.filter((r) => r.bbl === lot.bbl);
+        // 311 requests can repeat a DOB complaint (no shared key), so they're counted apart, never added.
+        const requests311 = records.filter((r) => r.dataset_key === "dob_311_requests").length;
         const failed = lot.datasets.filter((d) => d.status !== "ok");
         const tallest = Math.max(0, ...lot.buildings.map((b) => b.height_roof_ft ?? 0));
         return (
@@ -18,8 +21,9 @@ export function NeighborCards({ lots, visible, asOf, selectedBbl, onSelect }: Pr
               {lot.facts?.building_class ?? "?"}{tallest ? ` · roof ${tallest.toFixed(0)} ft` : ""}
             </p>
             <p className="mt-1 text-xs">
-              {records.length} records dated {asOf ? `before ${asOf}` : "to date"}
-              {records.some((r) => r.mentions_stop_work) ? " · mentions a stop-work order" : ""}
+              {records.length - requests311} records dated {asOf ? `before ${asOf}` : "to date"}
+              {requests311 > 0 ? ` · ${requests311} 311 requests, which may repeat a DOB complaint` : ""}
+              {records.some((r) => mentionsStopWorkAsOf(r, asOf)) ? " · mentions a stop-work order" : ""}
             </p>
             {failed.length > 0 && (
               <p className="mt-1 text-xs text-site">Couldn't load: {failed.map((d) => d.name).join(", ")} (unknown, not zero)</p>

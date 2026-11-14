@@ -1004,6 +1004,42 @@
       "type": "boolean",
       "title": "Mentions Stop Work",
       "default": false
+     },
+     "stop_work_first_mentioned": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Stop Work First Mentioned",
+      "description": "ISO date the earliest stop-work mention on this record was written, which can be after `date`; None if undated. An as-of view shows the mention only from the day after."
+     },
+     "resolution": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Resolution",
+      "description": "DOB's resolution text (311 requests), written when DOB acted, after `date`."
+     },
+     "resolution_recorded": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Resolution Recorded",
+      "description": "ISO date DOB recorded `resolution`; None if undated. An as-of view shows it only from the day after."
      }
     },
     "type": "object",

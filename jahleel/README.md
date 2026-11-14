@@ -62,6 +62,11 @@ jahleel/
 - **Show what the address matched**, not what was typed.
 - **As-of means "dated before that day"**, the same rule as the engine. Status is today's, so the
   screen never says a record was open on that date.
+- **Text written later shows only once it existed.** A stop-work mention, or DOB's resolution of
+  a 311 request, is dated when it was written, which can be weeks after the record's own date.
+  The replay shows the record but hides that text until its own date.
+- **311 requests and DOB complaints are never added.** The same complaint can be in both and they
+  share no key, so the neighbor cards count 311 requests apart and the record list says so.
 - **On life-safety rows (the engine's flag) the serious line comes first**, with the roast under it.
 - **No owner, applicant or respondent names.** The question is what was knowable, not who is to
   blame.

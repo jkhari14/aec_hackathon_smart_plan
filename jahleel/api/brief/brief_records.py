@@ -53,22 +53,49 @@ _FIELDS = {
         "status",
         lambda r: f"Complaint category code {r.get('complaint_category', '?')} (DOB publishes the key separately).",
     ),
+    # Can repeat a dob_complaints row (no shared key): never add the two counts.
+    "dob_311_requests": (
+        "unique_key",
+        "status",
+        lambda r: ". ".join(t for t in (r.get("complaint_type"), r.get("descriptor"), r.get("descriptor_2")) if t),
+    ),
 }
+# Published status values that state nothing.
+_NOT_A_STATUS = {"unspecified"}
+# Text written when DOB acted, later than the record's own date: (text field, date field).
+_LATER_TEXT = {"dob_311_requests": ("resolution_description", "resolution_action_updated_date")}
+
+
+def _first_stop_work_mentions(lot: dict) -> dict[tuple[str, str], Optional[str]]:
+    """(dataset, record id) -> ISO date of the earliest dated stop-work mention on it; None if all undated."""
+    first: dict[tuple[str, str], Optional[str]] = {}
+    for mention in lot.get("stop_work_mentions") or []:
+        key = (mention["dataset"], str(mention["record_id"]).strip())
+        dates = [d for d in (first.get(key), iso_date(mention.get("issue_date"))) if d]
+        first[key] = min(dates) if dates else None
+    return first
+
+
+def _status(row: dict, field: str) -> Optional[str]:
+    status = str(row.get(field) or "").strip()
+    return status if status and status.lower() not in _NOT_A_STATUS else None
 
 
 def lot_records(lot: dict, sources: dict) -> list[PublicRecord]:
     """Every counted record on one lot. Rows data_pull held back (another lot's) are left out."""
-    stop_work = {(m["dataset"], m["record_id"]) for m in lot.get("stop_work_mentions") or []}
+    stop_work = _first_stop_work_mentions(lot)
     records = []
     for key, (id_field, status_field, summarize) in _FIELDS.items():
         pulled = lot["datasets"].get(key) or {}
         if pulled.get("status") != "ok":
             continue
+        text_field, text_date_field = _LATER_TEXT.get(key, (None, None))
         for row in pulled.get("records") or []:
             record_id = str(row.get(id_field) or "").strip()
             if not record_id:
                 continue
             when = record_date(key, row)
+            later_text = _clip(row.get(text_field) or "") if text_field else ""
             records.append(
                 PublicRecord(
                     id=f"{key}:{record_id}",
@@ -77,10 +104,13 @@ def lot_records(lot: dict, sources: dict) -> list[PublicRecord]:
                     record_id=record_id,
                     bbl=lot["bbl"],
                     date=when.isoformat() if when else None,
-                    status_today=(row.get(status_field) or None),
+                    status_today=_status(row, status_field),
                     summary=_clip(summarize(row)),
                     query_url=pulled.get("query_url"),
                     mentions_stop_work=(key, record_id) in stop_work,
+                    stop_work_first_mentioned=stop_work.get((key, record_id)),
+                    resolution=later_text or None,
+                    resolution_recorded=iso_date(row.get(text_date_field)) if later_text else None,
                 )
             )
     return records

@@ -21,6 +21,15 @@ class BriefFromCacheTests(unittest.TestCase):
         flagged = {r.id for r in brief.records if r.mentions_stop_work}
         self.assertIn("ecb_violations:39553409Z", flagged)
 
+    def test_311_resolution_and_its_stop_work_mention_carry_the_day_dob_acted(self):
+        records = {r.id: r for r in build_brief("2625-bedford-ave-brooklyn").records}
+        request = records["dob_311_requests:68381531"]
+        self.assertEqual(request.date, "2026-03-18")
+        self.assertIn("removed the stop work order", request.resolution)
+        self.assertEqual(request.resolution_recorded, "2026-05-08")
+        self.assertTrue(request.mentions_stop_work)
+        self.assertEqual(request.stop_work_first_mentioned, "2026-05-08")
+
     def test_checklist_comes_from_the_engine_and_never_claims_proof(self):
         brief = build_brief("2625-bedford-ave-brooklyn")
         self.assertEqual(len(brief.checklist), brief.checklist_summary.rows)
@@ -59,6 +68,22 @@ class RecordTests(unittest.TestCase):
         lot = {"bbl": "3052110074", "datasets": {"ecb_violations": {"status": "error", "records": [
             {"ecb_violation_number": "1", "issue_date": "20260101"}]}}}
         self.assertEqual(brief_records.lot_records(copy.deepcopy(lot), {}), [])
+
+    def test_311_row_unstated_status_undated_resolution_and_earliest_mention(self):
+        lot = {"bbl": "3052110054", "datasets": {"dob_311_requests": {"status": "ok", "records": [
+            {"unique_key": "7", "created_date": "2021-01-20T09:00:00.000", "status": "Unspecified",
+             "complaint_type": "General Construction/Plumbing", "descriptor": "Working Contrary To Stop Work Order",
+             "resolution_description": "DOB inspected."}]}},
+            "stop_work_mentions": [
+                {"dataset": "dob_311_requests", "record_id": "7", "issue_date": "2021-03-02T00:00:00.000"},
+                {"dataset": "dob_311_requests", "record_id": "7", "issue_date": "2021-01-20T09:00:00.000"},
+                {"dataset": "dob_311_requests", "record_id": "7", "issue_date": None}]}
+        [record] = brief_records.lot_records(lot, {})
+        self.assertEqual(record.summary, "General Construction/Plumbing. Working Contrary To Stop Work Order")
+        self.assertIsNone(record.status_today)
+        self.assertEqual(record.resolution, "DOB inspected.")
+        self.assertIsNone(record.resolution_recorded)
+        self.assertEqual(record.stop_work_first_mentioned, "2021-01-20")
 
 
 if __name__ == "__main__":
