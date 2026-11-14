@@ -26,8 +26,8 @@ out a manual-import path and what a person has to do. All checks were run on **2
    decode as an explicit gap until a person imports DOB's newer list from nyc.gov.
 3. **Several "can't crawl" sources are plain downloads or keyless services.** These are FEMA's flood
    layer (queried today: 1321 Flatbush is in Zone X), the USGS bedrock files, the DCP 3D model, and
-   the BIS pages. Correction to the survey: the hero lots are in **Brooklyn Community District 17**
-   (PLUTO `cd` = 317), so the 3D model file is `nyc_3dmodel_bk17.zip`, not `bk14`.
+   the BIS pages. The hero lots are in **Brooklyn Community District 17** (PLUTO `cd` = 317), so the
+   3D model file is `nyc_3dmodel_bk17.zip`.
 4. **These stay with a person:**
    - the DOB NOW portal and nyc.gov PDFs, both of which answer scripts with HTTP 403;
    - amlegal, whose robots.txt disallows Anthropic's crawlers.
@@ -166,11 +166,11 @@ These are requests. This branch does not touch `data_pull/` or `checklist/`.
 4. **Leave the leads file alone.** When a DOB NOW document import exists, linking it to the 3309.1.1
    lead is the checklist's decision.
 
-## Where this differs from api_data_sources.md
+## Where this differed from api_data_sources.md
 
-- That page names `nyc_3dmodel_bk14.zip` for the hero site. PLUTO puts both hero lots in Brooklyn
-  Community District 17 (`cd` = 317, queried 2026-11-14), so the file is `nyc_3dmodel_bk17.zip`.
-  We told that page's owner and did not edit it.
+- That page once named `nyc_3dmodel_bk14.zip` for the hero site. PLUTO puts both hero lots in
+  Brooklyn Community District 17 (`cd` = 317, queried 2026-11-14). Its owner has since corrected
+  the page to `bk17`, so the two pages now agree.
 
 ## Unchecked
 
