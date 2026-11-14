@@ -1,0 +1,17 @@
+{
+  "source": "revit",
+  "material": "unreinforced brick masonry",
+  "gravity_system": "wood joists on masonry bearing walls",
+  "lateral_system": "masonry bearing walls",
+  "foundation_type": "rubble stone spread footing (assumed)",
+  "bearing_walls_on_lot_line": [
+    {
+      "id": "wall-north",
+      "side": "north",
+      "material": "brick",
+      "length_ft": 100.0
+    }
+  ],
+  "levels": 3,
+  "confidence": 0.6
+}

@@ -1,0 +1,15 @@
+[
+  {
+    "id": "warn-stop-work-continued",
+    "rule_id": "stop_work_then_work_continued",
+    "hazard": "structural",
+    "severity": 1,
+    "title": "Work continued after a stop-work order",
+    "explanation": "A stop-work order was followed by a violation for continuing work. On similar sites, this sequence calls for a check of what was done while the order stood.",
+    "evidence_record_ids": [
+      "ecb_violations:39553409Z"
+    ],
+    "first_seen": "2026-04-23",
+    "as_of": "2026-06-01"
+  }
+]

@@ -1,0 +1,45 @@
+{
+  "title": "SearchResult list",
+  "type": "array",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "label": {
+        "title": "Label",
+        "type": "string"
+      },
+      "bbl": {
+        "title": "Bbl",
+        "type": "string"
+      },
+      "bin": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Bin"
+      },
+      "lat": {
+        "title": "Lat",
+        "type": "number"
+      },
+      "lon": {
+        "title": "Lon",
+        "type": "number"
+      }
+    },
+    "required": [
+      "label",
+      "bbl",
+      "lat",
+      "lon"
+    ],
+    "title": "SearchResult",
+    "type": "object"
+  }
+}

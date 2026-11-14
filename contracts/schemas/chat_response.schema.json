@@ -1,0 +1,119 @@
+{
+  "$defs": {
+    "ChatAction": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "fly_to",
+            "toggle_layer",
+            "pin"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "additionalProperties": true,
+          "title": "Payload",
+          "type": "object"
+        }
+      },
+      "required": [
+        "type",
+        "payload"
+      ],
+      "title": "ChatAction",
+      "type": "object"
+    },
+    "ChatAnswerPart": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "public_record",
+            "case",
+            "ai_suggestion",
+            "web",
+            "user_input"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "source_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Name"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "record_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Record Id"
+        }
+      },
+      "required": [
+        "kind",
+        "text"
+      ],
+      "title": "ChatAnswerPart",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "answer_parts": {
+      "items": {
+        "$ref": "#/$defs/ChatAnswerPart"
+      },
+      "title": "Answer Parts",
+      "type": "array"
+    },
+    "actions": {
+      "items": {
+        "$ref": "#/$defs/ChatAction"
+      },
+      "title": "Actions",
+      "type": "array"
+    },
+    "offline": {
+      "title": "Offline",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "answer_parts",
+    "actions",
+    "offline"
+  ],
+  "title": "ChatResponse",
+  "type": "object"
+}

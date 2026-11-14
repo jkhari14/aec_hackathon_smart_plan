@@ -1,0 +1,265 @@
+{
+  "$defs": {
+    "Geometry": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "Point",
+            "LineString",
+            "Polygon",
+            "MultiPolygon"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "coordinates": {
+          "title": "Coordinates"
+        }
+      },
+      "required": [
+        "type",
+        "coordinates"
+      ],
+      "title": "Geometry",
+      "type": "object"
+    },
+    "LayerCatalogEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "layer_id": {
+          "title": "Layer Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "hazard": {
+          "enum": [
+            "structural",
+            "geotech",
+            "fire",
+            "flood",
+            "contamination",
+            "facade",
+            "weather",
+            "construction_safety"
+          ],
+          "title": "Hazard",
+          "type": "string"
+        },
+        "source_name": {
+          "title": "Source Name",
+          "type": "string"
+        },
+        "source_url": {
+          "title": "Source Url",
+          "type": "string"
+        },
+        "updated_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Updated At"
+        },
+        "feature_count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Feature Count"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "error",
+            "capped"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "default_on": {
+          "title": "Default On",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "layer_id",
+        "name",
+        "description",
+        "hazard",
+        "source_name",
+        "source_url",
+        "status",
+        "default_on"
+      ],
+      "title": "LayerCatalogEntry",
+      "type": "object"
+    },
+    "LayerFeature": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "Feature",
+          "title": "Type",
+          "type": "string"
+        },
+        "geometry": {
+          "$ref": "#/$defs/Geometry"
+        },
+        "properties": {
+          "$ref": "#/$defs/LayerFeatureProperties"
+        }
+      },
+      "required": [
+        "type",
+        "geometry",
+        "properties"
+      ],
+      "title": "LayerFeature",
+      "type": "object"
+    },
+    "LayerFeatureProperties": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "layer_id": {
+          "title": "Layer Id",
+          "type": "string"
+        },
+        "hazard": {
+          "enum": [
+            "structural",
+            "geotech",
+            "fire",
+            "flood",
+            "contamination",
+            "facade",
+            "weather",
+            "construction_safety"
+          ],
+          "title": "Hazard",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "title": "Severity",
+          "type": "integer"
+        },
+        "date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Date"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "source_name": {
+          "title": "Source Name",
+          "type": "string"
+        },
+        "source_url": {
+          "title": "Source Url",
+          "type": "string"
+        },
+        "bbl": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bbl"
+        },
+        "record_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Record Id"
+        }
+      },
+      "required": [
+        "id",
+        "layer_id",
+        "hazard",
+        "severity",
+        "title",
+        "summary",
+        "source_name",
+        "source_url"
+      ],
+      "title": "LayerFeatureProperties",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "const": "FeatureCollection",
+      "title": "Type",
+      "type": "string"
+    },
+    "layer": {
+      "$ref": "#/$defs/LayerCatalogEntry"
+    },
+    "features": {
+      "items": {
+        "$ref": "#/$defs/LayerFeature"
+      },
+      "title": "Features",
+      "type": "array"
+    }
+  },
+  "required": [
+    "type",
+    "layer",
+    "features"
+  ],
+  "title": "LayerFeatureCollection",
+  "type": "object"
+}

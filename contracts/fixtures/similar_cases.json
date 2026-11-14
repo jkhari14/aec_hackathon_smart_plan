@@ -1,0 +1,136 @@
+{
+  "bbl": "3052110074",
+  "results": [
+    {
+      "case_id": "case-211-e-34th-2020",
+      "case": {
+        "id": "case-211-e-34th-2020",
+        "title": "Partial collapse next to an excavation",
+        "address": "211 E 34th St, Manhattan",
+        "bbl": "1009150002",
+        "lat": 40.74577,
+        "lon": -73.97756,
+        "date": "2020",
+        "hazards": [
+          "structural",
+          "geotech"
+        ],
+        "severity": 2,
+        "job_type": "new_building",
+        "work_types": [
+          "excavation",
+          "support_of_excavation",
+          "underpinning"
+        ],
+        "conditions": {
+          "attached": true,
+          "construction": "masonry"
+        },
+        "summary": "The adjoining building partially collapsed during excavation for the development next door at 509 Third Ave. No injuries were reported.",
+        "cause_as_reported": "DOB cited failures to shore and brace the adjoining building, monitor movement, and evaluate the neighboring structure.",
+        "cause_status": "reported",
+        "sources": [
+          {
+            "name": "Patch, citing DOB",
+            "url": "https://patch.com/new-york/brooklyn/what-went-wrong-brooklyns-deadly-building-collapse",
+            "date": null
+          }
+        ]
+      },
+      "score": 0.82,
+      "matched_on": [
+        "excavation next to an attached older building",
+        "masonry neighbor"
+      ],
+      "differs_on": [
+        "Manhattan, not Brooklyn"
+      ]
+    },
+    {
+      "case_id": "case-102-02-liberty",
+      "case": {
+        "id": "case-102-02-liberty",
+        "title": "Adjacent wall collapse during underpinning",
+        "address": "102-02 Liberty Ave, Queens",
+        "bbl": "4095230001",
+        "lat": 40.681313,
+        "lon": -73.838397,
+        "date": "2018",
+        "hazards": [
+          "structural",
+          "geotech"
+        ],
+        "severity": 2,
+        "job_type": null,
+        "work_types": [
+          "underpinning",
+          "foundation"
+        ],
+        "conditions": {
+          "attached": true
+        },
+        "summary": "A wall of the adjacent property collapsed during underpinning operations.",
+        "cause_as_reported": "DOB penalized the general contractor for several conditions, including failing to promptly report the accident.",
+        "cause_status": "reported",
+        "sources": [
+          {
+            "name": "DOB enforcement bulletin",
+            "url": "https://www.nyc.gov/site/buildings/dob/pr-enforcement-bulletin-1118.page",
+            "date": null
+          }
+        ]
+      },
+      "score": 0.71,
+      "matched_on": [
+        "attached neighbor",
+        "foundation work"
+      ],
+      "differs_on": [
+        "underpinning, not support of excavation"
+      ]
+    },
+    {
+      "case_id": "case-714-39th-2018",
+      "case": {
+        "id": "case-714-39th-2018",
+        "title": "Support-of-excavation wall collapse",
+        "address": "714 39th St, Brooklyn",
+        "bbl": "3009150010",
+        "lat": 40.64807,
+        "lon": -73.99907,
+        "date": "2018-09-12",
+        "hazards": [
+          "geotech",
+          "construction_safety"
+        ],
+        "severity": 3,
+        "job_type": "new_building",
+        "work_types": [
+          "excavation",
+          "support_of_excavation"
+        ],
+        "conditions": {
+          "construction": "masonry wall"
+        },
+        "summary": "A support-of-excavation and masonry wall collapsed during excavation for a new cellar. One worker was killed.",
+        "cause_as_reported": "Warnings from workers and adjacent owners about a moving wall were not acted on.",
+        "cause_status": "reported",
+        "sources": [
+          {
+            "name": "NYC DOI and Brooklyn DA release",
+            "url": "https://www.nyc.gov/assets/doi/press-releases/2024/March/CYendreleases/DOB.pdf",
+            "date": "2024-03"
+          }
+        ]
+      },
+      "score": 0.64,
+      "matched_on": [
+        "support of excavation",
+        "Brooklyn"
+      ],
+      "differs_on": [
+        "new cellar, no attached neighbor reported"
+      ]
+    }
+  ]
+}

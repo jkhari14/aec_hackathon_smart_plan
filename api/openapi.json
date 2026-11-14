@@ -1,0 +1,3061 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ForeSite API",
+    "description": "Public records, similar cases and early warnings for NYC sites. Not a DOB determination or engineering advice.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Health Api Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/layers": {
+      "get": {
+        "summary": "List Layers",
+        "operationId": "list_layers_api_layers_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LayerCatalogEntry"
+                  },
+                  "type": "array",
+                  "title": "Response List Layers Api Layers Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/layers/{layer_id}": {
+      "get": {
+        "summary": "Layer Features",
+        "operationId": "layer_features_api_layers__layer_id__get",
+        "parameters": [
+          {
+            "name": "layer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Layer Id"
+            }
+          },
+          {
+            "name": "bbox",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Bbox"
+            }
+          },
+          {
+            "name": "as_of",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "As Of"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LayerFeatureCollection"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search": {
+      "get": {
+        "summary": "Search",
+        "operationId": "search_api_search_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Q"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SearchResult"
+                  },
+                  "title": "Response Search Api Search Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sites/{bbl}/profile": {
+      "get": {
+        "summary": "Site Profile",
+        "operationId": "site_profile_api_sites__bbl__profile_get",
+        "parameters": [
+          {
+            "name": "bbl",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bbl"
+            }
+          },
+          {
+            "name": "job_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Job Type"
+            }
+          },
+          {
+            "name": "stage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Stage"
+            }
+          },
+          {
+            "name": "as_of",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "As Of"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiteProfile"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sites/{bbl}/similar": {
+      "get": {
+        "summary": "Similar Cases",
+        "operationId": "similar_cases_api_sites__bbl__similar_get",
+        "parameters": [
+          {
+            "name": "bbl",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bbl"
+            }
+          },
+          {
+            "name": "hazard",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Hazard"
+            }
+          },
+          {
+            "name": "severity_min",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Severity Min"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimilarCases"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sites/{bbl}/warnings": {
+      "get": {
+        "summary": "Warnings",
+        "operationId": "warnings_api_sites__bbl__warnings_get",
+        "parameters": [
+          {
+            "name": "bbl",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bbl"
+            }
+          },
+          {
+            "name": "as_of",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "As Of"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EarlyWarning"
+                  },
+                  "title": "Response Warnings Api Sites  Bbl  Warnings Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sites/{bbl}/pattern": {
+      "get": {
+        "summary": "Pattern",
+        "operationId": "pattern_api_sites__bbl__pattern_get",
+        "parameters": [
+          {
+            "name": "bbl",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bbl"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatternScore"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sites/{bbl}/actions": {
+      "get": {
+        "summary": "Actions",
+        "operationId": "actions_api_sites__bbl__actions_get",
+        "parameters": [
+          {
+            "name": "bbl",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bbl"
+            }
+          },
+          {
+            "name": "stage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Stage"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ActionItem"
+                  },
+                  "title": "Response Actions Api Sites  Bbl  Actions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases": {
+      "get": {
+        "summary": "List Cases",
+        "operationId": "list_cases_api_cases_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Case"
+                  },
+                  "type": "array",
+                  "title": "Response List Cases Api Cases Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}": {
+      "get": {
+        "summary": "Get Case",
+        "operationId": "get_case_api_cases__case_id__get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Case"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects": {
+      "post": {
+        "summary": "Create Project",
+        "operationId": "create_project_api_projects_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}": {
+      "get": {
+        "summary": "Get Project",
+        "operationId": "get_project_api_projects__project_id__get",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/items": {
+      "post": {
+        "summary": "Add Items",
+        "operationId": "add_items_api_projects__project_id__items_post",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ActionItem"
+                },
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update Items",
+        "operationId": "update_items_api_projects__project_id__items_patch",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ActionItemUpdate"
+                },
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/notes": {
+      "post": {
+        "summary": "Add Note",
+        "operationId": "add_note_api_projects__project_id__notes_post",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoteCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/pins": {
+      "post": {
+        "summary": "Add Pin",
+        "operationId": "add_pin_api_projects__project_id__pins_post",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PinCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/model": {
+      "post": {
+        "summary": "Add Structural Model",
+        "operationId": "add_structural_model_api_projects__project_id__model_post",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StructuralModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat": {
+      "post": {
+        "summary": "Chat",
+        "operationId": "chat_api_chat_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ActionItem": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "discipline": {
+            "type": "string",
+            "enum": [
+              "architect",
+              "structural",
+              "geotech",
+              "contractor"
+            ],
+            "title": "Discipline"
+          },
+          "hazard": {
+            "type": "string",
+            "enum": [
+              "structural",
+              "geotech",
+              "fire",
+              "flood",
+              "contamination",
+              "facade",
+              "weather",
+              "construction_safety"
+            ],
+            "title": "Hazard"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "why": {
+            "type": "string",
+            "title": "Why"
+          },
+          "code_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code Ref"
+          },
+          "proof_needed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proof Needed"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "in_progress",
+              "done",
+              "not_applicable"
+            ],
+            "title": "Status"
+          },
+          "owner_role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "architect",
+                  "structural_engineer"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Role"
+          },
+          "source_rule": {
+            "type": "string",
+            "title": "Source Rule"
+          },
+          "life_safety": {
+            "type": "boolean",
+            "title": "Life Safety"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "discipline",
+          "hazard",
+          "title",
+          "why",
+          "status",
+          "source_rule",
+          "life_safety"
+        ],
+        "title": "ActionItem"
+      },
+      "ActionItemUpdate": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "open",
+                  "in_progress",
+                  "done",
+                  "not_applicable"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "owner_role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "architect",
+                  "structural_engineer"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Role"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "ActionItemUpdate"
+      },
+      "BearingWall": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "side": {
+            "type": "string",
+            "enum": [
+              "north",
+              "south",
+              "east",
+              "west",
+              "unknown"
+            ],
+            "title": "Side"
+          },
+          "material": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Material"
+          },
+          "length_ft": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Length Ft"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "side"
+        ],
+        "title": "BearingWall"
+      },
+      "Case": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "bbl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bbl"
+          },
+          "lat": {
+            "type": "number",
+            "title": "Lat"
+          },
+          "lon": {
+            "type": "number",
+            "title": "Lon"
+          },
+          "date": {
+            "type": "string",
+            "title": "Date"
+          },
+          "hazards": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "structural",
+                "geotech",
+                "fire",
+                "flood",
+                "contamination",
+                "facade",
+                "weather",
+                "construction_safety"
+              ]
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Hazards"
+          },
+          "severity": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "title": "Severity"
+          },
+          "job_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "new_building",
+                  "alteration",
+                  "demolition"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Type"
+          },
+          "work_types": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "earth_work",
+                "excavation",
+                "foundation",
+                "support_of_excavation",
+                "underpinning",
+                "structural",
+                "facade",
+                "demolition",
+                "sprinkler",
+                "standpipe",
+                "plumbing",
+                "mechanical",
+                "sidewalk_shed",
+                "scaffold",
+                "construction_fence"
+              ]
+            },
+            "type": "array",
+            "title": "Work Types"
+          },
+          "conditions": {
+            "$ref": "#/components/schemas/CaseConditions"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "cause_as_reported": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cause As Reported"
+          },
+          "cause_status": {
+            "type": "string",
+            "enum": [
+              "reported",
+              "under_investigation",
+              "unknown"
+            ],
+            "title": "Cause Status"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Sources"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "address",
+          "lat",
+          "lon",
+          "date",
+          "hazards",
+          "severity",
+          "work_types",
+          "conditions",
+          "summary",
+          "cause_status",
+          "sources"
+        ],
+        "title": "Case"
+      },
+      "CaseConditions": {
+        "properties": {
+          "neighbor_year_built": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Neighbor Year Built"
+          },
+          "attached": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attached"
+          },
+          "construction": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Construction"
+          },
+          "soil": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Soil"
+          },
+          "flood_zone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Flood Zone"
+          },
+          "excavation_depth_ft": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Excavation Depth Ft"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "title": "CaseConditions",
+        "description": "Open on purpose: a case records whatever conditions were publicly reported."
+      },
+      "ChatAction": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "fly_to",
+              "toggle_layer",
+              "pin"
+            ],
+            "title": "Type"
+          },
+          "payload": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Payload"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type",
+          "payload"
+        ],
+        "title": "ChatAction"
+      },
+      "ChatAnswerPart": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "public_record",
+              "case",
+              "ai_suggestion",
+              "web",
+              "user_input"
+            ],
+            "title": "Kind"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "source_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Name"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          },
+          "record_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Record Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kind",
+          "text"
+        ],
+        "title": "ChatAnswerPart"
+      },
+      "ChatRequest": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "title": "Question"
+          },
+          "bbl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bbl"
+          },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "question"
+        ],
+        "title": "ChatRequest"
+      },
+      "ChatResponse": {
+        "properties": {
+          "answer_parts": {
+            "items": {
+              "$ref": "#/components/schemas/ChatAnswerPart"
+            },
+            "type": "array",
+            "title": "Answer Parts"
+          },
+          "actions": {
+            "items": {
+              "$ref": "#/components/schemas/ChatAction"
+            },
+            "type": "array",
+            "title": "Actions"
+          },
+          "offline": {
+            "type": "boolean",
+            "title": "Offline"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "answer_parts",
+          "actions",
+          "offline"
+        ],
+        "title": "ChatResponse"
+      },
+      "DatasetStatus": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "error",
+              "capped"
+            ],
+            "title": "Status"
+          },
+          "count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Count"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "key",
+          "name",
+          "status"
+        ],
+        "title": "DatasetStatus",
+        "description": "How one source answered for one site. An error is never shown as zero; capped is \"at least\"."
+      },
+      "EarlyWarning": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "rule_id": {
+            "type": "string",
+            "title": "Rule Id"
+          },
+          "hazard": {
+            "type": "string",
+            "enum": [
+              "structural",
+              "geotech",
+              "fire",
+              "flood",
+              "contamination",
+              "facade",
+              "weather",
+              "construction_safety"
+            ],
+            "title": "Hazard"
+          },
+          "severity": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "title": "Severity"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "explanation": {
+            "type": "string",
+            "title": "Explanation"
+          },
+          "evidence_record_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Evidence Record Ids"
+          },
+          "first_seen": {
+            "type": "string",
+            "title": "First Seen"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "rule_id",
+          "hazard",
+          "severity",
+          "title",
+          "explanation",
+          "evidence_record_ids",
+          "first_seen"
+        ],
+        "title": "EarlyWarning"
+      },
+      "FloodContext": {
+        "properties": {
+          "fema_zone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fema Zone"
+          },
+          "stormwater": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stormwater"
+          },
+          "sandy_inundation": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sandy Inundation"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "FloodContext"
+      },
+      "Geometry": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "Point",
+              "LineString",
+              "Polygon",
+              "MultiPolygon"
+            ],
+            "title": "Type"
+          },
+          "coordinates": {
+            "title": "Coordinates"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "title": "Geometry"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LayerCatalogEntry": {
+        "properties": {
+          "layer_id": {
+            "type": "string",
+            "title": "Layer Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "hazard": {
+            "type": "string",
+            "enum": [
+              "structural",
+              "geotech",
+              "fire",
+              "flood",
+              "contamination",
+              "facade",
+              "weather",
+              "construction_safety"
+            ],
+            "title": "Hazard"
+          },
+          "source_name": {
+            "type": "string",
+            "title": "Source Name"
+          },
+          "source_url": {
+            "type": "string",
+            "title": "Source Url"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          },
+          "feature_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Feature Count"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "error",
+              "capped"
+            ],
+            "title": "Status"
+          },
+          "default_on": {
+            "type": "boolean",
+            "title": "Default On"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "layer_id",
+          "name",
+          "description",
+          "hazard",
+          "source_name",
+          "source_url",
+          "status",
+          "default_on"
+        ],
+        "title": "LayerCatalogEntry"
+      },
+      "LayerFeature": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "Feature",
+            "title": "Type"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/Geometry"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/LayerFeatureProperties"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type",
+          "geometry",
+          "properties"
+        ],
+        "title": "LayerFeature"
+      },
+      "LayerFeatureCollection": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "FeatureCollection",
+            "title": "Type"
+          },
+          "layer": {
+            "$ref": "#/components/schemas/LayerCatalogEntry"
+          },
+          "features": {
+            "items": {
+              "$ref": "#/components/schemas/LayerFeature"
+            },
+            "type": "array",
+            "title": "Features"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type",
+          "layer",
+          "features"
+        ],
+        "title": "LayerFeatureCollection"
+      },
+      "LayerFeatureProperties": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "layer_id": {
+            "type": "string",
+            "title": "Layer Id"
+          },
+          "hazard": {
+            "type": "string",
+            "enum": [
+              "structural",
+              "geotech",
+              "fire",
+              "flood",
+              "contamination",
+              "facade",
+              "weather",
+              "construction_safety"
+            ],
+            "title": "Hazard"
+          },
+          "severity": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "title": "Severity"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "source_name": {
+            "type": "string",
+            "title": "Source Name"
+          },
+          "source_url": {
+            "type": "string",
+            "title": "Source Url"
+          },
+          "bbl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bbl"
+          },
+          "record_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Record Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "layer_id",
+          "hazard",
+          "severity",
+          "title",
+          "summary",
+          "source_name",
+          "source_url"
+        ],
+        "title": "LayerFeatureProperties"
+      },
+      "LotFacts": {
+        "properties": {
+          "address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address"
+          },
+          "zoning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Zoning"
+          },
+          "built_far": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Built Far"
+          },
+          "max_far": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Far"
+          },
+          "lot_area_sqft": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lot Area Sqft"
+          },
+          "year_built": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year Built"
+          },
+          "floors": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Floors"
+          },
+          "building_class": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Building Class"
+          },
+          "landmark": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Landmark"
+          },
+          "historic_district": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Historic District"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "LotFacts"
+      },
+      "Neighbor": {
+        "properties": {
+          "bbl": {
+            "type": "string",
+            "title": "Bbl"
+          },
+          "bins": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Bins"
+          },
+          "address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address"
+          },
+          "attached": {
+            "type": "boolean",
+            "title": "Attached"
+          },
+          "year_built": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year Built"
+          },
+          "floors": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Floors"
+          },
+          "building_class": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Building Class"
+          },
+          "height_ft": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Height Ft"
+          },
+          "shared_wall_ft": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shared Wall Ft"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "bbl",
+          "bins",
+          "attached"
+        ],
+        "title": "Neighbor"
+      },
+      "NoteCreate": {
+        "properties": {
+          "author_role": {
+            "type": "string",
+            "enum": [
+              "architect",
+              "structural_engineer"
+            ],
+            "title": "Author Role"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "author_role",
+          "text"
+        ],
+        "title": "NoteCreate"
+      },
+      "PatternFactor": {
+        "properties": {
+          "feature": {
+            "type": "string",
+            "title": "Feature"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "contribution": {
+            "type": "number",
+            "title": "Contribution"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "feature",
+          "contribution"
+        ],
+        "title": "PatternFactor"
+      },
+      "PatternScore": {
+        "properties": {
+          "bbl": {
+            "type": "string",
+            "title": "Bbl"
+          },
+          "score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Score"
+          },
+          "percentile_vs_similar": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Percentile Vs Similar"
+          },
+          "compared_with": {
+            "type": "string",
+            "title": "Compared With"
+          },
+          "top_factors": {
+            "items": {
+              "$ref": "#/components/schemas/PatternFactor"
+            },
+            "type": "array",
+            "title": "Top Factors"
+          },
+          "model_version": {
+            "type": "string",
+            "title": "Model Version"
+          },
+          "calibration_note": {
+            "type": "string",
+            "title": "Calibration Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "bbl",
+          "score",
+          "percentile_vs_similar",
+          "compared_with",
+          "top_factors",
+          "model_version",
+          "calibration_note"
+        ],
+        "title": "PatternScore",
+        "description": "Relative to similar sites, never a prediction that a building will fail."
+      },
+      "PinCreate": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "record",
+              "case",
+              "warning",
+              "action",
+              "chat_answer"
+            ],
+            "title": "Kind"
+          },
+          "ref_id": {
+            "type": "string",
+            "title": "Ref Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "by_role": {
+            "type": "string",
+            "enum": [
+              "architect",
+              "structural_engineer"
+            ],
+            "title": "By Role"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kind",
+          "ref_id",
+          "title",
+          "by_role"
+        ],
+        "title": "PinCreate"
+      },
+      "Project": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "site_bbl": {
+            "type": "string",
+            "title": "Site Bbl"
+          },
+          "stage": {
+            "type": "string",
+            "enum": [
+              "pre_acquisition",
+              "design",
+              "pre_filing",
+              "construction"
+            ],
+            "title": "Stage"
+          },
+          "members": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectMember"
+            },
+            "type": "array",
+            "title": "Members"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ActionItem"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "notes": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectNote"
+            },
+            "type": "array",
+            "title": "Notes"
+          },
+          "pins": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectPin"
+            },
+            "type": "array",
+            "title": "Pins"
+          },
+          "structural_model": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StructuralModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "site_bbl",
+          "stage",
+          "members",
+          "items",
+          "notes",
+          "pins",
+          "created_at"
+        ],
+        "title": "Project"
+      },
+      "ProjectCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "site_bbl": {
+            "type": "string",
+            "title": "Site Bbl"
+          },
+          "stage": {
+            "type": "string",
+            "enum": [
+              "pre_acquisition",
+              "design",
+              "pre_filing",
+              "construction"
+            ],
+            "title": "Stage"
+          },
+          "members": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectMember"
+            },
+            "type": "array",
+            "title": "Members"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "site_bbl",
+          "stage",
+          "members"
+        ],
+        "title": "ProjectCreate"
+      },
+      "ProjectMember": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "architect",
+              "structural_engineer"
+            ],
+            "title": "Role"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "role"
+        ],
+        "title": "ProjectMember"
+      },
+      "ProjectNote": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "author_role": {
+            "type": "string",
+            "enum": [
+              "architect",
+              "structural_engineer"
+            ],
+            "title": "Author Role"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "author_role",
+          "text",
+          "created_at"
+        ],
+        "title": "ProjectNote"
+      },
+      "ProjectPin": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "record",
+              "case",
+              "warning",
+              "action",
+              "chat_answer"
+            ],
+            "title": "Kind"
+          },
+          "ref_id": {
+            "type": "string",
+            "title": "Ref Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "by_role": {
+            "type": "string",
+            "enum": [
+              "architect",
+              "structural_engineer"
+            ],
+            "title": "By Role"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "ref_id",
+          "title",
+          "by_role",
+          "created_at"
+        ],
+        "title": "ProjectPin"
+      },
+      "SearchResult": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "bbl": {
+            "type": "string",
+            "title": "Bbl"
+          },
+          "bin": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bin"
+          },
+          "lat": {
+            "type": "number",
+            "title": "Lat"
+          },
+          "lon": {
+            "type": "number",
+            "title": "Lon"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "label",
+          "bbl",
+          "lat",
+          "lon"
+        ],
+        "title": "SearchResult"
+      },
+      "Signal": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "hazard": {
+            "type": "string",
+            "enum": [
+              "structural",
+              "geotech",
+              "fire",
+              "flood",
+              "contamination",
+              "facade",
+              "weather",
+              "construction_safety"
+            ],
+            "title": "Hazard"
+          },
+          "severity": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "title": "Severity"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "explanation": {
+            "type": "string",
+            "title": "Explanation"
+          },
+          "record_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Record Ids"
+          },
+          "source_name": {
+            "type": "string",
+            "title": "Source Name"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "hazard",
+          "severity",
+          "title",
+          "explanation",
+          "record_ids",
+          "source_name"
+        ],
+        "title": "Signal"
+      },
+      "SimilarCase": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "title": "Case Id"
+          },
+          "case": {
+            "$ref": "#/components/schemas/Case"
+          },
+          "score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Score"
+          },
+          "matched_on": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Matched On"
+          },
+          "differs_on": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Differs On"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "case_id",
+          "case",
+          "score",
+          "matched_on",
+          "differs_on"
+        ],
+        "title": "SimilarCase"
+      },
+      "SimilarCases": {
+        "properties": {
+          "bbl": {
+            "type": "string",
+            "title": "Bbl"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/SimilarCase"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "bbl",
+          "results"
+        ],
+        "title": "SimilarCases"
+      },
+      "SiteProfile": {
+        "properties": {
+          "bbl": {
+            "type": "string",
+            "title": "Bbl"
+          },
+          "bins": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Bins"
+          },
+          "address_matched": {
+            "type": "string",
+            "title": "Address Matched"
+          },
+          "lat": {
+            "type": "number",
+            "title": "Lat"
+          },
+          "lon": {
+            "type": "number",
+            "title": "Lon"
+          },
+          "lot": {
+            "$ref": "#/components/schemas/LotFacts"
+          },
+          "neighbors": {
+            "items": {
+              "$ref": "#/components/schemas/Neighbor"
+            },
+            "type": "array",
+            "title": "Neighbors"
+          },
+          "job_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "new_building",
+                  "alteration",
+                  "demolition"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Type"
+          },
+          "work_types": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "earth_work",
+                "excavation",
+                "foundation",
+                "support_of_excavation",
+                "underpinning",
+                "structural",
+                "facade",
+                "demolition",
+                "sprinkler",
+                "standpipe",
+                "plumbing",
+                "mechanical",
+                "sidewalk_shed",
+                "scaffold",
+                "construction_fence"
+              ]
+            },
+            "type": "array",
+            "title": "Work Types"
+          },
+          "work_types_inferred": {
+            "type": "boolean",
+            "title": "Work Types Inferred"
+          },
+          "stage": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "pre_acquisition",
+                  "design",
+                  "pre_filing",
+                  "construction"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stage"
+          },
+          "soil": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Soil"
+          },
+          "bedrock_depth_ft": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bedrock Depth Ft"
+          },
+          "flood": {
+            "$ref": "#/components/schemas/FloodContext"
+          },
+          "e_designation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "E Designation"
+          },
+          "signals": {
+            "items": {
+              "$ref": "#/components/schemas/Signal"
+            },
+            "type": "array",
+            "title": "Signals"
+          },
+          "structural_model": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StructuralModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "datasets": {
+            "items": {
+              "$ref": "#/components/schemas/DatasetStatus"
+            },
+            "type": "array",
+            "title": "Datasets"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "bbl",
+          "bins",
+          "address_matched",
+          "lat",
+          "lon",
+          "lot",
+          "neighbors",
+          "work_types",
+          "work_types_inferred",
+          "flood",
+          "signals",
+          "datasets"
+        ],
+        "title": "SiteProfile"
+      },
+      "Source": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "Source"
+      },
+      "StructuralModel": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "revit",
+              "drawing"
+            ],
+            "title": "Source"
+          },
+          "material": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Material"
+          },
+          "gravity_system": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gravity System"
+          },
+          "lateral_system": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lateral System"
+          },
+          "foundation_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Foundation Type"
+          },
+          "bearing_walls_on_lot_line": {
+            "items": {
+              "$ref": "#/components/schemas/BearingWall"
+            },
+            "type": "array",
+            "title": "Bearing Walls On Lot Line"
+          },
+          "levels": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Levels"
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source",
+          "bearing_walls_on_lot_line",
+          "confidence"
+        ],
+        "title": "StructuralModel"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "answer_parts": [
+    {
+      "kind": "public_record",
+      "text": "An ECB violation on Apr 23, 2026 records work continuing while a stop-work order was in effect.",
+      "source_name": "DOB ECB Violations",
+      "source_url": "https://data.cityofnewyork.us/d/6bgk-3dad",
+      "record_id": "ecb_violations:39553409Z"
+    },
+    {
+      "kind": "ai_suggestion",
+      "text": "Ask the contractor what work was done between the order and the violation, and check the protection of the adjoining wall.",
+      "source_name": null,
+      "source_url": null,
+      "record_id": null
+    }
+  ],
+  "actions": [
+    {
+      "type": "fly_to",
+      "payload": {
+        "bbl": "3052110074"
+      }
+    }
+  ],
+  "offline": true
+}

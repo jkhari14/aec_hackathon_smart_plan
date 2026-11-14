@@ -1,0 +1,132 @@
+{
+  "type": "FeatureCollection",
+  "layer": {
+    "layer_id": "construction_incidents",
+    "name": "Construction incidents",
+    "description": "Accidents, incidents and notifications DOB records at construction sites, 2024 on, with injury and fatality counts.",
+    "hazard": "construction_safety",
+    "source_name": "DOB Construction-Related Incidents",
+    "source_url": "https://data.cityofnewyork.us/d/bf97-mjsy",
+    "updated_at": "2026-11-14",
+    "feature_count": 1511,
+    "status": "ok",
+    "default_on": true
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.919515,
+          40.739029
+        ]
+      },
+      "properties": {
+        "id": "construction_incidents:46639",
+        "layer_id": "construction_incidents",
+        "hazard": "geotech",
+        "severity": 2,
+        "date": "2026-11-02",
+        "title": "Accident: excavation or soil work",
+        "summary": "48-05 46 STREET, Queens. Injuries: 1. Fatalities: 0.",
+        "source_name": "DOB Construction-Related Incidents",
+        "source_url": "https://data.cityofnewyork.us/d/bf97-mjsy",
+        "bbl": "4022900015",
+        "record_id": "46639"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.9674,
+          40.769077
+        ]
+      },
+      "properties": {
+        "id": "construction_incidents:46571",
+        "layer_id": "construction_incidents",
+        "hazard": "geotech",
+        "severity": 1,
+        "date": "2026-10-15",
+        "title": "Incident: excavation or soil work",
+        "summary": "809 MADISON AVENUE, Manhattan. Injuries: 0. Fatalities: 0.",
+        "source_name": "DOB Construction-Related Incidents",
+        "source_url": "https://data.cityofnewyork.us/d/bf97-mjsy",
+        "bbl": "1013827502",
+        "record_id": "46571"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.964114,
+          40.762958
+        ]
+      },
+      "properties": {
+        "id": "construction_incidents:46572",
+        "layer_id": "construction_incidents",
+        "hazard": "geotech",
+        "severity": 1,
+        "date": "2026-10-15",
+        "title": "Incident: excavation or soil work",
+        "summary": "248 EAST 62 STREET, Manhattan. Injuries: 0. Fatalities: 0.",
+        "source_name": "DOB Construction-Related Incidents",
+        "source_url": "https://data.cityofnewyork.us/d/bf97-mjsy",
+        "bbl": "1014160127",
+        "record_id": "46572"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.814721,
+          40.735562
+        ]
+      },
+      "properties": {
+        "id": "construction_incidents:46364",
+        "layer_id": "construction_incidents",
+        "hazard": "geotech",
+        "severity": 1,
+        "date": "2026-08-18",
+        "title": "Notification: excavation or soil work",
+        "summary": "66-40 KISSENA BOULEVARD, Queens. Injuries: 0. Fatalities: 0.",
+        "source_name": "DOB Construction-Related Incidents",
+        "source_url": "https://data.cityofnewyork.us/d/bf97-mjsy",
+        "bbl": "4065170250",
+        "record_id": "46364"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.008202,
+          40.737465
+        ]
+      },
+      "properties": {
+        "id": "construction_incidents:46286",
+        "layer_id": "construction_incidents",
+        "hazard": "geotech",
+        "severity": 1,
+        "date": "2026-07-29",
+        "title": "Incident: excavation or soil work",
+        "summary": "767 WASHINGTON STREET, Manhattan. Injuries: 0. Fatalities: 0.",
+        "source_name": "DOB Construction-Related Incidents",
+        "source_url": "https://data.cityofnewyork.us/d/bf97-mjsy",
+        "bbl": "1006400040",
+        "record_id": "46286"
+      }
+    }
+  ]
+}

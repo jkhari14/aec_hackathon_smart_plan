@@ -1,0 +1,84 @@
+{
+  "title": "EarlyWarning list",
+  "type": "array",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "rule_id": {
+        "title": "Rule Id",
+        "type": "string"
+      },
+      "hazard": {
+        "enum": [
+          "structural",
+          "geotech",
+          "fire",
+          "flood",
+          "contamination",
+          "facade",
+          "weather",
+          "construction_safety"
+        ],
+        "title": "Hazard",
+        "type": "string"
+      },
+      "severity": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "title": "Severity",
+        "type": "integer"
+      },
+      "title": {
+        "title": "Title",
+        "type": "string"
+      },
+      "explanation": {
+        "title": "Explanation",
+        "type": "string"
+      },
+      "evidence_record_ids": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Evidence Record Ids",
+        "type": "array"
+      },
+      "first_seen": {
+        "title": "First Seen",
+        "type": "string"
+      },
+      "as_of": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "As Of"
+      }
+    },
+    "required": [
+      "id",
+      "rule_id",
+      "hazard",
+      "severity",
+      "title",
+      "explanation",
+      "evidence_record_ids",
+      "first_seen"
+    ],
+    "title": "EarlyWarning",
+    "type": "object"
+  }
+}

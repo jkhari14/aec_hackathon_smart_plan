@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+/* Placeholder tokens. Camilo's design system (web/src/design/, PR 1) replaces these. */
+@theme {
+  --color-night: #0b0f14;
+  --color-panel: #121821;
+  --color-line: #243041;
+  --color-text: #e6edf3;
+  --color-muted: #8b98a8;
+  --color-sample: #f59e0b;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--color-night);
+  color: var(--color-text);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}

@@ -1,0 +1,92 @@
+{
+  "title": "LayerCatalogEntry list",
+  "type": "array",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "layer_id": {
+        "title": "Layer Id",
+        "type": "string"
+      },
+      "name": {
+        "title": "Name",
+        "type": "string"
+      },
+      "description": {
+        "title": "Description",
+        "type": "string"
+      },
+      "hazard": {
+        "enum": [
+          "structural",
+          "geotech",
+          "fire",
+          "flood",
+          "contamination",
+          "facade",
+          "weather",
+          "construction_safety"
+        ],
+        "title": "Hazard",
+        "type": "string"
+      },
+      "source_name": {
+        "title": "Source Name",
+        "type": "string"
+      },
+      "source_url": {
+        "title": "Source Url",
+        "type": "string"
+      },
+      "updated_at": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Updated At"
+      },
+      "feature_count": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Feature Count"
+      },
+      "status": {
+        "enum": [
+          "ok",
+          "error",
+          "capped"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "default_on": {
+        "title": "Default On",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "layer_id",
+      "name",
+      "description",
+      "hazard",
+      "source_name",
+      "source_url",
+      "status",
+      "default_on"
+    ],
+    "title": "LayerCatalogEntry",
+    "type": "object"
+  }
+}

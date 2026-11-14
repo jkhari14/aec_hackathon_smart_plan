@@ -1,0 +1,115 @@
+{
+  "title": "ActionItem list",
+  "type": "array",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "discipline": {
+        "enum": [
+          "architect",
+          "structural",
+          "geotech",
+          "contractor"
+        ],
+        "title": "Discipline",
+        "type": "string"
+      },
+      "hazard": {
+        "enum": [
+          "structural",
+          "geotech",
+          "fire",
+          "flood",
+          "contamination",
+          "facade",
+          "weather",
+          "construction_safety"
+        ],
+        "title": "Hazard",
+        "type": "string"
+      },
+      "title": {
+        "title": "Title",
+        "type": "string"
+      },
+      "why": {
+        "title": "Why",
+        "type": "string"
+      },
+      "code_ref": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Code Ref"
+      },
+      "proof_needed": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Proof Needed"
+      },
+      "status": {
+        "enum": [
+          "open",
+          "in_progress",
+          "done",
+          "not_applicable"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "owner_role": {
+        "anyOf": [
+          {
+            "enum": [
+              "architect",
+              "structural_engineer"
+            ],
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Owner Role"
+      },
+      "source_rule": {
+        "title": "Source Rule",
+        "type": "string"
+      },
+      "life_safety": {
+        "title": "Life Safety",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "id",
+      "discipline",
+      "hazard",
+      "title",
+      "why",
+      "status",
+      "source_rule",
+      "life_safety"
+    ],
+    "title": "ActionItem",
+    "type": "object"
+  }
+}

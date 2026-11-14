@@ -35,11 +35,12 @@ contract PR for Jacob instead of working around it.
 ## Commands
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install -r api/requirements.txt
+python3.12 -m venv .venv && .venv/bin/pip install -r api/requirements.txt   # Python 3.10+
 .venv/bin/uvicorn api.main:app --port 8000
 cd web && npm install && npm run dev        # http://localhost:5173
 .venv/bin/python -m unittest discover -s tests -t .
 cd web && npm run build
+.venv/bin/python -m contracts.generate && (cd web && npm run contracts)   # after changing api/contracts.py
 ```
 
 `api/` and `web/` exist once PR 0 has merged.

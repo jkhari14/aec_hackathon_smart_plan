@@ -1,0 +1,25 @@
+{
+  "bbl": "3052110074",
+  "score": 0.74,
+  "percentile_vs_similar": 88,
+  "compared_with": "lots with earth-work filings that touch an attached building built before 1940",
+  "top_factors": [
+    {
+      "feature": "neighbor_year_built",
+      "value": "1930",
+      "contribution": 0.21
+    },
+    {
+      "feature": "stop_work_mentions",
+      "value": "1",
+      "contribution": 0.17
+    },
+    {
+      "feature": "attached_neighbors",
+      "value": "3",
+      "contribution": 0.12
+    }
+  ],
+  "model_version": "fixture",
+  "calibration_note": "Sample fixture, not a model output."
+}

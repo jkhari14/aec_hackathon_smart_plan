@@ -1,0 +1,145 @@
+{
+  "$defs": {
+    "BearingWall": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "side": {
+          "enum": [
+            "north",
+            "south",
+            "east",
+            "west",
+            "unknown"
+          ],
+          "title": "Side",
+          "type": "string"
+        },
+        "material": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Material"
+        },
+        "length_ft": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Length Ft"
+        }
+      },
+      "required": [
+        "id",
+        "side"
+      ],
+      "title": "BearingWall",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "source": {
+      "enum": [
+        "revit",
+        "drawing"
+      ],
+      "title": "Source",
+      "type": "string"
+    },
+    "material": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Material"
+    },
+    "gravity_system": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Gravity System"
+    },
+    "lateral_system": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Lateral System"
+    },
+    "foundation_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Foundation Type"
+    },
+    "bearing_walls_on_lot_line": {
+      "items": {
+        "$ref": "#/$defs/BearingWall"
+      },
+      "title": "Bearing Walls On Lot Line",
+      "type": "array"
+    },
+    "levels": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Levels"
+    },
+    "confidence": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Confidence",
+      "type": "number"
+    }
+  },
+  "required": [
+    "source",
+    "bearing_walls_on_lot_line",
+    "confidence"
+  ],
+  "title": "StructuralModel",
+  "type": "object"
+}
