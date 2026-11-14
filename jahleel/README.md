@@ -45,8 +45,7 @@ jahleel/
       neighbors/       one card per touching lot
       site_record/     the site's records, newest first, stop-work mentions highlighted
       checklist/       one lane per party (the engine's fixed list); "adjoining owner view" turns proofs into asks
-      roast/           the intensity dial and the roast line under each row
-      precedents/      past failures near the site
+      precedents/      past incidents near the site
       export/          download the brief as JSON, or lots and buildings as GeoJSON
     ui/                the status badges
 ```
@@ -67,9 +66,11 @@ jahleel/
   The replay shows the record but hides that text until its own date.
 - **311 requests and DOB complaints are never added.** The same complaint can be in both and they
   share no key, so the neighbor cards count 311 requests apart and the record list says so.
-- **On life-safety rows (the engine's flag) the serious line comes first**, with the roast under it.
+- **Life-safety rows are tagged** (the engine's flag: the duty protects life safety).
 - **No owner, applicant or respondent names.** The question is what was knowable, not who is to
   blame.
+- **Past incidents carry a cause only as publicly reported**, or "under investigation" where
+  officials say so; never "this would have prevented that" (the second team meeting).
 
 ## Run it
 
@@ -91,8 +92,7 @@ Try the demo replay: `http://localhost:5173/?site=2625-bedford-ave-brooklyn&as_o
 | Work | Where it lands | Suggested owner, by expertise in the transcript |
 |---|---|---|
 | Checklist rules and project inputs | `checklist/`; the brief carries its rows as they are | permitting and DOB data, with the structural engineer |
-| Precedent library | fills `precedents` in the brief; a map layer next | the structural engineer |
-| Roast lines and the character | fills `roast` on each row; `roast/` renders it | the design technologist (computation and BIM) |
+| Precedent library | fills `precedents` in the brief (causes as publicly reported or under investigation; the meeting found the construction-incidents dataset too vague); a map layer next | the structural engineer |
 | Voice | reads `GET /api/briefs/<slug>` | the voice-agent developer |
 | Grasshopper, Rhino, Revit | reads the brief or the GeoJSON export | the interoperability and BIM modeling specialist |
 | Code and objection angle | wording of rows and the "why it's here" lines | the drawing and code review professional |

@@ -7,7 +7,6 @@ import { ChecklistLanes } from "../features/checklist/checklist_lanes";
 import { BriefExportButtons } from "../features/export/brief_export_buttons";
 import { NeighborCards } from "../features/neighbors/neighbor_cards";
 import { PrecedentList } from "../features/precedents/precedent_list";
-import type { RoastIntensity } from "../features/roast/roast_dial";
 import { SiteMapView } from "../features/site_map/site_map_view";
 import { SiteRecordList } from "../features/site_record/site_record_list";
 import { SiteSearchBar } from "../features/site_search/site_search_bar";
@@ -24,7 +23,6 @@ export function PreflightApp() {
   const [slug, setSlug] = useState<string | null>(initial.slug);
   const [projectType, setProjectType] = useState<ProjectType>(initial.projectType ?? "excavation_next_to_existing");
   const [asOf, setAsOf] = useState<string | null>(initial.asOf);
-  const [intensity, setIntensity] = useState<RoastIntensity>("senior_examiner");
   const [brief, setBrief] = useState<Brief | null>(null);
   const [offline, setOffline] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,8 +64,8 @@ export function PreflightApp() {
         <p className="text-xs text-stone-300">What was knowable about this site and its neighbors, by whom, and when.</p>
       </header>
       {slug && (
-        <SiteSearchBar listings={listings} slug={slug} projectType={projectType} asOf={asOf} intensity={intensity}
-          onSlug={setSlug} onProjectType={setProjectType} onAsOf={setAsOf} onIntensity={setIntensity} />
+        <SiteSearchBar listings={listings} slug={slug} projectType={projectType} asOf={asOf}
+          onSlug={setSlug} onProjectType={setProjectType} onAsOf={setAsOf} />
       )}
       {offline && <p className="bg-amber-100 px-4 py-1 text-xs">API not running: showing the saved demo copy.</p>}
       {error && <p className="bg-red-100 px-4 py-1 text-xs">{error}</p>}
@@ -99,8 +97,8 @@ export function PreflightApp() {
             {checklistAsOfMismatch && (
               <p className="bg-amber-100 px-2 py-1 text-xs">No saved replay for this date offline: the checklist is as pulled.</p>
             )}
-            <ChecklistLanes rows={brief.checklist} intensity={intensity} adjoiningOwnerView={adjoiningOwnerView} />
-            <h2 className="font-semibold">Past failures nearby</h2>
+            <ChecklistLanes rows={brief.checklist} adjoiningOwnerView={adjoiningOwnerView} />
+            <h2 className="font-semibold">Past incidents nearby</h2>
             <PrecedentList precedents={brief.precedents} />
             <BriefExportButtons brief={brief} />
             <ul className="list-disc pl-4 text-xs text-stone-500">{brief.caveats.map((c) => <li key={c}>{c}</li>)}</ul>

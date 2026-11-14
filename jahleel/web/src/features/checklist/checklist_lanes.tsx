@@ -1,7 +1,5 @@
 import type { ChecklistRow, Party } from "../../brief/brief_types";
 import { ApplyBadge, ProofBadge, SectionLink } from "../../ui/evidence_badge";
-import type { RoastIntensity } from "../roast/roast_dial";
-import { RoastLine } from "../roast/roast_line";
 
 const PARTY_LABELS: Record<Party, string> = {
   owner_developer: "Owner / developer",
@@ -14,7 +12,7 @@ const PARTY_LABELS: Record<Party, string> = {
   dob: "DOB",
 };
 
-type Props = { rows: ChecklistRow[]; intensity: RoastIntensity; adjoiningOwnerView: boolean };
+type Props = { rows: ChecklistRow[]; adjoiningOwnerView: boolean };
 
 function basisText(row: ChecklistRow): string | null {
   const details = (row.applies.basis ?? []).map((b) => (typeof b.detail === "string" ? b.detail : null)).filter(Boolean);
@@ -23,7 +21,7 @@ function basisText(row: ChecklistRow): string | null {
 
 // One lane per party (a row with two parties shows in both): a building fails when several
 // parties miss at once, so each lane is one "cable".
-export function ChecklistLanes({ rows, intensity, adjoiningOwnerView }: Props) {
+export function ChecklistLanes({ rows, adjoiningOwnerView }: Props) {
   if (rows.length === 0) return <p className="p-4 text-sm text-gap">No checklist rows.</p>;
   const parties = (Object.keys(PARTY_LABELS) as Party[]).filter((p) => rows.some((r) => r.parties.includes(p)));
   return (
@@ -42,7 +40,10 @@ export function ChecklistLanes({ rows, intensity, adjoiningOwnerView }: Props) {
                     <span className="text-sm font-semibold">
                       {row.title} <SectionLink section={row.section} url={row.source_url} />
                     </span>
-                    <span className="flex gap-1"><ApplyBadge status={row.applies.status} /><ProofBadge proof={row.proof} /></span>
+                    <span className="flex flex-wrap gap-1">
+                      {row.life_safety && <span className="rounded border border-site px-1 text-xs text-site">Life safety</span>}
+                      <ApplyBadge status={row.applies.status} /><ProofBadge proof={row.proof} />
+                    </span>
                   </div>
                   <p className="mt-1 text-sm">
                     {adjoiningOwnerView ? <>Ask for: <strong>{row.proof_needed}</strong>. </> : null}
@@ -58,7 +59,6 @@ export function ChecklistLanes({ rows, intensity, adjoiningOwnerView }: Props) {
                   {related > 0 && <p className="mt-1 text-xs text-stone-500">{related} related records beside this row (not proof).</p>}
                   {row.proof.status === "reported_not_read" && <p className="mt-1 text-xs text-lead">{row.proof.note}</p>}
                   {row.open_gap && <p className="mt-1 text-xs font-semibold text-site">Open gap: applies, no proof provided.</p>}
-                  <RoastLine row={row} intensity={intensity} />
                 </li>
               );
             })}

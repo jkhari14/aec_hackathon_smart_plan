@@ -16,6 +16,11 @@ class BriefFromCacheTests(unittest.TestCase):
         self.assertEqual(brief.site.bbl, "3052110074")
         self.assertIn("3052110073", [lot.bbl for lot in brief.touching_lots])
 
+    def test_checklist_rows_carry_no_roast(self):
+        rows = build_brief("2625-bedford-ave-brooklyn").model_dump()["checklist"]
+        self.assertTrue(rows)
+        self.assertFalse([row["id"] for row in rows if "roast" in row])
+
     def test_stop_work_mention_is_flagged_on_its_record(self):
         brief = build_brief("2625-bedford-ave-brooklyn")
         flagged = {r.id for r in brief.records if r.mentions_stop_work}

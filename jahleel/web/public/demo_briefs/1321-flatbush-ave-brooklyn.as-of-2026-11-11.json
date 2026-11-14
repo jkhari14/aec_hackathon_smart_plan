@@ -8398,8 +8398,7 @@
     "citations": []
    },
    "open_gap": false,
-   "per_building": [],
-   "roast": null
+   "per_building": []
   },
   {
    "id": "license",
@@ -8437,8 +8436,7 @@
     "citations": []
    },
    "open_gap": false,
-   "per_building": [],
-   "roast": null
+   "per_building": []
   },
   {
    "id": "examination",
@@ -8521,8 +8519,7 @@
      },
      "open_gap": false
     }
-   ],
-   "roast": null
+   ]
   },
   {
    "id": "foundation_protection",
@@ -8562,8 +8559,7 @@
     "citations": []
    },
    "open_gap": false,
-   "per_building": [],
-   "roast": null
+   "per_building": []
   },
   {
    "id": "survey",
@@ -8652,8 +8648,7 @@
      },
      "open_gap": false
     }
-   ],
-   "roast": null
+   ]
   },
   {
    "id": "support_drawings",
@@ -8692,8 +8687,7 @@
     "citations": []
    },
    "open_gap": false,
-   "per_building": [],
-   "roast": null
+   "per_building": []
   },
   {
    "id": "support_basis",
@@ -8733,8 +8727,7 @@
     "citations": []
    },
    "open_gap": false,
-   "per_building": [],
-   "roast": null
+   "per_building": []
   },
   {
    "id": "underpinning",
@@ -8772,8 +8765,7 @@
     "citations": []
    },
    "open_gap": false,
-   "per_building": [],
-   "roast": null
+   "per_building": []
   },
   {
    "id": "underpinning_inspection",
@@ -8810,8 +8802,7 @@
     "citations": []
    },
    "open_gap": false,
-   "per_building": [],
-   "roast": null
+   "per_building": []
   },
   {
    "id": "exposed_wall",
@@ -8848,8 +8839,7 @@
     "citations": []
    },
    "open_gap": false,
-   "per_building": [],
-   "roast": null
+   "per_building": []
   },
   {
    "id": "monitoring",
@@ -8938,8 +8928,7 @@
      },
      "open_gap": false
     }
-   ],
-   "roast": null
+   ]
   },
   {
    "id": "hazard_elevations",
@@ -8980,8 +8969,7 @@
     "citations": []
    },
    "open_gap": false,
-   "per_building": [],
-   "roast": null
+   "per_building": []
   }
  ],
  "checklist_summary": {

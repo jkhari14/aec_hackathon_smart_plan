@@ -148,20 +148,15 @@ class BuildingApplies(BaseModel):
     open_gap: bool
 
 
-class Roast(BaseModel):
-    line: str
-    serious: str
-
-
 class ChecklistRow(BaseModel):
-    """One duty, built by the checklist engine (checklist/). `roast` is filled by the roast writer."""
+    """One duty, built by the checklist engine (checklist/)."""
 
     id: str
     section: str
     title: str
     requirement: str = Field(description="Paraphrase of the code section; read the linked text before relying on it.")
     parties: list[Party]
-    life_safety: bool = Field(description="Serious line first; the roast comes second.")
+    life_safety: bool = Field(description="The engine's flag: this duty protects life safety.")
     proof_needed: str
     source_url: str
     scope: Literal["site", "each_adjacent_building"]
@@ -170,7 +165,6 @@ class ChecklistRow(BaseModel):
     related_records: RelatedRecords
     open_gap: bool = Field(description="The duty applies and no proof was provided.")
     per_building: list[BuildingApplies] = Field(default_factory=list)
-    roast: Optional[Roast] = None
 
 
 class ChecklistSummary(BaseModel):
@@ -191,7 +185,9 @@ class Precedent(BaseModel):
     longitude: float
     latitude: float
     summary: str
-    cause_as_publicly_reported: Optional[str] = None
+    cause_as_publicly_reported: Optional[str] = Field(
+        None, description="Only a cause a public source states, or 'Under investigation' where officials say so. "
+        "Never inferred, never blame; None shows as 'No cause publicly reported'.")
     source_urls: list[str]
 
 

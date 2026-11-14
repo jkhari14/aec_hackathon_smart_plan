@@ -1,5 +1,4 @@
 import type { BriefListing, ProjectType } from "../../brief/brief_types";
-import { RoastDial, type RoastIntensity } from "../roast/roast_dial";
 
 const PROJECT_TYPES: { value: ProjectType; label: string }[] = [
   { value: "excavation_next_to_existing", label: "Excavation next to existing" },
@@ -12,11 +11,9 @@ type Props = {
   slug: string;
   projectType: ProjectType;
   asOf: string | null;
-  intensity: RoastIntensity;
   onSlug: (slug: string) => void;
   onProjectType: (projectType: ProjectType) => void;
   onAsOf: (asOf: string | null) => void;
-  onIntensity: (intensity: RoastIntensity) => void;
 };
 
 // Demo sites only for now; free-text address search lands when the API calls data_pull live.
@@ -41,7 +38,6 @@ export function SiteSearchBar(props: Props) {
           {props.asOf && <button className="text-xs underline" onClick={() => props.onAsOf(null)}>today</button>}
         </span>
       </label>
-      <RoastDial value={props.intensity} onChange={props.onIntensity} />
     </div>
   );
 }

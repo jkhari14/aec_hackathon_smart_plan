@@ -160,7 +160,7 @@ export interface components {
         };
         /**
          * ChecklistRow
-         * @description One duty, built by the checklist engine (checklist/). `roast` is filled by the roast writer.
+         * @description One duty, built by the checklist engine (checklist/).
          */
         ChecklistRow: {
             /** Id */
@@ -178,7 +178,7 @@ export interface components {
             parties: ("owner_developer" | "design_professional" | "excavation_support_engineer" | "geotechnical_engineer" | "contractor" | "special_inspector" | "adjoining_owner" | "dob")[];
             /**
              * Life Safety
-             * @description Serious line first; the roast comes second.
+             * @description The engine's flag: this duty protects life safety.
              */
             life_safety: boolean;
             /** Proof Needed */
@@ -200,7 +200,6 @@ export interface components {
             open_gap: boolean;
             /** Per Building */
             per_building?: components["schemas"]["BuildingApplies"][];
-            roast?: components["schemas"]["Roast"] | null;
         };
         /** ChecklistSummary */
         ChecklistSummary: {
@@ -341,7 +340,10 @@ export interface components {
             latitude: number;
             /** Summary */
             summary: string;
-            /** Cause As Publicly Reported */
+            /**
+             * Cause As Publicly Reported
+             * @description Only a cause a public source states, or 'Under investigation' where officials say so. Never inferred, never blame; None shows as 'No cause publicly reported'.
+             */
             cause_as_publicly_reported?: string | null;
             /** Source Urls */
             source_urls: string[];
@@ -415,13 +417,6 @@ export interface components {
             citations?: {
                 [key: string]: unknown;
             }[];
-        };
-        /** Roast */
-        Roast: {
-            /** Line */
-            line: string;
-            /** Serious */
-            serious: string;
         };
         /**
          * RowProof

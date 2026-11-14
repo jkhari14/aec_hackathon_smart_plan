@@ -436,7 +436,7 @@
      "life_safety": {
       "type": "boolean",
       "title": "Life Safety",
-      "description": "Serious line first; the roast comes second."
+      "description": "The engine's flag: this duty protects life safety."
      },
      "proof_needed": {
       "type": "string",
@@ -474,16 +474,6 @@
       },
       "type": "array",
       "title": "Per Building"
-     },
-     "roast": {
-      "anyOf": [
-       {
-        "$ref": "#/components/schemas/Roast"
-       },
-       {
-        "type": "null"
-       }
-      ]
      }
     },
     "type": "object",
@@ -503,7 +493,7 @@
      "open_gap"
     ],
     "title": "ChecklistRow",
-    "description": "One duty, built by the checklist engine (checklist/). `roast` is filled by the roast writer."
+    "description": "One duty, built by the checklist engine (checklist/)."
    },
    "ChecklistSummary": {
     "properties": {
@@ -940,7 +930,8 @@
         "type": "null"
        }
       ],
-      "title": "Cause As Publicly Reported"
+      "title": "Cause As Publicly Reported",
+      "description": "Only a cause a public source states, or 'Under investigation' where officials say so. Never inferred, never blame; None shows as 'No cause publicly reported'."
      },
      "source_urls": {
       "items": {
@@ -1118,24 +1109,6 @@
     ],
     "title": "RelatedRecords",
     "description": "Records beside a row. They are not its proof."
-   },
-   "Roast": {
-    "properties": {
-     "line": {
-      "type": "string",
-      "title": "Line"
-     },
-     "serious": {
-      "type": "string",
-      "title": "Serious"
-     }
-    },
-    "type": "object",
-    "required": [
-     "line",
-     "serious"
-    ],
-    "title": "Roast"
    },
    "RowProof": {
     "properties": {
