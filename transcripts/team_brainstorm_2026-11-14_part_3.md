@@ -6,6 +6,7 @@ Third session from the 2026 NYC AEC hackathon, recorded 2026-11-14. Part 1 is [t
 
 - It is an automatic transcription, kept word for word as provided. Transcription errors are not corrected.
 - Speaker labels do not map to one person each, and names are as transcribed and may be misspelled.
+- The name of the outside expert interviewed near the end, and the name of his firm, are withheld.
 
 ## Transcript
 
@@ -1321,7 +1322,7 @@ Third session from the 2026 NYC AEC hackathon, recorded 2026-11-14. Part 1 is [t
 
 **Speaker 2:** Yeah, it's interesting. Like, yeah, it's a new, it's, I mean, Alex, when he brought up the meta, like, mapping of happenings. Like, it's like, the sort of contribution model, like, I mean, we could just do stuff through GitHub.
 
-**Speaker 1:** Oh, Miko?
+**Speaker 1:** Oh, [name withheld]?
 
 **Speaker 4:** How's it going?
 
@@ -1597,7 +1598,7 @@ Third session from the 2026 NYC AEC hackathon, recorded 2026-11-14. Part 1 is [t
 
 **Speaker 3:** Gotcha. Yeah. Thank you so much.
 
-**Speaker 2:** Appreciate it. Cool. Thanks, Nico.
+**Speaker 2:** Appreciate it. Cool. Thanks, [name withheld].
 
 **Speaker 4:** Sorry, I was, like, grabbing trash in my pocket.
 
@@ -1635,13 +1636,13 @@ Third session from the 2026 NYC AEC hackathon, recorded 2026-11-14. Part 1 is [t
 
 **Speaker 2:** It's a reference point. And then there is the forensics angle, which is quite interesting, like, from the perspective of, like, after something happens, bringing in all the information. And that's a real problem of, like, these huge, you know, bodies of, like, files and, you know, documents that people have to source through and, like, find the relevant information to come up with.
 
-**Speaker 2:** So, like, AI could actually help there. I also think there's sort of, like, I mean, we're talking to sort of, like, Thornton Thomas Engineer is one of the best engineering firms in the world.
+**Speaker 2:** So, like, AI could actually help there. I also think there's sort of, like, I mean, we're talking to sort of, like, [firm name withheld] is one of the best engineering firms in the world.
 
 **Speaker 2:** So, like, they know their stuff.
 
 **Speaker 3:** It is.
 
-**Speaker 2:** Like, a lot of, I mean, and not to say that, like, other engineers don't, but, like, on any given, like, very small project in New York, like residential construction, you're not getting TT engineers. So, like, folk, like, it's, you know, objectively, like, not as high level of, like, engineering and, like, construction competence, I think, all the time. So it's like.
+**Speaker 2:** Like, a lot of, I mean, and not to say that, like, other engineers don't, but, like, on any given, like, very small project in New York, like residential construction, you're not getting [firm name withheld] engineers. So, like, folk, like, it's, you know, objectively, like, not as high level of, like, engineering and, like, construction competence, I think, all the time. So it's like.
 
 **Speaker 3:** They don't have the resources to, like, get.
 
