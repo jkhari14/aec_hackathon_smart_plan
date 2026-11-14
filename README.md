@@ -2,4 +2,5 @@
 
 - [README-Camilo](README-Camilo): the PreFlight plan
 - [Data and code notes](docs/data_and_code_notes.md): verified data sources, the Building Code checklist, the 1321 Flatbush demo facts
+- [data_pull](data_pull/README.md): address in, the public record for the site and every touching lot out (cached demo data in `data/cache/`)
 - [Brainstorm transcript](transcripts/team_brainstorm_2026-11-14.md)

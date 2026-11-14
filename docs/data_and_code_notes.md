@@ -65,8 +65,9 @@ open, keyless SODA endpoints (`https://data.cityofnewyork.us/resource/<ID>.json`
 - **We have not found stop-work orders as their own dataset**, so the plan's data row needs
   adjusting. They surface indirectly: a DOB violation that says so, or an ECB violation for
   continuing work while one was in effect.
-- **Adjoining lots:** lot shapes from MapPLUTO, where a shared boundary means adjoining. Consecutive
-  lot numbers are a hint, not proof.
+- **Adjoining lots:** tax-lot polygons (`i38t-6if2`) and a server-side `intersects()` query,
+  which [data_pull](../data_pull/README.md) already does. Consecutive lot numbers are a hint,
+  not proof.
 
 ## Hero demo case: what the record showed (pulled 2026-11-14)
 
@@ -102,5 +103,4 @@ what was knowable, by whom, and when. It does not answer who is to blame.
 
 ## Open questions
 
-- Adjacency: compute it from MapPLUTO in time, or hand-pick the neighbors for the demo?
 - Which DOB NOW documents are public enough to fill rows? The notice letter is; are the support drawings?
