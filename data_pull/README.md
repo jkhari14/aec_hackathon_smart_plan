@@ -72,5 +72,5 @@ LOT = {
 
 ## Not included, on purpose
 
-Owner, applicant and respondent names. The data is public, but the demo is about what was
-knowable, not about who is to blame.
+Owner, applicant, respondent, permit-holder and contractor names. The data is public, but the
+demo is about what was knowable, not about who is to blame (the team settled this on 2026-11-14).

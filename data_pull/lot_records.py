@@ -15,7 +15,8 @@ DATASETS = {
     "pluto": (
         "64uk-42ks", "PLUTO (lot data)",
         "bbl,address,yearbuilt,numfloors,numbldgs,bldgclass,landuse,unitsres,lotfront,"
-        "lotdepth,bldgarea,zonedist1,latitude,longitude,version",
+        "lotdepth,lotarea,bldgarea,zonedist1,builtfar,residfar,commfar,facilfar,landmark,histdist,"
+        "latitude,longitude,version",
         None,
     ),
     "dob_now_filings": (
@@ -23,7 +24,7 @@ DATASETS = {
         "job_filing_number,job_type,filing_status,filing_date,approved_date,first_permit_date,"
         "current_status_date,signoff_date,bin,bbl,house_no,street_name,job_description,"
         "earth_work_work_type_,foundation_work_type_,support_of_excavation_work_type_,"
-        "structural_work_type_,full_demolition_work_type_,filing_review_type",
+        "structural_work_type_,sprinkler_work_type,full_demolition_work_type_,filing_review_type",
         "filing_date DESC",
     ),
     "dob_violations": (

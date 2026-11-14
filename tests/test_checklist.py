@@ -98,6 +98,13 @@ class ContextTests(unittest.TestCase):
         self.assertEqual(counts["status"], "error")
         self.assertNotIn("open", counts)
 
+    def test_lot_facts_pass_pluto_through_and_leave_blanks_blank(self):
+        pluto = {"status": "ok", "records": [{"bbl": "3052110073", "lotarea": "1854", "builtfar": "1.66",
+                                              "residfar": "2.43", "histdist": "Example Historic District"}]}
+        ctx = neighbor_context.lot_context({"bbl": "3052110073", "datasets": {"pluto": pluto}}, None)
+        self.assertEqual((ctx["lot_area_sqft"], ctx["built_far"], ctx["max_far"]["residential"]), ("1854", "1.66", "2.43"))
+        self.assertEqual((ctx["historic_district"], ctx["landmark"]), ("Example Historic District", None))
+
     def test_building_presence(self):
         def lot(footprints, pluto):
             return {"footprint_buildings": footprints, "datasets": {"pluto": pluto}}

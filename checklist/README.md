@@ -23,7 +23,7 @@ code text before relying on a row. The rows are in `checklist_rules.py`.
 Each row has a stable `id` that the brief, the web page and the voice agent use. It also has
 `parties`, drawn from one fixed list shared with the brief: owner_developer, design_professional,
 excavation_support_engineer, geotechnical_engineer, contractor, special_inspector, adjoining_owner
-and dob. `life_safety` marks rows where the serious tone comes first.
+and dob. `life_safety` marks rows whose duty protects life safety.
 
 | id | Section | Duty | Scope | Life safety |
 |---|---|---|---|---|
@@ -134,9 +134,19 @@ the real-site checklists.
 - **Left out of this view:** the DOB violation issued on the day of the collapse (a full
   stop-work order), because it falls on the cutoff.
 
+## Not covered yet
+
+The 2026-11-14 team meetings put five hazards in scope: structural collapse, fire, flooding, soil
+contamination and extreme weather. These rows cover only duties toward adjoining property during
+excavation and foundation work. There are no rows yet for fire, flooding, contamination or weather,
+or for structural, facade or sprinkler work. Rows for an alteration, which the demo walkthrough
+uses, would come from the same gap.
+
 ## Not checked
 
-- Historic status, for the 90 ft monitoring rule.
+- Historic status, for the 90 ft monitoring rule. PLUTO's landmark and historic-district fields
+  are shown for each touching lot as hints; the code's own definition decides, and lots beyond the
+  touching ones are not looked up.
 - Footing positions, for digs of 5 ft or less.
 - Whether any document exists.
 

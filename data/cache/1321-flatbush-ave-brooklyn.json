@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "pulled_at": "2026-11-14T20:56:34+00:00",
+ "pulled_at": "2026-11-14T21:23:16+00:00",
  "address_lookup": {
   "input": "1321 Flatbush Ave, Brooklyn",
   "matched_label": "1321 FLATBUSH AVENUE, Brooklyn, NY, USA",
@@ -26,7 +26,7 @@
     "status": "ok",
     "count": 1,
     "truncated": false,
-    "query_url": "https://data.cityofnewyork.us/resource/64uk-42ks.json?%24limit=5000&%24select=bbl%2Caddress%2Cyearbuilt%2Cnumfloors%2Cnumbldgs%2Cbldgclass%2Clanduse%2Cunitsres%2Clotfront%2Clotdepth%2Cbldgarea%2Czonedist1%2Clatitude%2Clongitude%2Cversion&%24where=bbl%3D3052110073",
+    "query_url": "https://data.cityofnewyork.us/resource/64uk-42ks.json?%24limit=5000&%24select=bbl%2Caddress%2Cyearbuilt%2Cnumfloors%2Cnumbldgs%2Cbldgclass%2Clanduse%2Cunitsres%2Clotfront%2Clotdepth%2Clotarea%2Cbldgarea%2Czonedist1%2Cbuiltfar%2Cresidfar%2Ccommfar%2Cfacilfar%2Clandmark%2Chistdist%2Clatitude%2Clongitude%2Cversion&%24where=bbl%3D3052110073",
     "records": [
      {
       "bbl": "3052110073.00000000",
@@ -39,8 +39,13 @@
       "unitsres": "4",
       "lotfront": "20.5000000",
       "lotdepth": "90.4200000",
+      "lotarea": "1854",
       "bldgarea": "3075",
       "zonedist1": "R6",
+      "builtfar": "1.66000000000",
+      "residfar": "2.43000000000",
+      "commfar": "0.00000000000",
+      "facilfar": "4.80000000000",
       "latitude": "40.6389844",
       "longitude": "-73.9537859",
       "version": "26v2"
@@ -52,7 +57,7 @@
     "status": "ok",
     "count": 0,
     "truncated": false,
-    "query_url": "https://data.cityofnewyork.us/resource/w9ak-ipjd.json?%24limit=5000&%24select=job_filing_number%2Cjob_type%2Cfiling_status%2Cfiling_date%2Capproved_date%2Cfirst_permit_date%2Ccurrent_status_date%2Csignoff_date%2Cbin%2Cbbl%2Chouse_no%2Cstreet_name%2Cjob_description%2Cearth_work_work_type_%2Cfoundation_work_type_%2Csupport_of_excavation_work_type_%2Cstructural_work_type_%2Cfull_demolition_work_type_%2Cfiling_review_type&%24where=bbl%3D%273052110073%27+OR+bin+in+%28%273120364%27%29&%24order=filing_date+DESC",
+    "query_url": "https://data.cityofnewyork.us/resource/w9ak-ipjd.json?%24limit=5000&%24select=job_filing_number%2Cjob_type%2Cfiling_status%2Cfiling_date%2Capproved_date%2Cfirst_permit_date%2Ccurrent_status_date%2Csignoff_date%2Cbin%2Cbbl%2Chouse_no%2Cstreet_name%2Cjob_description%2Cearth_work_work_type_%2Cfoundation_work_type_%2Csupport_of_excavation_work_type_%2Cstructural_work_type_%2Csprinkler_work_type%2Cfull_demolition_work_type_%2Cfiling_review_type&%24where=bbl%3D%273052110073%27+OR+bin+in+%28%273120364%27%29&%24order=filing_date+DESC",
     "records": [],
     "held_back_other_lot": []
    },
@@ -331,59 +336,14 @@
       "novdescription": "(A) § HMC:FILE ANNUAL BEDBUG REPORT IN ACCORDANCE WITH HPD RULE AS DESCRIBED ON THE BACK OF THIS NOTICE OF VIOLATION OR AS DESCRIBED ON HPD\u001aS WEBSITE, WWW.NYC.GOV\\HPD, SEARCH BED BUGS."
      },
      {
-      "violationid": "18807726",
+      "violationid": "18814611",
       "inspectiondate": "2026-04-20T00:00:00.000",
       "novissueddate": "2026-04-27T00:00:00.000",
       "class": "B",
       "violationstatus": "Open",
       "currentstatus": "NOV SENT OUT",
       "currentstatusdate": "2026-04-27T00:00:00.000",
-      "novdescription": "§ 27-2005, 2007 ADM CODE REMOVE ALL ENCUMBRANCES CONSISTING OF BAGS AND OTHER HOUSEHOLD ITEMS AT SCUTTLE LADDER , 3rd STORY",
-      "story": "3"
-     },
-     {
-      "violationid": "18814630",
-      "inspectiondate": "2026-04-20T00:00:00.000",
-      "novissueddate": "2026-04-27T00:00:00.000",
-      "class": "B",
-      "violationstatus": "Open",
-      "currentstatus": "NOV SENT OUT",
-      "currentstatusdate": "2026-04-27T00:00:00.000",
-      "novdescription": "§ 27-2005, 2006, 2037 HMC: PROPERLY REPAIR AND ABATE UNSAFE ELECTRIC WIRING CONDITION CONSISTING OF EXPOSED WIRING AT EAST WALL AT PUBLIC HALL, 3rd STORY",
-      "story": "3"
-     },
-     {
-      "violationid": "18814619",
-      "inspectiondate": "2026-04-20T00:00:00.000",
-      "novissueddate": "2026-04-27T00:00:00.000",
-      "class": "B",
-      "violationstatus": "Open",
-      "currentstatus": "NOV SENT OUT",
-      "currentstatusdate": "2026-04-27T00:00:00.000",
-      "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE FIRE RETARDANT MATERIAL AT CEILING AT PUBLIC HALL, 3rd STORY",
-      "story": "3"
-     },
-     {
-      "violationid": "18814603",
-      "inspectiondate": "2026-04-20T00:00:00.000",
-      "novissueddate": "2026-04-27T00:00:00.000",
-      "class": "C",
-      "violationstatus": "Open",
-      "currentstatus": "NOV SENT OUT",
-      "currentstatusdate": "2026-04-27T00:00:00.000",
-      "novdescription": "§ 27-2005, 2050 HMC: PROVIDE AN ADEQUATE SUPPLY OF WATER FOR THE WET SPRINKLER AND/OR STANDPIPE SYSTEM AT ENTIRE BUILDING",
-      "story": "0"
-     },
-     {
-      "violationid": "18807708",
-      "inspectiondate": "2026-04-20T00:00:00.000",
-      "novissueddate": "2026-04-27T00:00:00.000",
-      "class": "C",
-      "violationstatus": "Open",
-      "currentstatus": "NOV SENT OUT",
-      "currentstatusdate": "2026-04-27T00:00:00.000",
-      "novdescription": "§ 27-2005, 27-2007, 27-2041.1 HMC, §238, § 309; § 107 (2) ( C) MDL AND 28 RCNY §25-171: REPLACE OR REPAIR THE SELF-CLOSING DOORS THAT IS MISSING OR DEFECTIVE DOOR. IN THE ENTRANCE LOCATED AT APT 3, 3rd STORY",
-      "apartment": "3",
+      "novdescription": "§ 27-2005 ADM CODE REPAIR THE ROOF SO THAT IT WILL NOT LEAK AT CEILING AT PUBLIC HALL, 3rd STORY",
       "story": "3"
      },
      {
@@ -398,15 +358,72 @@
       "story": "3"
      },
      {
-      "violationid": "18814611",
+      "violationid": "18807708",
+      "inspectiondate": "2026-04-20T00:00:00.000",
+      "novissueddate": "2026-04-27T00:00:00.000",
+      "class": "C",
+      "violationstatus": "Open",
+      "currentstatus": "NOV SENT OUT",
+      "currentstatusdate": "2026-04-27T00:00:00.000",
+      "novdescription": "§ 27-2005, 27-2007, 27-2041.1 HMC, §238, § 309; § 107 (2) ( C) MDL AND 28 RCNY §25-171: REPLACE OR REPAIR THE SELF-CLOSING DOORS THAT IS MISSING OR DEFECTIVE DOOR. IN THE ENTRANCE LOCATED AT APT 3, 3rd STORY",
+      "apartment": "3",
+      "story": "3"
+     },
+     {
+      "violationid": "18807726",
       "inspectiondate": "2026-04-20T00:00:00.000",
       "novissueddate": "2026-04-27T00:00:00.000",
       "class": "B",
       "violationstatus": "Open",
       "currentstatus": "NOV SENT OUT",
       "currentstatusdate": "2026-04-27T00:00:00.000",
-      "novdescription": "§ 27-2005 ADM CODE REPAIR THE ROOF SO THAT IT WILL NOT LEAK AT CEILING AT PUBLIC HALL, 3rd STORY",
+      "novdescription": "§ 27-2005, 2007 ADM CODE REMOVE ALL ENCUMBRANCES CONSISTING OF BAGS AND OTHER HOUSEHOLD ITEMS AT SCUTTLE LADDER , 3rd STORY",
       "story": "3"
+     },
+     {
+      "violationid": "18814619",
+      "inspectiondate": "2026-04-20T00:00:00.000",
+      "novissueddate": "2026-04-27T00:00:00.000",
+      "class": "B",
+      "violationstatus": "Open",
+      "currentstatus": "NOV SENT OUT",
+      "currentstatusdate": "2026-04-27T00:00:00.000",
+      "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE FIRE RETARDANT MATERIAL AT CEILING AT PUBLIC HALL, 3rd STORY",
+      "story": "3"
+     },
+     {
+      "violationid": "18814630",
+      "inspectiondate": "2026-04-20T00:00:00.000",
+      "novissueddate": "2026-04-27T00:00:00.000",
+      "class": "B",
+      "violationstatus": "Open",
+      "currentstatus": "NOV SENT OUT",
+      "currentstatusdate": "2026-04-27T00:00:00.000",
+      "novdescription": "§ 27-2005, 2006, 2037 HMC: PROPERLY REPAIR AND ABATE UNSAFE ELECTRIC WIRING CONDITION CONSISTING OF EXPOSED WIRING AT EAST WALL AT PUBLIC HALL, 3rd STORY",
+      "story": "3"
+     },
+     {
+      "violationid": "18814603",
+      "inspectiondate": "2026-04-20T00:00:00.000",
+      "novissueddate": "2026-04-27T00:00:00.000",
+      "class": "C",
+      "violationstatus": "Open",
+      "currentstatus": "NOV SENT OUT",
+      "currentstatusdate": "2026-04-27T00:00:00.000",
+      "novdescription": "§ 27-2005, 2050 HMC: PROVIDE AN ADEQUATE SUPPLY OF WATER FOR THE WET SPRINKLER AND/OR STANDPIPE SYSTEM AT ENTIRE BUILDING",
+      "story": "0"
+     },
+     {
+      "violationid": "18700524",
+      "inspectiondate": "2026-03-05T00:00:00.000",
+      "novissueddate": "2026-03-11T00:00:00.000",
+      "class": "C",
+      "violationstatus": "Open",
+      "currentstatus": "NOV SENT OUT",
+      "currentstatusdate": "2026-03-11T00:00:00.000",
+      "novdescription": "§ 27-2005, 27-2007, 27-2041.1 HMC, §238, § 309; § 107 (2) ( C) MDL AND 28 RCNY §25-171: REPLACE OR REPAIR THE SELF-CLOSING DOORS THAT IS MISSING OR DEFECTIVE HINGES IN THE ENTRANCE LOCATED AT APT 2R, 2nd STORY, 1st APARTMENT FROM NORTH AT EAST",
+      "apartment": "2R",
+      "story": "2"
      },
      {
       "violationid": "18688476",
@@ -429,18 +446,6 @@
       "currentstatus": "NOV SENT OUT",
       "currentstatusdate": "2026-03-11T00:00:00.000",
       "novdescription": "§ 27-2045(B)(1)(A) HMC, § 12-01, § 12-03 RCNY REPAIR, REPLACE OR PROVIDE AN APPROVED AND OPERATIONAL SMOKE DETECTING DEVICE, INSTALLED IN ACCORDANCE WITH DEPARTMENT OF BUILDINGS RULES AND REGULATIONS MISSING IN THE ENTIRE APARTMENT LOCATED AT APT 2R, 2nd STORY, 1st APARTMENT FROM NORTH AT EAST",
-      "apartment": "2R",
-      "story": "2"
-     },
-     {
-      "violationid": "18700524",
-      "inspectiondate": "2026-03-05T00:00:00.000",
-      "novissueddate": "2026-03-11T00:00:00.000",
-      "class": "C",
-      "violationstatus": "Open",
-      "currentstatus": "NOV SENT OUT",
-      "currentstatusdate": "2026-03-11T00:00:00.000",
-      "novdescription": "§ 27-2005, 27-2007, 27-2041.1 HMC, §238, § 309; § 107 (2) ( C) MDL AND 28 RCNY §25-171: REPLACE OR REPAIR THE SELF-CLOSING DOORS THAT IS MISSING OR DEFECTIVE HINGES IN THE ENTRANCE LOCATED AT APT 2R, 2nd STORY, 1st APARTMENT FROM NORTH AT EAST",
       "apartment": "2R",
       "story": "2"
      },
@@ -495,14 +500,14 @@
       "story": "3"
      },
      {
-      "violationid": "17190668",
+      "violationid": "17190667",
       "inspectiondate": "2024-08-13T00:00:00.000",
       "novissueddate": "2024-08-15T00:00:00.000",
-      "class": "B",
+      "class": "A",
       "violationstatus": "Open",
       "currentstatus": "NOT COMPLIED WITH",
       "currentstatusdate": "2026-04-24T00:00:00.000",
-      "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE FIRE RETARDANT PLASTER AT EAST WALL AT SCUTTLE CLOSET AT PUBLIC HALL, 3rd STORY",
+      "novdescription": "§ 27-2013 ADM CODE PAINT WITH LIGHT COLORED PAINT TO THE SATISFACTION OF THIS DEPARTMENT THE CEILING AT PUBLIC HALL, 3rd STORY",
       "story": "3"
      },
      {
@@ -517,25 +522,14 @@
       "story": "3"
      },
      {
-      "violationid": "17190667",
-      "inspectiondate": "2024-08-13T00:00:00.000",
-      "novissueddate": "2024-08-15T00:00:00.000",
-      "class": "A",
-      "violationstatus": "Open",
-      "currentstatus": "NOT COMPLIED WITH",
-      "currentstatusdate": "2026-04-24T00:00:00.000",
-      "novdescription": "§ 27-2013 ADM CODE PAINT WITH LIGHT COLORED PAINT TO THE SATISFACTION OF THIS DEPARTMENT THE CEILING AT PUBLIC HALL, 3rd STORY",
-      "story": "3"
-     },
-     {
-      "violationid": "17190662",
+      "violationid": "17190669",
       "inspectiondate": "2024-08-13T00:00:00.000",
       "novissueddate": "2024-08-15T00:00:00.000",
       "class": "C",
       "violationstatus": "Open",
       "currentstatus": "NOT COMPLIED WITH",
       "currentstatusdate": "2026-04-24T00:00:00.000",
-      "novdescription": "§ 27-2005, 27-2007, 27-2041.1 HMC, §238, § 309; § 107 (2) ( C) MDL AND 28 RCNY §25-171: REPLACE OR REPAIR THE SELF-CLOSING DOORS THAT IS MISSING OR DEFECTIVE HINGES AT BUILDING FRONT ENTRANCE DOOR , 1st STORY",
+      "novdescription": "§ 27-2005 ADM CODE & 309 M/D LAW ABATE THE NUISANCE CONSISTING OF UNCAPPED RADIATOR VALVE AT PUBLIC HALL, 1st STORY",
       "story": "1"
      },
      {
@@ -550,6 +544,17 @@
       "story": "0"
      },
      {
+      "violationid": "17190662",
+      "inspectiondate": "2024-08-13T00:00:00.000",
+      "novissueddate": "2024-08-15T00:00:00.000",
+      "class": "C",
+      "violationstatus": "Open",
+      "currentstatus": "NOT COMPLIED WITH",
+      "currentstatusdate": "2026-04-24T00:00:00.000",
+      "novdescription": "§ 27-2005, 27-2007, 27-2041.1 HMC, §238, § 309; § 107 (2) ( C) MDL AND 28 RCNY §25-171: REPLACE OR REPAIR THE SELF-CLOSING DOORS THAT IS MISSING OR DEFECTIVE HINGES AT BUILDING FRONT ENTRANCE DOOR , 1st STORY",
+      "story": "1"
+     },
+     {
       "violationid": "17190664",
       "inspectiondate": "2024-08-13T00:00:00.000",
       "novissueddate": "2024-08-15T00:00:00.000",
@@ -561,15 +566,15 @@
       "story": "0"
      },
      {
-      "violationid": "17190669",
+      "violationid": "17190668",
       "inspectiondate": "2024-08-13T00:00:00.000",
       "novissueddate": "2024-08-15T00:00:00.000",
-      "class": "C",
+      "class": "B",
       "violationstatus": "Open",
       "currentstatus": "NOT COMPLIED WITH",
       "currentstatusdate": "2026-04-24T00:00:00.000",
-      "novdescription": "§ 27-2005 ADM CODE & 309 M/D LAW ABATE THE NUISANCE CONSISTING OF UNCAPPED RADIATOR VALVE AT PUBLIC HALL, 1st STORY",
-      "story": "1"
+      "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE FIRE RETARDANT PLASTER AT EAST WALL AT SCUTTLE CLOSET AT PUBLIC HALL, 3rd STORY",
+      "story": "3"
      },
      {
       "violationid": "17161138",
@@ -603,26 +608,15 @@
       "novdescription": "(A) § HMC:FILE ANNUAL BEDBUG REPORT IN ACCORDANCE WITH HPD RULE AS DESCRIBED ON THE BACK OF THIS NOTICE OF VIOLATION OR AS DESCRIBED ON HPD\u001aS WEBSITE, WWW.NYC.GOV\\HPD, SEARCH BED BUGS."
      },
      {
-      "violationid": "15389569",
+      "violationid": "15389573",
       "inspectiondate": "2022-09-21T00:00:00.000",
       "novissueddate": "2022-09-23T00:00:00.000",
-      "class": "A",
+      "class": "B",
       "violationstatus": "Open",
       "currentstatus": "NOT COMPLIED WITH",
       "currentstatusdate": "2026-04-24T00:00:00.000",
-      "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE FIRE RETARDANT CEILING AT PUBLIC HALL, 3rd STORY",
+      "novdescription": "§ 27-2005 ADM CODE REPAIR THE ROOF SO THAT IT WILL NOT LEAK OVER CEILING AT PUBLIC HALL, 3rd STORY",
       "story": "3"
-     },
-     {
-      "violationid": "15389607",
-      "inspectiondate": "2022-09-21T00:00:00.000",
-      "novissueddate": "2022-09-23T00:00:00.000",
-      "class": "A",
-      "violationstatus": "Open",
-      "currentstatus": "NOT COMPLIED WITH",
-      "currentstatusdate": "2026-04-24T00:00:00.000",
-      "novdescription": "§ 27-2005 HMC: POST, IN A FORM APPROVED BY THE COMMISSIONER, AND MAINTAIN A NOTICE IN A COMMON AREA OF THE BUILDING REGARDING THE PROCEDURES THAT SHOULD BE FOLLOWED WHEN A GAS LEAK IS SUSPECTED",
-      "story": "0"
      },
      {
       "violationid": "15389602",
@@ -636,25 +630,36 @@
       "story": "1"
      },
      {
-      "violationid": "15389573",
-      "inspectiondate": "2022-09-21T00:00:00.000",
-      "novissueddate": "2022-09-23T00:00:00.000",
-      "class": "B",
-      "violationstatus": "Open",
-      "currentstatus": "NOT COMPLIED WITH",
-      "currentstatusdate": "2026-04-24T00:00:00.000",
-      "novdescription": "§ 27-2005 ADM CODE REPAIR THE ROOF SO THAT IT WILL NOT LEAK OVER CEILING AT PUBLIC HALL, 3rd STORY",
-      "story": "3"
-     },
-     {
-      "violationid": "15389601",
+      "violationid": "15389607",
       "inspectiondate": "2022-09-21T00:00:00.000",
       "novissueddate": "2022-09-23T00:00:00.000",
       "class": "A",
       "violationstatus": "Open",
       "currentstatus": "NOT COMPLIED WITH",
       "currentstatusdate": "2026-04-24T00:00:00.000",
-      "novdescription": "§ 27-2045 ADM CODE POST A PROPER NOTICE OF SMOKE DETECTOR REQUIREMENTS, IN A FORM APPROVED BY THE COMMISSIONER, AT OR NEAR THE MAIL BOX MISSING AT PUBLIC HALL, 1st STORY",
+      "novdescription": "§ 27-2005 HMC: POST, IN A FORM APPROVED BY THE COMMISSIONER, AND MAINTAIN A NOTICE IN A COMMON AREA OF THE BUILDING REGARDING THE PROCEDURES THAT SHOULD BE FOLLOWED WHEN A GAS LEAK IS SUSPECTED",
+      "story": "0"
+     },
+     {
+      "violationid": "15389578",
+      "inspectiondate": "2022-09-21T00:00:00.000",
+      "novissueddate": "2022-09-23T00:00:00.000",
+      "class": "C",
+      "violationstatus": "Open",
+      "currentstatus": "NOT COMPLIED WITH",
+      "currentstatusdate": "2026-04-24T00:00:00.000",
+      "novdescription": "§ 27-2005 ADM CODE & 309 M/D LAW ABATE THE NUISANCE CONSISTING OF UNCAPPED STEAM RADIATOR VALVE AT PUBLIC HALL, 1st STORY",
+      "story": "1"
+     },
+     {
+      "violationid": "15389600",
+      "inspectiondate": "2022-09-21T00:00:00.000",
+      "novissueddate": "2022-09-23T00:00:00.000",
+      "class": "A",
+      "violationstatus": "Open",
+      "currentstatus": "NOT COMPLIED WITH",
+      "currentstatusdate": "2026-04-24T00:00:00.000",
+      "novdescription": "§ 27-2046.1 HMC: POST A PROPER NOTICE OF CARBON MONOXIDE DETECTING DEVICE REQUIREMENTS, IN A FORM APPROVED BY THE COMMISSIONER, IN A COMMON AREA OF A CLASS A MULTIPLE DWELLING NEAR INSPECTION CERTIFICATE OR PROVIDE NOTICE TO TENANTS IN A PRIVATE DWELLING.",
       "story": "1"
      },
      {
@@ -669,50 +674,6 @@
       "story": "3"
      },
      {
-      "violationid": "15389600",
-      "inspectiondate": "2022-09-21T00:00:00.000",
-      "novissueddate": "2022-09-23T00:00:00.000",
-      "class": "A",
-      "violationstatus": "Open",
-      "currentstatus": "NOT COMPLIED WITH",
-      "currentstatusdate": "2026-04-24T00:00:00.000",
-      "novdescription": "§ 27-2046.1 HMC: POST A PROPER NOTICE OF CARBON MONOXIDE DETECTING DEVICE REQUIREMENTS, IN A FORM APPROVED BY THE COMMISSIONER, IN A COMMON AREA OF A CLASS A MULTIPLE DWELLING NEAR INSPECTION CERTIFICATE OR PROVIDE NOTICE TO TENANTS IN A PRIVATE DWELLING.",
-      "story": "1"
-     },
-     {
-      "violationid": "15389603",
-      "inspectiondate": "2022-09-21T00:00:00.000",
-      "novissueddate": "2022-09-23T00:00:00.000",
-      "class": "A",
-      "violationstatus": "Open",
-      "currentstatus": "NOT COMPLIED WITH",
-      "currentstatusdate": "2026-04-24T00:00:00.000",
-      "novdescription": "§ 27-2104 ADM CODE POST AND MAINTAIN A PROPER SIGN ON WALL OF ENTRANCE STORY SHOWING THE REGISTRATION NUMBER ASSIGNED BY THE DEPARTMENT AND THE ADDRESS OF THE BUILDING. AT PUBLIC HALL, 1st STORY",
-      "story": "1"
-     },
-     {
-      "violationid": "15389576",
-      "inspectiondate": "2022-09-21T00:00:00.000",
-      "novissueddate": "2022-09-23T00:00:00.000",
-      "class": "C",
-      "violationstatus": "Open",
-      "currentstatus": "NOT COMPLIED WITH",
-      "currentstatusdate": "2026-04-24T00:00:00.000",
-      "novdescription": "§ 27-2005, 27-2007, 27-2041.1 HMC: REPLACE OR REPAIR THE SELF-CLOSING DOORS THAT IS MISSING OR DEFECTIVE AT BUILDING ENTRANCE , 1st STORY",
-      "story": "1"
-     },
-     {
-      "violationid": "15389578",
-      "inspectiondate": "2022-09-21T00:00:00.000",
-      "novissueddate": "2022-09-23T00:00:00.000",
-      "class": "C",
-      "violationstatus": "Open",
-      "currentstatus": "NOT COMPLIED WITH",
-      "currentstatusdate": "2026-04-24T00:00:00.000",
-      "novdescription": "§ 27-2005 ADM CODE & 309 M/D LAW ABATE THE NUISANCE CONSISTING OF UNCAPPED STEAM RADIATOR VALVE AT PUBLIC HALL, 1st STORY",
-      "story": "1"
-     },
-     {
       "violationid": "15389572",
       "inspectiondate": "2022-09-21T00:00:00.000",
       "novissueddate": "2022-09-23T00:00:00.000",
@@ -724,14 +685,25 @@
       "story": "3"
      },
      {
-      "violationid": "15389599",
+      "violationid": "15389569",
       "inspectiondate": "2022-09-21T00:00:00.000",
       "novissueddate": "2022-09-23T00:00:00.000",
       "class": "A",
       "violationstatus": "Open",
       "currentstatus": "NOT COMPLIED WITH",
       "currentstatusdate": "2026-04-24T00:00:00.000",
-      "novdescription": "§ 26-1103 ADMIN. CODE: POST AND MAINTAIN A PROPER NOTICE ON WALL OF THE ENTRANCE STORY IN ENGLISH AND SPANISH ON THE AVAILABILITY OF THE AGENCY\u001aS HOUSING INFORMATION GUIDE. A SAMPLE NOTICE CAN BE FOUND AT WWW.NYC.GOV/HPD. AT PUBLIC HALL, 1st STORY",
+      "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE FIRE RETARDANT CEILING AT PUBLIC HALL, 3rd STORY",
+      "story": "3"
+     },
+     {
+      "violationid": "15389606",
+      "inspectiondate": "2022-09-21T00:00:00.000",
+      "novissueddate": "2022-09-23T00:00:00.000",
+      "class": "A",
+      "violationstatus": "Open",
+      "currentstatus": "NOT COMPLIED WITH",
+      "currentstatusdate": "2026-04-24T00:00:00.000",
+      "novdescription": "§ 27-2046.1 HMC: POST A PROPER NOTICE OF CARBON MONOXIDE DETECTING DEVICE REQUIREMENTS, IN A FORM APPROVED BY THE COMMISSIONER, IN A COMMON AREA OF A CLASS A MULTIPLE DWELLING NEAR INSPECTION CERTIFICATE OR PROVIDE NOTICE TO TENANTS IN A PRIVATE DWELLING.",
       "story": "1"
      },
      {
@@ -746,14 +718,47 @@
       "story": "1"
      },
      {
-      "violationid": "15389606",
+      "violationid": "15389601",
       "inspectiondate": "2022-09-21T00:00:00.000",
       "novissueddate": "2022-09-23T00:00:00.000",
       "class": "A",
       "violationstatus": "Open",
       "currentstatus": "NOT COMPLIED WITH",
       "currentstatusdate": "2026-04-24T00:00:00.000",
-      "novdescription": "§ 27-2046.1 HMC: POST A PROPER NOTICE OF CARBON MONOXIDE DETECTING DEVICE REQUIREMENTS, IN A FORM APPROVED BY THE COMMISSIONER, IN A COMMON AREA OF A CLASS A MULTIPLE DWELLING NEAR INSPECTION CERTIFICATE OR PROVIDE NOTICE TO TENANTS IN A PRIVATE DWELLING.",
+      "novdescription": "§ 27-2045 ADM CODE POST A PROPER NOTICE OF SMOKE DETECTOR REQUIREMENTS, IN A FORM APPROVED BY THE COMMISSIONER, AT OR NEAR THE MAIL BOX MISSING AT PUBLIC HALL, 1st STORY",
+      "story": "1"
+     },
+     {
+      "violationid": "15389576",
+      "inspectiondate": "2022-09-21T00:00:00.000",
+      "novissueddate": "2022-09-23T00:00:00.000",
+      "class": "C",
+      "violationstatus": "Open",
+      "currentstatus": "NOT COMPLIED WITH",
+      "currentstatusdate": "2026-04-24T00:00:00.000",
+      "novdescription": "§ 27-2005, 27-2007, 27-2041.1 HMC: REPLACE OR REPAIR THE SELF-CLOSING DOORS THAT IS MISSING OR DEFECTIVE AT BUILDING ENTRANCE , 1st STORY",
+      "story": "1"
+     },
+     {
+      "violationid": "15389599",
+      "inspectiondate": "2022-09-21T00:00:00.000",
+      "novissueddate": "2022-09-23T00:00:00.000",
+      "class": "A",
+      "violationstatus": "Open",
+      "currentstatus": "NOT COMPLIED WITH",
+      "currentstatusdate": "2026-04-24T00:00:00.000",
+      "novdescription": "§ 26-1103 ADMIN. CODE: POST AND MAINTAIN A PROPER NOTICE ON WALL OF THE ENTRANCE STORY IN ENGLISH AND SPANISH ON THE AVAILABILITY OF THE AGENCY\u001aS HOUSING INFORMATION GUIDE. A SAMPLE NOTICE CAN BE FOUND AT WWW.NYC.GOV/HPD. AT PUBLIC HALL, 1st STORY",
+      "story": "1"
+     },
+     {
+      "violationid": "15389603",
+      "inspectiondate": "2022-09-21T00:00:00.000",
+      "novissueddate": "2022-09-23T00:00:00.000",
+      "class": "A",
+      "violationstatus": "Open",
+      "currentstatus": "NOT COMPLIED WITH",
+      "currentstatusdate": "2026-04-24T00:00:00.000",
+      "novdescription": "§ 27-2104 ADM CODE POST AND MAINTAIN A PROPER SIGN ON WALL OF ENTRANCE STORY SHOWING THE REGISTRATION NUMBER ASSIGNED BY THE DEPARTMENT AND THE ADDRESS OF THE BUILDING. AT PUBLIC HALL, 1st STORY",
       "story": "1"
      },
      {
@@ -776,17 +781,6 @@
       "novdescription": "(A) § HMC:FILE ANNUAL BEDBUG REPORT IN ACCORDANCE WITH HPD RULE AS DESCRIBED ON THE BACK OF THIS NOTICE OF VIOLATION OR AS DESCRIBED ON HPD\u001aS WEBSITE, WWW.NYC.GOV\\HPD, SEARCH BED BUGS."
      },
      {
-      "violationid": "14262945",
-      "inspectiondate": "2021-04-14T00:00:00.000",
-      "novissueddate": "2021-04-19T00:00:00.000",
-      "class": "A",
-      "violationstatus": "Open",
-      "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
-      "currentstatusdate": "2022-09-09T00:00:00.000",
-      "novdescription": "§ 27-2005 ADM CODE PAINT METAL IN ACCORDANCE WITH DEPT. REGULATION ALL LINTELS ABOVE EXTERIOR WINDOWS AT 2ND AND 3RD STORIES (6) AT WEST",
-      "story": "0"
-     },
-     {
       "violationid": "14262946",
       "inspectiondate": "2021-04-14T00:00:00.000",
       "novissueddate": "2021-04-19T00:00:00.000",
@@ -795,6 +789,17 @@
       "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
       "currentstatusdate": "2022-09-09T00:00:00.000",
       "novdescription": "§ 27-2005 ADM CODE REPLACE WITH NEW THE BROKEN OR DEFECTIVE CORRODED BILCO DOOR AND FRAME AT SIDEWALK AT WEST",
+      "story": "0"
+     },
+     {
+      "violationid": "14262945",
+      "inspectiondate": "2021-04-14T00:00:00.000",
+      "novissueddate": "2021-04-19T00:00:00.000",
+      "class": "A",
+      "violationstatus": "Open",
+      "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
+      "currentstatusdate": "2022-09-09T00:00:00.000",
+      "novdescription": "§ 27-2005 ADM CODE PAINT METAL IN ACCORDANCE WITH DEPT. REGULATION ALL LINTELS ABOVE EXTERIOR WINDOWS AT 2ND AND 3RD STORIES (6) AT WEST",
       "story": "0"
      },
      {
@@ -808,6 +813,17 @@
       "novdescription": "(A) § HMC:FILE ANNUAL BEDBUG REPORT IN ACCORDANCE WITH HPD RULE AS DESCRIBED ON THE BACK OF THIS NOTICE OF VIOLATION OR AS DESCRIBED ON HPD\u001aS WEBSITE, WWW.NYC.GOV\\HPD, SEARCH BED BUGS."
      },
      {
+      "violationid": "13846813",
+      "inspectiondate": "2020-10-01T00:00:00.000",
+      "novissueddate": "2020-10-07T00:00:00.000",
+      "class": "C",
+      "violationstatus": "Open",
+      "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
+      "currentstatusdate": "2022-09-09T00:00:00.000",
+      "novdescription": "§ 27-2005 ADM CODE & 309 M/D LAW ABATE THE NUISANCE CONSISTING OF NAILED SHUT SCUTTLE HATCH AT PUBLIC HALL 3RD STORY .",
+      "story": "0"
+     },
+     {
       "violationid": "13842728",
       "inspectiondate": "2020-10-01T00:00:00.000",
       "novissueddate": "2020-10-07T00:00:00.000",
@@ -818,17 +834,6 @@
       "novdescription": "§ 27-2005, 27-2007, 27-2041.1 HMC: REPLACE OR REPAIR THE SELF-CLOSING DOORS THAT IS MISSING OR DEFECTIVE .. IN THE ENTRANCE LOCATED AT APT 3, 3rd STORY, 1st APARTMENT FROM SOUTH AT WEST",
       "apartment": "3",
       "story": "3"
-     },
-     {
-      "violationid": "13846813",
-      "inspectiondate": "2020-10-01T00:00:00.000",
-      "novissueddate": "2020-10-07T00:00:00.000",
-      "class": "C",
-      "violationstatus": "Open",
-      "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
-      "currentstatusdate": "2022-09-09T00:00:00.000",
-      "novdescription": "§ 27-2005 ADM CODE & 309 M/D LAW ABATE THE NUISANCE CONSISTING OF NAILED SHUT SCUTTLE HATCH AT PUBLIC HALL 3RD STORY .",
-      "story": "0"
      },
      {
       "violationid": "13846809",
@@ -883,6 +888,17 @@
       "novdescription": "§27-2107 ADM CODE OWNER FAILED TO FILE A VALID REGISTRATION STATEMENT WITH THE DEPARTMENT AS REQUIRED BY ADM CODE §27-2097 AND IS THEREFORE SUBJECT TO CIVIL PENALTIES, PROHIBITED FROM CERTIFYING VIOLATIONS, AND DENIED THE RIGHT TO RECOVER POSSESSION OF PREMISES FOR NONPAYMENT OF RENT UNTIL A VALID REGISTRATION STATEMENT IS FILED."
      },
      {
+      "violationid": "12425293",
+      "inspectiondate": "2018-06-07T00:00:00.000",
+      "novissueddate": "2018-06-13T00:00:00.000",
+      "class": "B",
+      "violationstatus": "Open",
+      "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
+      "currentstatusdate": "2020-10-05T00:00:00.000",
+      "novdescription": "§ 27-2050 ADM CODE PROVIDE A PIECE OF GARDEN HOSE 10 FEET IN LENGTH WITH FEMALE COUPLING AND A 10 QUART PAIL ON PREMISES TO TEST SPRINKLER SYSTEM.",
+      "story": "0"
+     },
+     {
       "violationid": "12425229",
       "inspectiondate": "2018-06-07T00:00:00.000",
       "novissueddate": "2018-06-12T00:00:00.000",
@@ -906,15 +922,15 @@
       "story": "3"
      },
      {
-      "violationid": "12425255",
+      "violationid": "12425557",
       "inspectiondate": "2018-06-07T00:00:00.000",
       "novissueddate": "2018-06-13T00:00:00.000",
-      "class": "C",
-      "violationstatus": "Open",
-      "currentstatus": "NOT COMPLIED WITH",
+      "class": "B",
+      "violationstatus": "Close",
+      "currentstatus": "VIOLATION DISMISSED",
       "currentstatusdate": "2020-10-05T00:00:00.000",
-      "novdescription": "§ 27-2005 ADM CODE & 309 M/D LAW ABATE THE NUISANCE CONSISTING OF NAILED SHUT SCUTTLE HATCH AT PUBLIC HALL, 3rd STORY",
-      "story": "3"
+      "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR FIRE RETARDANT AT CEILING IN THE VESTUBULE , 1st STORY",
+      "story": "1"
      },
      {
       "violationid": "12425268",
@@ -928,15 +944,26 @@
       "story": "3"
      },
      {
-      "violationid": "12425273",
+      "violationid": "12425255",
       "inspectiondate": "2018-06-07T00:00:00.000",
       "novissueddate": "2018-06-13T00:00:00.000",
-      "class": "B",
+      "class": "C",
+      "violationstatus": "Open",
+      "currentstatus": "NOT COMPLIED WITH",
+      "currentstatusdate": "2020-10-05T00:00:00.000",
+      "novdescription": "§ 27-2005 ADM CODE & 309 M/D LAW ABATE THE NUISANCE CONSISTING OF NAILED SHUT SCUTTLE HATCH AT PUBLIC HALL, 3rd STORY",
+      "story": "3"
+     },
+     {
+      "violationid": "12425558",
+      "inspectiondate": "2018-06-07T00:00:00.000",
+      "novissueddate": "2018-06-13T00:00:00.000",
+      "class": "A",
       "violationstatus": "Open",
       "currentstatus": "NOT COMPLIED WITH",
       "currentstatusdate": "2020-10-02T00:00:00.000",
-      "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE FIRE RETARDANT WALLS AT SKYLIGHT AT PUBLIC HALL, 3rd STORY",
-      "story": "3"
+      "novdescription": "§ 27-2013 ADM CODE PAINT WITH LIGHT COLORED PAINT TO THE SATISFACTION OF THIS DEPARTMENT AT CEILING IN THE VESTUBULE , 1st STORY",
+      "story": "1"
      },
      {
       "violationid": "12425275",
@@ -950,37 +977,15 @@
       "story": "3"
      },
      {
-      "violationid": "12425293",
+      "violationid": "12425273",
       "inspectiondate": "2018-06-07T00:00:00.000",
       "novissueddate": "2018-06-13T00:00:00.000",
       "class": "B",
-      "violationstatus": "Open",
-      "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
-      "currentstatusdate": "2020-10-05T00:00:00.000",
-      "novdescription": "§ 27-2050 ADM CODE PROVIDE A PIECE OF GARDEN HOSE 10 FEET IN LENGTH WITH FEMALE COUPLING AND A 10 QUART PAIL ON PREMISES TO TEST SPRINKLER SYSTEM.",
-      "story": "0"
-     },
-     {
-      "violationid": "12425557",
-      "inspectiondate": "2018-06-07T00:00:00.000",
-      "novissueddate": "2018-06-13T00:00:00.000",
-      "class": "B",
-      "violationstatus": "Close",
-      "currentstatus": "VIOLATION DISMISSED",
-      "currentstatusdate": "2020-10-05T00:00:00.000",
-      "novdescription": "§ 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR FIRE RETARDANT AT CEILING IN THE VESTUBULE , 1st STORY",
-      "story": "1"
-     },
-     {
-      "violationid": "12425558",
-      "inspectiondate": "2018-06-07T00:00:00.000",
-      "novissueddate": "2018-06-13T00:00:00.000",
-      "class": "A",
       "violationstatus": "Open",
       "currentstatus": "NOT COMPLIED WITH",
       "currentstatusdate": "2020-10-02T00:00:00.000",
-      "novdescription": "§ 27-2013 ADM CODE PAINT WITH LIGHT COLORED PAINT TO THE SATISFACTION OF THIS DEPARTMENT AT CEILING IN THE VESTUBULE , 1st STORY",
-      "story": "1"
+      "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE FIRE RETARDANT WALLS AT SKYLIGHT AT PUBLIC HALL, 3rd STORY",
+      "story": "3"
      },
      {
       "violationid": "12092923",
@@ -1079,18 +1084,6 @@
       "story": "3"
      },
      {
-      "violationid": "4833621",
-      "inspectiondate": "2004-01-22T00:00:00.000",
-      "novissueddate": "2004-01-26T00:00:00.000",
-      "class": "B",
-      "violationstatus": "Open",
-      "currentstatus": "NOV SENT OUT",
-      "currentstatusdate": "2004-01-26T00:00:00.000",
-      "novdescription": "SECTION 27-2018 ADM CODE ABATE THE NUISANCE CONSISTING OF VERMIN ROACHES IN THE ENTIRE APARTMENT LOCATED AT APT 3FL, 3rd STORY",
-      "apartment": "3FL",
-      "story": "3"
-     },
-     {
       "violationid": "4833607",
       "inspectiondate": "2004-01-22T00:00:00.000",
       "novissueddate": "2004-01-26T00:00:00.000",
@@ -1114,15 +1107,16 @@
       "story": "3"
      },
      {
-      "violationid": "4687364",
-      "inspectiondate": "2003-08-30T00:00:00.000",
-      "novissueddate": "2003-09-03T00:00:00.000",
+      "violationid": "4833621",
+      "inspectiondate": "2004-01-22T00:00:00.000",
+      "novissueddate": "2004-01-26T00:00:00.000",
       "class": "B",
-      "violationstatus": "Close",
-      "currentstatus": "VIOLATION CLOSED",
-      "currentstatusdate": "2018-06-11T00:00:00.000",
-      "novdescription": "§ 27-2005 ADM CODE PROPERLY SECURE THE LOOSE HANDRAIL TO WALL AT PUBLIC HALL, 1st STORY",
-      "story": "1"
+      "violationstatus": "Open",
+      "currentstatus": "NOV SENT OUT",
+      "currentstatusdate": "2004-01-26T00:00:00.000",
+      "novdescription": "SECTION 27-2018 ADM CODE ABATE THE NUISANCE CONSISTING OF VERMIN ROACHES IN THE ENTIRE APARTMENT LOCATED AT APT 3FL, 3rd STORY",
+      "apartment": "3FL",
+      "story": "3"
      },
      {
       "violationid": "4687366",
@@ -1135,6 +1129,17 @@
       "novdescription": "SECTION 27-2026 ADM CODE REPAIR THE LEAKY AND/OR DEFECTIVE FAUCETS AT SINK IN THE KITCHEN LOCATED AT APT 3-F, 3rd STORY, APARTMENT AT SOUTH",
       "apartment": "3-F",
       "story": "3"
+     },
+     {
+      "violationid": "4687364",
+      "inspectiondate": "2003-08-30T00:00:00.000",
+      "novissueddate": "2003-09-03T00:00:00.000",
+      "class": "B",
+      "violationstatus": "Close",
+      "currentstatus": "VIOLATION CLOSED",
+      "currentstatusdate": "2018-06-11T00:00:00.000",
+      "novdescription": "§ 27-2005 ADM CODE PROPERLY SECURE THE LOOSE HANDRAIL TO WALL AT PUBLIC HALL, 1st STORY",
+      "story": "1"
      },
      {
       "violationid": "4532222",
@@ -1191,18 +1196,6 @@
       "novdescription": "§ 27-2040 ADM CODE PROVIDE ADEQUATE LIGHTING AT OR NEAR THE OUTSIDE OF THE FRONT ENTRANCEWAY OF THE BUILDING AND KEEP SAME BURNING FROM SUNSET EVERY DAY TO SUNRISE ON THE DAY FOLLOWING 100 WATTS REQUIRED"
      },
      {
-      "violationid": "4343811",
-      "inspectiondate": "2002-09-18T00:00:00.000",
-      "novissueddate": "2002-09-20T00:00:00.000",
-      "class": "B",
-      "violationstatus": "Open",
-      "currentstatus": "NOV SENT OUT",
-      "currentstatusdate": "2002-09-20T00:00:00.000",
-      "novdescription": "SECTION 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR CEILING IN THE 1st ROOM FROM NORTH LOCATED AT APT 3F, 3rd STORY",
-      "apartment": "3F",
-      "story": "3"
-     },
-     {
       "violationid": "4343792",
       "inspectiondate": "2002-09-18T00:00:00.000",
       "novissueddate": "2002-09-20T00:00:00.000",
@@ -1211,6 +1204,18 @@
       "currentstatus": "NOV SENT OUT",
       "currentstatusdate": "2002-09-20T00:00:00.000",
       "novdescription": "SECTION 27-2005 ADM CODE REPAIR THE ROOF SO THAT IT WILL NOT LEAK OVER CEILING IN THE 1st ROOM FROM NORTH LOCATED AT APT 3F, 3rd STORY",
+      "apartment": "3F",
+      "story": "3"
+     },
+     {
+      "violationid": "4343811",
+      "inspectiondate": "2002-09-18T00:00:00.000",
+      "novissueddate": "2002-09-20T00:00:00.000",
+      "class": "B",
+      "violationstatus": "Open",
+      "currentstatus": "NOV SENT OUT",
+      "currentstatusdate": "2002-09-20T00:00:00.000",
+      "novdescription": "SECTION 27-2005 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR CEILING IN THE 1st ROOM FROM NORTH LOCATED AT APT 3F, 3rd STORY",
       "apartment": "3F",
       "story": "3"
      },
@@ -1227,17 +1232,6 @@
       "story": "3"
      },
      {
-      "violationid": "4222963",
-      "inspectiondate": "2002-05-28T00:00:00.000",
-      "novissueddate": "2002-06-04T00:00:00.000",
-      "class": "B",
-      "violationstatus": "Close",
-      "currentstatus": "VIOLATION CLOSED",
-      "currentstatusdate": "2018-06-11T00:00:00.000",
-      "novdescription": "§ 27-2005 ADM CODE REPLACE WITH NEW THE BROKEN OR DEFECTIVE PAINTED SPRINKLER HEADS AT PUBLIC HALL",
-      "story": "0"
-     },
-     {
       "violationid": "4222948",
       "inspectiondate": "2002-05-28T00:00:00.000",
       "novissueddate": "2002-06-04T00:00:00.000",
@@ -1249,6 +1243,17 @@
       "story": "1"
      },
      {
+      "violationid": "4222963",
+      "inspectiondate": "2002-05-28T00:00:00.000",
+      "novissueddate": "2002-06-04T00:00:00.000",
+      "class": "B",
+      "violationstatus": "Close",
+      "currentstatus": "VIOLATION CLOSED",
+      "currentstatusdate": "2018-06-11T00:00:00.000",
+      "novdescription": "§ 27-2005 ADM CODE REPLACE WITH NEW THE BROKEN OR DEFECTIVE PAINTED SPRINKLER HEADS AT PUBLIC HALL",
+      "story": "0"
+     },
+     {
       "violationid": "4108484",
       "inspectiondate": "2002-02-12T00:00:00.000",
       "novissueddate": "2002-02-14T00:00:00.000",
@@ -1258,18 +1263,6 @@
       "currentstatusdate": "2018-06-11T00:00:00.000",
       "novdescription": "§ 27-2005, 2007 ADM CODE REMOVE THE ILLEGAL FASTENING - DOUBLE CYLINDER LOCK INSTALLED ON WROUGHT IRON DOOR AT STREET ENTRANCE TO BUILDING AT PUBLIC HALL, 1st STORY",
       "story": "1"
-     },
-     {
-      "violationid": "4088579",
-      "inspectiondate": "2002-01-28T00:00:00.000",
-      "novissueddate": "2002-01-30T00:00:00.000",
-      "class": "B",
-      "violationstatus": "Open",
-      "currentstatus": "NOV SENT OUT",
-      "currentstatusdate": "2002-01-30T00:00:00.000",
-      "novdescription": "SECTION 27-2005 ADM CODE PROPERLY REPAIR THE BROKEN OR DEFECTIVE INTERCOM SYSTEM , ENTRANCE OF BLDG TO APT LOCATED AT APT 3-F, 3rd STORY, APARTMENT AT WEST",
-      "apartment": "3-F",
-      "story": "3"
      },
      {
       "violationid": "4088521",
@@ -1320,6 +1313,18 @@
       "story": "3"
      },
      {
+      "violationid": "4088579",
+      "inspectiondate": "2002-01-28T00:00:00.000",
+      "novissueddate": "2002-01-30T00:00:00.000",
+      "class": "B",
+      "violationstatus": "Open",
+      "currentstatus": "NOV SENT OUT",
+      "currentstatusdate": "2002-01-30T00:00:00.000",
+      "novdescription": "SECTION 27-2005 ADM CODE PROPERLY REPAIR THE BROKEN OR DEFECTIVE INTERCOM SYSTEM , ENTRANCE OF BLDG TO APT LOCATED AT APT 3-F, 3rd STORY, APARTMENT AT WEST",
+      "apartment": "3-F",
+      "story": "3"
+     },
+     {
       "violationid": "4088794",
       "inspectiondate": "2002-01-28T00:00:00.000",
       "novissueddate": "2002-01-30T00:00:00.000",
@@ -1354,37 +1359,6 @@
       "story": "3"
      },
      {
-      "violationid": "1457212",
-      "inspectiondate": "1992-08-10T00:00:00.000",
-      "novissueddate": "1992-10-13T00:00:00.000",
-      "class": "B",
-      "violationstatus": "Open",
-      "currentstatus": "NOV CERTIFIED LATE",
-      "currentstatusdate": "1993-03-16T00:00:00.000",
-      "novdescription": "SECTION 27-2005, 2007 ADM CODE ARRANGE AND MAKE SELF-CLOSING THE DOORS ENTRANCE 3 STY FRONT 3F."
-     },
-     {
-      "violationid": "1457211",
-      "inspectiondate": "1992-08-10T00:00:00.000",
-      "novissueddate": "2006-07-28T00:00:00.000",
-      "class": "A",
-      "violationstatus": "Open",
-      "currentstatus": "NOV SENT OUT",
-      "currentstatusdate": "2006-07-28T00:00:00.000",
-      "novdescription": "SECTION 27-2043 ADM CODE PROVIDE A LOCK AND KEY TO THE ENTRANCE DOOR OF DWELLING UNIT AND, IF A CL A MULTIPLE DWELLING, ALSO CHAIN DOOR GUARD 3 STY FRONT 3F."
-     },
-     {
-      "violationid": "1457210",
-      "inspectiondate": "1992-08-10T00:00:00.000",
-      "novissueddate": "2006-07-28T00:00:00.000",
-      "class": "A",
-      "violationstatus": "Open",
-      "currentstatus": "NOV SENT OUT",
-      "currentstatusdate": "2006-07-28T00:00:00.000",
-      "novdescription": "SECTION 27-2005 ADM CODE REPLACE WITH NEW THE BROKEN OR DEFECTIVE PEEPHOLE ENTRANCE DOOR 3 STY FRONT APT 3F. LOCATED AT APT 3F",
-      "apartment": "3F"
-     },
-     {
       "violationid": "1457209",
       "inspectiondate": "1992-08-10T00:00:00.000",
       "novissueddate": "1992-10-13T00:00:00.000",
@@ -1396,80 +1370,14 @@
       "apartment": "3F"
      },
      {
-      "violationid": "1457208",
-      "inspectiondate": "1992-08-10T00:00:00.000",
-      "novissueddate": "1992-10-13T00:00:00.000",
-      "class": "B",
-      "violationstatus": "Open",
-      "currentstatus": "NOV CERTIFIED LATE",
-      "currentstatusdate": "1993-03-16T00:00:00.000",
-      "novdescription": "SECTION 27-2045 ADM CODE REPAIR OR REPLACE THE SMOKE DETECTOR DEFECTIVE 3 STY FRONT APT 3F HALL. LOCATED AT APT 3F",
-      "apartment": "3F"
-     },
-     {
-      "violationid": "1457207",
-      "inspectiondate": "1992-08-10T00:00:00.000",
-      "novissueddate": "2006-07-28T00:00:00.000",
-      "class": "A",
-      "violationstatus": "Open",
-      "currentstatus": "NOV SENT OUT",
-      "currentstatusdate": "2006-07-28T00:00:00.000",
-      "novdescription": "SECTION 27-2005 ADM CODE PROPERLY SECURE THE LOOSE DOOR KNOB ENTRANCEWAY 3 STY FRONT APT 3F. LOCATED AT APT 3F",
-      "apartment": "3F"
-     },
-     {
-      "violationid": "1457206",
-      "inspectiondate": "1992-08-10T00:00:00.000",
-      "novissueddate": "1992-03-10T00:00:00.000",
-      "class": "B",
-      "violationstatus": "Open",
-      "currentstatus": "NOV SENT OUT",
-      "currentstatusdate": "1992-03-10T00:00:00.000",
-      "novdescription": "SECTION 27-2005 ADM CODE PROPERLY REPAIR THE BROKEN OR DEFECTIVE ENTRANCE DOOR 3 STY APT 3F , SECTION '' ''",
-      "apartment": "3F"
-     },
-     {
-      "violationid": "1457205",
-      "inspectiondate": "1992-08-10T00:00:00.000",
-      "novissueddate": "1992-03-10T00:00:00.000",
-      "class": "B",
-      "violationstatus": "Open",
-      "currentstatus": "NOV SENT OUT",
-      "currentstatusdate": "1992-03-10T00:00:00.000",
-      "novdescription": "SECTION 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD FLOOR NORTH ROOM 3 STY APT 3F , SECTION '' ''",
-      "apartment": "3F"
-     },
-     {
-      "violationid": "1457204",
-      "inspectiondate": "1992-08-10T00:00:00.000",
-      "novissueddate": "1992-03-10T00:00:00.000",
-      "class": "C",
-      "violationstatus": "Open",
-      "currentstatus": "NOV CERTIFIED LATE",
-      "currentstatusdate": "1992-04-20T00:00:00.000",
-      "novdescription": "SECTION 27-2013 ADM CODE REMOVE OR COVER IN A MANNER APPROVED BY THE DEPARTMENT THE PEELING LEAD PAINT STEAM PIPE BATHROOM 3 STY APT 3F ER1 0282642 , SECTION '' ''",
-      "apartment": "3F"
-     },
-     {
-      "violationid": "1457203",
+      "violationid": "1457200",
       "inspectiondate": "1992-08-10T00:00:00.000",
       "novissueddate": "1992-03-10T00:00:00.000",
       "class": "C",
       "violationstatus": "Open",
       "currentstatus": "NOT COMPLIED WITH",
       "currentstatusdate": "1992-08-10T00:00:00.000",
-      "novdescription": "SECTION 27-2013 ADM CODE REMOVE OR COVER IN A MANNER APPROVED BY THE DEPARTMENT THE PEELING LEAD PAINT CEILING CENTER ROOM 3 STY APT 3F ER1 0282642 , SECTION '' ''",
-      "apartment": "3F"
-     },
-     {
-      "violationid": "1457202",
-      "inspectiondate": "1992-08-10T00:00:00.000",
-      "novissueddate": "1992-03-10T00:00:00.000",
-      "class": "C",
-      "violationstatus": "Open",
-      "currentstatus": "NOT COMPLIED WITH",
-      "currentstatusdate": "1992-08-10T00:00:00.000",
-      "novdescription": "SECTION 27-2013 ADM CODE REMOVE OR COVER IN A MANNER APPROVED BY THE DEPARTMENT THE PEELING LEAD PAINT NORTH WALL NORTH ROOM 3 STY APT 3F ER1 0282642 , SECTION '' ''",
+      "novdescription": "SECTION 27-2013 ADM CODE REMOVE OR COVER IN A MANNER APPROVED BY THE DEPARTMENT THE PEELING LEAD PAINT CEILING NORTH ROOM 3 STY APT 3F HALL 735 6598 ER1 0282642 , SECTION '' ''",
       "apartment": "3F"
      },
      {
@@ -1484,15 +1392,112 @@
       "apartment": "3F"
      },
      {
-      "violationid": "1457200",
+      "violationid": "1457202",
       "inspectiondate": "1992-08-10T00:00:00.000",
       "novissueddate": "1992-03-10T00:00:00.000",
       "class": "C",
       "violationstatus": "Open",
       "currentstatus": "NOT COMPLIED WITH",
       "currentstatusdate": "1992-08-10T00:00:00.000",
-      "novdescription": "SECTION 27-2013 ADM CODE REMOVE OR COVER IN A MANNER APPROVED BY THE DEPARTMENT THE PEELING LEAD PAINT CEILING NORTH ROOM 3 STY APT 3F HALL 735 6598 ER1 0282642 , SECTION '' ''",
+      "novdescription": "SECTION 27-2013 ADM CODE REMOVE OR COVER IN A MANNER APPROVED BY THE DEPARTMENT THE PEELING LEAD PAINT NORTH WALL NORTH ROOM 3 STY APT 3F ER1 0282642 , SECTION '' ''",
       "apartment": "3F"
+     },
+     {
+      "violationid": "1457203",
+      "inspectiondate": "1992-08-10T00:00:00.000",
+      "novissueddate": "1992-03-10T00:00:00.000",
+      "class": "C",
+      "violationstatus": "Open",
+      "currentstatus": "NOT COMPLIED WITH",
+      "currentstatusdate": "1992-08-10T00:00:00.000",
+      "novdescription": "SECTION 27-2013 ADM CODE REMOVE OR COVER IN A MANNER APPROVED BY THE DEPARTMENT THE PEELING LEAD PAINT CEILING CENTER ROOM 3 STY APT 3F ER1 0282642 , SECTION '' ''",
+      "apartment": "3F"
+     },
+     {
+      "violationid": "1457204",
+      "inspectiondate": "1992-08-10T00:00:00.000",
+      "novissueddate": "1992-03-10T00:00:00.000",
+      "class": "C",
+      "violationstatus": "Open",
+      "currentstatus": "NOV CERTIFIED LATE",
+      "currentstatusdate": "1992-04-20T00:00:00.000",
+      "novdescription": "SECTION 27-2013 ADM CODE REMOVE OR COVER IN A MANNER APPROVED BY THE DEPARTMENT THE PEELING LEAD PAINT STEAM PIPE BATHROOM 3 STY APT 3F ER1 0282642 , SECTION '' ''",
+      "apartment": "3F"
+     },
+     {
+      "violationid": "1457205",
+      "inspectiondate": "1992-08-10T00:00:00.000",
+      "novissueddate": "1992-03-10T00:00:00.000",
+      "class": "B",
+      "violationstatus": "Open",
+      "currentstatus": "NOV SENT OUT",
+      "currentstatusdate": "1992-03-10T00:00:00.000",
+      "novdescription": "SECTION 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD FLOOR NORTH ROOM 3 STY APT 3F , SECTION '' ''",
+      "apartment": "3F"
+     },
+     {
+      "violationid": "1457206",
+      "inspectiondate": "1992-08-10T00:00:00.000",
+      "novissueddate": "1992-03-10T00:00:00.000",
+      "class": "B",
+      "violationstatus": "Open",
+      "currentstatus": "NOV SENT OUT",
+      "currentstatusdate": "1992-03-10T00:00:00.000",
+      "novdescription": "SECTION 27-2005 ADM CODE PROPERLY REPAIR THE BROKEN OR DEFECTIVE ENTRANCE DOOR 3 STY APT 3F , SECTION '' ''",
+      "apartment": "3F"
+     },
+     {
+      "violationid": "1457207",
+      "inspectiondate": "1992-08-10T00:00:00.000",
+      "novissueddate": "2006-07-28T00:00:00.000",
+      "class": "A",
+      "violationstatus": "Open",
+      "currentstatus": "NOV SENT OUT",
+      "currentstatusdate": "2006-07-28T00:00:00.000",
+      "novdescription": "SECTION 27-2005 ADM CODE PROPERLY SECURE THE LOOSE DOOR KNOB ENTRANCEWAY 3 STY FRONT APT 3F. LOCATED AT APT 3F",
+      "apartment": "3F"
+     },
+     {
+      "violationid": "1457208",
+      "inspectiondate": "1992-08-10T00:00:00.000",
+      "novissueddate": "1992-10-13T00:00:00.000",
+      "class": "B",
+      "violationstatus": "Open",
+      "currentstatus": "NOV CERTIFIED LATE",
+      "currentstatusdate": "1993-03-16T00:00:00.000",
+      "novdescription": "SECTION 27-2045 ADM CODE REPAIR OR REPLACE THE SMOKE DETECTOR DEFECTIVE 3 STY FRONT APT 3F HALL. LOCATED AT APT 3F",
+      "apartment": "3F"
+     },
+     {
+      "violationid": "1457210",
+      "inspectiondate": "1992-08-10T00:00:00.000",
+      "novissueddate": "2006-07-28T00:00:00.000",
+      "class": "A",
+      "violationstatus": "Open",
+      "currentstatus": "NOV SENT OUT",
+      "currentstatusdate": "2006-07-28T00:00:00.000",
+      "novdescription": "SECTION 27-2005 ADM CODE REPLACE WITH NEW THE BROKEN OR DEFECTIVE PEEPHOLE ENTRANCE DOOR 3 STY FRONT APT 3F. LOCATED AT APT 3F",
+      "apartment": "3F"
+     },
+     {
+      "violationid": "1457211",
+      "inspectiondate": "1992-08-10T00:00:00.000",
+      "novissueddate": "2006-07-28T00:00:00.000",
+      "class": "A",
+      "violationstatus": "Open",
+      "currentstatus": "NOV SENT OUT",
+      "currentstatusdate": "2006-07-28T00:00:00.000",
+      "novdescription": "SECTION 27-2043 ADM CODE PROVIDE A LOCK AND KEY TO THE ENTRANCE DOOR OF DWELLING UNIT AND, IF A CL A MULTIPLE DWELLING, ALSO CHAIN DOOR GUARD 3 STY FRONT 3F."
+     },
+     {
+      "violationid": "1457212",
+      "inspectiondate": "1992-08-10T00:00:00.000",
+      "novissueddate": "1992-10-13T00:00:00.000",
+      "class": "B",
+      "violationstatus": "Open",
+      "currentstatus": "NOV CERTIFIED LATE",
+      "currentstatusdate": "1993-03-16T00:00:00.000",
+      "novdescription": "SECTION 27-2005, 2007 ADM CODE ARRANGE AND MAKE SELF-CLOSING THE DOORS ENTRANCE 3 STY FRONT 3F."
      },
      {
       "violationid": "1457199",
@@ -1516,25 +1521,25 @@
       "novdescription": "D26-10.01 ADM CODE REPLACE WITH NEW THE MISSING BALUSTERS 3 STY PUB HALL."
      },
      {
-      "violationid": "1457197",
+      "violationid": "1457186",
       "inspectiondate": "1980-12-01T00:00:00.000",
       "novissueddate": "2008-06-05T00:00:00.000",
-      "class": "A",
-      "violationstatus": "Open",
-      "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
-      "currentstatusdate": "2020-10-02T00:00:00.000",
-      "novdescription": "D26-10.01 ADM CODE PROPERLY REPAIR THE BROKEN OR DEFECTIVE CELLAR STAIR ENCLOSURE AS PER SEC 190 MDL.",
+      "class": "B",
+      "violationstatus": "Close",
+      "currentstatus": "VIOLATION CLOSED",
+      "currentstatusdate": "2018-06-11T00:00:00.000",
+      "novdescription": "D26-10.01, 10.05 ADM CODE REMOVE ALL ENCUMBRANCES CONSISTING OF WOOD LADDER & HOUSEHOLD ITEMS 3 STY PUB HALL.",
       "story": "0"
      },
      {
-      "violationid": "1457195",
+      "violationid": "1457185",
       "inspectiondate": "1980-12-01T00:00:00.000",
       "novissueddate": "2008-06-05T00:00:00.000",
       "class": "B",
       "violationstatus": "Open",
       "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
-      "currentstatusdate": "2020-10-05T00:00:00.000",
-      "novdescription": "D26-21.07 ADM CODE PROVIDE A PIECE OF GARDEN HOSE 10 FEET IN LENGTH WITH FEMALE COUPLING AND A 10 QUART PAIL ON PREMISES TO TEST SPRINKLER SYSTEM.",
+      "currentstatusdate": "2020-10-02T00:00:00.000",
+      "novdescription": "D26-10.01, 10.05 ADM CODE FIRE EGRESS DEFECTIVE. MAKE STATIONARY THE IRON LADDER LEADING TO SCUTTLE OPENING IN ROOF 3 STY PUB HALL TO ROOF.",
       "story": "0"
      },
      {
@@ -1613,36 +1618,14 @@
       "novdescription": "D26-10.01 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE PLASTIC BOARD AT CELLAR CEILING AT CENTER."
      },
      {
-      "violationid": "1457196",
+      "violationid": "1457187",
       "inspectiondate": "1980-12-01T00:00:00.000",
       "novissueddate": "2008-06-05T00:00:00.000",
       "class": "B",
       "violationstatus": "Open",
       "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
       "currentstatusdate": "2020-10-02T00:00:00.000",
-      "novdescription": "D26-21.07 ADM CODE PROVIDE 3 EXTRA SPRINKLER HEADS AND SUITABLE WRENCH FOR EMERGENCY PURPOSES AT O.S.Y. VALVE OF SPRINKLER IN ACCORDANCE WITH THE RULES AND REGULATIONS OF THIS DEPARTMENT MISING WRENCH CELLAR FRONT.",
-      "story": "0"
-     },
-     {
-      "violationid": "1457190",
-      "inspectiondate": "1980-12-01T00:00:00.000",
-      "novissueddate": "2008-06-05T00:00:00.000",
-      "class": "A",
-      "violationstatus": "Close",
-      "currentstatus": "VIOLATION CLOSED",
-      "currentstatusdate": "2018-06-11T00:00:00.000",
-      "novdescription": "D26-10.01 ADM CODE PROPERLY REPAIR THE BROKEN OR DEFECTIVE LOCKING DEVICE DOOR 1 STY PUB HALL TO VESTIBULE.",
-      "story": "0"
-     },
-     {
-      "violationid": "1457189",
-      "inspectiondate": "1980-12-01T00:00:00.000",
-      "novissueddate": "2008-06-05T00:00:00.000",
-      "class": "A",
-      "violationstatus": "Open",
-      "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
-      "currentstatusdate": "2020-10-02T00:00:00.000",
-      "novdescription": "D26-10.01 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE ERODED MORTAR JOINTS PARAPET WALL ROOF FRONT.",
+      "novdescription": "§ 62, 187, 231 M/D LAW AND DEPT. RULES AND REGS. SAFEGUARD EGRESS BY PROVIDING IRON GUARD RAILS OR PARAPET WALLS 3 FT 6 IN HIGH AND EXTENDING A MINIMUM OF 4 FT 0 IN BEYOND EITHER SIDE OF BULKHEAD/SCUTTLE OPENING AT ROOF",
       "story": "0"
      },
      {
@@ -1657,48 +1640,59 @@
       "story": "0"
      },
      {
-      "violationid": "1457187",
+      "violationid": "1457189",
       "inspectiondate": "1980-12-01T00:00:00.000",
-      "novissueddate": "2008-06-05T00:00:00.000",
-      "class": "B",
-      "violationstatus": "Open",
-      "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
-      "currentstatusdate": "2020-10-02T00:00:00.000",
-      "novdescription": "§ 62, 187, 231 M/D LAW AND DEPT. RULES AND REGS. SAFEGUARD EGRESS BY PROVIDING IRON GUARD RAILS OR PARAPET WALLS 3 FT 6 IN HIGH AND EXTENDING A MINIMUM OF 4 FT 0 IN BEYOND EITHER SIDE OF BULKHEAD/SCUTTLE OPENING AT ROOF",
-      "story": "0"
-     },
-     {
-      "violationid": "1457186",
-      "inspectiondate": "1980-12-01T00:00:00.000",
-      "novissueddate": "2008-06-05T00:00:00.000",
-      "class": "B",
-      "violationstatus": "Close",
-      "currentstatus": "VIOLATION CLOSED",
-      "currentstatusdate": "2018-06-11T00:00:00.000",
-      "novdescription": "D26-10.01, 10.05 ADM CODE REMOVE ALL ENCUMBRANCES CONSISTING OF WOOD LADDER & HOUSEHOLD ITEMS 3 STY PUB HALL.",
-      "story": "0"
-     },
-     {
-      "violationid": "1457185",
-      "inspectiondate": "1980-12-01T00:00:00.000",
-      "novissueddate": "2008-06-05T00:00:00.000",
-      "class": "B",
-      "violationstatus": "Open",
-      "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
-      "currentstatusdate": "2020-10-02T00:00:00.000",
-      "novdescription": "D26-10.01, 10.05 ADM CODE FIRE EGRESS DEFECTIVE. MAKE STATIONARY THE IRON LADDER LEADING TO SCUTTLE OPENING IN ROOF 3 STY PUB HALL TO ROOF.",
-      "story": "0"
-     },
-     {
-      "violationid": "1457183",
-      "inspectiondate": "1979-08-16T00:00:00.000",
       "novissueddate": "2008-06-05T00:00:00.000",
       "class": "A",
       "violationstatus": "Open",
-      "currentstatus": "NOV SENT OUT",
-      "currentstatusdate": "2008-06-05T00:00:00.000",
-      "novdescription": "D26-12.01 ADM CODE PAINT WITH LIGHT COLORED PAINT TO THE SATISFACTION OF THIS DEPARTMENT CLG & WALLS ALL ROOMS 3 STY APT 3R. , SECTION '' ''",
-      "apartment": "3R"
+      "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
+      "currentstatusdate": "2020-10-02T00:00:00.000",
+      "novdescription": "D26-10.01 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE ERODED MORTAR JOINTS PARAPET WALL ROOF FRONT.",
+      "story": "0"
+     },
+     {
+      "violationid": "1457190",
+      "inspectiondate": "1980-12-01T00:00:00.000",
+      "novissueddate": "2008-06-05T00:00:00.000",
+      "class": "A",
+      "violationstatus": "Close",
+      "currentstatus": "VIOLATION CLOSED",
+      "currentstatusdate": "2018-06-11T00:00:00.000",
+      "novdescription": "D26-10.01 ADM CODE PROPERLY REPAIR THE BROKEN OR DEFECTIVE LOCKING DEVICE DOOR 1 STY PUB HALL TO VESTIBULE.",
+      "story": "0"
+     },
+     {
+      "violationid": "1457197",
+      "inspectiondate": "1980-12-01T00:00:00.000",
+      "novissueddate": "2008-06-05T00:00:00.000",
+      "class": "A",
+      "violationstatus": "Open",
+      "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
+      "currentstatusdate": "2020-10-02T00:00:00.000",
+      "novdescription": "D26-10.01 ADM CODE PROPERLY REPAIR THE BROKEN OR DEFECTIVE CELLAR STAIR ENCLOSURE AS PER SEC 190 MDL.",
+      "story": "0"
+     },
+     {
+      "violationid": "1457196",
+      "inspectiondate": "1980-12-01T00:00:00.000",
+      "novissueddate": "2008-06-05T00:00:00.000",
+      "class": "B",
+      "violationstatus": "Open",
+      "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
+      "currentstatusdate": "2020-10-02T00:00:00.000",
+      "novdescription": "D26-21.07 ADM CODE PROVIDE 3 EXTRA SPRINKLER HEADS AND SUITABLE WRENCH FOR EMERGENCY PURPOSES AT O.S.Y. VALVE OF SPRINKLER IN ACCORDANCE WITH THE RULES AND REGULATIONS OF THIS DEPARTMENT MISING WRENCH CELLAR FRONT.",
+      "story": "0"
+     },
+     {
+      "violationid": "1457195",
+      "inspectiondate": "1980-12-01T00:00:00.000",
+      "novissueddate": "2008-06-05T00:00:00.000",
+      "class": "B",
+      "violationstatus": "Open",
+      "currentstatus": "FIRST NO ACCESS TO RE- INSPECT VIOLATION",
+      "currentstatusdate": "2020-10-05T00:00:00.000",
+      "novdescription": "D26-21.07 ADM CODE PROVIDE A PIECE OF GARDEN HOSE 10 FEET IN LENGTH WITH FEMALE COUPLING AND A 10 QUART PAIL ON PREMISES TO TEST SPRINKLER SYSTEM.",
+      "story": "0"
      },
      {
       "violationid": "1457182",
@@ -1712,14 +1706,15 @@
       "apartment": "3R"
      },
      {
-      "violationid": "1457181",
-      "inspectiondate": "1977-09-19T00:00:00.000",
+      "violationid": "1457183",
+      "inspectiondate": "1979-08-16T00:00:00.000",
       "novissueddate": "2008-06-05T00:00:00.000",
       "class": "A",
       "violationstatus": "Open",
       "currentstatus": "NOV SENT OUT",
       "currentstatusdate": "2008-06-05T00:00:00.000",
-      "novdescription": "D26-12.01 ADM CODE PAINT WITH LIGHT COLORED PAINT TO THE SATISFACTION OF THIS DEPARTMENT WALLS & CEILINGS ALL ROOMS 3RD STY APT THROUGHOUT."
+      "novdescription": "D26-12.01 ADM CODE PAINT WITH LIGHT COLORED PAINT TO THE SATISFACTION OF THIS DEPARTMENT CLG & WALLS ALL ROOMS 3 STY APT 3R. , SECTION '' ''",
+      "apartment": "3R"
      },
      {
       "violationid": "1457180",
@@ -1730,6 +1725,16 @@
       "currentstatus": "NOV SENT OUT",
       "currentstatusdate": "2008-06-05T00:00:00.000",
       "novdescription": "D26-10.01 ADM CODE REPAIR THE BROKEN OR DEFECTIVE PLASTERED SURFACES AND PAINT IN A UNIFORM COLOR CEILING OF NORTH EAST ROOM 3RD STY REAR APT."
+     },
+     {
+      "violationid": "1457181",
+      "inspectiondate": "1977-09-19T00:00:00.000",
+      "novissueddate": "2008-06-05T00:00:00.000",
+      "class": "A",
+      "violationstatus": "Open",
+      "currentstatus": "NOV SENT OUT",
+      "currentstatusdate": "2008-06-05T00:00:00.000",
+      "novdescription": "D26-12.01 ADM CODE PAINT WITH LIGHT COLORED PAINT TO THE SATISFACTION OF THIS DEPARTMENT WALLS & CEILINGS ALL ROOMS 3RD STY APT THROUGHOUT."
      }
     ],
     "held_back_other_lot": []
@@ -1831,7 +1836,7 @@
      "status": "ok",
      "count": 0,
      "truncated": false,
-     "query_url": "https://data.cityofnewyork.us/resource/64uk-42ks.json?%24limit=5000&%24select=bbl%2Caddress%2Cyearbuilt%2Cnumfloors%2Cnumbldgs%2Cbldgclass%2Clanduse%2Cunitsres%2Clotfront%2Clotdepth%2Cbldgarea%2Czonedist1%2Clatitude%2Clongitude%2Cversion&%24where=bbl%3D3052110054",
+     "query_url": "https://data.cityofnewyork.us/resource/64uk-42ks.json?%24limit=5000&%24select=bbl%2Caddress%2Cyearbuilt%2Cnumfloors%2Cnumbldgs%2Cbldgclass%2Clanduse%2Cunitsres%2Clotfront%2Clotdepth%2Clotarea%2Cbldgarea%2Czonedist1%2Cbuiltfar%2Cresidfar%2Ccommfar%2Cfacilfar%2Clandmark%2Chistdist%2Clatitude%2Clongitude%2Cversion&%24where=bbl%3D3052110054",
      "records": [],
      "held_back_other_lot": []
     },
@@ -1839,7 +1844,7 @@
      "status": "ok",
      "count": 0,
      "truncated": false,
-     "query_url": "https://data.cityofnewyork.us/resource/w9ak-ipjd.json?%24limit=5000&%24select=job_filing_number%2Cjob_type%2Cfiling_status%2Cfiling_date%2Capproved_date%2Cfirst_permit_date%2Ccurrent_status_date%2Csignoff_date%2Cbin%2Cbbl%2Chouse_no%2Cstreet_name%2Cjob_description%2Cearth_work_work_type_%2Cfoundation_work_type_%2Csupport_of_excavation_work_type_%2Cstructural_work_type_%2Cfull_demolition_work_type_%2Cfiling_review_type&%24where=bbl%3D%273052110054%27+OR+bin+in+%28%273120353%27%29&%24order=filing_date+DESC",
+     "query_url": "https://data.cityofnewyork.us/resource/w9ak-ipjd.json?%24limit=5000&%24select=job_filing_number%2Cjob_type%2Cfiling_status%2Cfiling_date%2Capproved_date%2Cfirst_permit_date%2Ccurrent_status_date%2Csignoff_date%2Cbin%2Cbbl%2Chouse_no%2Cstreet_name%2Cjob_description%2Cearth_work_work_type_%2Cfoundation_work_type_%2Csupport_of_excavation_work_type_%2Cstructural_work_type_%2Csprinkler_work_type%2Cfull_demolition_work_type_%2Cfiling_review_type&%24where=bbl%3D%273052110054%27+OR+bin+in+%28%273120353%27%29&%24order=filing_date+DESC",
      "records": [],
      "held_back_other_lot": [
       {
@@ -1858,6 +1863,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Standard Plan Examination"
       },
@@ -1877,6 +1883,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Professional Certification"
       },
@@ -1896,6 +1903,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Professional Certification"
       },
@@ -1916,6 +1924,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Professional Certification"
       },
@@ -1937,6 +1946,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Standard Plan Examination"
       },
@@ -1958,6 +1968,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Standard Plan Examination"
       },
@@ -1979,6 +1990,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Standard Plan Examination"
       }
@@ -2907,7 +2919,7 @@
      "status": "ok",
      "count": 1,
      "truncated": false,
-     "query_url": "https://data.cityofnewyork.us/resource/64uk-42ks.json?%24limit=5000&%24select=bbl%2Caddress%2Cyearbuilt%2Cnumfloors%2Cnumbldgs%2Cbldgclass%2Clanduse%2Cunitsres%2Clotfront%2Clotdepth%2Cbldgarea%2Czonedist1%2Clatitude%2Clongitude%2Cversion&%24where=bbl%3D3052110072",
+     "query_url": "https://data.cityofnewyork.us/resource/64uk-42ks.json?%24limit=5000&%24select=bbl%2Caddress%2Cyearbuilt%2Cnumfloors%2Cnumbldgs%2Cbldgclass%2Clanduse%2Cunitsres%2Clotfront%2Clotdepth%2Clotarea%2Cbldgarea%2Czonedist1%2Cbuiltfar%2Cresidfar%2Ccommfar%2Cfacilfar%2Clandmark%2Chistdist%2Clatitude%2Clongitude%2Cversion&%24where=bbl%3D3052110072",
      "records": [
       {
        "bbl": "3052110072.00000000",
@@ -2920,8 +2932,13 @@
        "unitsres": "4",
        "lotfront": "20.5000000",
        "lotdepth": "99.5800000",
+       "lotarea": "1720",
        "bldgarea": "3075",
        "zonedist1": "R6",
+       "builtfar": "1.79000000000",
+       "residfar": "2.43000000000",
+       "commfar": "0.00000000000",
+       "facilfar": "4.80000000000",
        "latitude": "40.6389404",
        "longitude": "-73.9537319",
        "version": "26v2"
@@ -2933,7 +2950,7 @@
      "status": "ok",
      "count": 0,
      "truncated": false,
-     "query_url": "https://data.cityofnewyork.us/resource/w9ak-ipjd.json?%24limit=5000&%24select=job_filing_number%2Cjob_type%2Cfiling_status%2Cfiling_date%2Capproved_date%2Cfirst_permit_date%2Ccurrent_status_date%2Csignoff_date%2Cbin%2Cbbl%2Chouse_no%2Cstreet_name%2Cjob_description%2Cearth_work_work_type_%2Cfoundation_work_type_%2Csupport_of_excavation_work_type_%2Cstructural_work_type_%2Cfull_demolition_work_type_%2Cfiling_review_type&%24where=bbl%3D%273052110072%27+OR+bin+in+%28%273120363%27%29&%24order=filing_date+DESC",
+     "query_url": "https://data.cityofnewyork.us/resource/w9ak-ipjd.json?%24limit=5000&%24select=job_filing_number%2Cjob_type%2Cfiling_status%2Cfiling_date%2Capproved_date%2Cfirst_permit_date%2Ccurrent_status_date%2Csignoff_date%2Cbin%2Cbbl%2Chouse_no%2Cstreet_name%2Cjob_description%2Cearth_work_work_type_%2Cfoundation_work_type_%2Csupport_of_excavation_work_type_%2Cstructural_work_type_%2Csprinkler_work_type%2Cfull_demolition_work_type_%2Cfiling_review_type&%24where=bbl%3D%273052110072%27+OR+bin+in+%28%273120363%27%29&%24order=filing_date+DESC",
      "records": [],
      "held_back_other_lot": []
     },
@@ -3176,6 +3193,18 @@
        "story": "2"
       },
       {
+       "violationid": "16250490",
+       "inspectiondate": "2023-09-25T00:00:00.000",
+       "novissueddate": "2023-09-27T00:00:00.000",
+       "class": "C",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION CLOSED",
+       "currentstatusdate": "2025-09-03T00:00:00.000",
+       "novdescription": "§ 27-2005 HMC: PROPERLY REPAIR OR REPLACE THE BROKEN OR DEFECTIVE DISLODGED WOOD DOOR FRAME WITH EXPOSED NAILS AT WEST WALL IN THE BATHROOM LOCATED AT APT 2F, 2nd STORY, 1st APARTMENT FROM EAST AT SOUTH",
+       "apartment": "2F",
+       "story": "2"
+      },
+      {
        "violationid": "16263026",
        "inspectiondate": "2023-09-25T00:00:00.000",
        "novissueddate": "2023-09-28T00:00:00.000",
@@ -3318,18 +3347,6 @@
        "story": "2"
       },
       {
-       "violationid": "16250490",
-       "inspectiondate": "2023-09-25T00:00:00.000",
-       "novissueddate": "2023-09-27T00:00:00.000",
-       "class": "C",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION CLOSED",
-       "currentstatusdate": "2025-09-03T00:00:00.000",
-       "novdescription": "§ 27-2005 HMC: PROPERLY REPAIR OR REPLACE THE BROKEN OR DEFECTIVE DISLODGED WOOD DOOR FRAME WITH EXPOSED NAILS AT WEST WALL IN THE BATHROOM LOCATED AT APT 2F, 2nd STORY, 1st APARTMENT FROM EAST AT SOUTH",
-       "apartment": "2F",
-       "story": "2"
-      },
-      {
        "violationid": "16257551",
        "inspectiondate": "2023-09-25T00:00:00.000",
        "novissueddate": "2023-09-27T00:00:00.000",
@@ -3342,15 +3359,15 @@
        "story": "2"
       },
       {
-       "violationid": "15866839",
+       "violationid": "15866779",
        "inspectiondate": "2023-03-24T00:00:00.000",
        "novissueddate": "2023-03-28T00:00:00.000",
-       "class": "A",
+       "class": "B",
        "violationstatus": "Open",
        "currentstatus": "NOV SENT OUT",
        "currentstatusdate": "2023-03-28T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD THREAD 10TH FROM BOTTOM AT PUBLIC HALL STAIRS, 1st STORY",
-       "story": "1"
+       "novdescription": "§ 27-2005, 2007 ADM CODE REMOVE ALL ENCUMBRANCES CONSISTING OF HOUSEHOLD TRASH AND CARPET OBSTRUCTING THE SCUDDLE LATTER TO ROOF AT LOBBY",
+       "story": "0"
       },
       {
        "violationid": "15866752",
@@ -3375,14 +3392,25 @@
        "story": "0"
       },
       {
-       "violationid": "15866779",
+       "violationid": "15866839",
        "inspectiondate": "2023-03-24T00:00:00.000",
        "novissueddate": "2023-03-28T00:00:00.000",
-       "class": "B",
+       "class": "A",
        "violationstatus": "Open",
        "currentstatus": "NOV SENT OUT",
        "currentstatusdate": "2023-03-28T00:00:00.000",
-       "novdescription": "§ 27-2005, 2007 ADM CODE REMOVE ALL ENCUMBRANCES CONSISTING OF HOUSEHOLD TRASH AND CARPET OBSTRUCTING THE SCUDDLE LATTER TO ROOF AT LOBBY",
+       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD THREAD 10TH FROM BOTTOM AT PUBLIC HALL STAIRS, 1st STORY",
+       "story": "1"
+      },
+      {
+       "violationid": "15866748",
+       "inspectiondate": "2023-03-24T00:00:00.000",
+       "novissueddate": "2023-03-28T00:00:00.000",
+       "class": "A",
+       "violationstatus": "Open",
+       "currentstatus": "NOV SENT OUT",
+       "currentstatusdate": "2023-03-28T00:00:00.000",
+       "novdescription": "§ 27-2104 ADM CODE POST AND MAINTAIN A PROPER SIGN ON WALL OF ENTRANCE STORY SHOWING THE REGISTRATION NUMBER ASSIGNED BY THE DEPARTMENT AND THE ADDRESS OF THE BUILDING. AT LOBBY",
        "story": "0"
       },
       {
@@ -3406,17 +3434,6 @@
        "currentstatusdate": "2023-03-28T00:00:00.000",
        "novdescription": "§ 27-2005, 2007 ADM CODE REMOVE ALL ENCUMBRANCES CONSISTING OF CARPET AND HOUSEHOLD TRASH OBSTRUCTING THE SCUDDLE LADDER TO ROOF AT PUBLIC HALL, 3rd STORY",
        "story": "3"
-      },
-      {
-       "violationid": "15866748",
-       "inspectiondate": "2023-03-24T00:00:00.000",
-       "novissueddate": "2023-03-28T00:00:00.000",
-       "class": "A",
-       "violationstatus": "Open",
-       "currentstatus": "NOV SENT OUT",
-       "currentstatusdate": "2023-03-28T00:00:00.000",
-       "novdescription": "§ 27-2104 ADM CODE POST AND MAINTAIN A PROPER SIGN ON WALL OF ENTRANCE STORY SHOWING THE REGISTRATION NUMBER ASSIGNED BY THE DEPARTMENT AND THE ADDRESS OF THE BUILDING. AT LOBBY",
-       "story": "0"
       },
       {
        "violationid": "15834056",
@@ -5888,7 +5905,7 @@
      "status": "ok",
      "count": 1,
      "truncated": false,
-     "query_url": "https://data.cityofnewyork.us/resource/64uk-42ks.json?%24limit=5000&%24select=bbl%2Caddress%2Cyearbuilt%2Cnumfloors%2Cnumbldgs%2Cbldgclass%2Clanduse%2Cunitsres%2Clotfront%2Clotdepth%2Cbldgarea%2Czonedist1%2Clatitude%2Clongitude%2Cversion&%24where=bbl%3D3052110074",
+     "query_url": "https://data.cityofnewyork.us/resource/64uk-42ks.json?%24limit=5000&%24select=bbl%2Caddress%2Cyearbuilt%2Cnumfloors%2Cnumbldgs%2Cbldgclass%2Clanduse%2Cunitsres%2Clotfront%2Clotdepth%2Clotarea%2Cbldgarea%2Czonedist1%2Cbuiltfar%2Cresidfar%2Ccommfar%2Cfacilfar%2Clandmark%2Chistdist%2Clatitude%2Clongitude%2Cversion&%24where=bbl%3D3052110074",
      "records": [
       {
        "bbl": "3052110074.00000000",
@@ -5901,8 +5918,13 @@
        "unitsres": "0",
        "lotfront": "100.0000000",
        "lotdepth": "100.0000000",
+       "lotarea": "10000",
        "bldgarea": "6000",
        "zonedist1": "R6",
+       "builtfar": "0.60000000000",
+       "residfar": "2.43000000000",
+       "commfar": "0.00000000000",
+       "facilfar": "4.80000000000",
        "latitude": "40.6391463",
        "longitude": "-73.9538111",
        "version": "26v2"
@@ -5914,7 +5936,7 @@
      "status": "ok",
      "count": 10,
      "truncated": false,
-     "query_url": "https://data.cityofnewyork.us/resource/w9ak-ipjd.json?%24limit=5000&%24select=job_filing_number%2Cjob_type%2Cfiling_status%2Cfiling_date%2Capproved_date%2Cfirst_permit_date%2Ccurrent_status_date%2Csignoff_date%2Cbin%2Cbbl%2Chouse_no%2Cstreet_name%2Cjob_description%2Cearth_work_work_type_%2Cfoundation_work_type_%2Csupport_of_excavation_work_type_%2Cstructural_work_type_%2Cfull_demolition_work_type_%2Cfiling_review_type&%24where=bbl%3D%273052110074%27&%24order=filing_date+DESC",
+     "query_url": "https://data.cityofnewyork.us/resource/w9ak-ipjd.json?%24limit=5000&%24select=job_filing_number%2Cjob_type%2Cfiling_status%2Cfiling_date%2Capproved_date%2Cfirst_permit_date%2Ccurrent_status_date%2Csignoff_date%2Cbin%2Cbbl%2Chouse_no%2Cstreet_name%2Cjob_description%2Cearth_work_work_type_%2Cfoundation_work_type_%2Csupport_of_excavation_work_type_%2Cstructural_work_type_%2Csprinkler_work_type%2Cfull_demolition_work_type_%2Cfiling_review_type&%24where=bbl%3D%273052110074%27&%24order=filing_date+DESC",
      "records": [
       {
        "job_filing_number": "B01479063-I1",
@@ -5933,6 +5955,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Professional Certification"
       },
@@ -5951,6 +5974,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "YES",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Standard Plan Examination"
       },
@@ -5970,6 +5994,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Standard Plan Examination"
       },
@@ -5988,6 +6013,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Standard Plan Examination"
       },
@@ -6008,6 +6034,7 @@
        "foundation_work_type_": "YES",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Standard Plan Examination"
       },
@@ -6028,6 +6055,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Standard Plan Examination"
       },
@@ -6048,6 +6076,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Professional Certification"
       },
@@ -6068,6 +6097,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Professional Certification"
       },
@@ -6086,6 +6116,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "NO",
        "filing_review_type": "Standard Plan Examination"
       },
@@ -6107,6 +6138,7 @@
        "foundation_work_type_": "NO",
        "support_of_excavation_work_type_": "No",
        "structural_work_type_": "NO",
+       "sprinkler_work_type": "NO",
        "full_demolition_work_type_": "YES",
        "filing_review_type": "Standard Plan Examination"
       }

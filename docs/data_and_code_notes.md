@@ -20,7 +20,8 @@ The proposal:
   past failures. Each row becomes a code section, a responsible discipline, and the proof that
   the duty was done.
 - **The precedent library stays** for the map, the hook and the "why it matters" line under each
-  roast, with causes labeled "as publicly reported".
+  row, with causes labeled "as publicly reported" and nothing said about what could have been
+  prevented.
 
 This fits the plan's own rule ("Rules decide the risks; LLM only phrases them"): the rules become
 code sections. It also gives the demo a sharper reveal, a duty with no proof.
@@ -30,23 +31,9 @@ technical knowledge to judge the work.
 
 ## The checklist spine (2022 NYC Building Code)
 
-This is our paraphrase. Read the city's text before relying on any row:
-[Chapter 33](https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf),
-[Chapter 17](https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter17_SpecialInspectionsWBwm.pdf).
-
-| Section | What it requires | Who | Proof |
-|---|---|---|---|
-| 3309.1.1 | Written notice to the adjoining owner at least 60 days before work: the work, schedule, monitoring, protection, contact. A second notice if there is no reply | Owner / developer | The letter and its date |
-| 3309.2 | The adjoining owner affords a license to enter; 3309.4 says who carries the duty if they don't | Adjoining owner | License, or the refusal |
-| 3309.3 | Physical examination of the adjoining property before work and during it, recorded and available to DOB | Whoever causes the work | Inspection records |
-| 3309.4.3 | No excavation 5 to 10 ft deep within 10 ft of an adjacent building, or over 10 ft anywhere, until a preconstruction survey documents all adjacent buildings | Owner / design professional | The survey |
-| 3304.4.1 | Excavation-support drawings by a design professional with retaining or bracing experience; over 20 ft deep, a NY State PE | Support engineer | Stamped drawings |
-| 3304.4.1.2 | Those drawings rest on site-specific testing and incorporate the geotechnical report, the evaluation analysis and the preconstruction survey | Geotech + support engineer | Cross-references |
-| 3309.4, 3309.5 | Protect adjoining footings and foundations; underpin at the builder's expense | Developer / contractor | Underpinning drawings, installed as drawn |
-| 3309.8 | Where an adjoining wall is exposed, a design professional investigates its stability and condition | Design professional | Investigation report |
-| 3309.4.4, 3309.16 | Monitor buildings within the excavation's depth of its edge, under a plan that sets scope, frequency, tolerances and when to report | Design professional / contractor | Plan and readings |
-| 1705.25.4 | Underpinning is subject to special inspections | Special inspector | Inspection reports |
-| 3309.4.5 | Where DOB sees a potential hazard, elevations are recorded at intervals of 24 hours or less | DOB / design professional | Readings |
+The rows live in [checklist/README.md](../checklist/README.md): twelve duties from chapters 33 and
+17, each with the parties who act on it, whether it is life safety, and the proof it needs. That
+file is the one copy, so the table that used to sit here was removed rather than kept in step.
 
 ## The data, verified (NYC Open Data)
 
@@ -89,12 +76,35 @@ facts only, and nothing here establishes a cause.
     during demolition. Resolved.
   - ECB, 2026-04-23: work continued while a stop-work order was in effect. Resolved.
   - ECB, 2026-11-11: failure to safeguard persons and property. Active.
-  - The adjoining-owner notice dated June 10 is posted on DOB NOW
-    ([reported by Northeastern](https://news.northeastern.edu/2026/11/12/brooklyn-building-collapse-analysis/)).
+  - [Northeastern](https://news.northeastern.edu/2026/11/12/brooklyn-building-collapse-analysis/)
+    links an adjoining-owner notification on DOB NOW and dates the letter June 10. Nobody here has
+    read it, and when it was filed is not known (`data/leads/2625-bedford-ave-brooklyn.json`).
 
-The demo can show which checklist rows the public record fills, and which stay "not in public data"
-(the preconstruction survey and the monitoring readings, for example). The question it answers is
+The demo can show which duties the public record says apply, and that their proof (the
+preconstruction survey and the monitoring readings, for example) is not in public data. The question it answers is
 what was knowable, by whom, and when. It does not answer who is to blame.
+
+## Decisions from the team meetings (2026-11-14)
+
+From the two [brainstorm transcripts](../transcripts/), and what they mean for the data and the checklist:
+
+- **Neutral framing.** Public facts only, an ongoing investigation called ongoing, no blame, and no
+  claim that a collapse could have been prevented.
+- **No roast humor in this project.** The checklist's `life_safety` flag marks rows that protect life
+  safety; it no longer sets a tone.
+- **No permit-holder, contractor, owner or applicant names.** `data_pull` never requests them.
+- **Hazards in scope:** structural collapse, fire, flooding, soil contamination, extreme weather.
+  The checklist covers only duties toward adjoining property during excavation and foundation work
+  so far. The other four hazards have no rows and no data source in the pull yet.
+- **Past violations are not a predictor.** Before the collapse, 1321 Flatbush's open records were
+  housing violations, 13 sign violations from 2019, and one missed gas-piping filing. Nothing was
+  structural. Counts are shown as context, never as a score.
+- **The demo hook is the Brooklyn collapse; the walkthrough is an alteration.** 2625 Bedford is a
+  new-building job, so the walkthrough still needs an alteration address.
+- **Address facts:** zoning, lot area, floor area ratios, year built, and PLUTO's landmark and
+  historic-district fields come with the pull. Flood zone has no source yet.
+- **Sources we cannot crawl** (DOB NOW documents, JustFix, BuildNYC, Zillow and others) are being
+  checked for a manual import path by a separate session.
 
 ## Rules for the build
 

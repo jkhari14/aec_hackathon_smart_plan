@@ -1,8 +1,8 @@
 {
  "schema_version": 1,
- "built_at": "2026-11-14T20:56:47+00:00",
+ "built_at": "2026-11-14T21:23:38+00:00",
  "pull": {
-  "pulled_at": "2026-11-14T20:56:22+00:00",
+  "pulled_at": "2026-11-14T21:22:50+00:00",
   "site_bbl": "3052110074",
   "matched_label": "2625 BEDFORD AVENUE, Brooklyn, NY, USA"
  },
@@ -41,6 +41,16 @@
   "floors": "1.0000000",
   "residential_units": "0",
   "building_class": "K1",
+  "zoning_district": "R6",
+  "lot_area_sqft": "10000",
+  "built_far": "0.60000000000",
+  "max_far": {
+   "residential": "2.43000000000",
+   "commercial": "0.00000000000",
+   "community_facility": "4.80000000000"
+  },
+  "landmark": null,
+  "historic_district": null,
   "building_presence": {
    "status": "yes",
    "basis": "PLUTO lists 1 building(s)"
@@ -135,6 +145,16 @@
    "floors": "6.0000000",
    "residential_units": "53",
    "building_class": "D4",
+   "zoning_district": "R6",
+   "lot_area_sqft": "14000",
+   "built_far": "4.80000000000",
+   "max_far": {
+    "residential": "2.43000000000",
+    "commercial": "0.00000000000",
+    "community_facility": "4.80000000000"
+   },
+   "landmark": null,
+   "historic_district": null,
    "building_presence": {
     "status": "yes",
     "basis": "1 building footprint(s)"
@@ -206,6 +226,16 @@
    "floors": "2.7500000",
    "residential_units": "3",
    "building_class": "C0",
+   "zoning_district": "R6",
+   "lot_area_sqft": "4000",
+   "built_far": "0.89000000000",
+   "max_far": {
+    "residential": "2.43000000000",
+    "commercial": "0.00000000000",
+    "community_facility": "4.80000000000"
+   },
+   "landmark": null,
+   "historic_district": null,
    "building_presence": {
     "status": "yes",
     "basis": "2 building footprint(s)"
@@ -277,6 +307,16 @@
    "floors": null,
    "residential_units": null,
    "building_class": null,
+   "zoning_district": null,
+   "lot_area_sqft": null,
+   "built_far": null,
+   "max_far": {
+    "residential": null,
+    "commercial": null,
+    "community_facility": null
+   },
+   "landmark": null,
+   "historic_district": null,
    "building_presence": {
     "status": "yes",
     "basis": "1 building footprint(s)"
@@ -384,6 +424,16 @@
    "floors": "3.0000000",
    "residential_units": "4",
    "building_class": "S4",
+   "zoning_district": "R6",
+   "lot_area_sqft": "1854",
+   "built_far": "1.66000000000",
+   "max_far": {
+    "residential": "2.43000000000",
+    "commercial": "0.00000000000",
+    "community_facility": "4.80000000000"
+   },
+   "landmark": null,
+   "historic_district": null,
    "building_presence": {
     "status": "yes",
     "basis": "1 building footprint(s)"
@@ -463,6 +513,16 @@
    "floors": "4.0000000",
    "residential_units": "16",
    "building_class": "C1",
+   "zoning_district": "R6",
+   "lot_area_sqft": "5000",
+   "built_far": "3.19000000000",
+   "max_far": {
+    "residential": "2.43000000000",
+    "commercial": "0.00000000000",
+    "community_facility": "4.80000000000"
+   },
+   "landmark": null,
+   "historic_district": null,
    "building_presence": {
     "status": "yes",
     "basis": "1 building footprint(s)"
@@ -1169,7 +1229,7 @@
        "excavation_depth_ft"
       ],
       "notes": [
-       "Historic structures within 90 ft also need monitoring; historic status is not checked here."
+       "Historic structures within 90 ft also need monitoring. PLUTO's landmark and historic-district fields are shown per touching lot as hints; lots farther out are not checked."
       ]
      },
      "open_gap": false
@@ -1185,7 +1245,7 @@
        "excavation_depth_ft"
       ],
       "notes": [
-       "Historic structures within 90 ft also need monitoring; historic status is not checked here."
+       "Historic structures within 90 ft also need monitoring. PLUTO's landmark and historic-district fields are shown per touching lot as hints; lots farther out are not checked."
       ]
      },
      "open_gap": false
@@ -1201,7 +1261,7 @@
        "excavation_depth_ft"
       ],
       "notes": [
-       "Historic structures within 90 ft also need monitoring; historic status is not checked here."
+       "Historic structures within 90 ft also need monitoring. PLUTO's landmark and historic-district fields are shown per touching lot as hints; lots farther out are not checked."
       ]
      },
      "open_gap": false
@@ -1217,7 +1277,7 @@
        "excavation_depth_ft"
       ],
       "notes": [
-       "Historic structures within 90 ft also need monitoring; historic status is not checked here."
+       "Historic structures within 90 ft also need monitoring. PLUTO's landmark and historic-district fields are shown per touching lot as hints; lots farther out are not checked."
       ]
      },
      "open_gap": false
@@ -1233,7 +1293,7 @@
        "excavation_depth_ft"
       ],
       "notes": [
-       "Historic structures within 90 ft also need monitoring; historic status is not checked here."
+       "Historic structures within 90 ft also need monitoring. PLUTO's landmark and historic-district fields are shown per touching lot as hints; lots farther out are not checked."
       ]
      },
      "open_gap": false

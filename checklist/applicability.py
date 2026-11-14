@@ -107,7 +107,8 @@ def _survey(inputs: dict, excavation: dict, bbl: str | None) -> dict:
 def _monitoring(inputs: dict, excavation: dict, bbl: str | None) -> dict:
     if excavation["status"] != "applies":
         return excavation
-    historic = "Historic structures within 90 ft also need monitoring; historic status is not checked here."
+    historic = ("Historic structures within 90 ft also need monitoring. PLUTO's landmark and historic-district "
+                "fields are shown per touching lot as hints; lots farther out are not checked.")
     depth = inputs.get("excavation_depth_ft")
     if depth is None:
         return _result("needs_input", needs=("excavation_depth_ft",), notes=(historic,))
