@@ -124,7 +124,7 @@
       "type": "public_record",
       "ref": "dob_now_filings:B01330433-S3",
       "label": "DOB NOW job filings B01330433-S3",
-      "detail": "New Building filing. Earth work: YES. FOUNDATION PLANS FILED HEREWITH. Approved 2026-06-03. Status today: On Hold - Pending Withdrawal of Special Inspector.",
+      "detail": "New Building filing. Earth work: YES. FOUNDATION PLANS FILED HEREWITH. Approved 2026-06-03. Status today: On Hold \u2013 Administrative Action.",
       "date": "2026-02-24",
       "bbl": "3052110074",
       "url": "https://data.cityofnewyork.us/resource/w9ak-ipjd.json?%24limit=5000&%24select=job_filing_number%2Cjob_type%2Cfiling_status%2Cfiling_date%2Capproved_date%2Cfirst_permit_date%2Ccurrent_status_date%2Csignoff_date%2Cbin%2Cbbl%2Chouse_no%2Cstreet_name%2Cjob_description%2Cearth_work_work_type_%2Cfoundation_work_type_%2Csupport_of_excavation_work_type_%2Cstructural_work_type_%2Csprinkler_work_type%2Cfull_demolition_work_type_%2Cfiling_review_type&%24where=bbl%3D%273052110074%27&%24order=filing_date+DESC"
