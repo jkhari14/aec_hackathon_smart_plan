@@ -1,0 +1,1175 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "PreFlight",
+  "version": "0.1.0"
+ },
+ "paths": {
+  "/api/briefs": {
+   "get": {
+    "summary": "Briefs",
+    "operationId": "briefs_api_briefs_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/BriefListing"
+         },
+         "type": "array",
+         "title": "Response Briefs Api Briefs Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/briefs/{slug}": {
+   "get": {
+    "summary": "Brief",
+    "operationId": "brief_api_briefs__slug__get",
+    "parameters": [
+     {
+      "name": "slug",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Slug"
+      }
+     },
+     {
+      "name": "project_type",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "new_building",
+        "renovation",
+        "excavation_next_to_existing"
+       ],
+       "type": "string",
+       "default": "excavation_next_to_existing",
+       "title": "Project Type"
+      }
+     },
+     {
+      "name": "as_of",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string",
+         "format": "date"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "Build the checklist from records dated before this day.",
+       "title": "As Of"
+      },
+      "description": "Build the checklist from records dated before this day."
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Brief"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "Applies": {
+    "properties": {
+     "status": {
+      "type": "string",
+      "enum": [
+       "applies",
+       "needs_input",
+       "unknown",
+       "set_by_dob",
+       "does_not_apply"
+      ],
+      "title": "Status"
+     },
+     "basis": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Basis",
+      "description": "Each has a kind: public_record, user_input or code_text."
+     },
+     "needs": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Needs",
+      "description": "Project inputs that would decide it."
+     },
+     "notes": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Notes"
+     }
+    },
+    "type": "object",
+    "required": [
+     "status"
+    ],
+    "title": "Applies",
+    "description": "From the checklist engine: whether a duty applies, and the record, input or code text behind it."
+   },
+   "Brief": {
+    "properties": {
+     "schema_version": {
+      "type": "integer",
+      "const": 1,
+      "title": "Schema Version",
+      "default": 1
+     },
+     "slug": {
+      "type": "string",
+      "title": "Slug"
+     },
+     "project_type": {
+      "type": "string",
+      "enum": [
+       "new_building",
+       "renovation",
+       "excavation_next_to_existing"
+      ],
+      "title": "Project Type"
+     },
+     "address_input": {
+      "type": "string",
+      "title": "Address Input"
+     },
+     "matched_label": {
+      "type": "string",
+      "title": "Matched Label"
+     },
+     "pulled_at": {
+      "type": "string",
+      "title": "Pulled At"
+     },
+     "coordinate_system": {
+      "type": "string",
+      "title": "Coordinate System",
+      "default": "EPSG:4326 (longitude, latitude); heights in feet"
+     },
+     "site": {
+      "$ref": "#/components/schemas/Lot"
+     },
+     "touching_lots": {
+      "items": {
+       "$ref": "#/components/schemas/Lot"
+      },
+      "type": "array",
+      "title": "Touching Lots"
+     },
+     "as_of": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "As Of",
+      "description": "Checklist built from records dated before this day; None = as pulled."
+     },
+     "records": {
+      "items": {
+       "$ref": "#/components/schemas/PublicRecord"
+      },
+      "type": "array",
+      "title": "Records"
+     },
+     "checklist": {
+      "items": {
+       "$ref": "#/components/schemas/ChecklistRow"
+      },
+      "type": "array",
+      "title": "Checklist"
+     },
+     "checklist_summary": {
+      "$ref": "#/components/schemas/ChecklistSummary"
+     },
+     "precedents": {
+      "items": {
+       "$ref": "#/components/schemas/Precedent"
+      },
+      "type": "array",
+      "title": "Precedents",
+      "default": []
+     },
+     "caveats": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Caveats"
+     }
+    },
+    "type": "object",
+    "required": [
+     "slug",
+     "project_type",
+     "address_input",
+     "matched_label",
+     "pulled_at",
+     "site",
+     "touching_lots",
+     "records",
+     "checklist",
+     "checklist_summary",
+     "caveats"
+    ],
+    "title": "Brief"
+   },
+   "BriefListing": {
+    "properties": {
+     "slug": {
+      "type": "string",
+      "title": "Slug"
+     },
+     "address": {
+      "type": "string",
+      "title": "Address"
+     },
+     "project_type": {
+      "type": "string",
+      "enum": [
+       "new_building",
+       "renovation",
+       "excavation_next_to_existing"
+      ],
+      "title": "Project Type"
+     }
+    },
+    "type": "object",
+    "required": [
+     "slug",
+     "address",
+     "project_type"
+    ],
+    "title": "BriefListing"
+   },
+   "Building": {
+    "properties": {
+     "bin": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Bin"
+     },
+     "construction_year": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Construction Year"
+     },
+     "height_roof_ft": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Height Roof Ft"
+     },
+     "ground_elevation_ft": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ground Elevation Ft"
+     },
+     "status": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Status"
+     },
+     "geometry": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Geometry"
+     }
+    },
+    "type": "object",
+    "title": "Building",
+    "description": "One building footprint. Heights are in feet; geometry is GeoJSON in EPSG:4326."
+   },
+   "BuildingApplies": {
+    "properties": {
+     "bbl": {
+      "type": "string",
+      "title": "Bbl"
+     },
+     "address": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Address"
+     },
+     "building_presence": {
+      "type": "string",
+      "title": "Building Presence"
+     },
+     "applies": {
+      "$ref": "#/components/schemas/Applies"
+     },
+     "open_gap": {
+      "type": "boolean",
+      "title": "Open Gap"
+     }
+    },
+    "type": "object",
+    "required": [
+     "bbl",
+     "building_presence",
+     "applies",
+     "open_gap"
+    ],
+    "title": "BuildingApplies"
+   },
+   "ChecklistRow": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "section": {
+      "type": "string",
+      "title": "Section"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "requirement": {
+      "type": "string",
+      "title": "Requirement",
+      "description": "Paraphrase of the code section; read the linked text before relying on it."
+     },
+     "parties": {
+      "items": {
+       "type": "string",
+       "enum": [
+        "owner_developer",
+        "design_professional",
+        "excavation_support_engineer",
+        "geotechnical_engineer",
+        "contractor",
+        "special_inspector",
+        "adjoining_owner",
+        "dob"
+       ]
+      },
+      "type": "array",
+      "title": "Parties"
+     },
+     "life_safety": {
+      "type": "boolean",
+      "title": "Life Safety",
+      "description": "Serious line first; the roast comes second."
+     },
+     "proof_needed": {
+      "type": "string",
+      "title": "Proof Needed"
+     },
+     "source_url": {
+      "type": "string",
+      "title": "Source Url"
+     },
+     "scope": {
+      "type": "string",
+      "enum": [
+       "site",
+       "each_adjacent_building"
+      ],
+      "title": "Scope"
+     },
+     "applies": {
+      "$ref": "#/components/schemas/Applies"
+     },
+     "proof": {
+      "$ref": "#/components/schemas/RowProof"
+     },
+     "related_records": {
+      "$ref": "#/components/schemas/RelatedRecords"
+     },
+     "open_gap": {
+      "type": "boolean",
+      "title": "Open Gap",
+      "description": "The duty applies and no proof was provided."
+     },
+     "per_building": {
+      "items": {
+       "$ref": "#/components/schemas/BuildingApplies"
+      },
+      "type": "array",
+      "title": "Per Building"
+     },
+     "roast": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Roast"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "section",
+     "title",
+     "requirement",
+     "parties",
+     "life_safety",
+     "proof_needed",
+     "source_url",
+     "scope",
+     "applies",
+     "proof",
+     "related_records",
+     "open_gap"
+    ],
+    "title": "ChecklistRow",
+    "description": "One duty, built by the checklist engine (checklist/). `roast` is filled by the roast writer."
+   },
+   "ChecklistSummary": {
+    "properties": {
+     "rows": {
+      "type": "integer",
+      "title": "Rows"
+     },
+     "applies": {
+      "type": "integer",
+      "title": "Applies"
+     },
+     "needs_input": {
+      "type": "integer",
+      "title": "Needs Input"
+     },
+     "unknown": {
+      "type": "integer",
+      "title": "Unknown"
+     },
+     "set_by_dob": {
+      "type": "integer",
+      "title": "Set By Dob"
+     },
+     "does_not_apply": {
+      "type": "integer",
+      "title": "Does Not Apply"
+     },
+     "open_gaps": {
+      "type": "integer",
+      "title": "Open Gaps"
+     },
+     "inputs_needed": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Inputs Needed"
+     }
+    },
+    "type": "object",
+    "required": [
+     "rows",
+     "applies",
+     "needs_input",
+     "unknown",
+     "set_by_dob",
+     "does_not_apply",
+     "open_gaps",
+     "inputs_needed"
+    ],
+    "title": "ChecklistSummary"
+   },
+   "DatasetStatus": {
+    "properties": {
+     "key": {
+      "type": "string",
+      "title": "Key"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "ok",
+       "error",
+       "skipped"
+      ],
+      "title": "Status",
+      "description": "ok: queried (count 0 means none found). error: nothing is known; never show as zero."
+     },
+     "count": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Count"
+     },
+     "reason": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Reason"
+     },
+     "query_url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Query Url"
+     }
+    },
+    "type": "object",
+    "required": [
+     "key",
+     "name",
+     "status"
+    ],
+    "title": "DatasetStatus"
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "type": "array",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "title": "HTTPValidationError"
+   },
+   "Lead": {
+    "properties": {
+     "reported_by": {
+      "type": "string",
+      "title": "Reported By"
+     },
+     "document": {
+      "type": "string",
+      "title": "Document"
+     },
+     "url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Url"
+     },
+     "reported_on": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Reported On"
+     },
+     "document_url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Document Url"
+     },
+     "document_date": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Document Date"
+     },
+     "checked": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Checked"
+     }
+    },
+    "type": "object",
+    "required": [
+     "reported_by",
+     "document"
+    ],
+    "title": "Lead",
+    "description": "A document a public source reports and nobody here has read. Never proof."
+   },
+   "Lot": {
+    "properties": {
+     "bbl": {
+      "type": "string",
+      "title": "Bbl"
+     },
+     "role": {
+      "type": "string",
+      "enum": [
+       "site",
+       "touching"
+      ],
+      "title": "Role"
+     },
+     "facts": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/LotFacts"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "description": "None when PLUTO has no record for the lot."
+     },
+     "datasets": {
+      "items": {
+       "$ref": "#/components/schemas/DatasetStatus"
+      },
+      "type": "array",
+      "title": "Datasets"
+     },
+     "record_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Record Ids"
+     },
+     "lot_geometry": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lot Geometry",
+      "description": "Tax-lot polygon, GeoJSON in EPSG:4326."
+     },
+     "buildings": {
+      "items": {
+       "$ref": "#/components/schemas/Building"
+      },
+      "type": "array",
+      "title": "Buildings",
+      "default": []
+     }
+    },
+    "type": "object",
+    "required": [
+     "bbl",
+     "role",
+     "datasets",
+     "record_ids"
+    ],
+    "title": "Lot"
+   },
+   "LotFacts": {
+    "properties": {
+     "address": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Address"
+     },
+     "year_built": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Year Built"
+     },
+     "floors": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Floors"
+     },
+     "building_class": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Building Class"
+     },
+     "zoning_district": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Zoning District"
+     },
+     "residential_units": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Residential Units"
+     },
+     "lot_front_ft": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lot Front Ft"
+     },
+     "lot_depth_ft": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lot Depth Ft"
+     },
+     "pluto_version": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Pluto Version"
+     }
+    },
+    "type": "object",
+    "title": "LotFacts",
+    "description": "From PLUTO, which can lag a demolition or a collapse."
+   },
+   "Precedent": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "date": {
+      "type": "string",
+      "title": "Date"
+     },
+     "longitude": {
+      "type": "number",
+      "title": "Longitude"
+     },
+     "latitude": {
+      "type": "number",
+      "title": "Latitude"
+     },
+     "summary": {
+      "type": "string",
+      "title": "Summary"
+     },
+     "cause_as_publicly_reported": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Cause As Publicly Reported"
+     },
+     "source_urls": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Source Urls"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "title",
+     "date",
+     "longitude",
+     "latitude",
+     "summary",
+     "source_urls"
+    ],
+    "title": "Precedent"
+   },
+   "PublicRecord": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id",
+      "description": "\"<dataset_key>:<record_id>\", unique within the brief."
+     },
+     "dataset_key": {
+      "type": "string",
+      "title": "Dataset Key"
+     },
+     "dataset_name": {
+      "type": "string",
+      "title": "Dataset Name"
+     },
+     "record_id": {
+      "type": "string",
+      "title": "Record Id"
+     },
+     "bbl": {
+      "type": "string",
+      "title": "Bbl"
+     },
+     "date": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Date",
+      "description": "ISO date the record was issued or filed; None if undated."
+     },
+     "status_today": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Status Today",
+      "description": "Status as published today, not as of `date`."
+     },
+     "summary": {
+      "type": "string",
+      "title": "Summary"
+     },
+     "query_url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Query Url"
+     },
+     "mentions_stop_work": {
+      "type": "boolean",
+      "title": "Mentions Stop Work",
+      "default": false
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "dataset_key",
+     "dataset_name",
+     "record_id",
+     "bbl",
+     "summary"
+    ],
+    "title": "PublicRecord"
+   },
+   "RelatedFilings": {
+    "properties": {
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "records": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Records"
+     }
+    },
+    "type": "object",
+    "required": [
+     "status"
+    ],
+    "title": "RelatedFilings"
+   },
+   "RelatedRecords": {
+    "properties": {
+     "filings": {
+      "$ref": "#/components/schemas/RelatedFilings"
+     },
+     "citations": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Citations"
+     }
+    },
+    "type": "object",
+    "required": [
+     "filings"
+    ],
+    "title": "RelatedRecords",
+    "description": "Records beside a row. They are not its proof."
+   },
+   "Roast": {
+    "properties": {
+     "line": {
+      "type": "string",
+      "title": "Line"
+     },
+     "serious": {
+      "type": "string",
+      "title": "Serious"
+     }
+    },
+    "type": "object",
+    "required": [
+     "line",
+     "serious"
+    ],
+    "title": "Roast"
+   },
+   "RowProof": {
+    "properties": {
+     "status": {
+      "type": "string",
+      "enum": [
+       "not_provided",
+       "provided_unverified",
+       "reported_not_read"
+      ],
+      "title": "Status"
+     },
+     "note": {
+      "type": "string",
+      "title": "Note"
+     },
+     "leads": {
+      "items": {
+       "$ref": "#/components/schemas/Lead"
+      },
+      "type": "array",
+      "title": "Leads"
+     },
+     "document": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Document"
+     },
+     "provided_by": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Provided By"
+     }
+    },
+    "type": "object",
+    "required": [
+     "status",
+     "note"
+    ],
+    "title": "RowProof",
+    "description": "None of these statuses is 'verified'; a lead never closes a gap."
+   },
+   "ValidationError": {
+    "properties": {
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "type": "array",
+      "title": "Location"
+     },
+     "msg": {
+      "type": "string",
+      "title": "Message"
+     },
+     "type": {
+      "type": "string",
+      "title": "Error Type"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "ctx": {
+      "type": "object",
+      "title": "Context"
+     }
+    },
+    "type": "object",
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError"
+   }
+  }
+ }
+}
