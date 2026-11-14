@@ -1,0 +1,397 @@
+[
+ {
+  "mode": "saved",
+  "question": "What does the public record say about excavation on this site?",
+  "parts": [
+   {
+    "kind": "notice",
+    "code": "saved_example",
+    "text": "A saved example, written ahead of time and checked against this brief. It is not a live answer, and it uses no web search."
+   },
+   {
+    "kind": "record",
+    "text": "A DOB NOW New Building filing, B01330433-S3, filed 2026-02-24, lists earth work as \"YES\" and describes foundation plans.",
+    "sources": [
+     {
+      "type": "public_record",
+      "ref": "dob_now_filings:B01330433-S3",
+      "label": "DOB NOW job filings B01330433-S3",
+      "detail": "New Building filing. Earth work: YES. FOUNDATION PLANS FILED HEREWITH. No approval dated before 2026-06-01.",
+      "date": "2026-02-24",
+      "bbl": "3052110074",
+      "url": "https://data.cityofnewyork.us/resource/w9ak-ipjd.json?%24limit=5000&%24select=job_filing_number%2Cjob_type%2Cfiling_status%2Cfiling_date%2Capproved_date%2Cfirst_permit_date%2Ccurrent_status_date%2Csignoff_date%2Cbin%2Cbbl%2Chouse_no%2Cstreet_name%2Cjob_description%2Cearth_work_work_type_%2Cfoundation_work_type_%2Csupport_of_excavation_work_type_%2Cstructural_work_type_%2Csprinkler_work_type%2Cfull_demolition_work_type_%2Cfiling_review_type&%24where=bbl%3D%273052110074%27&%24order=filing_date+DESC"
+     }
+    ]
+   },
+   {
+    "kind": "record",
+    "text": "The checklist notes that the same filing answers \"No\" for support of excavation. PreFlight quotes that as recorded and draws nothing further from it.",
+    "sources": [
+     {
+      "type": "requirement",
+      "ref": "row:foundation_protection",
+      "label": "BC \u00a73309.4 Protect adjoining footings and foundations",
+      "detail": "Whenever soil or foundation work occurs, at any depth, protect adjoining structures, including footings and foundations, at the builder's expense. (A paraphrase: read the linked code text.)",
+      "date": null,
+      "bbl": null,
+      "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf"
+     }
+    ]
+   },
+   {
+    "kind": "record",
+    "text": "From that filing, the checklist treats three duties as applying: protecting adjoining footings and foundations (BC 3309.4), excavation-support drawings (BC 3304.4.1) and the geotechnical basis for the support design (BC 3304.4.1.2). Proof of each has not been provided to PreFlight.",
+    "sources": [
+     {
+      "type": "requirement",
+      "ref": "row:foundation_protection",
+      "label": "BC \u00a73309.4 Protect adjoining footings and foundations",
+      "detail": "Whenever soil or foundation work occurs, at any depth, protect adjoining structures, including footings and foundations, at the builder's expense. (A paraphrase: read the linked code text.)",
+      "date": null,
+      "bbl": null,
+      "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf"
+     },
+     {
+      "type": "requirement",
+      "ref": "row:support_drawings",
+      "label": "BC \u00a73304.4.1 Excavation-support drawings",
+      "detail": "Means of supporting the excavation shown on construction documents by a design professional with retaining or bracing experience; over 20 ft deep, a NY State PE. (A paraphrase: read the linked code text.)",
+      "date": null,
+      "bbl": null,
+      "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf"
+     },
+     {
+      "type": "requirement",
+      "ref": "row:support_basis",
+      "label": "BC \u00a73304.4.1.2 Geotechnical basis for the support design",
+      "detail": "The support drawings rest on site-specific testing, and incorporate the geotechnical report, the evaluation analysis and the preconstruction survey. (A paraphrase: read the linked code text.)",
+      "date": null,
+      "bbl": null,
+      "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf"
+     }
+    ]
+   },
+   {
+    "kind": "notice",
+    "code": "not_a_determination",
+    "text": "PreFlight is a coordination aid. It does not determine code compliance, structural adequacy or safety: the licensed professionals on the project and the Department of Buildings do."
+   }
+  ],
+  "plain_text": "A saved example, written ahead of time and checked against this brief. It is not a live answer, and it uses no web search.\nFrom the public record: A DOB NOW New Building filing, B01330433-S3, filed 2026-02-24, lists earth work as \"YES\" and describes foundation plans.\nFrom the public record: The checklist notes that the same filing answers \"No\" for support of excavation. PreFlight quotes that as recorded and draws nothing further from it.\nFrom the public record: From that filing, the checklist treats three duties as applying: protecting adjoining footings and foundations (BC 3309.4), excavation-support drawings (BC 3304.4.1) and the geotechnical basis for the support design (BC 3304.4.1.2). Proof of each has not been provided to PreFlight.\nPreFlight is a coordination aid. It does not determine code compliance, structural adequacy or safety: the licensed professionals on the project and the Department of Buildings do.",
+  "as_of": "2026-06-01",
+  "web_search": "off",
+  "examples": [],
+  "usage": null
+ },
+ {
+  "mode": "saved",
+  "question": "Does the record mention a stop-work order on this site?",
+  "parts": [
+   {
+    "kind": "notice",
+    "code": "saved_example",
+    "text": "A saved example, written ahead of time and checked against this brief. It is not a live answer, and it uses no web search."
+   },
+   {
+    "kind": "record",
+    "text": "An ECB violation dated 2026-04-23 reads \"UNLAWFULLY CONTINUED WORK WHILE NOTICE OF A STOP WORK ORDER\".",
+    "sources": [
+     {
+      "type": "public_record",
+      "ref": "ecb_violations:39553409Z",
+      "label": "ECB violations 39553409Z",
+      "detail": "28-207.2.2 UNLAWFULLY CONTINUED WORK WHILE NOTICE OF A STOP WORK ORDER. DURING RE-INSPECTION CURRENT PICTURES WERE COMPARED TO THE PREVIOUS PICTURES TAKEN ON 3/20/26 WHICH AT THAT TIME THERE WAS A 1 STORY BUILDING REMAINING ON SITE. THE VIOLATION THAT WAS ISSUED STATED STOP ALL DEM Its text mentions a stop-work order.",
+      "date": "2026-04-23",
+      "bbl": "3052110074",
+      "url": "https://data.cityofnewyork.us/resource/6bgk-3dad.json?%24limit=5000&%24select=ecb_violation_number%2Cdob_violation_number%2Cbin%2Cissue_date%2Cecb_violation_status%2Cviolation_type%2Cseverity%2Csection_law_description1%2Cviolation_description%2Cinfraction_code1%2Cpenality_imposed%2Cbalance_due%2Chearing_status%2Ccertification_status&%24where=%28boro%3D%273%27+AND+block+in+%28%2705211%27%2C%275211%27%29+AND+lot+in+%28%2700074%27%2C%270074%27%2C%2774%27%29%29+OR+bin+in+%28%273328271%27%2C%273430674%27%29&%24order=issue_date+DESC"
+     }
+    ]
+   },
+   {
+    "kind": "record",
+    "text": "A 311 request dated 2026-03-18 is about work contrary to or beyond approved plans. DOB's resolution, recorded 2026-05-08, says it removed the stop work order.",
+    "sources": [
+     {
+      "type": "public_record",
+      "ref": "dob_311_requests:68381531",
+      "label": "311 service requests routed to DOB (2020 on) 68381531",
+      "detail": "General Construction/Plumbing. Cons - Contrary/Beyond Approved Plans/Permits Its text mentions a stop-work order. DOB's resolution, recorded 2026-05-08: The Department of Buildings investigated this complaint and removed the stop work order.",
+      "date": "2026-03-18",
+      "bbl": "3052110074",
+      "url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?%24limit=5000&%24select=unique_key%2Ccreated_date%2Cclosed_date%2Cagency%2Ccomplaint_type%2Cdescriptor%2Cdescriptor_2%2Cstatus%2Cresolution_description%2Cresolution_action_updated_date%2Cincident_address%2Cbbl&%24where=agency%3D%27DOB%27+AND+bbl%3D%273052110074%27&%24order=created_date+DESC"
+     }
+    ]
+   },
+   {
+    "kind": "not_found",
+    "text": "Not found in what we queried: a complete list of stop-work orders (we have not found them published as their own dataset).",
+    "queried": [
+     {
+      "key": "pluto",
+      "name": "PLUTO (lot data)",
+      "bbl": null,
+      "url": null
+     },
+     {
+      "key": "dob_now_filings",
+      "name": "DOB NOW job filings",
+      "bbl": null,
+      "url": null
+     },
+     {
+      "key": "dob_violations",
+      "name": "DOB violations",
+      "bbl": null,
+      "url": null
+     },
+     {
+      "key": "ecb_violations",
+      "name": "ECB violations",
+      "bbl": null,
+      "url": null
+     },
+     {
+      "key": "dob_safety_violations",
+      "name": "DOB safety violations (newer civil-penalty set)",
+      "bbl": null,
+      "url": null
+     },
+     {
+      "key": "hpd_violations",
+      "name": "HPD violations (housing agency)",
+      "bbl": null,
+      "url": null
+     },
+     {
+      "key": "dob_complaints",
+      "name": "DOB complaints",
+      "bbl": null,
+      "url": null
+     },
+     {
+      "key": "dob_311_requests",
+      "name": "311 service requests routed to DOB (2020 on)",
+      "bbl": null,
+      "url": null
+     }
+    ]
+   },
+   {
+    "kind": "notice",
+    "code": "cause_not_established",
+    "text": "Nothing in the public record here establishes the cause of any incident. Where officials say a cause is under investigation, that is the state."
+   },
+   {
+    "kind": "notice",
+    "code": "after_as_of",
+    "text": "Some of this saved answer is not shown: it rests on records dated on or after the as-of day."
+   }
+  ],
+  "plain_text": "A saved example, written ahead of time and checked against this brief. It is not a live answer, and it uses no web search.\nFrom the public record: An ECB violation dated 2026-04-23 reads \"UNLAWFULLY CONTINUED WORK WHILE NOTICE OF A STOP WORK ORDER\".\nFrom the public record: A 311 request dated 2026-03-18 is about work contrary to or beyond approved plans. DOB's resolution, recorded 2026-05-08, says it removed the stop work order.\nNot found in what we queried: a complete list of stop-work orders (we have not found them published as their own dataset).\nNothing in the public record here establishes the cause of any incident. Where officials say a cause is under investigation, that is the state.\nSome of this saved answer is not shown: it rests on records dated on or after the as-of day.",
+  "as_of": "2026-06-01",
+  "web_search": "off",
+  "examples": [],
+  "usage": null
+ },
+ {
+  "mode": "saved",
+  "question": "What do we know about the buildings touching the site?",
+  "parts": [
+   {
+    "kind": "notice",
+    "code": "saved_example",
+    "text": "A saved example, written ahead of time and checked against this brief. It is not a live answer, and it uses no web search."
+   },
+   {
+    "kind": "record",
+    "text": "PLUTO lists 1321 Flatbush Avenue as built in 1930, with 3 floors and 4 residential units, on a lot 20.5 feet wide.",
+    "sources": [
+     {
+      "type": "lot_facts",
+      "ref": "lot:3052110073",
+      "label": "PLUTO lot facts, 1321 FLATBUSH AVENUE (lot 3052110073, touching the site)",
+      "detail": "address: 1321 FLATBUSH AVENUE, year built: 1930, floors: 3.0, building class: S4, zoning district: R6, residential units: 4, lot front ft: 20.5, lot depth ft: 90.42, pluto version: 26v2",
+      "date": null,
+      "bbl": "3052110073",
+      "url": "https://data.cityofnewyork.us/resource/64uk-42ks.json?%24limit=5000&%24select=bbl%2Caddress%2Cyearbuilt%2Cnumfloors%2Cnumbldgs%2Cbldgclass%2Clanduse%2Cunitsres%2Clotfront%2Clotdepth%2Clotarea%2Cbldgarea%2Czonedist1%2Cbuiltfar%2Cresidfar%2Ccommfar%2Cfacilfar%2Clandmark%2Chistdist%2Clatitude%2Clongitude%2Cversion&%24where=bbl%3D3052110073"
+     }
+    ]
+   },
+   {
+    "kind": "record",
+    "text": "129 records in HPD violations (housing agency) for 1321 FLATBUSH AVENUE (lot 3052110073, touching the site) among records dated before 2026-06-01.",
+    "sources": [
+     {
+      "type": "dataset_count",
+      "ref": "dataset:3052110073:hpd_violations",
+      "label": "HPD violations (housing agency)",
+      "detail": null,
+      "date": null,
+      "bbl": "3052110073",
+      "url": "https://data.cityofnewyork.us/resource/wvxf-dwi5.json?%24limit=5000&%24select=violationid%2Cinspectiondate%2Cnovissueddate%2Cclass%2Cviolationstatus%2Ccurrentstatus%2Ccurrentstatusdate%2Cnovdescription%2Capartment%2Cstory&%24where=bbl%3D%273052110073%27&%24order=inspectiondate+DESC"
+     }
+    ]
+   },
+   {
+    "kind": "not_found",
+    "text": "None found in DOB violations for 1321 FLATBUSH AVENUE (lot 3052110073, touching the site) among records dated before 2026-06-01.",
+    "queried": [
+     {
+      "key": "dob_violations",
+      "name": "DOB violations",
+      "bbl": "3052110073",
+      "url": "https://data.cityofnewyork.us/resource/3h2n-5cm9.json?%24limit=5000&%24select=isn_dob_bis_viol%2Cboro%2Cblock%2Clot%2Cbin%2Cissue_date%2Cviolation_type%2Cviolation_category%2Cviolation_number%2Cnumber%2Cdescription%2Cdisposition_comments&%24where=%28boro%3D%273%27+AND+block+in+%28%2705211%27%2C%275211%27%29+AND+lot+in+%28%2700073%27%2C%270073%27%2C%2773%27%29%29+OR+bin+in+%28%273120364%27%29&%24order=issue_date+DESC"
+     }
+    ]
+   },
+   {
+    "kind": "record",
+    "text": "1 record in DOB safety violations (newer civil-penalty set) for 1321 FLATBUSH AVENUE (lot 3052110073, touching the site) among records dated before 2026-06-01.",
+    "sources": [
+     {
+      "type": "dataset_count",
+      "ref": "dataset:3052110073:dob_safety_violations",
+      "label": "DOB safety violations (newer civil-penalty set)",
+      "detail": null,
+      "date": null,
+      "bbl": "3052110073",
+      "url": "https://data.cityofnewyork.us/resource/855j-jady.json?%24limit=5000&%24select=violation_number%2Cbbl%2Cbin%2Cviolation_type%2Cviolation_status%2Cviolation_issue_date%2Cviolation_remarks%2Cdevice_type&%24where=bbl%3D%273052110073%27+OR+bin+in+%28%273120364%27%29&%24order=violation_issue_date+DESC"
+     }
+    ]
+   },
+   {
+    "kind": "not_found",
+    "text": "None found in PLUTO (lot data) for lot 3052110054 (touching the site, no PLUTO address).",
+    "queried": [
+     {
+      "key": "pluto",
+      "name": "PLUTO (lot data)",
+      "bbl": "3052110054",
+      "url": "https://data.cityofnewyork.us/resource/64uk-42ks.json?%24limit=5000&%24select=bbl%2Caddress%2Cyearbuilt%2Cnumfloors%2Cnumbldgs%2Cbldgclass%2Clanduse%2Cunitsres%2Clotfront%2Clotdepth%2Clotarea%2Cbldgarea%2Czonedist1%2Cbuiltfar%2Cresidfar%2Ccommfar%2Cfacilfar%2Clandmark%2Chistdist%2Clatitude%2Clongitude%2Cversion&%24where=bbl%3D3052110054"
+     }
+    ]
+   },
+   {
+    "kind": "record",
+    "text": "The checklist judges the examination (BC 3309.3), preconstruction survey (BC 3309.4.3) and monitoring (BC 3309.4.4) duties building by building. Each waits on a project input before it can be decided.",
+    "sources": [
+     {
+      "type": "requirement",
+      "ref": "row:examination",
+      "label": "BC \u00a73309.3 Examine the adjoining building",
+      "detail": "Once access is granted, physically examine the adjoining property before work and at intervals during it, record the conditions, and make the records available to DOB. (A paraphrase: read the linked code text.)",
+      "date": null,
+      "bbl": null,
+      "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf"
+     },
+     {
+      "type": "requirement",
+      "ref": "row:survey",
+      "label": "BC \u00a73309.4.3 Preconstruction survey",
+      "detail": "No excavation 5 to 10 ft deep within 10 ft of an adjacent building, or over 10 ft deep anywhere, until a survey documents the existing conditions of all adjacent buildings. (A paraphrase: read the linked code text.)",
+      "date": null,
+      "bbl": null,
+      "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf"
+     },
+     {
+      "type": "requirement",
+      "ref": "row:monitoring",
+      "label": "BC \u00a73309.4.4 Monitor nearby buildings",
+      "detail": "During excavation, monitor buildings within the excavation's maximum depth of its edge (and historic structures within 90 ft), under a plan setting scope, frequency, tolerances and reporting (3309.16). (A paraphrase: read the linked code text.)",
+      "date": null,
+      "bbl": null,
+      "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf"
+     }
+    ]
+   },
+   {
+    "kind": "notice",
+    "code": "status_is_todays",
+    "text": "A record's status is the one published at the pull, not its status on an earlier date: the datasets keep only the current status."
+   }
+  ],
+  "plain_text": "A saved example, written ahead of time and checked against this brief. It is not a live answer, and it uses no web search.\nFrom the public record: PLUTO lists 1321 Flatbush Avenue as built in 1930, with 3 floors and 4 residential units, on a lot 20.5 feet wide.\nFrom the public record: 129 records in HPD violations (housing agency) for 1321 FLATBUSH AVENUE (lot 3052110073, touching the site) among records dated before 2026-06-01.\nNone found in DOB violations for 1321 FLATBUSH AVENUE (lot 3052110073, touching the site) among records dated before 2026-06-01.\nFrom the public record: 1 record in DOB safety violations (newer civil-penalty set) for 1321 FLATBUSH AVENUE (lot 3052110073, touching the site) among records dated before 2026-06-01.\nNone found in PLUTO (lot data) for lot 3052110054 (touching the site, no PLUTO address).\nFrom the public record: The checklist judges the examination (BC 3309.3), preconstruction survey (BC 3309.4.3) and monitoring (BC 3309.4.4) duties building by building. Each waits on a project input before it can be decided.\nA record's status is the one published at the pull, not its status on an earlier date: the datasets keep only the current status.",
+  "as_of": "2026-06-01",
+  "web_search": "off",
+  "examples": [],
+  "usage": null
+ },
+ {
+  "mode": "saved",
+  "question": "Is it safe to excavate here?",
+  "parts": [
+   {
+    "kind": "notice",
+    "code": "saved_example",
+    "text": "A saved example, written ahead of time and checked against this brief. It is not a live answer, and it uses no web search."
+   },
+   {
+    "kind": "notice",
+    "code": "not_a_determination",
+    "text": "PreFlight is a coordination aid. It does not determine code compliance, structural adequacy or safety: the licensed professionals on the project and the Department of Buildings do."
+   },
+   {
+    "kind": "record",
+    "text": "What the checklist can say: the duties under BC 3309.4, BC 3304.4.1 and BC 3304.4.1.2 apply from the public record, and proof of each has not been provided to PreFlight.",
+    "sources": [
+     {
+      "type": "requirement",
+      "ref": "row:foundation_protection",
+      "label": "BC \u00a73309.4 Protect adjoining footings and foundations",
+      "detail": "Whenever soil or foundation work occurs, at any depth, protect adjoining structures, including footings and foundations, at the builder's expense. (A paraphrase: read the linked code text.)",
+      "date": null,
+      "bbl": null,
+      "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf"
+     },
+     {
+      "type": "requirement",
+      "ref": "row:support_drawings",
+      "label": "BC \u00a73304.4.1 Excavation-support drawings",
+      "detail": "Means of supporting the excavation shown on construction documents by a design professional with retaining or bracing experience; over 20 ft deep, a NY State PE. (A paraphrase: read the linked code text.)",
+      "date": null,
+      "bbl": null,
+      "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf"
+     },
+     {
+      "type": "requirement",
+      "ref": "row:support_basis",
+      "label": "BC \u00a73304.4.1.2 Geotechnical basis for the support design",
+      "detail": "The support drawings rest on site-specific testing, and incorporate the geotechnical report, the evaluation analysis and the preconstruction survey. (A paraphrase: read the linked code text.)",
+      "date": null,
+      "bbl": null,
+      "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf"
+     }
+    ]
+   },
+   {
+    "kind": "record",
+    "text": "Other rows, such as the preconstruction survey (BC 3309.4.3) and monitoring (BC 3309.4.4), wait on project inputs the public record does not hold, such as the excavation depth.",
+    "sources": [
+     {
+      "type": "requirement",
+      "ref": "row:survey",
+      "label": "BC \u00a73309.4.3 Preconstruction survey",
+      "detail": "No excavation 5 to 10 ft deep within 10 ft of an adjacent building, or over 10 ft deep anywhere, until a survey documents the existing conditions of all adjacent buildings. (A paraphrase: read the linked code text.)",
+      "date": null,
+      "bbl": null,
+      "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf"
+     },
+     {
+      "type": "requirement",
+      "ref": "row:monitoring",
+      "label": "BC \u00a73309.4.4 Monitor nearby buildings",
+      "detail": "During excavation, monitor buildings within the excavation's maximum depth of its edge (and historic structures within 90 ft), under a plan setting scope, frequency, tolerances and reporting (3309.16). (A paraphrase: read the linked code text.)",
+      "date": null,
+      "bbl": null,
+      "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf"
+     }
+    ]
+   }
+  ],
+  "plain_text": "A saved example, written ahead of time and checked against this brief. It is not a live answer, and it uses no web search.\nPreFlight is a coordination aid. It does not determine code compliance, structural adequacy or safety: the licensed professionals on the project and the Department of Buildings do.\nFrom the public record: What the checklist can say: the duties under BC 3309.4, BC 3304.4.1 and BC 3304.4.1.2 apply from the public record, and proof of each has not been provided to PreFlight.\nFrom the public record: Other rows, such as the preconstruction survey (BC 3309.4.3) and monitoring (BC 3309.4.4), wait on project inputs the public record does not hold, such as the excavation depth.",
+  "as_of": "2026-06-01",
+  "web_search": "off",
+  "examples": [],
+  "usage": null
+ }
+]
