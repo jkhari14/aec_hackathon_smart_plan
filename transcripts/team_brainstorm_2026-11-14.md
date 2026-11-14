@@ -4,7 +4,8 @@ Problem-framing session from the 2026 NYC AEC hackathon, recorded 2026-11-14.
 
 ## About this transcript
 
-- It is an automatic transcription, kept word for word. The only change is that consecutive lines from the same speaker are joined into one paragraph.
+- It is an automatic transcription, kept word for word except where marked withheld. Consecutive lines from the same speaker are joined into one paragraph.
+- One speaker's company name and their description of its product are withheld.
 - **Speaker labels are often wrong.** The tool put several other people's lines under "Jahleel Murray": the self-introductions from the Code Studio modeling-team member and the University of Maryland AI student, Rishabh's question about who the system's users are, and most of the structural engineering discussion around lunch, including the checklist-from-past-failures idea, which another speaker credits to Hongyu ("So, so Han Yu, what you were just saying"). "Speaker 4" covers at least two people, Camilo (design technologist) and Hongyu (structural engineer). Two names are split across speakers ("Camilo Ren" / "ares", "J" / "aelil").
 - Names of people and companies are as transcribed and may be misspelled.
 
@@ -140,11 +141,11 @@ Problem-framing session from the 2026 NYC AEC hackathon, recorded 2026-11-14.
 
 **Speaker 1:** Intro.
 
-**Jahleel Murray:** All right. Yes, so, um, I'm Jahleel Murray. My background is in AI engineering, and I represent DA Blueprint Technologies. We want to do a lot of work in, um, the permitting intelligence space.
+**Jahleel Murray:** All right. Yes, so, um, I'm Jahleel Murray. My background is in AI engineering, and I represent [company name withheld]. We want to do a lot of work in, um, the permitting intelligence space.
 
 **Speaker 1:** Speak up a word.
 
-**Jahleel Murray:** Oh, yeah. Um, but yeah, we want to do a lot of work in the permitting intelligence space, and what I was pitching earlier was essentially bridging the gap between knowing the codes and applying that to your plans, and knowing how a planned examiner would view your plans with the codes in mind. A lot of times, people, they go through the filing process, and they submit plans that get objections from the city, and these are people that understand the codes well, but they don't understand how a planned examiner views them. So my thought was, if you could build a model that can represent the empirical reasoning of a planned examiner and put that together with the codes, you could have a solution that would help prevent objections and save money. And I thought that tied into a lot of other things you guys were saying, like you wanting to understand how a building is safe matters because planned examiners, of course, they care about that a lot. When you were discussing, like, helping someone figure out what's wrong with their plans, from my research, the relationship between planned examiners and architects is— it's antagonistic. So there is, essentially, roasting going on through the plans, through objections. So that's— that made me thought, uh, you know, and then— and then your slice, not only is it an interpretation issue, it is just a software issue. Like, the city software is garbage, and people suffer a lot because of that. So if you put those things together, you have something that could make the whole process much, much simpler for everybody.
+**Jahleel Murray:** Oh, yeah. Um, but yeah, we want to do a lot of work in the permitting intelligence space, and what I was pitching earlier was [description of the speaker's company's product withheld]. And I thought that tied into a lot of other things you guys were saying, like you wanting to understand how a building is safe matters because planned examiners, of course, they care about that a lot. When you were discussing, like, helping someone figure out what's wrong with their plans, from my research, the relationship between planned examiners and architects is— it's antagonistic. So there is, essentially, roasting going on through the plans, through objections. So that's— that made me thought, uh, you know, and then— and then your slice, not only is it an interpretation issue, it is just a software issue. Like, the city software is garbage, and people suffer a lot because of that. So if you put those things together, you have something that could make the whole process much, much simpler for everybody.
 
 **Speaker 1:** Are we using DOB NOW for filing? Have you used— have you guys used it?
 
