@@ -5,7 +5,7 @@ Third session from the 2026 NYC AEC hackathon, recorded 2026-11-14. Part 1 is [t
 ## About this transcript
 
 - It is an automatic transcription, kept word for word as provided. Transcription errors are not corrected.
-- Speaker labels do not map to one person each, and names are as transcribed and may be misspelled.
+- Speaker labels do not map to one person each. People's names are withheld.
 - The name of the outside expert interviewed near the end, and the name of his firm, are withheld.
 
 ## Transcript
@@ -376,7 +376,7 @@ Third session from the 2026 NYC AEC hackathon, recorded 2026-11-14. Part 1 is [t
 
 **Speaker 2:** I'm rolling.
 
-**Speaker 3:** Thank you, Jensen. Anything new? Has there been more than three?
+**Speaker 3:** Thank you, [name withheld]. Anything new? Has there been more than three?
 
 **Speaker 2:** Okay.
 
@@ -1320,7 +1320,7 @@ Third session from the 2026 NYC AEC hackathon, recorded 2026-11-14. Part 1 is [t
 
 **Speaker 1:** All right.
 
-**Speaker 2:** Yeah, it's interesting. Like, yeah, it's a new, it's, I mean, Alex, when he brought up the meta, like, mapping of happenings. Like, it's like, the sort of contribution model, like, I mean, we could just do stuff through GitHub.
+**Speaker 2:** Yeah, it's interesting. Like, yeah, it's a new, it's, I mean, [name withheld], when he brought up the meta, like, mapping of happenings. Like, it's like, the sort of contribution model, like, I mean, we could just do stuff through GitHub.
 
 **Speaker 1:** Oh, [name withheld]?
 

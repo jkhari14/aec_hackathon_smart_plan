@@ -5,16 +5,17 @@ Second problem-framing session from the 2026 NYC AEC hackathon, recorded 2026-11
 ## About this transcript
 
 - It is an automatic transcription, kept word for word as provided. Transcription errors are not corrected.
-- **Speaker labels do not map to one person each.** "Speaker 1" introduces themself as Hongyu early on, and the in-meeting demo is also under "Speaker 1"; "Speaker 3" introduces themself as Luis, and later answers as Jacob. The names said near the end (Jacob, Shandon, Ethny, and three more) are as transcribed and may be misspelled.
+- **Speaker labels do not map to one person each.** "Speaker 1" introduces themself early on as the structural engineer, and the in-meeting demo is also under "Speaker 1"; "Speaker 3" introduces themself under one name and later answers to another.
+- People's names, and the name of a firm that a later session's interviewee works for, are withheld.
 
 ## Transcript
 
 **Speaker 1:** Okay, we're starting.  
-**Speaker 2:** Luis, you want to start us off?  
+**Speaker 2:** [name withheld], you want to start us off?  
 **Speaker 3:** I was about to— I mean, we're trying to say our feelings about where we currently at.  
 **Speaker 4:** Yeah.  
 **Speaker 2:** And things that, like, are on your mind. Like, from the plans, you know, like, what are you thinking, questions you want to answer as a group. If you say your name and say.  
-**Speaker 3:** My name is Luis. Um, I guess from where we're at so far, I know we took a look at the school addresses that had some issues. I guess my question would be, like, demo-wise, we're going to expect whatever social we're going to give to also be able to differentiate when an address is also okay.  
+**Speaker 3:** My name is [name withheld]. Um, I guess from where we're at so far, I know we took a look at the school addresses that had some issues. I guess my question would be, like, demo-wise, we're going to expect whatever social we're going to give to also be able to differentiate when an address is also okay.  
 **Speaker 3:** For example, like, that's my, like, my question is, like, are we going to be able to, like, have that as a focus as well? Like, both cases, basically.  
 **Speaker 3:** And another thing I was thinking about is that with the current cases, like, the status is kind of unresolved. Like, my question is going to be, like, how can we automate, like, because the information I've gotten so far from the two sites have been from various sites.  
 **Speaker 3:** We could do various sites. How can we automate this in a way that's, like, efficient when, like, buildings are older and versus when buildings are newer, I guess?  
@@ -42,9 +43,9 @@ Second problem-framing session from the 2026 NYC AEC hackathon, recorded 2026-11
 **Speaker 1:** And secondly, it's the approach, how we get the data. We have different— we already identified different sources, data sources that we can use.  
 **Speaker 1:** I guess we can just, like, research more on how we get those historic data. And the last question would be about the output.  
 **Speaker 1:** So we have all the inputs, we have the data sets, we do, like, data processing, and what the output, like, what the product will look like. Right?  
-**Speaker 1:** We were talking about a website where we'd checklist for different parties, like, to make sure they coordinate things properly, but, like, to just to make it more specific. So, yeah, and I forgot to mention, my name is Hongyu.  
+**Speaker 1:** We were talking about a website where we'd checklist for different parties, like, to make sure they coordinate things properly, but, like, to just to make it more specific. So, yeah, and I forgot to mention, my name is [name withheld].  
 **Speaker 1:** So, yeah, that's my main suggestion and questions.  
-**Speaker 2:** I think for, like, we should go back to Luis and then back to you after. Like, for each one, like, we should actually make the decision.  
+**Speaker 2:** I think for, like, we should go back to [name withheld] and then back to you after. Like, for each one, like, we should actually make the decision.  
 **Speaker 3:** Yeah.  
 **Speaker 2:** So that we capture all that as recall. So, like, do you mind just recapping your, like, questions?  
 **Speaker 3:** Yeah, I'm just—  
@@ -87,7 +88,7 @@ Second problem-framing session from the 2026 NYC AEC hackathon, recorded 2026-11
 **Speaker 1:** Yeah, I agree.  
 **Speaker 3:** The question is, like, who do we want to focus on for now as a key user?  
 **Speaker 4:** Yeah.  
-**Speaker 2:** So I was showing everyone the Jobs Blitz, the nonprofit website, and that specifically actually focused towards the tenants and renters that you spoke about before. So I don't think we should do that again, because I feel like it would just be redoing the same thing again. And I do agree with what Jacob said, that we initially started the seed idea with, like, you know, engineers, architects, designers, like, for those people.  
+**Speaker 2:** So I was showing everyone the Jobs Blitz, the nonprofit website, and that specifically actually focused towards the tenants and renters that you spoke about before. So I don't think we should do that again, because I feel like it would just be redoing the same thing again. And I do agree with what [name withheld] said, that we initially started the seed idea with, like, you know, engineers, architects, designers, like, for those people.  
 **Speaker 2:** And I honestly think, like, even if it's broad with all these different.  
 **Speaker 4:** It's hard.  
 **Speaker 2:** It's fine, I think. I don't know.  
@@ -379,7 +380,7 @@ Second problem-framing session from the 2026 NYC AEC hackathon, recorded 2026-11
 **Speaker 3:** That's interesting.  
 **Speaker 2:** Like, everyone.  
 **Speaker 3:** I'll put the codes that in there. Cool. All right.  
-**Speaker 3:** Um, so I think we can do, you, we missed you, Steve. Do you want to do your questions and thoughts?  
+**Speaker 3:** Um, so I think we can do, you, we missed you, [name withheld]. Do you want to do your questions and thoughts?  
 **Speaker 3:** No? Why don't we, let's try to wrap up the full group at, like, by 3:30 this week.  
 **Speaker 3:** We could, like, sync this up this last session, uh, and then we can get down to it.  
 **Speaker 1:** Um, yeah, I think everybody raised good points. Um, my only, uh, thing, have we covered, uh, the general structure of how this will be delivered to people? Because I, I've had, I have, like, a prerequisite that I think might be useful that I want to show you guys.  
@@ -508,7 +509,7 @@ Second problem-framing session from the 2026 NYC AEC hackathon, recorded 2026-11
 **Speaker 3:** No, my job.  
 **Speaker 4:** That's why.  
 **Speaker 3:** It's my job.  
-**Speaker 2:** Camila, and then, and then.  
+**Speaker 2:** [name withheld], and then, and then.  
 **Speaker 1:** That's what they are.  
 **Speaker 4:** I mean, it's expensive to have that.  
 **Speaker 3:** All right, cool.  
@@ -626,12 +627,12 @@ Second problem-framing session from the 2026 NYC AEC hackathon, recorded 2026-11
 **Speaker 4:** Sorry, yeah. The pure proximity to those activities.  
 **Speaker 3:** Exactly.  
 **Speaker 2:** Yeah, okay. Just a little quick. Just for, can you say, can you all say your names so it identifies the voice?  
-**Speaker 3:** Jacob, what's up?  
-**Speaker 2:** I'm Shandon.  
-**Speaker 4:** Ethny.  
-**Speaker 1:** Jhuil.  
-**Speaker 2:** Liz.  
-**Speaker 1:** Hershey.  
+**Speaker 3:** [name withheld], what's up?  
+**Speaker 2:** I'm [name withheld].  
+**Speaker 4:** [name withheld].  
+**Speaker 1:** [name withheld].  
+**Speaker 2:** [name withheld].  
+**Speaker 1:** [name withheld].  
 **Speaker 2:** All right, whisper. We just said our names again, so figure it out. Also, um, are we going to have a checklist for each of the stakeholders?  
 **Speaker 2:** Like, like a submission checklist. Like, structural, geotech, contractor.  
 **Speaker 1:** But, like, I don't think everybody will submit structural stuff. Like, I think every party.  
@@ -709,14 +710,14 @@ Second problem-framing session from the 2026 NYC AEC hackathon, recorded 2026-11
 **Speaker 3:** Like, we, we present the facts and we present the potential, but we don't say, I think, like, it should have been done a different way.  
 **Speaker 4:** Yeah.  
 **Speaker 3:** Like, it could have been, like, because I think that sort of gets into sort of the things that we're just, we don't necessarily have all the information.  
-**Speaker 2:** There's, there's a lot of people, I guess, uh, volunteering for help. TT has a specific forensic department.  
+**Speaker 2:** There's, there's a lot of people, I guess, uh, volunteering for help. [firm name withheld] has a specific forensic department.  
 **Speaker 3:** We should talk to them.  
 **Speaker 2:** We could talk to them about that.  
 **Speaker 3:** We should talk to them.  
 **Speaker 2:** Yeah. Um, was that your only one or did you have anything else?  
 **Speaker 4:** I was like, could we do it, like, with an example? Is there, like, a proper use of Wispr? Like, could we, like, take an example and.  
 **Speaker 3:** We have to, yeah, we should show it end to end. Like, it's sort of like, it's an end to end project, sort of like, uh, life safety, I mean, more things, but just for safety discussion. Like, life safety risk, like, mitigate or management sort of, like, workflow.  
-**Speaker 3:** I think, Haungyu, you're like our test user, actually, I think. Like, you would use this, right, probably?  
+**Speaker 3:** I think, [name withheld], you're like our test user, actually, I think. Like, you would use this, right, probably?  
 **Speaker 2:** Yeah.  
 **Speaker 3:** So, like, you're, I mean, many of us would, but.  
 **Speaker 4:** Many of us would, yeah.  
@@ -752,7 +753,7 @@ Second problem-framing session from the 2026 NYC AEC hackathon, recorded 2026-11
 **Speaker 3:** It's not, like, the thing that causes it. But, like, we're dealing with all those.  
 **Speaker 3:** There may be other ones that surface that are, like, sub ones, um, that, like, aren't as severe. Uh, like, I mean, there's also the work, worker, uh, construction worker safety was one.  
 **Speaker 2:** Connection worker safety feels like another layer because they're in the cloud or.  
-**Speaker 3:** But anyway, like, I think, like, Camila, like, I think even if we sort of went to things like just general code compliance, I think we just have to decide, like, we just have to just definitively say, like, we're not, it's, it's like, we're not including that or we are including. If we are including that, like, we basically can't do anything where people die.  
+**Speaker 3:** But anyway, like, I think, like, [name withheld], like, I think even if we sort of went to things like just general code compliance, I think we just have to decide, like, we just have to just definitively say, like, we're not, it's, it's like, we're not including that or we are including. If we are including that, like, we basically can't do anything where people die.  
 **Speaker 2:** Oh, I thought we'd get rid of the whole roasting thing.  
 **Speaker 3:** All right.  
 **Speaker 2:** Yeah. It's like, kind of strange if, like, say I used the roasting and then you reply to me, "Guess what? Your tenant is going to get cancer because this, this lot is contaminated."  
