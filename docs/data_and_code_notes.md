@@ -99,8 +99,9 @@ From the two [brainstorm transcripts](../transcripts/), and what they mean for t
 - **Past violations are not a predictor.** Before the collapse, 1321 Flatbush's open records were
   housing violations, 13 sign violations from 2019, and one missed gas-piping filing. Nothing was
   structural. Counts are shown as context, never as a score.
-- **The demo hook is the Brooklyn collapse; the walkthrough is an alteration.** 2625 Bedford is a
-  new-building job, so the walkthrough still needs an alteration address.
+- **The demo hook is the Brooklyn collapse.** The meeting also discussed an alteration for "just
+  the walkthrough right now", and that is noted as a later focus. For now every project type stays
+  open. 2625 Bedford is a new-building job.
 - **Address facts:** zoning, lot area, floor area ratios, year built, and PLUTO's landmark and
   historic-district fields come with the pull. Flood zone has no source yet.
 - **Sources we cannot crawl** (DOB NOW documents, JustFix, BuildNYC, Zillow and others) are being

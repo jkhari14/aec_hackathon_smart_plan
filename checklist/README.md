@@ -139,8 +139,8 @@ the real-site checklists.
 The 2026-11-14 team meetings put five hazards in scope: structural collapse, fire, flooding, soil
 contamination and extreme weather. These rows cover only duties toward adjoining property during
 excavation and foundation work. There are no rows yet for fire, flooding, contamination or weather,
-or for structural, facade or sprinkler work. Rows for an alteration, which the demo walkthrough
-uses, would come from the same gap.
+or for structural, facade or sprinkler work. Alteration work, noted as a later focus after the
+meeting, has no rows of its own either.
 
 ## Not checked
 
