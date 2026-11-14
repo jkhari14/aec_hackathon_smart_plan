@@ -1,4 +1,4 @@
-"""PreFlight's API. Run from the repo root: .venv/bin/uvicorn api.preflight_api:app --reload --port 8000"""
+"""PreFlight's API. Run from the repo root: .venv/bin/uvicorn jahleel.api.preflight_api:app --reload --port 8000"""
 
 from datetime import date
 from typing import Optional
@@ -6,8 +6,8 @@ from typing import Optional
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.brief.brief_build import build_brief, list_slugs
-from api.brief.brief_models import Brief, BriefListing, ProjectType
+from jahleel.api.brief.brief_build import build_brief, list_slugs
+from jahleel.api.brief.brief_models import Brief, BriefListing, ProjectType
 
 app = FastAPI(title="PreFlight", version="0.1.0")
 # The Vite dev server; any other reader (Grasshopper, voice) calls from outside a browser.

@@ -4,9 +4,9 @@ import copy
 import unittest
 from datetime import date
 
-from api.brief import brief_records
-from api.brief.brief_build import build_brief
-from api.brief.brief_models import Brief
+from jahleel.api.brief import brief_records
+from jahleel.api.brief.brief_build import build_brief
+from jahleel.api.brief.brief_models import Brief
 
 
 class BriefFromCacheTests(unittest.TestCase):

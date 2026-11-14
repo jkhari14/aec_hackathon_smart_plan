@@ -18,7 +18,7 @@ export async function loadBriefList(): Promise<Loaded<BriefListing[]>> {
   const live = await fetchJson<BriefListing[]>("/api/briefs");
   if (live) return { data: live, offline: false };
   const saved = await fetchJson<BriefListing[]>("/demo_briefs/index.json");
-  if (!saved) throw new Error("No API and no saved demo briefs: run `python -m api.brief.brief_export`.");
+  if (!saved) throw new Error("No API and no saved demo briefs: run `python -m jahleel.api.brief.brief_export`.");
   return { data: saved, offline: true };
 }
 

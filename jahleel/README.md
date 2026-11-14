@@ -1,8 +1,10 @@
-# PreFlight: app structure
+# PreFlight: a proposed app structure
 
-How the web app and API are laid out, and where each person's work plugs in. Companion to the
-[plan](../README-Camilo), the [data notes](data_and_code_notes.md), the
-[data sources](api_data_sources.md) and the [checklist engine](../checklist/README.md).
+One teammate's working proposal for the web app and API, kept in its own folder for now so the
+team can react before anything moves to the top level. Everything here reads the shared
+`data_pull/` cache and the `checklist/` engine; it changes neither. Companion to the
+[plan](../README-Camilo), the [data notes](../docs/data_and_code_notes.md), the
+[data sources](../docs/api_data_sources.md) and the [checklist engine](../checklist/README.md).
 
 ## One brief, many readers
 
@@ -13,7 +15,7 @@ the others.
 
 - `GET /api/briefs` lists the sites. `GET /api/briefs/<slug>?as_of=YYYY-MM-DD` returns one brief,
   its checklist built from records dated before that day (the engine's `--as-of`).
-- `python -m api.brief.brief_export` writes every brief to `web/public/demo_briefs/`, plus a copy
+- `python -m jahleel.api.brief.brief_export` writes every brief to `jahleel/web/public/demo_briefs/`, plus a copy
   for each replay date in `DEMO_AS_OF` (June 1 and November 11). When the API is down, the web
   page reads those files, so the demo never depends on a live server.
 - The brief's types are generated from the API (`npm run types`), so a renamed field breaks the
@@ -22,28 +24,31 @@ the others.
 ## Layout
 
 ```
-data_pull/           address in, public records for the site and touching lots out
-checklist/           which Building Code duties apply, and the proof each needs
-api/
-  preflight_api.py   the two routes
-  brief/
-    brief_models.py          the brief's shape (the contract every reader shares)
-    brief_build.py           data_pull cache + checklist engine + geometry -> brief
-    brief_records.py         each dataset's rows -> {id, date, status today, summary}
-    brief_geometry_pull.py   tax-lot polygons and building footprints
-    brief_export.py          static copies for the web page, plus api/openapi.json
-web/src/
-  brief/             generated types, loading with the offline fallback, the as-of filter
-  features/
-    site_search/     site, project type, as-of date
-    site_map/        lots, 3D footprints, click a lot to select it
-    neighbors/       one card per touching lot
-    site_record/     the site's records, newest first, stop-work mentions highlighted
-    checklist/       one lane per party (the engine's fixed list); "adjoining owner view" turns proofs into asks
-    roast/           the intensity dial and the roast line under each row
-    precedents/      past failures near the site
-    export/          download the brief as JSON, or lots and buildings as GeoJSON
-  ui/                the status badges
+data_pull/             (shared) address in, public records for the site and touching lots out
+checklist/             (shared) which Building Code duties apply, and the proof each needs
+jahleel/
+  api/
+    preflight_api.py   the two routes
+    brief/
+      brief_models.py          the brief's shape (the contract every reader shares)
+      brief_build.py           data_pull cache + checklist engine + geometry -> brief
+      brief_records.py         each dataset's rows -> {id, date, status today, summary}
+      brief_geometry_pull.py   tax-lot polygons and building footprints
+      brief_export.py          static copies for the web page, plus api/openapi.json
+  data/geometry/       lot polygons and footprints per cached site
+  tests/               the brief's tests
+  web/src/
+    brief/             generated types, loading with the offline fallback, the as-of filter
+    features/
+      site_search/     site, project type, as-of date
+      site_map/        lots, 3D footprints, click a lot to select it
+      neighbors/       one card per touching lot
+      site_record/     the site's records, newest first, stop-work mentions highlighted
+      checklist/       one lane per party (the engine's fixed list); "adjoining owner view" turns proofs into asks
+      roast/           the intensity dial and the roast line under each row
+      precedents/      past failures near the site
+      export/          download the brief as JSON, or lots and buildings as GeoJSON
+    ui/                the status badges
 ```
 
 ## Rules the screen keeps
@@ -63,13 +68,15 @@ web/src/
 
 ## Run it
 
+From the repo root:
+
 ```bash
-python3 -m venv .venv && .venv/bin/pip install -r api/requirements.txt
-.venv/bin/python -m api.brief.brief_geometry_pull      # once per new cached site
-.venv/bin/python -m api.brief.brief_export             # after any brief change
-.venv/bin/uvicorn api.preflight_api:app --port 8000
-cd web && npm install && npm run dev                   # http://localhost:5173
-.venv/bin/python -m unittest discover -s tests -t .
+python3 -m venv .venv && .venv/bin/pip install -r jahleel/api/requirements.txt
+.venv/bin/python -m jahleel.api.brief.brief_geometry_pull   # once per new cached site
+.venv/bin/python -m jahleel.api.brief.brief_export          # after any brief change
+.venv/bin/uvicorn jahleel.api.preflight_api:app --port 8000
+cd jahleel/web && npm install && npm run dev                # http://localhost:5173
+.venv/bin/python -m unittest discover -s jahleel/tests -t .
 ```
 
 Try the demo replay: `http://localhost:5173/?site=2625-bedford-ave-brooklyn&as_of=2026-06-01`.
@@ -88,7 +95,7 @@ Try the demo replay: `http://localhost:5173/?site=2625-bedford-ave-brooklyn&as_o
 ## Known gaps
 
 - **Rhino and Revit need local feet.** The brief carries EPSG:4326 only. The
-  [data sources](api_data_sources.md) recommend local feet from an EPSG:2263 origin; add that to
+  [data sources](../docs/api_data_sources.md) recommend local feet from an EPSG:2263 origin; add that to
   `brief_geometry_pull.py` (MapPLUTO answers in 2263 with `outSR=2263`).
 - **Address search is the demo list.** Free-text search needs the API to call `data_pull` live.
 - **Project inputs are not wired.** The engine takes `--inputs` (excavation depth, exposed wall,

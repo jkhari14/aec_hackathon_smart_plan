@@ -3,7 +3,7 @@
 import re
 from typing import Optional
 
-from api.brief.brief_models import PublicRecord
+from jahleel.api.brief.brief_models import PublicRecord
 from checklist.record_dates import parse_record_date, record_date
 
 _SUMMARY_CHARS = 300

@@ -1,13 +1,13 @@
 """Pull tax-lot polygons and building footprints for every lot in a cached site, for the map and Rhino/Revit.
 
-python -m api.brief.brief_geometry_pull            # every cached site
-Writes data/cache/geometry/<slug>.json: {bbl: {lot_geometry, buildings: [...]}}. Uses data_pull's SODA client.
+python -m jahleel.api.brief.brief_geometry_pull            # every cached site
+Writes jahleel/data/geometry/<slug>.json: {bbl: {lot_geometry, buildings: [...]}}. Uses data_pull's SODA client.
 """
 
 import json
 import sys
 
-from api.brief.brief_build import CACHE_DIR, GEOMETRY_DIR, list_slugs
+from jahleel.api.brief.brief_build import CACHE_DIR, GEOMETRY_DIR, list_slugs
 from data_pull.soda_client import query, soql_in, validate_bbl
 
 TAX_LOT_POLYGONS = "i38t-6if2"

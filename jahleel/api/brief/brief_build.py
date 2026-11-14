@@ -6,14 +6,15 @@ import re
 from datetime import date
 from typing import Optional
 
-from api.brief.brief_models import Brief, Building, ChecklistRow, ChecklistSummary, DatasetStatus, Lot, LotFacts
-from api.brief.brief_records import lot_records
+from jahleel.api.brief.brief_models import Brief, Building, ChecklistRow, ChecklistSummary, DatasetStatus, Lot, LotFacts
+from jahleel.api.brief.brief_records import lot_records
 from checklist.build_checklist import build as build_checklist
 
-REPO_ROOT = pathlib.Path(__file__).resolve().parents[2]
-CACHE_DIR = REPO_ROOT / "data" / "cache"
-GEOMETRY_DIR = CACHE_DIR / "geometry"
-LEADS_DIR = REPO_ROOT / "data" / "leads"
+REPO_ROOT = pathlib.Path(__file__).resolve().parents[3]
+FOLDER = pathlib.Path(__file__).resolve().parents[2]  # jahleel/
+CACHE_DIR = REPO_ROOT / "data" / "cache"  # data_pull's
+LEADS_DIR = REPO_ROOT / "data" / "leads"  # the checklist engine's
+GEOMETRY_DIR = FOLDER / "data" / "geometry"  # this folder's own
 _SLUG = re.compile(r"^[a-z0-9-]{1,80}$", re.ASCII)
 
 
@@ -98,7 +99,7 @@ def build_brief(slug: str, project_type: str = "excavation_next_to_existing", as
     checklist = build_checklist(pulled, {}, as_of, leads)
     caveats = list(pulled.get("caveats", [])) + [c for c in checklist["caveats"] if c not in pulled.get("caveats", [])]
     if not geometry:
-        caveats.append("No lot geometry cached for this site yet: run api.brief.brief_geometry_pull.")
+        caveats.append("No lot geometry cached for this site yet: run jahleel.api.brief.brief_geometry_pull.")
     lookup = pulled.get("address_lookup") or {}
     return Brief(
         slug=slug,
