@@ -1,4 +1,4 @@
-"""The public record for one lot: six NYC Open Data datasets, each reported honestly.
+"""The public record for one lot: seven NYC Open Data datasets, each reported honestly.
 
 Each dataset comes back as one of three statuses, never blurred together:
 - "ok": queried; `count` may be 0, which means "queried and none found";
@@ -38,6 +38,12 @@ DATASETS = {
         "violation_type,severity,section_law_description1,violation_description,"
         "infraction_code1,penality_imposed,balance_due,hearing_status,certification_status",
         "issue_date DESC",
+    ),
+    "dob_safety_violations": (
+        "855j-jady", "DOB safety violations (newer civil-penalty set)",
+        "violation_number,bbl,bin,violation_type,violation_status,violation_issue_date,"
+        "violation_remarks,device_type",
+        "violation_issue_date DESC",
     ),
     "hpd_violations": (
         "wvxf-dwi5", "HPD violations (housing agency)",
@@ -120,6 +126,8 @@ def pull_lot(bbl: str, seed_bins: list[str]) -> dict:
     where_block_lot = _block_lot_or_bins(bbl, bins)
     datasets["dob_violations"] = _run("dob_violations", where_block_lot, bbl)
     datasets["ecb_violations"] = _run("ecb_violations", where_block_lot, bbl)
+    safety_where = f"bbl='{bbl}'" + (f" OR bin in {soda_client.soql_in(bins)}" if bins else "")
+    datasets["dob_safety_violations"] = _run("dob_safety_violations", safety_where, bbl)
     datasets["hpd_violations"] = _run("hpd_violations", f"bbl='{bbl}'", bbl)
     if bins:
         complaints_where = f"bin in {soda_client.soql_in(bins)}"

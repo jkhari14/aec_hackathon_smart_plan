@@ -59,6 +59,7 @@ open, keyless SODA endpoints (`https://data.cityofnewyork.us/resource/<ID>.json`
 | DOB NOW job filings | `w9ak-ipjd` | `bbl`, `bin`, job number | One row per filing (`-I1`, `-S3`...). Earth work can sit on a later filing |
 | DOB violations | `3h2n-5cm9` | `boro` + `block` + `lot`, or `bin` | No `bbl` column. `lot` is stored in several widths (`00073`, `73`), so query all of them. Status is free text |
 | ECB violations | `6bgk-3dad` | `boro` + `block` + `lot` | Carries the section of law and the inspector's note |
+| DOB safety violations | `855j-jady` | `bbl`, `bin` | The newer civil-penalty set. It holds 1321 Flatbush's open violation; the two older sets do not |
 | HPD violations (housing agency) | `wvxf-dwi5` | `bbl` | Not DOB. "Open" includes items decades old |
 | DOB complaints | `eabe-havv` | `bin` only | Categories are 2-character codes; DOB publishes the key separately |
 

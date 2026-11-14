@@ -14,8 +14,15 @@ _MENTION = re.compile(r"STOP\s*-?\s*WORK|28-207\.2", re.IGNORECASE)
 _TEXT_FIELDS = {
     "dob_violations": ("description", "disposition_comments", "violation_type"),
     "ecb_violations": ("section_law_description1", "violation_description"),
+    "dob_safety_violations": ("violation_remarks", "violation_type"),
 }
-_ID_FIELDS = {"dob_violations": "isn_dob_bis_viol", "ecb_violations": "ecb_violation_number"}
+_ID_FIELDS = {
+    "dob_violations": "isn_dob_bis_viol",
+    "ecb_violations": "ecb_violation_number",
+    "dob_safety_violations": "violation_number",
+}
+# Each dataset names its issue date differently.
+_DATE_FIELDS = {"dob_safety_violations": "violation_issue_date"}
 _EXCERPT_CHARS = 240
 
 
@@ -30,7 +37,7 @@ def find_stop_work_mentions(datasets: dict) -> list[dict]:
                     mentions.append({
                         "dataset": key,
                         "record_id": record.get(_ID_FIELDS[key]),
-                        "issue_date": record.get("issue_date"),
+                        "issue_date": record.get(_DATE_FIELDS.get(key, "issue_date")),
                         "field": field,
                         "text": text[:_EXCERPT_CHARS],
                     })

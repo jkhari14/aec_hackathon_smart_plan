@@ -25,9 +25,9 @@ NYC Open Data app token for higher rate limits.
    every other tax-lot polygon. A shared edge or corner counts as touching.
 3. **BINs per lot.** These come from building footprints (`5zhs-2jue`), the address lookup, and
    DOB NOW filings that state this lot.
-4. **Six datasets per lot:** PLUTO, DOB NOW filings, DOB violations, ECB violations, HPD
-   violations and DOB complaints. The [data notes](../docs/data_and_code_notes.md) list their IDs
-   and traps.
+4. **Seven datasets per lot:** PLUTO, DOB NOW filings, DOB violations, ECB violations, DOB
+   safety violations, HPD violations and DOB complaints. The
+   [data notes](../docs/data_and_code_notes.md) list their IDs and traps.
 5. **Stop-work mentions.** These are violation records whose own text mentions a stop-work order.
 
 ## Output shape
@@ -42,7 +42,8 @@ NYC Open Data app token for higher rate limits.
 }
 LOT = {
   "bbl", "role", "bins", "footprint_buildings": {status, records},
-  "datasets": {pluto | dob_now_filings | dob_violations | ecb_violations | hpd_violations | dob_complaints:
+  "datasets": {pluto | dob_now_filings | dob_violations | ecb_violations | dob_safety_violations |
+               hpd_violations | dob_complaints:
                {status, count, truncated, query_url, records, held_back_other_lot}},
   "stop_work_mentions": [{dataset, record_id, issue_date, field, text}]
 }

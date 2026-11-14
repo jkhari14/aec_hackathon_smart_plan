@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "pulled_at": "2026-11-14T19:00:48+00:00",
+ "pulled_at": "2026-11-14T19:10:16+00:00",
  "address_lookup": {
   "input": "1321 Flatbush Ave, Brooklyn",
   "matched_label": "1321 FLATBUSH AVENUE, Brooklyn, NY, USA",
@@ -291,6 +291,25 @@
       "balance_due": "5000",
       "hearing_status": "IN VIOLATION",
       "certification_status": "NO COMPLIANCE RECORDED"
+     }
+    ],
+    "held_back_other_lot": []
+   },
+   "dob_safety_violations": {
+    "status": "ok",
+    "count": 1,
+    "truncated": false,
+    "query_url": "https://data.cityofnewyork.us/resource/855j-jady.json?%24limit=5000&%24select=violation_number%2Cbbl%2Cbin%2Cviolation_type%2Cviolation_status%2Cviolation_issue_date%2Cviolation_remarks%2Cdevice_type&%24where=bbl%3D%273052110073%27+OR+bin+in+%28%273120364%27%29&%24order=violation_issue_date+DESC",
+    "records": [
+     {
+      "violation_number": "NOD-FTF-PL-PER-202312-0021956",
+      "bbl": "3052110073",
+      "bin": "3120364",
+      "violation_type": "FTF-PL-PER",
+      "violation_status": "Active",
+      "violation_issue_date": "2025-01-31T00:00:00.000",
+      "violation_remarks": "Cycle 1, Sub-cycle D (premises is in Community District 17)",
+      "device_type": "Gas Piping - LL152"
      }
     ],
     "held_back_other_lot": []
@@ -2236,6 +2255,62 @@
      ],
      "held_back_other_lot": []
     },
+    "dob_safety_violations": {
+     "status": "ok",
+     "count": 0,
+     "truncated": false,
+     "query_url": "https://data.cityofnewyork.us/resource/855j-jady.json?%24limit=5000&%24select=violation_number%2Cbbl%2Cbin%2Cviolation_type%2Cviolation_status%2Cviolation_issue_date%2Cviolation_remarks%2Cdevice_type&%24where=bbl%3D%273052110054%27+OR+bin+in+%28%273120353%27%29&%24order=violation_issue_date+DESC",
+     "records": [],
+     "held_back_other_lot": [
+      {
+       "violation_number": "VIO-DQ-EN-BENCH-202608-0167117",
+       "bbl": "3052117501",
+       "bin": "3120353",
+       "violation_type": "DQ-EN-BENCH",
+       "violation_status": "Active",
+       "violation_issue_date": "2026-09-25T00:00:00.000",
+       "violation_remarks": "FAILURE TO FILE BENCHMARKING REPORT OF ENERGY USE AS PER AD. CODE SEC. 28-309.4",
+       "device_type": "Benchmarking - LL84"
+      },
+      {
+       "violation_number": "VIO-FTF-PS-INITL-202512-0183168",
+       "bbl": "3052117501",
+       "bin": "3120353",
+       "violation_type": "FTF-PS-INITL",
+       "violation_status": "Dismissed",
+       "violation_issue_date": "2026-09-23T00:00:00.000",
+       "violation_remarks": "Failure to file parking structures compliance report by 12/31/2025 as required per 1 RCNY 103-13",
+       "device_type": "Parking Structures"
+      },
+      {
+       "violation_number": "082219AEUHAZ100473",
+       "bbl": "3052117501",
+       "bin": "3120353",
+       "violation_type": "FTC-AEU-HAZ",
+       "violation_status": "Dismissed",
+       "violation_issue_date": "2019-08-22T00:00:00.000",
+       "device_type": "AEUHAZ"
+      },
+      {
+       "violation_number": "041719AEUHAZ100294",
+       "bbl": "3052117501",
+       "bin": "3120353",
+       "violation_type": "FTC-AEU-HAZ",
+       "violation_status": "Dismissed",
+       "violation_issue_date": "2019-04-17T00:00:00.000",
+       "device_type": "AEUHAZ"
+      },
+      {
+       "violation_number": "040319AEUHAZ100379",
+       "bbl": "3052117501",
+       "bin": "3120353",
+       "violation_type": "FTC-AEU-HAZ",
+       "violation_status": "Dismissed",
+       "violation_issue_date": "2019-04-03T00:00:00.000",
+       "device_type": "AEUHAZ"
+      }
+     ]
+    },
     "hpd_violations": {
      "status": "ok",
      "count": 2,
@@ -2657,6 +2732,25 @@
      "records": [],
      "held_back_other_lot": []
     },
+    "dob_safety_violations": {
+     "status": "ok",
+     "count": 1,
+     "truncated": false,
+     "query_url": "https://data.cityofnewyork.us/resource/855j-jady.json?%24limit=5000&%24select=violation_number%2Cbbl%2Cbin%2Cviolation_type%2Cviolation_status%2Cviolation_issue_date%2Cviolation_remarks%2Cdevice_type&%24where=bbl%3D%273052110072%27+OR+bin+in+%28%273120363%27%29&%24order=violation_issue_date+DESC",
+     "records": [
+      {
+       "violation_number": "NOD-FTF-PL-PER-202312-0021955",
+       "bbl": "3052110072",
+       "bin": "3120363",
+       "violation_type": "FTF-PL-PER",
+       "violation_status": "Active",
+       "violation_issue_date": "2025-01-31T00:00:00.000",
+       "violation_remarks": "Cycle 1, Sub-cycle D (premises is in Community District 17)",
+       "device_type": "Gas Piping - LL152"
+      }
+     ],
+     "held_back_other_lot": []
+    },
     "hpd_violations": {
      "status": "ok",
      "count": 234,
@@ -2847,18 +2941,6 @@
        "story": "2"
       },
       {
-       "violationid": "16250490",
-       "inspectiondate": "2023-09-25T00:00:00.000",
-       "novissueddate": "2023-09-27T00:00:00.000",
-       "class": "C",
-       "violationstatus": "Close",
-       "currentstatus": "VIOLATION CLOSED",
-       "currentstatusdate": "2025-09-03T00:00:00.000",
-       "novdescription": "§ 27-2005 HMC: PROPERLY REPAIR OR REPLACE THE BROKEN OR DEFECTIVE DISLODGED WOOD DOOR FRAME WITH EXPOSED NAILS AT WEST WALL IN THE BATHROOM LOCATED AT APT 2F, 2nd STORY, 1st APARTMENT FROM EAST AT SOUTH",
-       "apartment": "2F",
-       "story": "2"
-      },
-      {
        "violationid": "16263026",
        "inspectiondate": "2023-09-25T00:00:00.000",
        "novissueddate": "2023-09-28T00:00:00.000",
@@ -3001,6 +3083,18 @@
        "story": "2"
       },
       {
+       "violationid": "16250490",
+       "inspectiondate": "2023-09-25T00:00:00.000",
+       "novissueddate": "2023-09-27T00:00:00.000",
+       "class": "C",
+       "violationstatus": "Close",
+       "currentstatus": "VIOLATION CLOSED",
+       "currentstatusdate": "2025-09-03T00:00:00.000",
+       "novdescription": "§ 27-2005 HMC: PROPERLY REPAIR OR REPLACE THE BROKEN OR DEFECTIVE DISLODGED WOOD DOOR FRAME WITH EXPOSED NAILS AT WEST WALL IN THE BATHROOM LOCATED AT APT 2F, 2nd STORY, 1st APARTMENT FROM EAST AT SOUTH",
+       "apartment": "2F",
+       "story": "2"
+      },
+      {
        "violationid": "16257551",
        "inspectiondate": "2023-09-25T00:00:00.000",
        "novissueddate": "2023-09-27T00:00:00.000",
@@ -3013,15 +3107,15 @@
        "story": "2"
       },
       {
-       "violationid": "15866779",
+       "violationid": "15866839",
        "inspectiondate": "2023-03-24T00:00:00.000",
        "novissueddate": "2023-03-28T00:00:00.000",
-       "class": "B",
+       "class": "A",
        "violationstatus": "Open",
        "currentstatus": "NOV SENT OUT",
        "currentstatusdate": "2023-03-28T00:00:00.000",
-       "novdescription": "§ 27-2005, 2007 ADM CODE REMOVE ALL ENCUMBRANCES CONSISTING OF HOUSEHOLD TRASH AND CARPET OBSTRUCTING THE SCUDDLE LATTER TO ROOF AT LOBBY",
-       "story": "0"
+       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD THREAD 10TH FROM BOTTOM AT PUBLIC HALL STAIRS, 1st STORY",
+       "story": "1"
       },
       {
        "violationid": "15866752",
@@ -3046,25 +3140,14 @@
        "story": "0"
       },
       {
-       "violationid": "15866839",
+       "violationid": "15866779",
        "inspectiondate": "2023-03-24T00:00:00.000",
        "novissueddate": "2023-03-28T00:00:00.000",
-       "class": "A",
+       "class": "B",
        "violationstatus": "Open",
        "currentstatus": "NOV SENT OUT",
        "currentstatusdate": "2023-03-28T00:00:00.000",
-       "novdescription": "§ 27-2005 ADM CODE PROPERLY REPAIR WITH SIMILAR MATERIAL THE BROKEN OR DEFECTIVE WOOD THREAD 10TH FROM BOTTOM AT PUBLIC HALL STAIRS, 1st STORY",
-       "story": "1"
-      },
-      {
-       "violationid": "15866748",
-       "inspectiondate": "2023-03-24T00:00:00.000",
-       "novissueddate": "2023-03-28T00:00:00.000",
-       "class": "A",
-       "violationstatus": "Open",
-       "currentstatus": "NOV SENT OUT",
-       "currentstatusdate": "2023-03-28T00:00:00.000",
-       "novdescription": "§ 27-2104 ADM CODE POST AND MAINTAIN A PROPER SIGN ON WALL OF ENTRANCE STORY SHOWING THE REGISTRATION NUMBER ASSIGNED BY THE DEPARTMENT AND THE ADDRESS OF THE BUILDING. AT LOBBY",
+       "novdescription": "§ 27-2005, 2007 ADM CODE REMOVE ALL ENCUMBRANCES CONSISTING OF HOUSEHOLD TRASH AND CARPET OBSTRUCTING THE SCUDDLE LATTER TO ROOF AT LOBBY",
        "story": "0"
       },
       {
@@ -3088,6 +3171,17 @@
        "currentstatusdate": "2023-03-28T00:00:00.000",
        "novdescription": "§ 27-2005, 2007 ADM CODE REMOVE ALL ENCUMBRANCES CONSISTING OF CARPET AND HOUSEHOLD TRASH OBSTRUCTING THE SCUDDLE LADDER TO ROOF AT PUBLIC HALL, 3rd STORY",
        "story": "3"
+      },
+      {
+       "violationid": "15866748",
+       "inspectiondate": "2023-03-24T00:00:00.000",
+       "novissueddate": "2023-03-28T00:00:00.000",
+       "class": "A",
+       "violationstatus": "Open",
+       "currentstatus": "NOV SENT OUT",
+       "currentstatusdate": "2023-03-28T00:00:00.000",
+       "novdescription": "§ 27-2104 ADM CODE POST AND MAINTAIN A PROPER SIGN ON WALL OF ENTRANCE STORY SHOWING THE REGISTRATION NUMBER ASSIGNED BY THE DEPARTMENT AND THE ADDRESS OF THE BUILDING. AT LOBBY",
+       "story": "0"
       },
       {
        "violationid": "15834056",
@@ -5878,6 +5972,24 @@
      ],
      "held_back_other_lot": []
     },
+    "dob_safety_violations": {
+     "status": "ok",
+     "count": 1,
+     "truncated": false,
+     "query_url": "https://data.cityofnewyork.us/resource/855j-jady.json?%24limit=5000&%24select=violation_number%2Cbbl%2Cbin%2Cviolation_type%2Cviolation_status%2Cviolation_issue_date%2Cviolation_remarks%2Cdevice_type&%24where=bbl%3D%273052110074%27+OR+bin+in+%28%273328271%27%2C%273430674%27%29&%24order=violation_issue_date+DESC",
+     "records": [
+      {
+       "violation_number": "VIO-FTC-AEU-HAZ-202609-0040618",
+       "bbl": "3052110074",
+       "bin": "3328271",
+       "violation_type": "FTC-AEU-HAZ",
+       "violation_status": "Dismissed",
+       "violation_issue_date": "2026-09-16T00:00:00.000",
+       "device_type": "AEUHAZ"
+      }
+     ],
+     "held_back_other_lot": []
+    },
     "hpd_violations": {
      "status": "ok",
      "count": 0,
@@ -6044,6 +6156,11 @@
    "name": "ECB violations",
    "dataset_id": "6bgk-3dad",
    "url": "https://data.cityofnewyork.us/d/6bgk-3dad"
+  },
+  "dob_safety_violations": {
+   "name": "DOB safety violations (newer civil-penalty set)",
+   "dataset_id": "855j-jady",
+   "url": "https://data.cityofnewyork.us/d/855j-jady"
   },
   "hpd_violations": {
    "name": "HPD violations (housing agency)",
