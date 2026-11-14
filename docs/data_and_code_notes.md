@@ -1,6 +1,7 @@
 # PreFlight: data and code notes
 
-A companion to [README-Camilo](../README-Camilo), which is the plan. This file:
+Written as a companion to the team's first plan, README-Camilo (deleted in 2edb488 and kept in the
+repo's history). The current plan is [foresite_build_plan.md](foresite_build_plan.md). This file:
 
 - answers its "⚠️ Verify" data items,
 - gives the hero demo case's facts,
