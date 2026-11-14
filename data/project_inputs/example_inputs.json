@@ -1,0 +1,11 @@
+{
+  "_note": "HYPOTHETICAL values for trying the checklist. They are not facts about any real project or site.",
+  "excavation_depth_ft": 12,
+  "requires_adjoining_access": true,
+  "underpinning_planned": true,
+  "exposes_adjoining_wall": true,
+  "distance_to_building_ft": {"3052110073": 0, "3052110079": 0, "3052110044": 30},
+  "provided_proof": {
+    "3309.1.1": {"document": "Example notice letter (hypothetical)", "provided_by": "example"}
+  }
+}
