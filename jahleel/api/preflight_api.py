@@ -8,10 +8,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from jahleel.api.brief.brief_build import build_brief, list_slugs
 from jahleel.api.brief.brief_models import Brief, BriefListing, ProjectType
+from jahleel.api.chat.chat_router import chat_router
 
 app = FastAPI(title="PreFlight", version="0.1.0")
 # The Vite dev server; any other reader (Grasshopper, voice) calls from outside a browser.
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173"], allow_methods=["GET"])
+# The chat's two routes (jahleel/api/chat/README.md). The page reaches them through the Vite proxy.
+app.include_router(chat_router)
 
 
 @app.get("/api/briefs", response_model=list[BriefListing])

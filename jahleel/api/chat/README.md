@@ -71,11 +71,11 @@ that day.
 
 ## Run it
 
-The routes mount in the API with one line (see "Wiring"). With them mounted:
+From the repo root, after the [app's own setup](../../README.md):
 
 ```bash
 export ANTHROPIC_API_KEY=...        # the server only; never in the web app, never committed
-.venv/bin/pip install anthropic     # without it, or without a key, the chat serves saved examples
+.venv/bin/pip install -r jahleel/api/requirements.txt   # without the anthropic package, or without a key, the chat serves saved examples
 .venv/bin/uvicorn jahleel.api.preflight_api:app --port 8000
 .venv/bin/python -m unittest discover -s jahleel/tests -t .       # offline: a scripted model, no key
 .venv/bin/python -m jahleel.api.chat.chat_saved_export            # after a brief change: the panel's offline copies
@@ -106,19 +106,15 @@ POST /api/chat/answer
 - `mode` is `live`, `saved`, or `unavailable` (no key, or the call failed; the parts say which).
 - HTTP 422 means the question or history is over a cap, 429 that the per-minute limit was reached.
 
-## Wiring
+## Where it plugs in
 
-Three edits in files this folder does not own:
-
-1. `jahleel/api/preflight_api.py`: `from jahleel.api.chat.chat_router import chat_router` and
-   `app.include_router(chat_router)`. A browser client on another origin also needs `POST` and the
-   `content-type` header allowed in the CORS line; the page itself goes through the Vite proxy.
-2. `jahleel/web/src/app/preflight_app.tsx`:
-   `<ChatPanel brief={brief} projectType={projectType} asOf={asOf} offline={offline} />`.
-3. `jahleel/api/requirements.txt`: the `anthropic` package.
-
-After the first, `brief_export` and `npm run types` add the chat's shapes to the generated types;
-until then the panel uses hand-written ones in `chat_types.ts`.
+- `jahleel/api/preflight_api.py` mounts the two routes with `app.include_router(chat_router)`. The
+  page reaches them through the Vite proxy; a browser client on another origin (a voice page) also
+  needs `POST` and the `content-type` header allowed in that file's CORS line.
+- `jahleel/web/src/app/preflight_app.tsx` places `<ChatPanel />` at the top of the right-hand column.
+- `jahleel/api/requirements.txt` pins the `anthropic` package.
+- The chat's shapes are in `api/openapi.json` and the generated types. The panel still reads its own
+  hand-written copies in `chat_types.ts`; pointing them at the generated ones is the next step.
 
 ## Files
 

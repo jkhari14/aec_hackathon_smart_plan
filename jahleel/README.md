@@ -5,6 +5,8 @@ team can react before anything moves to the top level. Everything here reads the
 `data_pull/` cache and the `checklist/` engine; it changes neither. Companion to the
 [plan](../README-Camilo), the [data notes](../docs/data_and_code_notes.md), the
 [data sources](../docs/api_data_sources.md) and the [checklist engine](../checklist/README.md).
+The page also has a [chat](api/chat/README.md) that answers questions about one site from the brief
+and web search.
 
 ## One brief, many readers
 
@@ -28,13 +30,14 @@ data_pull/             (shared) address in, public records for the site and touc
 checklist/             (shared) which Building Code duties apply, and the proof each needs
 jahleel/
   api/
-    preflight_api.py   the two routes
+    preflight_api.py   the brief's two routes, and the chat's
     brief/
       brief_models.py          the brief's shape (the contract every reader shares)
       brief_build.py           data_pull cache + checklist engine + geometry -> brief
       brief_records.py         each dataset's rows -> {id, date, status today, summary}
       brief_geometry_pull.py   tax-lot polygons and building footprints
       brief_export.py          static copies for the web page, plus api/openapi.json
+    chat/              questions about one site, answered from the brief and web search (see api/chat/README.md)
   data/geometry/       lot polygons and footprints per cached site
   tests/               the brief's tests
   web/src/
@@ -47,6 +50,7 @@ jahleel/
       checklist/       one lane per party (the engine's fixed list); "adjoining owner view" turns proofs into asks
       precedents/      past incidents near the site
       export/          download the brief as JSON, or lots and buildings as GeoJSON
+      chat/            the chat panel: each answer part drawn by where it came from
     ui/                the status badges
 ```
 

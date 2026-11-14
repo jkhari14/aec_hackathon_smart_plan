@@ -4,6 +4,43 @@
  */
 
 export interface paths {
+    "/api/chat/setup/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Chat Setup */
+        get: operations["chat_setup_api_chat_setup__slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/chat/answer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Chat Answer
+         * @description A question about one site, answered from its brief and web search. See jahleel/api/chat/README.md.
+         */
+        post: operations["chat_answer_api_chat_answer_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/briefs": {
         parameters: {
             query?: never;
@@ -127,6 +164,29 @@ export interface components {
             project_type: "new_building" | "renovation" | "excavation_next_to_existing";
         };
         /**
+         * BriefSource
+         * @description An item of the brief. Its link is the brief's own, never one the model wrote.
+         */
+        BriefSource: {
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "public_record" | "requirement" | "lot_facts" | "dataset_count";
+            /** Ref */
+            ref: string;
+            /** Label */
+            label: string;
+            /** Detail */
+            detail?: string | null;
+            /** Date */
+            date?: string | null;
+            /** Bbl */
+            bbl?: string | null;
+            /** Url */
+            url?: string | null;
+        };
+        /**
          * Building
          * @description One building footprint. Heights are in feet; geometry is GeoJSON in EPSG:4326.
          */
@@ -157,6 +217,110 @@ export interface components {
             applies: components["schemas"]["Applies"];
             /** Open Gap */
             open_gap: boolean;
+        };
+        /** ChatAnswer */
+        ChatAnswer: {
+            /**
+             * Mode
+             * @description live: a model answered now. saved: an example written ahead of time, checked against this brief. unavailable: no live answer; `examples` lists what can be opened.
+             * @enum {string}
+             */
+            mode: "live" | "saved" | "unavailable";
+            /** Question */
+            question: string;
+            /** Parts */
+            parts: (components["schemas"]["RecordPart"] | components["schemas"]["LeadPart"] | components["schemas"]["NotFoundPart"] | components["schemas"]["UnknownPart"] | components["schemas"]["NoticePart"])[];
+            /**
+             * Plain Text
+             * @description The parts as one text, each prefixed by where it came from. For a voice client.
+             */
+            plain_text: string;
+            /** As Of */
+            as_of?: string | null;
+            /**
+             * Web Search
+             * @enum {string}
+             */
+            web_search: "used" | "not_used" | "off_as_of" | "off";
+            /** Examples */
+            examples?: components["schemas"]["ExampleQuestion"][];
+            usage?: components["schemas"]["ChatUsage"] | null;
+        };
+        /**
+         * ChatRequest
+         * @description Over any limit the request is refused (HTTP 422), never cut to fit.
+         */
+        ChatRequest: {
+            /** Slug */
+            slug: string;
+            /**
+             * Project Type
+             * @default excavation_next_to_existing
+             * @enum {string}
+             */
+            project_type: "new_building" | "renovation" | "excavation_next_to_existing";
+            /**
+             * As Of
+             * @description The page's as-of day: nothing dated on or after it is used.
+             */
+            as_of?: string | null;
+            /** History */
+            history?: components["schemas"]["Exchange"][];
+            /**
+             * Question
+             * @default
+             */
+            question: string;
+            /**
+             * Example Id
+             * @description Ask for a saved example instead of a live answer.
+             */
+            example_id?: string | null;
+        };
+        /**
+         * ChatSetup
+         * @description What a client needs before the first question.
+         */
+        ChatSetup: {
+            /** Live */
+            live: boolean;
+            /** Examples */
+            examples: components["schemas"]["ExampleQuestion"][];
+            /**
+             * Max Question Chars
+             * @default 1000
+             */
+            max_question_chars: number;
+            /**
+             * Max Earlier Exchanges
+             * @default 8
+             */
+            max_earlier_exchanges: number;
+            /**
+             * Max History Chars
+             * @default 12000
+             */
+            max_history_chars: number;
+        };
+        /** ChatUsage */
+        ChatUsage: {
+            /** Model */
+            model: string;
+            /**
+             * Input Tokens
+             * @default 0
+             */
+            input_tokens: number;
+            /**
+             * Output Tokens
+             * @default 0
+             */
+            output_tokens: number;
+            /**
+             * Web Searches
+             * @default 0
+             */
+            web_searches: number;
         };
         /**
          * ChecklistRow
@@ -245,6 +409,23 @@ export interface components {
             /** Query Url */
             query_url?: string | null;
         };
+        /** ExampleQuestion */
+        ExampleQuestion: {
+            /** Id */
+            id: string;
+            /** Question */
+            question: string;
+        };
+        /**
+         * Exchange
+         * @description One earlier question and the text of the answer the reader saw.
+         */
+        Exchange: {
+            /** Question */
+            question: string;
+            /** Answer */
+            answer: string;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -269,6 +450,21 @@ export interface components {
             document_date?: string | null;
             /** Checked */
             checked?: string | null;
+        };
+        /**
+         * LeadPart
+         * @description From the web or a reported document. Not checked by us; never evidence.
+         */
+        LeadPart: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "lead";
+            /** Text */
+            text: string;
+            /** Sources */
+            sources: (components["schemas"]["WebSource"] | components["schemas"]["ReportedSource"])[];
         };
         /** Lot */
         Lot: {
@@ -331,6 +527,39 @@ export interface components {
             historic_district?: string | null;
             /** Pluto Version */
             pluto_version?: string | null;
+        };
+        /**
+         * NotFoundPart
+         * @description Queried and nothing found, with what was queried named.
+         */
+        NotFoundPart: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "not_found";
+            /** Text */
+            text: string;
+            /** Queried */
+            queried: components["schemas"]["QueriedDataset"][];
+        };
+        /**
+         * NoticePart
+         * @description A status line the server wrote. The model can ask for one by code; it cannot word one.
+         */
+        NoticePart: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "notice";
+            /**
+             * Code
+             * @enum {string}
+             */
+            code: "not_a_determination" | "names_withheld" | "cause_not_established" | "out_of_scope" | "status_is_todays" | "complaints_overlap" | "web_off_as_of" | "held_back" | "after_as_of" | "no_answer" | "saved_example" | "live_off" | "live_failed";
+            /** Text */
+            text: string;
         };
         /** Precedent */
         Precedent: {
@@ -409,6 +638,32 @@ export interface components {
              */
             resolution_recorded?: string | null;
         };
+        /** QueriedDataset */
+        QueriedDataset: {
+            /** Key */
+            key: string;
+            /** Name */
+            name: string;
+            /** Bbl */
+            bbl?: string | null;
+            /** Url */
+            url?: string | null;
+        };
+        /**
+         * RecordPart
+         * @description Rests on the brief: public records, checklist rows, PLUTO lot facts or a dataset count.
+         */
+        RecordPart: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "record";
+            /** Text */
+            text: string;
+            /** Sources */
+            sources: components["schemas"]["BriefSource"][];
+        };
         /** RelatedFilings */
         RelatedFilings: {
             /** Status */
@@ -430,6 +685,29 @@ export interface components {
             }[];
         };
         /**
+         * ReportedSource
+         * @description A document a public source reports and nobody here has read (a lead already in the brief).
+         */
+        ReportedSource: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "reported_document";
+            /** Ref */
+            ref: string;
+            /** Reported By */
+            reported_by: string;
+            /** Document */
+            document: string;
+            /** Url */
+            url?: string | null;
+            /** Reported On */
+            reported_on?: string | null;
+            /** Document Date */
+            document_date?: string | null;
+        };
+        /**
          * RowProof
          * @description None of these statuses is 'verified'; a lead never closes a gap.
          */
@@ -448,6 +726,21 @@ export interface components {
             /** Provided By */
             provided_by?: string | null;
         };
+        /**
+         * UnknownPart
+         * @description A query failed or was skipped: nothing is known. Never zero.
+         */
+        UnknownPart: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "unknown";
+            /** Text */
+            text: string;
+            /** Queried */
+            queried: components["schemas"]["QueriedDataset"][];
+        };
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -461,6 +754,28 @@ export interface components {
             /** Context */
             ctx?: Record<string, never>;
         };
+        /**
+         * WebSource
+         * @description A web search result the model received in this call.
+         */
+        WebSource: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "web_result";
+            /** Url */
+            url: string;
+            /** Title */
+            title: string;
+            /** Page Age */
+            page_age?: string | null;
+            /**
+             * Official
+             * @description The host is a city, state or federal government site. A hint about the host only.
+             */
+            official: boolean;
+        };
     };
     responses: never;
     parameters: never;
@@ -470,6 +785,70 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    chat_setup_api_chat_setup__slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatSetup"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    chat_answer_api_chat_answer_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatAnswer"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     briefs_api_briefs_get: {
         parameters: {
             query?: never;

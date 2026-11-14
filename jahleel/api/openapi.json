@@ -5,6 +5,90 @@
   "version": "0.1.0"
  },
  "paths": {
+  "/api/chat/setup/{slug}": {
+   "get": {
+    "tags": [
+     "chat"
+    ],
+    "summary": "Chat Setup",
+    "operationId": "chat_setup_api_chat_setup__slug__get",
+    "parameters": [
+     {
+      "name": "slug",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Slug"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ChatSetup"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/chat/answer": {
+   "post": {
+    "tags": [
+     "chat"
+    ],
+    "summary": "Chat Answer",
+    "description": "A question about one site, answered from its brief and web search. See jahleel/api/chat/README.md.",
+    "operationId": "chat_answer_api_chat_answer_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ChatRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ChatAnswer"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/briefs": {
    "get": {
     "summary": "Briefs",
@@ -285,6 +369,81 @@
     ],
     "title": "BriefListing"
    },
+   "BriefSource": {
+    "properties": {
+     "type": {
+      "type": "string",
+      "enum": [
+       "public_record",
+       "requirement",
+       "lot_facts",
+       "dataset_count"
+      ],
+      "title": "Type"
+     },
+     "ref": {
+      "type": "string",
+      "title": "Ref"
+     },
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "detail": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Detail"
+     },
+     "date": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Date"
+     },
+     "bbl": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Bbl"
+     },
+     "url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Url"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "type",
+     "ref",
+     "label"
+    ],
+    "title": "BriefSource",
+    "description": "An item of the brief. Its link is the brief's own, never one the model wrote."
+   },
    "Building": {
     "properties": {
      "bin": {
@@ -396,6 +555,242 @@
      "open_gap"
     ],
     "title": "BuildingApplies"
+   },
+   "ChatAnswer": {
+    "properties": {
+     "mode": {
+      "type": "string",
+      "enum": [
+       "live",
+       "saved",
+       "unavailable"
+      ],
+      "title": "Mode",
+      "description": "live: a model answered now. saved: an example written ahead of time, checked against this brief. unavailable: no live answer; `examples` lists what can be opened."
+     },
+     "question": {
+      "type": "string",
+      "title": "Question"
+     },
+     "parts": {
+      "items": {
+       "oneOf": [
+        {
+         "$ref": "#/components/schemas/RecordPart"
+        },
+        {
+         "$ref": "#/components/schemas/LeadPart"
+        },
+        {
+         "$ref": "#/components/schemas/NotFoundPart"
+        },
+        {
+         "$ref": "#/components/schemas/UnknownPart"
+        },
+        {
+         "$ref": "#/components/schemas/NoticePart"
+        }
+       ],
+       "discriminator": {
+        "propertyName": "kind",
+        "mapping": {
+         "lead": "#/components/schemas/LeadPart",
+         "not_found": "#/components/schemas/NotFoundPart",
+         "notice": "#/components/schemas/NoticePart",
+         "record": "#/components/schemas/RecordPart",
+         "unknown": "#/components/schemas/UnknownPart"
+        }
+       }
+      },
+      "type": "array",
+      "title": "Parts"
+     },
+     "plain_text": {
+      "type": "string",
+      "title": "Plain Text",
+      "description": "The parts as one text, each prefixed by where it came from. For a voice client."
+     },
+     "as_of": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "As Of"
+     },
+     "web_search": {
+      "type": "string",
+      "enum": [
+       "used",
+       "not_used",
+       "off_as_of",
+       "off"
+      ],
+      "title": "Web Search"
+     },
+     "examples": {
+      "items": {
+       "$ref": "#/components/schemas/ExampleQuestion"
+      },
+      "type": "array",
+      "title": "Examples"
+     },
+     "usage": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ChatUsage"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "mode",
+     "question",
+     "parts",
+     "plain_text",
+     "web_search"
+    ],
+    "title": "ChatAnswer"
+   },
+   "ChatRequest": {
+    "properties": {
+     "slug": {
+      "type": "string",
+      "maxLength": 80,
+      "title": "Slug"
+     },
+     "project_type": {
+      "type": "string",
+      "enum": [
+       "new_building",
+       "renovation",
+       "excavation_next_to_existing"
+      ],
+      "title": "Project Type",
+      "default": "excavation_next_to_existing"
+     },
+     "as_of": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "As Of",
+      "description": "The page's as-of day: nothing dated on or after it is used."
+     },
+     "history": {
+      "items": {
+       "$ref": "#/components/schemas/Exchange"
+      },
+      "type": "array",
+      "maxItems": 8,
+      "title": "History"
+     },
+     "question": {
+      "type": "string",
+      "maxLength": 1000,
+      "title": "Question",
+      "default": ""
+     },
+     "example_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 60
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Example Id",
+      "description": "Ask for a saved example instead of a live answer."
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "slug"
+    ],
+    "title": "ChatRequest",
+    "description": "Over any limit the request is refused (HTTP 422), never cut to fit."
+   },
+   "ChatSetup": {
+    "properties": {
+     "live": {
+      "type": "boolean",
+      "title": "Live"
+     },
+     "examples": {
+      "items": {
+       "$ref": "#/components/schemas/ExampleQuestion"
+      },
+      "type": "array",
+      "title": "Examples"
+     },
+     "max_question_chars": {
+      "type": "integer",
+      "title": "Max Question Chars",
+      "default": 1000
+     },
+     "max_earlier_exchanges": {
+      "type": "integer",
+      "title": "Max Earlier Exchanges",
+      "default": 8
+     },
+     "max_history_chars": {
+      "type": "integer",
+      "title": "Max History Chars",
+      "default": 12000
+     }
+    },
+    "type": "object",
+    "required": [
+     "live",
+     "examples"
+    ],
+    "title": "ChatSetup",
+    "description": "What a client needs before the first question."
+   },
+   "ChatUsage": {
+    "properties": {
+     "model": {
+      "type": "string",
+      "title": "Model"
+     },
+     "input_tokens": {
+      "type": "integer",
+      "title": "Input Tokens",
+      "default": 0
+     },
+     "output_tokens": {
+      "type": "integer",
+      "title": "Output Tokens",
+      "default": 0
+     },
+     "web_searches": {
+      "type": "integer",
+      "title": "Web Searches",
+      "default": 0
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "model"
+    ],
+    "title": "ChatUsage"
    },
    "ChecklistRow": {
     "properties": {
@@ -614,6 +1009,48 @@
     ],
     "title": "DatasetStatus"
    },
+   "ExampleQuestion": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "question": {
+      "type": "string",
+      "title": "Question"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "id",
+     "question"
+    ],
+    "title": "ExampleQuestion"
+   },
+   "Exchange": {
+    "properties": {
+     "question": {
+      "type": "string",
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Question"
+     },
+     "answer": {
+      "type": "string",
+      "maxLength": 4000,
+      "title": "Answer"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "question",
+     "answer"
+    ],
+    "title": "Exchange",
+    "description": "One earlier question and the text of the answer the reader saw."
+   },
    "HTTPValidationError": {
     "properties": {
      "detail": {
@@ -700,6 +1137,50 @@
     ],
     "title": "Lead",
     "description": "A document a public source reports and nobody here has read. Never proof."
+   },
+   "LeadPart": {
+    "properties": {
+     "kind": {
+      "type": "string",
+      "const": "lead",
+      "title": "Kind",
+      "default": "lead"
+     },
+     "text": {
+      "type": "string",
+      "title": "Text"
+     },
+     "sources": {
+      "items": {
+       "oneOf": [
+        {
+         "$ref": "#/components/schemas/WebSource"
+        },
+        {
+         "$ref": "#/components/schemas/ReportedSource"
+        }
+       ],
+       "discriminator": {
+        "propertyName": "type",
+        "mapping": {
+         "reported_document": "#/components/schemas/ReportedSource",
+         "web_result": "#/components/schemas/WebSource"
+        }
+       }
+      },
+      "type": "array",
+      "minItems": 1,
+      "title": "Sources"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "text",
+     "sources"
+    ],
+    "title": "LeadPart",
+    "description": "From the web or a reported document. Not checked by us; never evidence."
    },
    "Lot": {
     "properties": {
@@ -901,6 +1382,77 @@
     "title": "LotFacts",
     "description": "From PLUTO, which can lag a demolition or a collapse."
    },
+   "NotFoundPart": {
+    "properties": {
+     "kind": {
+      "type": "string",
+      "const": "not_found",
+      "title": "Kind",
+      "default": "not_found"
+     },
+     "text": {
+      "type": "string",
+      "title": "Text"
+     },
+     "queried": {
+      "items": {
+       "$ref": "#/components/schemas/QueriedDataset"
+      },
+      "type": "array",
+      "minItems": 1,
+      "title": "Queried"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "text",
+     "queried"
+    ],
+    "title": "NotFoundPart",
+    "description": "Queried and nothing found, with what was queried named."
+   },
+   "NoticePart": {
+    "properties": {
+     "kind": {
+      "type": "string",
+      "const": "notice",
+      "title": "Kind",
+      "default": "notice"
+     },
+     "code": {
+      "type": "string",
+      "enum": [
+       "not_a_determination",
+       "names_withheld",
+       "cause_not_established",
+       "out_of_scope",
+       "status_is_todays",
+       "complaints_overlap",
+       "web_off_as_of",
+       "held_back",
+       "after_as_of",
+       "no_answer",
+       "saved_example",
+       "live_off",
+       "live_failed"
+      ],
+      "title": "Code"
+     },
+     "text": {
+      "type": "string",
+      "title": "Text"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "code",
+     "text"
+    ],
+    "title": "NoticePart",
+    "description": "A status line the server wrote. The model can ask for one by code; it cannot word one."
+   },
    "Precedent": {
     "properties": {
      "id": {
@@ -1086,6 +1638,77 @@
     ],
     "title": "PublicRecord"
    },
+   "QueriedDataset": {
+    "properties": {
+     "key": {
+      "type": "string",
+      "title": "Key"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "bbl": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Bbl"
+     },
+     "url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Url"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "key",
+     "name"
+    ],
+    "title": "QueriedDataset"
+   },
+   "RecordPart": {
+    "properties": {
+     "kind": {
+      "type": "string",
+      "const": "record",
+      "title": "Kind",
+      "default": "record"
+     },
+     "text": {
+      "type": "string",
+      "title": "Text"
+     },
+     "sources": {
+      "items": {
+       "$ref": "#/components/schemas/BriefSource"
+      },
+      "type": "array",
+      "minItems": 1,
+      "title": "Sources"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "text",
+     "sources"
+    ],
+    "title": "RecordPart",
+    "description": "Rests on the brief: public records, checklist rows, PLUTO lot facts or a dataset count."
+   },
    "RelatedFilings": {
     "properties": {
      "status": {
@@ -1127,6 +1750,70 @@
     ],
     "title": "RelatedRecords",
     "description": "Records beside a row. They are not its proof."
+   },
+   "ReportedSource": {
+    "properties": {
+     "type": {
+      "type": "string",
+      "const": "reported_document",
+      "title": "Type",
+      "default": "reported_document"
+     },
+     "ref": {
+      "type": "string",
+      "title": "Ref"
+     },
+     "reported_by": {
+      "type": "string",
+      "title": "Reported By"
+     },
+     "document": {
+      "type": "string",
+      "title": "Document"
+     },
+     "url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Url"
+     },
+     "reported_on": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Reported On"
+     },
+     "document_date": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Document Date"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "ref",
+     "reported_by",
+     "document"
+    ],
+    "title": "ReportedSource",
+    "description": "A document a public source reports and nobody here has read (a lead already in the brief)."
    },
    "RowProof": {
     "properties": {
@@ -1181,6 +1868,36 @@
     "title": "RowProof",
     "description": "None of these statuses is 'verified'; a lead never closes a gap."
    },
+   "UnknownPart": {
+    "properties": {
+     "kind": {
+      "type": "string",
+      "const": "unknown",
+      "title": "Kind",
+      "default": "unknown"
+     },
+     "text": {
+      "type": "string",
+      "title": "Text"
+     },
+     "queried": {
+      "items": {
+       "$ref": "#/components/schemas/QueriedDataset"
+      },
+      "type": "array",
+      "minItems": 1,
+      "title": "Queried"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "text",
+     "queried"
+    ],
+    "title": "UnknownPart",
+    "description": "A query failed or was skipped: nothing is known. Never zero."
+   },
    "ValidationError": {
     "properties": {
      "loc": {
@@ -1220,6 +1937,49 @@
      "type"
     ],
     "title": "ValidationError"
+   },
+   "WebSource": {
+    "properties": {
+     "type": {
+      "type": "string",
+      "const": "web_result",
+      "title": "Type",
+      "default": "web_result"
+     },
+     "url": {
+      "type": "string",
+      "title": "Url"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "page_age": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Page Age"
+     },
+     "official": {
+      "type": "boolean",
+      "title": "Official",
+      "description": "The host is a city, state or federal government site. A hint about the host only."
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "url",
+     "title",
+     "official"
+    ],
+    "title": "WebSource",
+    "description": "A web search result the model received in this call."
    }
   }
  }

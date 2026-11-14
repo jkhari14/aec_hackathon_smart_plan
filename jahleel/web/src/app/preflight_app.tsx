@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { recordsAsOf } from "../brief/brief_as_of";
 import { loadBrief, loadBriefList } from "../brief/brief_load";
 import type { Brief, BriefListing, ProjectType } from "../brief/brief_types";
+import { ChatPanel } from "../features/chat/chat_panel";
 import { ChecklistLanes } from "../features/checklist/checklist_lanes";
 import { BriefExportButtons } from "../features/export/brief_export_buttons";
 import { NeighborCards } from "../features/neighbors/neighbor_cards";
@@ -83,6 +84,7 @@ export function PreflightApp() {
               capped={brief.site.datasets.filter((d) => d.status === "ok" && d.truncated).map((d) => d.name)} />
           </div>
           <div className="space-y-4">
+            <ChatPanel brief={brief} projectType={projectType} asOf={asOf} offline={offline} />
             <div className="flex items-center justify-between">
               <h2 className="font-semibold">Checklist by party</h2>
               <label className="flex items-center gap-1 text-xs">
