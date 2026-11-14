@@ -30,6 +30,10 @@ NYC Open Data app token for higher rate limits.
    [data notes](../docs/data_and_code_notes.md) list their IDs and traps.
 5. **Stop-work mentions.** These are violation records and 311 resolutions whose own text
    mentions a stop-work order. A 311 resolution is dated by when DOB recorded it.
+6. **DOB's disposition code table** (`6v9u-ndjg`), once per pull, kept as printed with the date
+   Open Data says its rows last changed. That date is 2017-02-08, and two codes in these pulls
+   (AF and H8) are missing from it, probably because they are newer. The checklist decodes
+   complaints with it.
 
 ## Output shape
 
@@ -39,6 +43,8 @@ NYC Open Data app token for higher rate limits.
   "touching_lots_lookup": {status, count},
   "site":          LOT,
   "touching_lots": [LOT, ...],
+  "reference_tables": {"dob_complaint_dispositions":
+                       {status, dataset_id, rows_updated_at, count, query_url, records: [{code, disposition}]}},
   "sources": {key: {name, dataset_id, url}}, "caveats": [...]
 }
 LOT = {

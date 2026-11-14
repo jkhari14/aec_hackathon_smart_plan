@@ -18,6 +18,7 @@ from pathlib import Path
 from data_pull import lot_neighbors, soda_client
 from data_pull.address_lookup import AddressLookupError, lookup_address
 from data_pull.lot_records import DATASETS, pull_lot
+from data_pull.reference_tables import DISPOSITION_CODES, pull_disposition_codes
 from data_pull.stop_work_mentions import find_stop_work_mentions
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -36,6 +37,8 @@ CAVEATS = [
     "never add their counts. 311 rows with no bbl, and rows before 2020, are missed.",
     "DOB violations filed under a letter borough code (a few thousand of 2.5 million rows) "
     "are found only through a BIN.",
+    "reference_tables hold DOB's code tables as printed. The disposition table was last updated "
+    "in 2017 (see rows_updated_at), and codes it lacks are shown as gaps, never guessed.",
 ]
 
 
@@ -49,6 +52,8 @@ def _sources() -> dict:
                                    "url": f"https://data.cityofnewyork.us/d/{lot_neighbors.TAX_LOT_POLYGONS}"}
     sources["building_footprints"] = {"name": "Building footprints", "dataset_id": lot_neighbors.BUILDING_FOOTPRINTS,
                                       "url": f"https://data.cityofnewyork.us/d/{lot_neighbors.BUILDING_FOOTPRINTS}"}
+    sources["dob_complaint_dispositions"] = {"name": "DOB complaint disposition codes", "dataset_id": DISPOSITION_CODES,
+                                             "url": f"https://data.cityofnewyork.us/d/{DISPOSITION_CODES}"}
     sources["geosearch"] = {"name": "NYC Planning GeoSearch", "url": "https://geosearch.planninglabs.nyc/"}
     return sources
 
@@ -100,6 +105,7 @@ def pull_site(address: str | None = None, bbl: str | None = None) -> dict:
         "touching_lots_lookup": neighbor_status,
         "site": lots[0],
         "touching_lots": lots[1:],
+        "reference_tables": {"dob_complaint_dispositions": pull_disposition_codes()},
         "sources": _sources(),
         "caveats": CAVEATS,
     }

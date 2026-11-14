@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+import io
 import unittest
 from unittest import mock
 
-from data_pull import lot_neighbors, lot_records, soda_client
+from data_pull import lot_neighbors, lot_records, reference_tables, soda_client
 from data_pull.stop_work_mentions import find_stop_work_mentions
 
 BBL = "3052110073"
@@ -101,6 +102,25 @@ class PullLotTests(unittest.TestCase):
         with mock.patch.object(soda_client, "query", side_effect=fake):
             lot_records.pull_lot(BBL, seed_bins=[])
         self.assertEqual([p["where"] for d, p in calls if d == "erm2-nwe9"], [f"agency='DOB' AND bbl='{BBL}'"])
+
+
+class ReferenceTableTests(unittest.TestCase):
+    def _meta(self, body: bytes):
+        response = mock.MagicMock()
+        response.__enter__.return_value = io.BytesIO(body)
+        return mock.patch.object(reference_tables.urllib.request, "urlopen", return_value=response)
+
+    def test_disposition_rows_are_kept_as_printed_and_the_table_is_dated(self):
+        rows = [{"code": "A3", "disposition": "FULL STOP WORK ORDER SERVED F"}]
+        with mock.patch.object(soda_client, "query", return_value=(rows, "u")), self._meta(b'{"rowsUpdatedAt": 1486578625}'):
+            table = reference_tables.pull_disposition_codes()
+        self.assertEqual((table["status"], table["records"], table["rows_updated_at"]), ("ok", rows, "2017-02-08"))
+
+    def test_a_failed_query_is_an_error_and_an_unreadable_date_is_none(self):
+        with mock.patch.object(soda_client, "query", side_effect=soda_client.SodaQueryError("HTTP 503")):
+            self.assertEqual(reference_tables.pull_disposition_codes()["status"], "error")
+        with mock.patch.object(soda_client, "query", return_value=([], "u")), self._meta(b"not json"):
+            self.assertIsNone(reference_tables.pull_disposition_codes()["rows_updated_at"])
 
 
 class StopWorkMentionTests(unittest.TestCase):

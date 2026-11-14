@@ -71,7 +71,9 @@ facts only, and nothing here establishes a cause.
     and May 2026. This is the "98 violations" in the news, and they are HPD's, not DOB's.
 - **2625 Bedford Ave** (BBL 3052110074, the next lot on the block):
   - DOB NOW job B01330433, a new building. Filing `-S3` covers earth work and foundation; it was
-    approved 2026-06-03 and now reads "On Hold - Pending Withdrawal of Special Inspector".
+    approved 2026-06-03. Its status now reads "On Hold – Administrative Action", dated
+    2026-11-13, like seven other filings on the site. An earlier pull on 2026-11-14 showed "On Hold
+    - Pending Withdrawal of Special Inspector".
   - ECB, 2026-03-20: work not as approved, with overhead protection for adjacent properties missing
     during demolition. Resolved.
   - ECB, 2026-04-23: work continued while a stop-work order was in effect. Resolved.
