@@ -1,0 +1,150 @@
+# PreFlight
+ 
+> Enter an NYC address and project type. PreFlight pulls the site's and neighbors' DOB history, matches it against past failures on similar projects, and generates a roasted, discipline-assigned risk checklist before filing and before excavation.
+ 
+**Status:** Hackathon build (AEC Tech NYC 2026). Working name, subject to change.
+**Deadline:** Sunday 12:00 pm
+ 
+---
+ 
+## Table of Contents
+- [Problem](#problem)
+- [Solution](#solution)
+- [MVP Scope](#mvp-scope)
+- [Users](#users)
+- [Data](#data)
+- [Architecture](#architecture)
+- [Roast Layer](#roast-layer)
+- [Team](#team)
+- [Timeline](#timeline)
+- [Demo Script](#demo-script)
+- [Judging Fit](#judging-fit)
+- [Risks](#risks)
+- [Getting Started](#getting-started)
+- [Disclaimer](#disclaimer)
+- [License](#license)
+---
+ 
+## Problem
+Building failures in NYC are rarely one party's mistake. They happen when architects, engineers, geotechs, contractors, and DOB each miss something, because critical information about a site, its neighbors, and similar past failures is scattered across slow, siloed systems. Teams don't know what to watch for until it's too late.
+ 
+## Solution
+A shared, browser-based risk and coordination tool that:
+1. Pulls DOB history for a site and its adjacent buildings
+2. Matches the project against a library of past NYC failures
+3. Generates a project-specific checklist of coordination items, each assigned to a discipline
+4. Delivers every risk through a roast character, with a serious explanation underneath
+## MVP Scope
+ 
+### In
+- [ ] Address lookup returning site and adjacent buildings' violations, complaints, and stop work orders
+- [ ] Project inputs: type (new build, renovation, excavation adjacent to existing), building age, foundation type if known
+- [ ] Curated precedent library of 10 to 20 NYC failures, tagged by building type, conditions, and root cause
+- [ ] Risk checklist from matching inputs plus site data against precedents, each item assigned to a discipline
+- [ ] Map view of site, neighbors, and nearby precedent incidents
+- [ ] Roast layer with serious explanation under every item
+### Out (Roadmap)
+- Plan examiner objection prediction
+- Scanned historic plan analysis
+- Early structural schemes for massing options
+- DOB-side portal
+## Users
+| Type | Who |
+|---|---|
+| Primary | Applicant of record (architect) and consultants |
+| Secondary | Developer or owner doing due diligence |
+| Future | DOB plan examiners and inspectors |
+ 
+## Data
+| Source | Use | Status |
+|---|---|---|
+| NYC Open Data DOB datasets (violations, ECB violations, complaints, job filings, stop work orders) | Site and neighbor history | ⚠️ Verify dataset names, API access, and fields in hour one |
+| NYC building footprints / PLUTO | Building age, lot, neighbors, map | ⚠️ Verify |
+| Curated precedents | Failure library | Manual research from news and public reports |
+| Recent Brooklyn collapse | Hero demo case | Publicly reported facts only, cited |
+ 
+**Fallback:** cache JSON for 3 to 5 demo addresses so the demo never depends on live API calls.
+ 
+## Architecture
+```
+[ Web UI + Map ]  ->  [ API Server ]  ->  [ NYC Open Data ]
+                            |
+                     [ Risk Engine ]
+                       |         |
+              [ Rules: precedent   [ LLM: roast +
+                tag matching ]       explanation ]
+```
+ 
+| Layer | Tech |
+|---|---|
+| Front end | React or Next.js, MapLibre or Leaflet |
+| Back end | Python (FastAPI) or Node |
+| Risk engine | Rules decide the risks; LLM only phrases them, so output stays grounded |
+| Voice (stretch) | ElevenLabs or browser speech API |
+ 
+## Roast Layer
+- Roasts target the plan, never the person
+- Every roast has a serious line below it: the risk, the precedent, and who must act
+- Intensity dial: **Mentor**, **Senior Examiner**, **DOB at 4:59 pm on Friday**
+- Life safety items (for example, excavation next to unreinforced masonry) default to serious tone first, roast second
+## Team
+| Area | Lead |
+|---|---|
+| Problem framing, pitch, business case | Ethny |
+| Precedent research and risk tagging | Hongyu |
+| DOB data and permitting logic | Jahleel, Michelle |
+| Code review and objection angle | Jacob |
+| Front end, map, interoperability | Shandon |
+| Roast character and UX | Camilo |
+| Voice and agent | Jaelil |
+| Architecture and integration | Rishabh |
+ 
+*Proposed roles, confirm with team.*
+ 
+## Timeline
+| When | Milestone |
+|---|---|
+| Sat 1:30 to 3:00 pm | Lock scope, confirm data access, repo setup, roles |
+| Sat 3:00 to 7:00 pm | Data pipeline for demo addresses, precedent library v1, UI skeleton and map |
+| Sat 7:00 to 11:00 pm | Risk engine matching, checklist UI, roast generation |
+| Sat 11:00 pm to Sun 3:00 am | Integration, cache demo data, stretch: voice |
+| Sun 8:00 to 10:00 am | Bug fixes, README, deck |
+| Sun 10:00 to 11:30 am | Rehearse demo three times |
+| **Sun 12:00 pm** | **Submit** |
+ 
+## Demo Script
+**2 minutes total**
+1. **Hook (20 s):** The Brooklyn collapse. Every party said they didn't know.
+2. **Input (20 s):** Enter an address next to an old masonry building, select "excavation."
+3. **Reveal (40 s):** Map lights up with neighbor violations and nearby precedents. Checklist appears, assigned to geotech, structural, contractor.
+4. **Roast (20 s):** Character delivers the top risk out loud, serious explanation underneath.
+5. **Close (20 s):** Open source on GitHub, roadmap to objection prediction.
+## Judging Fit
+| Criterion | How we hit it |
+|---|---|
+| Technology | Live city data, precedent matching, grounded LLM generation, map, optional voice |
+| Innovation | Turns scattered failure history into predictive coordination, delivered memorably |
+| Open Source | Public repo, open precedent library others can extend |
+ 
+## Risks
+| Risk | Mitigation |
+|---|---|
+| Data access | Check first, cache everything |
+| Precedent accuracy | Cite every case; label causes "as publicly reported" where investigations are ongoing |
+| Liability | Position as coordination support, not a safety or compliance determination |
+| Scope creep | Extra ideas go on the roadmap |
+ 
+## Getting Started
+*To be filled in once the stack is set.*
+```bash
+git clone https://github.com/YOUR-USERNAME/preflight.git
+cd preflight
+# install and run steps here
+```
+ 
+## Disclaimer
+PreFlight is a research and coordination aid. It is not a code compliance, structural, or safety determination. Always consult licensed professionals and the authority having jurisdiction.
+ 
+## License
+MIT (add LICENSE file before making the repo public)
+ 
