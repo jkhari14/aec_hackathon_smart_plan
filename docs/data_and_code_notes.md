@@ -1,7 +1,7 @@
 # PreFlight: data and code notes
 
 Written as a companion to the team's first plan, README-Camilo (deleted in 2edb488 and kept in the
-repo's history). The current plan is [foresite_build_plan.md](foresite_build_plan.md). This file:
+repo's history). The current plan is [foresite_build_plan.md](../planning/foresite_build_plan.md). This file:
 
 - answers its "⚠️ Verify" data items,
 - gives the hero demo case's facts,
@@ -89,7 +89,7 @@ what was knowable, by whom, and when. It does not answer who is to blame.
 
 ## Decisions from the team meetings (2026-11-14)
 
-From the two [brainstorm transcripts](../transcripts/), and what they mean for the data and the checklist:
+From the two [brainstorm transcripts](../planning/transcripts/), and what they mean for the data and the checklist:
 
 - **Neutral framing.** Public facts only, an ongoing investigation called ongoing, no blame, and no
   claim that a collapse could have been prevented.
