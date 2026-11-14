@@ -148,6 +148,13 @@ export interface components {
              * @default []
              */
             precedents: components["schemas"]["Precedent"][];
+            /**
+             * Complaint Code Keys
+             * @description dob_complaint_categories and dob_complaint_dispositions: each key's source.
+             */
+            complaint_code_keys?: {
+                [key: string]: components["schemas"]["ComplaintCodeKey"];
+            };
             /** Caveats */
             caveats: string[];
         };
@@ -383,6 +390,87 @@ export interface components {
             open_gaps: number;
             /** Inputs Needed */
             inputs_needed: string[];
+        };
+        /**
+         * ComplaintCategory
+         * @description A complaint category code's meaning, from DOB's printed list imported by hand. Never a public-record pull.
+         */
+        ComplaintCategory: {
+            /**
+             * Kind
+             * @default manual_import
+             * @constant
+             */
+            kind: "manual_import";
+            /** Code */
+            code?: string | null;
+            /**
+             * Status
+             * @description Never 'ok'. imported_unchecked: nobody has compared the import with DOB's list a second time. not_in_key: the list lacks the code, a gap and never a guess.
+             * @enum {string}
+             */
+            status: "imported_unchecked" | "imported_checked" | "not_in_key" | "key_unavailable" | "not_recorded";
+            /** Description */
+            description?: string | null;
+            /** Reason */
+            reason?: string | null;
+        };
+        /**
+         * ComplaintCodeKey
+         * @description Where one complaint-code key came from, and the codes it lacked among the records the checklist read.
+         */
+        ComplaintCodeKey: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "manual_import" | "public_record";
+            /** Status */
+            status: string;
+            /** Name */
+            name?: string | null;
+            /** Source Url */
+            source_url?: string | null;
+            /** Document Date Note */
+            document_date_note?: string | null;
+            /** Rows Updated At */
+            rows_updated_at?: string | null;
+            /** Reason */
+            reason?: string | null;
+            /**
+             * Not Found
+             * @default []
+             */
+            not_found: string[];
+        };
+        /**
+         * ComplaintDisposition
+         * @description DOB's disposition of a complaint, its code read from the Open Data table 6v9u-ndjg.
+         */
+        ComplaintDisposition: {
+            /**
+             * Kind
+             * @default public_record
+             * @constant
+             */
+            kind: "public_record";
+            /** Code */
+            code?: string | null;
+            /**
+             * Date
+             * @description ISO date of the disposition; None if undated. An as-of view shows it only from the day after.
+             */
+            date?: string | null;
+            /**
+             * Status
+             * @description not_in_table: the table lacks the code, a gap and never a guess.
+             * @enum {string}
+             */
+            status: "ok" | "not_in_table" | "key_unavailable" | "not_recorded";
+            /** Description */
+            description?: string | null;
+            /** Reason */
+            reason?: string | null;
         };
         /** DatasetStatus */
         DatasetStatus: {
@@ -637,6 +725,10 @@ export interface components {
              * @description ISO date DOB recorded `resolution`; None if undated. An as-of view shows it only from the day after.
              */
             resolution_recorded?: string | null;
+            /** @description DOB complaints only. */
+            complaint_category?: components["schemas"]["ComplaintCategory"] | null;
+            /** @description DOB complaints only. */
+            complaint_disposition?: components["schemas"]["ComplaintDisposition"] | null;
         };
         /** QueriedDataset */
         QueriedDataset: {

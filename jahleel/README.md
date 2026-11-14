@@ -68,8 +68,15 @@ jahleel/
 - **As-of means "dated before that day"**, the same rule as the engine. Status is today's, so the
   screen never says a record was open on that date.
 - **Text written later shows only once it existed.** A stop-work mention, DOB's resolution of
-  a 311 request, or a filing's approval is dated when it was written, which can be weeks after the record's own date.
-  The replay shows the record but hides that text until its own date.
+  a 311 request, a complaint's disposition, or a filing's approval is dated when it was written, which can be weeks
+  after the record's own date. The replay shows the record but hides that text until its own date.
+- **A complaint code's meaning names its source.** The category comes from DOB's printed list, typed in by
+  hand and not yet checked by a second person, so it sits on a dashed edge and never inside the record's own text. The
+  disposition comes from DOB's code table on Open Data. A code either one lacks shows as missing from it, never
+  guessed. Both come from the checklist engine (`complaint_category`, `complaint_disposition` and
+  `complaint_code_keys` in the brief).
+- **A long record list says it is cut.** It shows the newest 40 and says how many more there are. Clicking a touching
+  lot opens its own record list.
 - **311 requests and DOB complaints are never added.** The same complaint can be in both and they
   share no key, so the neighbor cards count 311 requests apart and the record list says so.
 - **Life-safety rows are tagged** (the engine's flag: the duty protects life safety).

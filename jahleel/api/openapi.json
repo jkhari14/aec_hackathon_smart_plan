@@ -317,6 +317,14 @@
       "title": "Precedents",
       "default": []
      },
+     "complaint_code_keys": {
+      "additionalProperties": {
+       "$ref": "#/components/schemas/ComplaintCodeKey"
+      },
+      "type": "object",
+      "title": "Complaint Code Keys",
+      "description": "dob_complaint_categories and dob_complaint_dispositions: each key's source."
+     },
      "caveats": {
       "items": {
        "type": "string"
@@ -940,6 +948,225 @@
      "inputs_needed"
     ],
     "title": "ChecklistSummary"
+   },
+   "ComplaintCategory": {
+    "properties": {
+     "kind": {
+      "type": "string",
+      "const": "manual_import",
+      "title": "Kind",
+      "default": "manual_import"
+     },
+     "code": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Code"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "imported_unchecked",
+       "imported_checked",
+       "not_in_key",
+       "key_unavailable",
+       "not_recorded"
+      ],
+      "title": "Status",
+      "description": "Never 'ok'. imported_unchecked: nobody has compared the import with DOB's list a second time. not_in_key: the list lacks the code, a gap and never a guess."
+     },
+     "description": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Description"
+     },
+     "reason": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Reason"
+     }
+    },
+    "type": "object",
+    "required": [
+     "status"
+    ],
+    "title": "ComplaintCategory",
+    "description": "A complaint category code's meaning, from DOB's printed list imported by hand. Never a public-record pull."
+   },
+   "ComplaintCodeKey": {
+    "properties": {
+     "kind": {
+      "type": "string",
+      "enum": [
+       "manual_import",
+       "public_record"
+      ],
+      "title": "Kind"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "name": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Name"
+     },
+     "source_url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Source Url"
+     },
+     "document_date_note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Document Date Note"
+     },
+     "rows_updated_at": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Rows Updated At"
+     },
+     "reason": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Reason"
+     },
+     "not_found": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Not Found",
+      "default": []
+     }
+    },
+    "type": "object",
+    "required": [
+     "kind",
+     "status"
+    ],
+    "title": "ComplaintCodeKey",
+    "description": "Where one complaint-code key came from, and the codes it lacked among the records the checklist read."
+   },
+   "ComplaintDisposition": {
+    "properties": {
+     "kind": {
+      "type": "string",
+      "const": "public_record",
+      "title": "Kind",
+      "default": "public_record"
+     },
+     "code": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Code"
+     },
+     "date": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Date",
+      "description": "ISO date of the disposition; None if undated. An as-of view shows it only from the day after."
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "ok",
+       "not_in_table",
+       "key_unavailable",
+       "not_recorded"
+      ],
+      "title": "Status",
+      "description": "not_in_table: the table lacks the code, a gap and never a guess."
+     },
+     "description": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Description"
+     },
+     "reason": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Reason"
+     }
+    },
+    "type": "object",
+    "required": [
+     "status"
+    ],
+    "title": "ComplaintDisposition",
+    "description": "DOB's disposition of a complaint, its code read from the Open Data table 6v9u-ndjg."
    },
    "DatasetStatus": {
     "properties": {
@@ -1626,6 +1853,28 @@
       ],
       "title": "Resolution Recorded",
       "description": "ISO date DOB recorded `resolution`; None if undated. An as-of view shows it only from the day after."
+     },
+     "complaint_category": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ComplaintCategory"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "description": "DOB complaints only."
+     },
+     "complaint_disposition": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ComplaintDisposition"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "description": "DOB complaints only."
      }
     },
     "type": "object",

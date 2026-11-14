@@ -75,6 +75,44 @@ class Lot(BaseModel):
     buildings: list[Building] = []
 
 
+class ComplaintCategory(BaseModel):
+    """A complaint category code's meaning, from DOB's printed list imported by hand. Never a public-record pull."""
+
+    kind: Literal["manual_import"] = "manual_import"
+    code: Optional[str] = None
+    status: Literal["imported_unchecked", "imported_checked", "not_in_key", "key_unavailable", "not_recorded"] = Field(
+        description="Never 'ok'. imported_unchecked: nobody has compared the import with DOB's list a second time. "
+        "not_in_key: the list lacks the code, a gap and never a guess.")
+    description: Optional[str] = None
+    reason: Optional[str] = None
+
+
+class ComplaintDisposition(BaseModel):
+    """DOB's disposition of a complaint, its code read from the Open Data table 6v9u-ndjg."""
+
+    kind: Literal["public_record"] = "public_record"
+    code: Optional[str] = None
+    date: Optional[str] = Field(None, description="ISO date of the disposition; None if undated. An as-of view shows "
+                                "it only from the day after.")
+    status: Literal["ok", "not_in_table", "key_unavailable", "not_recorded"] = Field(
+        description="not_in_table: the table lacks the code, a gap and never a guess.")
+    description: Optional[str] = None
+    reason: Optional[str] = None
+
+
+class ComplaintCodeKey(BaseModel):
+    """Where one complaint-code key came from, and the codes it lacked among the records the checklist read."""
+
+    kind: Literal["manual_import", "public_record"]
+    status: str
+    name: Optional[str] = None
+    source_url: Optional[str] = None
+    document_date_note: Optional[str] = None
+    rows_updated_at: Optional[str] = None
+    reason: Optional[str] = None
+    not_found: list[str] = []
+
+
 class PublicRecord(BaseModel):
     id: str = Field(description='"<dataset_key>:<record_id>", unique within the brief.')
     dataset_key: str
@@ -97,6 +135,8 @@ class PublicRecord(BaseModel):
     resolution_recorded: Optional[str] = Field(
         None, description="ISO date DOB recorded `resolution`; None if undated. An as-of view shows it only "
         "from the day after.")
+    complaint_category: Optional[ComplaintCategory] = Field(None, description="DOB complaints only.")
+    complaint_disposition: Optional[ComplaintDisposition] = Field(None, description="DOB complaints only.")
 
 
 ApplyStatus = Literal["applies", "needs_input", "unknown", "set_by_dob", "does_not_apply"]
@@ -211,6 +251,8 @@ class Brief(BaseModel):
     checklist: list[ChecklistRow]
     checklist_summary: ChecklistSummary
     precedents: list[Precedent] = []
+    complaint_code_keys: dict[str, ComplaintCodeKey] = Field(
+        default_factory=dict, description="dob_complaint_categories and dob_complaint_dispositions: each key's source.")
     caveats: list[str]
 
 

@@ -3,7 +3,8 @@
 import re
 from typing import Optional
 
-from jahleel.api.brief.brief_models import PublicRecord
+from jahleel.api.brief.brief_models import ComplaintCategory, ComplaintDisposition, PublicRecord
+from checklist.complaint_codes import lot_complaints
 from checklist.record_dates import parse_record_date, record_date
 
 _SUMMARY_CHARS = 300
@@ -52,7 +53,8 @@ _FIELDS = {
     "dob_complaints": (
         "complaint_number",
         "status",
-        lambda r: f"Complaint category code {r.get('complaint_category', '?')} (DOB publishes the key separately).",
+        # The code's meaning sits beside it (complaint_category), never in the public-record summary.
+        lambda r: f"Complaint category code {r.get('complaint_category') or '?'}.",
     ),
     # Can repeat a dob_complaints row (no shared key): never add the two counts.
     "dob_311_requests": (
@@ -84,9 +86,24 @@ def _status(row: dict, field: str) -> Optional[str]:
     return status if status and status.lower() not in _NOT_A_STATUS else None
 
 
-def lot_records(lot: dict, sources: dict) -> list[PublicRecord]:
-    """Every counted record on one lot. Rows data_pull held back (another lot's) are left out."""
+def _complaint_codes(lot: dict, code_keys: Optional[tuple]) -> dict[str, tuple]:
+    """Record id -> (category, disposition), decoded by the checklist engine with no cutoff; readers apply as-of."""
+    if code_keys is None:
+        return {}
+    decoded = lot_complaints(lot, None, *code_keys)["records"]
+    return {f"dob_complaints:{str(r['complaint_number']).strip()}": (
+        ComplaintCategory.model_validate(r["category"]),
+        ComplaintDisposition.model_validate({**r["disposition"], "date": iso_date(r["disposition"].get("date"))}),
+    ) for r in decoded}
+
+
+def lot_records(lot: dict, sources: dict, code_keys: Optional[tuple] = None) -> list[PublicRecord]:
+    """Every counted record on one lot. Rows data_pull held back (another lot's) are left out.
+
+    `code_keys` is (category import, disposition table) from checklist.complaint_codes; None leaves codes undecoded.
+    """
     stop_work = _first_stop_work_mentions(lot)
+    complaint_codes = _complaint_codes(lot, code_keys)
     records = []
     for key, (id_field, status_field, summarize) in _FIELDS.items():
         pulled = lot["datasets"].get(key) or {}
@@ -99,6 +116,7 @@ def lot_records(lot: dict, sources: dict) -> list[PublicRecord]:
                 continue
             when = record_date(key, row)
             later_text = _clip(row.get(text_field) or "") if text_field else ""
+            category, disposition = complaint_codes.get(f"{key}:{record_id}", (None, None))
             records.append(
                 PublicRecord(
                     id=f"{key}:{record_id}",
@@ -115,6 +133,8 @@ def lot_records(lot: dict, sources: dict) -> list[PublicRecord]:
                     approved_on=iso_date(row.get(_APPROVED[key])) if key in _APPROVED else None,
                     resolution=later_text or None,
                     resolution_recorded=iso_date(row.get(text_date_field)) if later_text else None,
+                    complaint_category=category,
+                    complaint_disposition=disposition,
                 )
             )
     return records

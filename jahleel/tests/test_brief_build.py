@@ -4,9 +4,11 @@ import copy
 import unittest
 from datetime import date
 
+from pydantic import ValidationError
+
 from jahleel.api.brief import brief_build, brief_records
 from jahleel.api.brief.brief_build import build_brief
-from jahleel.api.brief.brief_models import Brief
+from jahleel.api.brief.brief_models import Brief, ComplaintCategory
 
 
 class BriefFromCacheTests(unittest.TestCase):
@@ -84,6 +86,40 @@ class LotFactsTests(unittest.TestCase):
             "ecb_violations": {"status": "ok", "count": 2}}}
         statuses = {d.key: d.truncated for d in brief_build._lot(lot, "site", {}, {}, []).datasets}
         self.assertEqual(statuses, {"dob_violations": True, "ecb_violations": False})
+
+
+class ComplaintCodeTests(unittest.TestCase):
+    def test_complaint_codes_are_decoded_each_with_its_own_source_kind(self):
+        brief = build_brief("2625-bedford-ave-brooklyn")
+        records = {r.id: r for r in brief.records}
+        adjacent = records["dob_complaints:3778633"]
+        self.assertEqual(adjacent.bbl, "3052110054")
+        self.assertEqual((adjacent.complaint_category.code, adjacent.complaint_category.kind), ("03", "manual_import"))
+        self.assertEqual(adjacent.complaint_category.status, "imported_unchecked")
+        self.assertEqual(adjacent.complaint_category.description, "Adjacent Buildings - Not Protected")
+        disposition = adjacent.complaint_disposition
+        self.assertEqual((disposition.code, disposition.date, disposition.kind), ("A8", "2020-12-02", "public_record"))
+        self.assertNotIn("Adjacent Buildings", adjacent.summary)
+        complaints = [r for r in brief.records if r.dataset_key == "dob_complaints"]
+        self.assertTrue(complaints and all(r.complaint_category and r.complaint_disposition for r in complaints))
+        self.assertTrue(all(r.complaint_category is None for r in brief.records if r.dataset_key != "dob_complaints"))
+
+    def test_a_code_the_key_lacks_keeps_its_code_and_reason(self):
+        brief = build_brief("2625-bedford-ave-brooklyn")
+        gaps = [r.complaint_category for r in brief.records if r.complaint_category and r.complaint_category.code == "7G"]
+        self.assertTrue(gaps)
+        self.assertTrue(all(g.status == "not_in_key" and g.description is None and g.reason for g in gaps))
+        keys = brief.complaint_code_keys
+        self.assertEqual(keys["dob_complaint_categories"].kind, "manual_import")
+        self.assertIn("eabe-havv", keys["dob_complaint_categories"].source_url)
+        self.assertIn("6v9u-ndjg", keys["dob_complaint_dispositions"].source_url)
+        self.assertEqual(keys["dob_complaint_dispositions"].not_found, ["AF", "H8"])
+
+    def test_an_imported_meaning_cannot_be_built_as_ok_or_as_a_public_record(self):
+        with self.assertRaises(ValidationError):
+            ComplaintCategory(code="03", status="ok")
+        with self.assertRaises(ValidationError):
+            ComplaintCategory(code="03", status="imported_unchecked", kind="public_record")
 
 
 class RecordTests(unittest.TestCase):

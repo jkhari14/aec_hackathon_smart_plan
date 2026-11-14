@@ -6,9 +6,11 @@ import re
 from datetime import date
 from typing import Optional
 
-from jahleel.api.brief.brief_models import Brief, Building, ChecklistRow, ChecklistSummary, DatasetStatus, Lot, LotFacts
+from jahleel.api.brief.brief_models import (Brief, Building, ChecklistRow, ChecklistSummary, ComplaintCodeKey,
+                                            DatasetStatus, Lot, LotFacts)
 from jahleel.api.brief.brief_records import lot_records
 from checklist.build_checklist import build as build_checklist
+from checklist.complaint_codes import category_key, disposition_key
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parents[3]
 FOLDER = pathlib.Path(__file__).resolve().parents[2]  # jahleel/
@@ -66,6 +68,11 @@ def _lot(lot: dict, role: str, sources: dict, geometry: dict, record_ids: list[s
     )
 
 
+def _code_key(meta: dict) -> ComplaintCodeKey:
+    # The engine names a dataset's page `url` and an imported document's `source_url`.
+    return ComplaintCodeKey.model_validate({**meta, "source_url": meta.get("source_url") or meta.get("url")})
+
+
 def list_slugs() -> list[str]:
     """Cached sites, in data/demo_addresses.json order (the excavation site first), then the rest."""
     demo_path = REPO_ROOT / "data" / "demo_addresses.json"
@@ -91,9 +98,10 @@ def build_brief(slug: str, project_type: str = "excavation_next_to_existing", as
     geometry = json.loads(geometry_path.read_text()) if geometry_path.exists() else {}
     sources = pulled.get("sources", {})
 
+    code_keys = (category_key()[0], disposition_key(pulled)[0])
     records, lots = [], []
     for lot, role in [(pulled["site"], "site")] + [(t, "touching") for t in pulled["touching_lots"]]:
-        lot_recs = lot_records(lot, sources)
+        lot_recs = lot_records(lot, sources, code_keys)
         records.extend(lot_recs)
         lots.append(_lot(lot, role, sources, geometry, [r.id for r in lot_recs]))
 
@@ -116,5 +124,6 @@ def build_brief(slug: str, project_type: str = "excavation_next_to_existing", as
         records=sorted(records, key=lambda r: r.date or "", reverse=True),
         checklist=[ChecklistRow(**row) for row in checklist["rows"]],
         checklist_summary=ChecklistSummary(**checklist["summary"]),
+        complaint_code_keys={key: _code_key(meta) for key, meta in (checklist.get("code_keys") or {}).items()},
         caveats=caveats,
     )

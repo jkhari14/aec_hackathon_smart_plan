@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { recordsAsOf } from "../brief/brief_as_of";
 import { loadBrief, loadBriefList } from "../brief/brief_load";
-import type { Brief, BriefListing, ProjectType } from "../brief/brief_types";
+import type { Brief, BriefListing, Lot, ProjectType } from "../brief/brief_types";
 import { ChatPanel } from "../features/chat/chat_panel";
 import { ChecklistLanes } from "../features/checklist/checklist_lanes";
 import { BriefExportButtons } from "../features/export/brief_export_buttons";
@@ -11,6 +11,11 @@ import { PrecedentList } from "../features/precedents/precedent_list";
 import { SiteMapView } from "../features/site_map/site_map_view";
 import { SiteRecordList } from "../features/site_record/site_record_list";
 import { SiteSearchBar } from "../features/site_search/site_search_bar";
+
+// Datasets that hit the row cap, so the list says its oldest records are missing.
+function cappedNames(lot: Lot): string[] {
+  return lot.datasets.filter((d) => d.status === "ok" && d.truncated).map((d) => d.name);
+}
 
 // The URL carries the brief's inputs, so a shared link reopens the same view.
 function readUrl() {
@@ -55,6 +60,7 @@ export function PreflightApp() {
   }, [slug, asOf, projectType]);
 
   const visible = useMemo(() => (brief ? recordsAsOf(brief, asOf) : []), [brief, asOf]);
+  const selectedLot = brief?.touching_lots.find((lot) => lot.bbl === selectedBbl) ?? null;
   // An offline copy for a date with no saved replay is the as-pulled checklist: say so.
   const checklistAsOfMismatch = brief != null && (brief.as_of ?? null) !== asOf;
 
@@ -80,8 +86,18 @@ export function PreflightApp() {
             <h2 className="font-semibold">Touching lots</h2>
             <NeighborCards lots={brief.touching_lots} visible={visible} asOf={asOf} selectedBbl={selectedBbl} onSelect={setSelectedBbl} />
             <h2 className="font-semibold">Site record {asOf ? `as of ${asOf}` : ""}</h2>
+            {selectedLot && (
+              <>
+                <h2 className="font-semibold">
+                  Records on {selectedLot.facts?.address ?? `lot ${selectedLot.bbl}`} {asOf ? `as of ${asOf}` : ""}
+                </h2>
+                <SiteRecordList key={selectedLot.bbl} records={visible.filter((r) => r.bbl === selectedLot.bbl)} asOf={asOf}
+                  codeKeys={brief.complaint_code_keys} capped={cappedNames(selectedLot)} />
+              </>
+            )}
+            <h2 className="font-semibold">Site record {asOf ? `as of ${asOf}` : ""}</h2>
             <SiteRecordList records={visible.filter((r) => r.bbl === brief.site.bbl)} asOf={asOf}
-              capped={brief.site.datasets.filter((d) => d.status === "ok" && d.truncated).map((d) => d.name)} />
+              codeKeys={brief.complaint_code_keys} capped={cappedNames(brief.site)} />
           </div>
           <div className="space-y-4">
             <ChatPanel brief={brief} projectType={projectType} asOf={asOf} offline={offline} />
