@@ -183,5 +183,5 @@ Speckle for the 24-hour build.
     and no claim that something would have been prevented. This moves the precedent map off
     `bf97-mjsy`, which the team called "very vague", onto the curated library.
   - Sources we cannot crawl (DOB NOW documents, Who Owns What, BuildNYC) are being sorted for manual
-    import in a separate document, `manual_data_imports.md`, which was not on `main` when this was
-    written. The terms findings above are the ones it should cite.
+    import in [manual_data_imports.md](manual_data_imports.md), which cites the terms findings above
+    instead of restating them.
