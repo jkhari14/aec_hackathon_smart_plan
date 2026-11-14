@@ -1,5 +1,6 @@
 # aec_hackathon_smart_plan
 
+- [ForeSite build plan](docs/foresite_build_plan.md): the build goal after the third meeting: a citywide 3D map for architects and structural engineers, with a predictive foresight layer and post-event forensics
 - [README-Camilo](README-Camilo): the PreFlight plan
 - [Data and code notes](docs/data_and_code_notes.md): verified data sources, the Building Code checklist, the 1321 Flatbush demo facts
 - [data_pull](data_pull/README.md): address in, the public record for the site and every touching lot out (cached demo data in `data/cache/`)
