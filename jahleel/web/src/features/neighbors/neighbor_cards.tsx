@@ -20,6 +20,13 @@ export function NeighborCards({ lots, visible, asOf, selectedBbl, onSelect }: Pr
               BBL {lot.bbl} · built {lot.facts?.year_built ?? "?"} · {lot.facts?.floors ?? "?"} floors · class{" "}
               {lot.facts?.building_class ?? "?"}{tallest ? ` · roof ${tallest.toFixed(0)} ft` : ""}
             </p>
+            {(lot.facts?.landmark || lot.facts?.historic_district) && (
+              <p className="text-xs text-stone-600">
+                PLUTO lists{lot.facts.landmark ? ` landmark: ${lot.facts.landmark}` : ""}
+                {lot.facts.landmark && lot.facts.historic_district ? ";" : ""}
+                {lot.facts.historic_district ? ` historic district: ${lot.facts.historic_district}` : ""} (a hint; check with LPC)
+              </p>
+            )}
             <p className="mt-1 text-xs">
               {records.length - requests311} records dated {asOf ? `before ${asOf}` : "to date"}
               {requests311 > 0 ? ` · ${requests311} 311 requests, which may repeat a DOB complaint` : ""}

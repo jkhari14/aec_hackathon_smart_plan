@@ -865,6 +865,30 @@
       ],
       "title": "Lot Depth Ft"
      },
+     "landmark": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Landmark",
+      "description": "PLUTO's landmark name: a hint, not a determination. None means PLUTO lists none, never 'no'."
+     },
+     "historic_district": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Historic District",
+      "description": "PLUTO's historic district: a hint, not a determination. None means PLUTO lists none, never 'no'."
+     },
      "pluto_version": {
       "anyOf": [
        {

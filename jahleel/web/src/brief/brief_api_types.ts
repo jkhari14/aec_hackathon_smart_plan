@@ -314,6 +314,16 @@ export interface components {
             lot_front_ft?: number | null;
             /** Lot Depth Ft */
             lot_depth_ft?: number | null;
+            /**
+             * Landmark
+             * @description PLUTO's landmark name: a hint, not a determination. None means PLUTO lists none, never 'no'.
+             */
+            landmark?: string | null;
+            /**
+             * Historic District
+             * @description PLUTO's historic district: a hint, not a determination. None means PLUTO lists none, never 'no'.
+             */
+            historic_district?: string | null;
             /** Pluto Version */
             pluto_version?: string | null;
         };

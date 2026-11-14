@@ -40,6 +40,8 @@ def _facts(lot: dict) -> Optional[LotFacts]:
         residential_units=_number(row.get("unitsres"), int),
         lot_front_ft=_number(row.get("lotfront"), float),
         lot_depth_ft=_number(row.get("lotdepth"), float),
+        landmark=str(row.get("landmark") or "").strip() or None,
+        historic_district=str(row.get("histdist") or "").strip() or None,
         pluto_version=row.get("version"),
     )
 

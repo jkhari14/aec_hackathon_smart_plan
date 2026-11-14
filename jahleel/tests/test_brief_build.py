@@ -4,7 +4,7 @@ import copy
 import unittest
 from datetime import date
 
-from jahleel.api.brief import brief_records
+from jahleel.api.brief import brief_build, brief_records
 from jahleel.api.brief.brief_build import build_brief
 from jahleel.api.brief.brief_models import Brief
 
@@ -54,6 +54,16 @@ class BriefFromCacheTests(unittest.TestCase):
         for bad in ("../README", "a/b", "", "x" * 81):
             with self.assertRaises(ValueError):
                 build_brief(bad)
+
+
+class LotFactsTests(unittest.TestCase):
+    def test_landmark_and_historic_district_are_blank_when_pluto_lists_none(self):
+        def lot(extra):
+            return {"datasets": {"pluto": {"status": "ok", "records": [{"address": "1 MAIN ST", **extra}]}}}
+        listed = brief_build._facts(lot({"landmark": "OLD MILL", "histdist": "Park Slope Historic District"}))
+        self.assertEqual((listed.landmark, listed.historic_district), ("OLD MILL", "Park Slope Historic District"))
+        blank = brief_build._facts(lot({"landmark": "  "}))
+        self.assertEqual((blank.landmark, blank.historic_district), (None, None))
 
 
 class RecordTests(unittest.TestCase):

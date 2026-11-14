@@ -45,6 +45,10 @@ class LotFacts(BaseModel):
     residential_units: Optional[int] = None
     lot_front_ft: Optional[float] = None
     lot_depth_ft: Optional[float] = None
+    landmark: Optional[str] = Field(
+        None, description="PLUTO's landmark name: a hint, not a determination. None means PLUTO lists none, never 'no'.")
+    historic_district: Optional[str] = Field(
+        None, description="PLUTO's historic district: a hint, not a determination. None means PLUTO lists none, never 'no'.")
     pluto_version: Optional[str] = None
 
 
