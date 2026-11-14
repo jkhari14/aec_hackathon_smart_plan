@@ -7,4 +7,4 @@
 - [App structure (proposal)](jahleel/README.md): one teammate's proposed API and web page, kept in `jahleel/` for now: the brief every reader shares, how to run them
 - [Data sources](docs/api_data_sources.md): more datasets, ownership sources, the Revit/Rhino/Grasshopper path
 - [Manual data imports](docs/manual_data_imports.md): the sources a crawler can't use, our verdict on each, and the manual-import path ([manual_imports/](manual_imports/README.md), with DOB's complaint code key as the first import)
-- Brainstorm transcripts: [part 1](transcripts/team_brainstorm_2026-11-14.md), [part 2](transcripts/team_brainstorm_2026-11-14_part_2.md)
+- Brainstorm transcripts: [part 1](transcripts/team_brainstorm_2026-11-14.md), [part 2](transcripts/team_brainstorm_2026-11-14_part_2.md), [part 3](transcripts/team_brainstorm_2026-11-14_part_3.md)
