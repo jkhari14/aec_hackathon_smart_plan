@@ -62,7 +62,8 @@ def excavation_status(site_filings: dict, inputs: dict, cutoff: date | None) -> 
     filed = []
     for record in split_by_cutoff("dob_now_filings", site_filings.get("records", []), cutoff)["before"]:
         if any(_is_yes(record.get(flag)) for flag in EXCAVATION_FLAGS):
-            filed.append({"dataset": "dob_now_filings", "job_filing_number": record.get("job_filing_number"),
+            filed.append({"dataset": "dob_now_filings", "ref": f"dob_now_filings:{record.get('job_filing_number')}",
+                          "job_filing_number": record.get("job_filing_number"),
                           "filing_date": record.get("filing_date"),
                           **{flag: record.get(flag) for flag in EXCAVATION_FLAGS}})
     if filed:

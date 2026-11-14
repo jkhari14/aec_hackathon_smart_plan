@@ -7,7 +7,8 @@ import unittest
 from datetime import date
 from pathlib import Path
 
-from checklist import applicability, neighbor_context, record_dates, record_evidence
+from checklist import applicability, neighbor_context, record_dates, record_evidence, row_proof
+from checklist.checklist_rules import PARTIES, RULES
 from checklist.build_checklist import build
 
 REPO = Path(__file__).resolve().parent.parent
@@ -115,6 +116,39 @@ class CitationTests(unittest.TestCase):
         self.assertFalse(record_evidence.citations_for_row("3304.4.1", [{"cited": "3304.4"}]))
 
 
+class RuleTableTests(unittest.TestCase):
+    def test_ids_are_unique_and_parties_come_from_the_fixed_list(self):
+        self.assertEqual(len({r.id for r in RULES}), len(RULES))
+        self.assertEqual(len({r.section for r in RULES}), len(RULES))
+        for rule in RULES:
+            self.assertTrue(rule.parties and set(rule.parties) <= set(PARTIES), rule.id)
+
+
+class LeadTests(unittest.TestCase):
+    LEAD = {"reported_by": "a paper", "document": "a letter", "url": "https://example.org/a",
+            "document_date": "2026-06-10"}
+
+    def test_bad_leads_are_refused(self):
+        for bad in [{"leads": {"9999": [self.LEAD]}},
+                    {"leads": {"3309.1.1": [{**self.LEAD, "url": "http://example.org/a"}]}},
+                    {"leads": {"3309.1.1": [{**self.LEAD, "verified": True}]}},
+                    {"leads": {"3309.1.1": [{"url": "https://example.org/a"}]}}]:
+            with self.assertRaises(ValueError):
+                row_proof.load_leads(bad, {"3309.1.1"}, None)
+
+    def test_as_of_keeps_only_leads_dated_before_the_cutoff(self):
+        raw = {"leads": {"3309.1.1": [self.LEAD, {**self.LEAD, "document_date": "2026-11-12"},
+                                      {**self.LEAD, "document_date": None}]}}
+        self.assertEqual(len(row_proof.load_leads(raw, {"3309.1.1"}, None)["3309.1.1"]), 3)
+        self.assertEqual(len(row_proof.load_leads(raw, {"3309.1.1"}, CUTOFF)["3309.1.1"]), 1)
+
+    def test_a_lead_never_closes_a_gap(self):
+        pull = json.loads((REPO / "data/cache/2625-bedford-ave-brooklyn.json").read_text())
+        result = build(pull, {}, CUTOFF, {"leads": {"3309.4": [self.LEAD]}})
+        row = [r for r in result["rows"] if r["id"] == "foundation_protection"][0]
+        self.assertEqual((row["proof"]["status"], row["open_gap"]), ("reported_not_read", True))
+
+
 class CachedHeroCaseTests(unittest.TestCase):
     """Structure only: numbers in the cache change whenever someone re-pulls."""
 
@@ -127,7 +161,9 @@ class CachedHeroCaseTests(unittest.TestCase):
         self.assertEqual({r["proof"]["status"] for r in self.result["rows"]}, {"not_provided"})
 
     def test_excavation_comes_from_the_record_and_1321_flatbush_is_adjacent(self):
-        self.assertEqual(self.result["excavation"]["basis"][0]["kind"], "public_record")
+        basis = self.result["excavation"]["basis"][0]
+        self.assertEqual(basis["kind"], "public_record")
+        self.assertTrue(all(r["ref"].startswith("dob_now_filings:") for r in basis["records"]))
         self.assertIn("3052110073", [b["bbl"] for b in self.result["adjacent_buildings"]])
 
     def test_records_from_the_collapse_day_are_outside_the_before_view(self):

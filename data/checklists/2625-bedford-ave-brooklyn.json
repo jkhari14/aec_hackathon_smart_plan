@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "built_at": "2026-11-14T19:12:00+00:00",
+ "built_at": "2026-11-14T19:18:35+00:00",
  "pull": {
   "pulled_at": "2026-11-14T19:09:57+00:00",
   "site_bbl": "3052110074",
@@ -9,6 +9,7 @@
  "as_of": null,
  "inputs": {},
  "inputs_note": null,
+ "leads_note": "Documents a public source reports for this site. Nobody on the team has read them; each is a lead, never proof.",
  "excavation": {
   "status": "applies",
   "basis": [
@@ -17,6 +18,7 @@
     "records": [
      {
       "dataset": "dob_now_filings",
+      "ref": "dob_now_filings:B01330433-S3",
       "job_filing_number": "B01330433-S3",
       "filing_date": "2026-02-24T00:00:00.000",
       "earth_work_work_type_": "YES",
@@ -429,16 +431,31 @@
  ],
  "rows": [
   {
+   "id": "notice",
    "section": "3309.1.1",
    "title": "Notify the adjoining owner",
    "requirement": "Written notice to the adjoining owner at least 60 days before work: the work, schedule, inspections or monitoring, protection, and a contact. A second notice if there is no reply.",
-   "responsible": "Owner / developer",
+   "parties": [
+    "owner_developer"
+   ],
+   "life_safety": false,
    "proof_needed": "The notice letters and their dates",
    "source_url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf",
    "scope": "site",
    "proof": {
-    "status": "not_provided",
-    "note": "Public data does not hold this document; the responsible party provides it."
+    "status": "reported_not_read",
+    "leads": [
+     {
+      "reported_by": "Northeastern Global News",
+      "url": "https://news.northeastern.edu/2026/11/12/brooklyn-building-collapse-analysis/",
+      "reported_on": "2026-11-12",
+      "document": "Adjoining Owners Notification.pdf on DOB NOW, job B01330433, filing S3. The article describes it as a letter to neighboring landlords dated June 10.",
+      "document_url": "https://a810-dobnow.nyc.gov/Publish/DocumentStage/PortalDownloadedDocuments/BROOKLYN/B01330433/S3/Supporting%20Documents//20261111063907253223246342/Adjoining%20Owners%20Notification.pdf",
+      "document_date": "2026-06-10",
+      "checked": "Unread: DOB NOW's portal refused a teammate's script (HTTP 403) on 2026-11-14. June 10 is the article's date for the letter. When it was filed on DOB NOW is not known; the 20261111... folder in the link may only be when the portal staged the download."
+     }
+    ],
+    "note": "A public source reports this document; nobody here has read it. A lead, not proof."
    },
    "related_records": {
     "filings": {
@@ -458,15 +475,21 @@
    "open_gap": false
   },
   {
+   "id": "license",
    "section": "3309.2",
    "title": "License to enter the adjoining property",
    "requirement": "The adjoining owner affords a license to enter; section 3309.4 says who carries the protection duty if they don't.",
-   "responsible": "Adjoining owner",
+   "parties": [
+    "adjoining_owner",
+    "owner_developer"
+   ],
+   "life_safety": false,
    "proof_needed": "The license, or the refusal",
    "source_url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf",
    "scope": "site",
    "proof": {
     "status": "not_provided",
+    "leads": [],
     "note": "Public data does not hold this document; the responsible party provides it."
    },
    "related_records": {
@@ -487,15 +510,21 @@
    "open_gap": false
   },
   {
+   "id": "examination",
    "section": "3309.3",
    "title": "Examine the adjoining building",
    "requirement": "Once access is granted, physically examine the adjoining property before work and at intervals during it, record the conditions, and make the records available to DOB.",
-   "responsible": "Whoever causes the work",
+   "parties": [
+    "owner_developer",
+    "contractor"
+   ],
+   "life_safety": true,
    "proof_needed": "Dated inspection records",
    "source_url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf",
    "scope": "each_adjacent_building",
    "proof": {
     "status": "not_provided",
+    "leads": [],
     "note": "Public data does not hold this document; the responsible party provides it."
    },
    "related_records": {
@@ -590,15 +619,21 @@
    "open_gap": false
   },
   {
+   "id": "foundation_protection",
    "section": "3309.4",
    "title": "Protect adjoining footings and foundations",
    "requirement": "Whenever soil or foundation work occurs, at any depth, protect adjoining structures, including footings and foundations, at the builder's expense.",
-   "responsible": "Developer / contractor",
+   "parties": [
+    "owner_developer",
+    "contractor"
+   ],
+   "life_safety": true,
    "proof_needed": "The protection design and records that it was installed",
    "source_url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf",
    "scope": "site",
    "proof": {
     "status": "not_provided",
+    "leads": [],
     "note": "Public data does not hold this document; the responsible party provides it."
    },
    "related_records": {
@@ -606,6 +641,7 @@
      "status": "ok",
      "records": [
       {
+       "ref": "dob_now_filings:B01330433-S3",
        "job_filing_number": "B01330433-S3",
        "filing_date": "2026-02-24T00:00:00.000",
        "filing_status": "On Hold - Pending Withdrawal of Special Inspector",
@@ -627,6 +663,7 @@
       "records": [
        {
         "dataset": "dob_now_filings",
+        "ref": "dob_now_filings:B01330433-S3",
         "job_filing_number": "B01330433-S3",
         "filing_date": "2026-02-24T00:00:00.000",
         "earth_work_work_type_": "YES",
@@ -643,15 +680,21 @@
    "open_gap": true
   },
   {
+   "id": "survey",
    "section": "3309.4.3",
    "title": "Preconstruction survey",
    "requirement": "No excavation 5 to 10 ft deep within 10 ft of an adjacent building, or over 10 ft deep anywhere, until a survey documents the existing conditions of all adjacent buildings.",
-   "responsible": "Owner / design professional",
+   "parties": [
+    "owner_developer",
+    "design_professional"
+   ],
+   "life_safety": true,
    "proof_needed": "The preconstruction survey",
    "source_url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf",
    "scope": "each_adjacent_building",
    "proof": {
     "status": "not_provided",
+    "leads": [],
     "note": "Public data does not hold this document; the responsible party provides it."
    },
    "related_records": {
@@ -746,15 +789,20 @@
    "open_gap": false
   },
   {
+   "id": "support_drawings",
    "section": "3304.4.1",
    "title": "Excavation-support drawings",
    "requirement": "Means of supporting the excavation shown on construction documents by a design professional with retaining or bracing experience; over 20 ft deep, a NY State PE.",
-   "responsible": "Support-of-excavation engineer",
+   "parties": [
+    "excavation_support_engineer"
+   ],
+   "life_safety": true,
    "proof_needed": "Stamped support-of-excavation drawings",
    "source_url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf",
    "scope": "site",
    "proof": {
     "status": "not_provided",
+    "leads": [],
     "note": "Public data does not hold this document; the responsible party provides it."
    },
    "related_records": {
@@ -762,6 +810,7 @@
      "status": "ok",
      "records": [
       {
+       "ref": "dob_now_filings:B01330433-S3",
        "job_filing_number": "B01330433-S3",
        "filing_date": "2026-02-24T00:00:00.000",
        "filing_status": "On Hold - Pending Withdrawal of Special Inspector",
@@ -783,6 +832,7 @@
       "records": [
        {
         "dataset": "dob_now_filings",
+        "ref": "dob_now_filings:B01330433-S3",
         "job_filing_number": "B01330433-S3",
         "filing_date": "2026-02-24T00:00:00.000",
         "earth_work_work_type_": "YES",
@@ -799,15 +849,21 @@
    "open_gap": true
   },
   {
+   "id": "support_basis",
    "section": "3304.4.1.2",
    "title": "Geotechnical basis for the support design",
    "requirement": "The support drawings rest on site-specific testing, and incorporate the geotechnical report, the evaluation analysis and the preconstruction survey.",
-   "responsible": "Geotechnical + support engineer",
+   "parties": [
+    "geotechnical_engineer",
+    "excavation_support_engineer"
+   ],
+   "life_safety": true,
    "proof_needed": "The geotechnical report, cross-referenced in the drawings",
    "source_url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf",
    "scope": "site",
    "proof": {
     "status": "not_provided",
+    "leads": [],
     "note": "Public data does not hold this document; the responsible party provides it."
    },
    "related_records": {
@@ -815,6 +871,7 @@
      "status": "ok",
      "records": [
       {
+       "ref": "dob_now_filings:B01330433-S3",
        "job_filing_number": "B01330433-S3",
        "filing_date": "2026-02-24T00:00:00.000",
        "filing_status": "On Hold - Pending Withdrawal of Special Inspector",
@@ -836,6 +893,7 @@
       "records": [
        {
         "dataset": "dob_now_filings",
+        "ref": "dob_now_filings:B01330433-S3",
         "job_filing_number": "B01330433-S3",
         "filing_date": "2026-02-24T00:00:00.000",
         "earth_work_work_type_": "YES",
@@ -852,15 +910,21 @@
    "open_gap": true
   },
   {
+   "id": "underpinning",
    "section": "3309.5",
    "title": "Underpin or otherwise support adjoining buildings",
    "requirement": "Where underpinning or another method of support is required, provide it at the builder's expense.",
-   "responsible": "Developer / contractor",
+   "parties": [
+    "owner_developer",
+    "contractor"
+   ],
+   "life_safety": true,
    "proof_needed": "Underpinning drawings, and records that they were followed",
    "source_url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf",
    "scope": "site",
    "proof": {
     "status": "not_provided",
+    "leads": [],
     "note": "Public data does not hold this document; the responsible party provides it."
    },
    "related_records": {
@@ -881,15 +945,20 @@
    "open_gap": false
   },
   {
+   "id": "underpinning_inspection",
    "section": "1705.25.4",
    "title": "Special inspection of underpinning",
    "requirement": "Underpinning and other methods of supporting adjacent property are subject to special inspections.",
-   "responsible": "Special inspector",
+   "parties": [
+    "special_inspector"
+   ],
+   "life_safety": true,
    "proof_needed": "Special inspection reports",
    "source_url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter17_SpecialInspectionsWBwm.pdf",
    "scope": "site",
    "proof": {
     "status": "not_provided",
+    "leads": [],
     "note": "Public data does not hold this document; the responsible party provides it."
    },
    "related_records": {
@@ -897,6 +966,7 @@
      "status": "ok",
      "records": [
       {
+       "ref": "dob_now_filings:B01330433-S3",
        "job_filing_number": "B01330433-S3",
        "filing_date": "2026-02-24T00:00:00.000",
        "filing_status": "On Hold - Pending Withdrawal of Special Inspector",
@@ -907,6 +977,7 @@
        "support_of_excavation_work_type_": "No"
       },
       {
+       "ref": "dob_now_filings:B01330433-S4",
        "job_filing_number": "B01330433-S4",
        "filing_date": "2026-02-17T00:00:00.000",
        "filing_status": "On Hold - Pending Withdrawal of Special Inspector",
@@ -931,15 +1002,20 @@
    "open_gap": false
   },
   {
+   "id": "exposed_wall",
    "section": "3309.8",
    "title": "Investigate exposed adjoining walls",
    "requirement": "Where work exposes or breaches an adjoining wall, a design professional investigates its stability and condition, and the wall's integrity is maintained.",
-   "responsible": "Design professional",
+   "parties": [
+    "design_professional"
+   ],
+   "life_safety": true,
    "proof_needed": "The wall investigation report",
    "source_url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf",
    "scope": "site",
    "proof": {
     "status": "not_provided",
+    "leads": [],
     "note": "Public data does not hold this document; the responsible party provides it."
    },
    "related_records": {
@@ -960,15 +1036,21 @@
    "open_gap": false
   },
   {
+   "id": "monitoring",
    "section": "3309.4.4",
    "title": "Monitor nearby buildings",
    "requirement": "During excavation, monitor buildings within the excavation's maximum depth of its edge (and historic structures within 90 ft), under a plan setting scope, frequency, tolerances and reporting (3309.16).",
-   "responsible": "Design professional / contractor",
+   "parties": [
+    "design_professional",
+    "contractor"
+   ],
+   "life_safety": true,
    "proof_needed": "The monitoring plan and its readings",
    "source_url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf",
    "scope": "each_adjacent_building",
    "proof": {
     "status": "not_provided",
+    "leads": [],
     "note": "Public data does not hold this document; the responsible party provides it."
    },
    "related_records": {
@@ -1073,15 +1155,21 @@
    "open_gap": false
   },
   {
+   "id": "hazard_elevations",
    "section": "3309.4.5",
    "title": "Hazard monitoring ordered by DOB",
    "requirement": "Where DOB sees a potential hazard from soil or foundation work, elevations of adjacent buildings are recorded at intervals of 24 hours or less.",
-   "responsible": "DOB / design professional",
+   "parties": [
+    "dob",
+    "design_professional"
+   ],
+   "life_safety": true,
    "proof_needed": "Elevation readings at the ordered interval",
    "source_url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter33_Con_DemoSafetyWBwm.pdf",
    "scope": "site",
    "proof": {
     "status": "not_provided",
+    "leads": [],
     "note": "Public data does not hold this document; the responsible party provides it."
    },
    "related_records": {
@@ -1112,6 +1200,7 @@
     "lot_role": "site",
     "dataset": "ecb_violations",
     "record_id": "39211470H",
+    "ref": "ecb_violations:39211470H",
     "date": "2026-11-11",
     "cited": "3301.2",
     "text": "BC 3301.2,27-1009(A) FAIL TO SAFEGUARD PERS/PROPERTY AFFECTED BY CONSTRUCTION OP FAILURE TO SAFEGUARD THE PUBLIC AND PROPERTY AFFECTED BY CONSTRUCTION OPERATIONS. AT TIME OF INSPECTION RESPONDING TO A INCIDENT OBSERVED ADJACENT BUILDING 132"
@@ -1121,6 +1210,7 @@
     "lot_role": "touching lot",
     "dataset": "ecb_violations",
     "record_id": "35506252M",
+    "ref": "ecb_violations:35506252M",
     "date": "2021-08-28",
     "cited": "3301.2",
     "text": "BC 3301.2,27-1009(A) FAIL TO SAFEGUARD PERS/PROPERTY AFFECTED BY CONSTRUCTION OP FAILURE TO SAFEGUARD ALL PERSONS&PROPERTY AFFECTED BY CONST-CONST DEBRIS FALLING TO ADJ PROPTERY-ST.NOTE:ATO MY INSP OF 6STYNB@ROOF LEVEL UNDER CONST.I OBSERVE"
@@ -1130,6 +1220,7 @@
     "lot_role": "touching lot",
     "dataset": "ecb_violations",
     "record_id": "35506255H",
+    "ref": "ecb_violations:35506255H",
     "date": "2021-08-28",
     "cited": "3307.2.1",
     "text": "27-/28-/BC-MISC MISCELLANEOUS VIOLATIONS BC3307.2.1 FAILURE TO POST DOT PERMIT FOR STORAGE ON ST.NOTE:ATO MY INSP OF 6STYNB@ROOF LEVEL UNDER CONST.I OBSERVED STORAGE AREA W/JERSEY BARRIER PROVIDED ON ST W/O DOT PERMIT AS REQUIRED.STOP ALL U"
@@ -1139,6 +1230,7 @@
     "lot_role": "touching lot",
     "dataset": "ecb_violations",
     "record_id": "35506253Y",
+    "ref": "ecb_violations:35506253Y",
     "date": "2021-08-28",
     "cited": "3303.4.7",
     "text": "27-/28-/BC-MISC MISCELLANEOUS VIOLATIONS BC3303.4.7 FAILURE TO MAINTAIN SAFETY MEASURE/SOLID FENCE OR BARRIER@STORAGE AREA ON NEAR WALKWAY.NOTE:ATO MY INSP OF 6STYBLDG@ROOF LEVEL UNDER CONST,I OBSERVED STORAGE AREA PROVIDED ON ST IN FRONT O"
@@ -1148,6 +1240,7 @@
     "lot_role": "touching lot",
     "dataset": "ecb_violations",
     "record_id": "35506254X",
+    "ref": "ecb_violations:35506254X",
     "date": "2021-08-28",
     "cited": "3307.7",
     "text": "27-/28-/BC-MISC MISCELLANEOUS VIOLATIONS BC3307.7 FAILURE TO MAINTAIN JOBSITE FENCE CONST.NOTE@TIME OF MY INSP OF 6STYBLDG@ROOF LEVEL UNDER CONST.I OBSERVED JOBSITE FENCE GATE NOT FULLY CLOSED OPEN AREA.APPROX 18\" PUBLIC ACCESSIBLE AREA CRE"
@@ -1157,6 +1250,7 @@
     "lot_role": "touching lot",
     "dataset": "ecb_violations",
     "record_id": "35559223M",
+    "ref": "ecb_violations:35559223M",
     "date": "2021-06-08",
     "cited": "3303.4",
     "text": "BC 3303.4 & 27-1018 FAILURE TO MAINTAIN ADEQUATE HOUSEKEEPING PER SECTION REQUIREMENTS FAILURE TO MAINTAIN HOUSEKEEPING PER SECTION REQUIREMENTS.NOTE AT THE TIME OF MY INSPECTION OF A 5 STORY BUILDING WITH CONSTRUCTION WORK IN PROGRESS THAT"
@@ -1166,6 +1260,7 @@
     "lot_role": "touching lot",
     "dataset": "ecb_violations",
     "record_id": "35544269X",
+    "ref": "ecb_violations:35544269X",
     "date": "2021-01-14",
     "cited": "3304.4",
     "text": "BC 3304.4,27-1032 FAIL TO PROVIDE PROTECTION AT SIDES OF EXCAVATION FAILURE TO PROVIDE PROTECTION AT SIDE OF EXCAVATION.NOTE:AT THE TIME OF MY INSPECTION OF A 6 STORY NEW BUILDING AT EXCAVATION PHASE,I OBSERVED EXCAVATION GOING DOWN APPROXI"
@@ -1175,6 +1270,7 @@
     "lot_role": "touching lot",
     "dataset": "ecb_violations",
     "record_id": "35544267M",
+    "ref": "ecb_violations:35544267M",
     "date": "2021-01-14",
     "cited": "3301.2",
     "text": "BC 3301.2,27-1009(A) FAIL TO SAFEGUARD PERS/PROPERTY AFFECTED BY CONSTRUCTION OP FAILURE TO SAFEGUARD ALL PUBLIC AND PROPERTY AFFECTED BY CONSTRUCTION OPERATION.NOTE:AT THE TIME OF MY INSPECTION OF A 6 STORY NEW BUILDING IN EXCAVTION PHASE,"
@@ -1184,6 +1280,7 @@
     "lot_role": "touching lot",
     "dataset": "ecb_violations",
     "record_id": "39032833Y",
+    "ref": "ecb_violations:39032833Y",
     "date": "2020-12-02",
     "cited": "3301.2",
     "text": "BC 3301.2,27-1009(A) FAIL TO SAFEGUARD PERS/PROPERTY AFFECTED BY CONSTRUCTION OP FAILURE TO SAFEGUARD ALL PERSONS AND PROPERTY AFFECTED BY CONSTRUCTION OPERATIONS. AT TIME OF INSPECTION OBSERVED A SECTION OF CONSTRUCTION FENCE AT EXPOSURE 3"
@@ -1206,7 +1303,7 @@
   ]
  },
  "caveats": [
-  "A row is never marked done from public data: its proof is a document the public record does not hold. 'provided_unverified' means the project team supplied it; nobody checked it.",
+  "A row is never marked done from public data: its proof is a document the public record does not hold. 'provided_unverified' means the project team supplied it; nobody checked it. 'reported_not_read' means a public source reports it; nobody here has read it.",
   "related_records sit beside a row; they are not its proof.",
   "Counts use each record's status at pull time, not on the as-of date.",
   "Requirements are paraphrased; read the linked code text before relying on a row.",

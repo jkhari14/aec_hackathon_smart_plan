@@ -1,0 +1,16 @@
+{
+ "_note": "Documents a public source reports for this site. Nobody on the team has read them; each is a lead, never proof.",
+ "leads": {
+  "3309.1.1": [
+   {
+    "reported_by": "Northeastern Global News",
+    "url": "https://news.northeastern.edu/2026/11/12/brooklyn-building-collapse-analysis/",
+    "reported_on": "2026-11-12",
+    "document": "Adjoining Owners Notification.pdf on DOB NOW, job B01330433, filing S3. The article describes it as a letter to neighboring landlords dated June 10.",
+    "document_url": "https://a810-dobnow.nyc.gov/Publish/DocumentStage/PortalDownloadedDocuments/BROOKLYN/B01330433/S3/Supporting%20Documents//20261111063907253223246342/Adjoining%20Owners%20Notification.pdf",
+    "document_date": "2026-06-10",
+    "checked": "Unread: DOB NOW's portal refused a teammate's script (HTTP 403) on 2026-11-14. June 10 is the article's date for the letter. When it was filed on DOB NOW is not known; the 20261111... folder in the link may only be when the portal staged the download."
+   }
+  ]
+ }
+}

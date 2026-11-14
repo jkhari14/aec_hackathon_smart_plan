@@ -39,6 +39,7 @@ def code_citations(lots: list[dict], cutoff: date | None) -> list[dict]:
                 for section in cited_sections(text):
                     citations.append({"lot_bbl": lot["bbl"], "lot_role": lot.get("role"), "dataset": key,
                                       "record_id": record.get(_ID_FIELDS[key]),
+                                      "ref": f"{key}:{record.get(_ID_FIELDS[key])}",
                                       "date": str(record_date(key, record) or ""), "cited": section,
                                       "text": text[:240]})
     return citations
@@ -64,6 +65,7 @@ def related_filings(kind: str, site_filings: dict, cutoff: date | None) -> dict:
             continue
         status_date = parse_record_date(record.get("current_status_date"))
         found.append({
+            "ref": f"dob_now_filings:{record.get('job_filing_number')}",
             "job_filing_number": record.get("job_filing_number"), "filing_date": record.get("filing_date"),
             "filing_status": record.get("filing_status"), "current_status_date": record.get("current_status_date"),
             "status_is_after_cutoff": bool(cutoff and status_date and status_date >= cutoff),

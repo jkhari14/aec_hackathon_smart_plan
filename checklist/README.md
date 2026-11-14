@@ -12,6 +12,7 @@ python3 -m unittest discover -s tests -t .                                      
 ```
 
 Each run writes `data/checklists/<pull>[-as-of-DATE][-<inputs>].json` and prints a summary.
+If `data/leads/<pull file name>.json` exists, its leads are read too (`--no-leads` skips them).
 
 ## The rows
 
@@ -19,20 +20,25 @@ Twelve rows from the 2022 Building Code, chapter 33 (safeguards during construct
 chapter 17 (special inspections). Each row is paraphrased and links to the city's PDF, so read the
 code text before relying on a row. The rows are in `checklist_rules.py`.
 
-| Section | Duty | Scope |
-|---|---|---|
-| 3309.1.1 | Notify the adjoining owner 60 days ahead | site |
-| 3309.2 | License to enter the adjoining property | site |
-| 3309.3 | Examine the adjoining building before and during work | each adjacent building |
-| 3309.4 | Protect adjoining footings and foundations | site |
-| 3309.4.3 | Preconstruction survey | each adjacent building |
-| 3304.4.1 | Excavation-support drawings | site |
-| 3304.4.1.2 | Geotechnical basis for the support design | site |
-| 3309.5 | Underpin or otherwise support adjoining buildings | site |
-| 1705.25.4 | Special inspection of underpinning | site |
-| 3309.8 | Investigate exposed adjoining walls | site |
-| 3309.4.4 | Monitor nearby buildings | each adjacent building |
-| 3309.4.5 | Hazard monitoring ordered by DOB | site |
+Each row has a stable `id` that the brief, the web page and the voice agent use. It also has
+`parties`, drawn from one fixed list shared with the brief: owner_developer, design_professional,
+excavation_support_engineer, geotechnical_engineer, contractor, special_inspector, adjoining_owner
+and dob. `life_safety` marks rows where the serious tone comes first.
+
+| id | Section | Duty | Scope | Life safety |
+|---|---|---|---|---|
+| notice | 3309.1.1 | Notify the adjoining owner 60 days ahead | site | no |
+| license | 3309.2 | License to enter the adjoining property | site | no |
+| examination | 3309.3 | Examine the adjoining building before and during work | each adjacent building | yes |
+| foundation_protection | 3309.4 | Protect adjoining footings and foundations | site | yes |
+| survey | 3309.4.3 | Preconstruction survey | each adjacent building | yes |
+| support_drawings | 3304.4.1 | Excavation-support drawings | site | yes |
+| support_basis | 3304.4.1.2 | Geotechnical basis for the support design | site | yes |
+| underpinning | 3309.5 | Underpin or otherwise support adjoining buildings | site | yes |
+| underpinning_inspection | 1705.25.4 | Special inspection of underpinning | site | yes |
+| exposed_wall | 3309.8 | Investigate exposed adjoining walls | site | yes |
+| monitoring | 3309.4.4 | Monitor nearby buildings (plan per 3309.16) | each adjacent building | yes |
+| hazard_elevations | 3309.4.5 | Hazard monitoring ordered by DOB | site | yes |
 
 ## What decides a row
 
@@ -60,10 +66,21 @@ status rolls up in the order applies > needs_input > unknown > set_by_dob > does
 
 ## Proof is never taken from public data
 
-`proof.status` is `not_provided` or `provided_unverified`. The public record does not hold
-notice letters, surveys, support drawings or inspection reports, so no row is ever marked done
-from it. `provided_unverified` means the project team listed a document under `provided_proof`,
-and nobody checked it. `open_gap` is true when a row applies and no proof was provided.
+The public record does not hold notice letters, surveys, support drawings or inspection
+reports, so no row is ever marked done from it. `proof.status` is one of three, and none of them
+means verified:
+
+- `provided_unverified`: the project team listed a document under `provided_proof`, and nobody
+  checked it.
+- `reported_not_read`: a public source, such as a news article linking a portal document, reports
+  one. Nobody here has read it. The leads are in `proof.leads` and come from `data/leads/`.
+- `not_provided`: neither of the above.
+
+`open_gap` is true when a row applies and the team has provided nothing. **A lead never closes a
+gap.** In an as-of view, a lead counts only if its document is dated before the cutoff.
+
+Every record a row points to carries a `ref` in the brief's id format,
+`<dataset_key>:<record_id>`.
 
 `related_records` sit beside a row and are not its proof:
 
@@ -103,6 +120,9 @@ the real-site checklists.
   3304.4.1.2 (geotechnical basis). These apply from the record alone, and no proof was provided.
 - **8 rows need input**, from four facts the record does not hold: depth, adjoining access,
   underpinning and an exposed wall. **1 row is set by DOB.**
+- **A lead on the notice row (3309.1.1).** A Northeastern article links an "Adjoining Owners
+  Notification" on DOB NOW for filing S3 and dates the letter June 10. Nobody has read it, and it
+  is not known when it was filed.
 - **Five touching lots have buildings**, including 1321 Flatbush (built 1930). Lot 3052110054
   has a footprint but no PLUTO record.
 - **S3 and S4's current status**, "On Hold - Pending Withdrawal of Special Inspector", is dated
@@ -116,5 +136,32 @@ the real-site checklists.
 - Historic status, for the 90 ft monitoring rule.
 - Footing positions, for digs of 5 ft or less.
 - Whether any document exists.
+
+## For the team's reviewers
+
+These twelve sections are the only ones reviewed for this list. Other parts of sections 3304
+and 3309, the rest of chapter 33, and the Administrative Code were not read for it. The brief's
+first draft combined 3309.4 with 3309.5, and 3309.4.4 with 3309.16. Here 3309.4 and 3309.5 are
+separate rows, and 3309.16 is cited inside the monitoring row.
+
+What we need from each area of expertise:
+
+- **Code consultant or expediter.**
+  - Are the paraphrases faithful to the 2022 text?
+  - Which other sections belong here?
+  - Is the right party on each row?
+  - Are the two rows marked not life-safety (notice and license) right?
+- **Structural or excavation-support engineer.**
+  - Check the thresholds in the per-building rows. The survey applies over 10 ft deep anywhere,
+    or 5 to 10 ft deep within 10 ft of a building. Monitoring applies to buildings within the
+    excavation's depth of its edge. Digs of 5 ft or less can be exempt.
+  - Should 3309.4 and 3309.5 be one row?
+  - What project facts would decide underpinning and exposed walls?
+- **Geotechnical engineer.**
+  - What must the report behind 3304.4.1.2 contain?
+  - Could public data, such as borings or groundwater, tell us more before a project starts?
+- **Special inspector.**
+  - Which DOB NOW filing statuses mean an inspector withdrew or was never assigned?
+  - Is "the status names an inspector" a fair way to pick the filings shown beside 1705.25.4?
 
 Nothing here establishes the cause of any incident.
