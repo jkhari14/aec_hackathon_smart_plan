@@ -3,13 +3,13 @@
 // prevented". Filters narrow by hazard, severity and date.
 import "./similar_cases.css";
 
-import { type CSSProperties, useMemo, useState } from "react";
+import { type CSSProperties, type MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { Hazard, Severity, SimilarCase } from "../../contracts";
 import { SEVERITY_LABELS } from "../../contracts";
 import { causeText, copy } from "../../copy";
-import { Chip, EmptyState, Explain, formatDate, HAZARD_LABELS, humanize, SeverityBadge, SourceLabel, Toggle } from "../../design";
-import { ringDash } from "./ring";
+import { Chip, EmptyState, formatDate, HAZARD_LABELS, SeverityBadge, SourceLabel, Toggle } from "../../design";
+import { resemblance } from "./ring";
 
 type Since = "all" | "2020" | "2015";
 const SINCE: { value: Since; label: string }[] = [
@@ -27,6 +27,7 @@ export function SimilarCases({ results, strands }: { results: SimilarCase[]; str
   const [hazards, setHazards] = useState<Set<Hazard>>(new Set());
   const [severities, setSeverities] = useState<Set<Severity>>(new Set());
   const [since, setSince] = useState<Since>("all");
+  const [openId, setOpenId] = useState<string | null>(null);
 
   const available = useMemo(() => {
     const h = new Set<Hazard>(), s = new Set<Severity>();
@@ -103,76 +104,194 @@ export function SimilarCases({ results, strands }: { results: SimilarCase[]; str
 
       {shown.map((r) => (
         <CaseCard key={r.case_id} result={r} focused={strands?.focusedId === r.case_id}
-          onFocus={strands ? () => strands.onFocus(r.case_id) : undefined} />
+          onFocus={strands ? () => strands.onFocus(r.case_id) : undefined} onOpen={() => setOpenId(r.case_id)} />
       ))}
+      {(() => {
+        const open = results.find((r) => r.case_id === openId);
+        return open ? <CaseDialog key={open.case_id} result={open} onClose={() => setOpenId(null)} /> : null;
+      })()}
     </div>
   );
 }
 
-const MATCHES_SHOWN = 3;
-const DIFFERS_SHOWN = 2;
-
-/** A case in a few lines: the ring, what it was and when, where, and what matches. The rest folds away.
-    Clicking the card shows it joined to the site on the map; clicking again lets go. */
-function CaseCard({ result, focused, onFocus }: { result: SimilarCase; focused: boolean; onFocus?: () => void }) {
-  const c = result.case;
-  const matches = result.matched_on.slice(0, MATCHES_SHOWN);
-  const differs = result.differs_on.slice(0, DIFFERS_SHOWN);
-  const more = result.matched_on.length + result.differs_on.length - matches.length - differs.length;
+const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+const sentence = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
+const where = (c: SimilarCase["case"]) => {
   const borough = c.address.split(",").slice(1).join(",").trim();
+  return `${c.address.split(",")[0]}${borough ? ` · ${borough}` : ""} · ${c.date.length === 10 ? formatDate(c.date) : c.date}`;
+};
+
+/** A case in two lines: the ring, what it was, where and when, and how much it shares with this site.
+    Clicking anywhere on a card shows that case joined to the site on the map (its title row again lets go);
+    "N things in common" opens the details in a popup. */
+function CaseCard({ result, focused, onFocus, onOpen }: {
+  result: SimilarCase; focused: boolean; onFocus?: () => void; onOpen: () => void;
+}) {
+  const c = result.case;
+  const common = result.matched_on.length;
+  const differs = result.differs_on.length;
+  // Any click on an unfocused card picks it, the details button included. The title row is the one place
+  // that also lets go, so it is left to its own button.
+  const pick = (event: MouseEvent) => {
+    if (!onFocus || focused || (event.target as HTMLElement).closest(".fs-case__main")) return;
+    onFocus();
+  };
   return (
-    <article className="fs-case" data-focused={focused} style={{ "--fs-hz": `var(--fs-hz-${c.hazards[0]})` } as CSSProperties}>
+    <article className="fs-case" data-case-id={result.case_id} data-focused={focused} data-pickable={Boolean(onFocus) && !focused} onClickCapture={pick}
+      style={{ "--fs-hz": `var(--fs-hz-${c.hazards[0]})` } as CSSProperties}>
       <button type="button" className="fs-case__main" aria-pressed={focused} onClick={onFocus} disabled={!onFocus}
         title={focused ? "Hide it on the map" : "Show it joined to this site on the map"}>
         <ScoreRing score={result.score} />
         <span className="fs-case__head">
           <span className="fs-case__title">{c.title}</span>
-          <span className="fs-case__meta fs-num">
-            {c.address.split(",")[0]}
-            {borough && ` · ${borough}`} · {c.date.length === 10 ? formatDate(c.date) : c.date}
-          </span>
+          <span className="fs-case__meta fs-num">{where(c)}</span>
         </span>
         <SeverityBadge level={c.severity} />
       </button>
-      <ul className="fs-case__chips" aria-label={`${S.matchesOn} and ${S.differsOn.toLowerCase()}`}>
-        {matches.map((m) => (
-          <li key={m} data-kind="match" title={`${S.matchesOn}: ${m}`}>{m}</li>
-        ))}
-        {differs.map((m) => (
-          <li key={m} data-kind="differ" title={`${S.differsOn}: ${m}`}>{m}</li>
-        ))}
-      </ul>
-      <Explain label={more > 0 ? `What happened, and ${more} more` : "What happened"}>
-        <p>{c.summary}</p>
-        <p>{causeText(c.cause_status, c.cause_as_reported ?? null)}</p>
-        {result.matched_on.length > MATCHES_SHOWN && (
-          <p className="fs-quiet">Also matches: {result.matched_on.slice(MATCHES_SHOWN).join("; ")}.</p>
-        )}
-        {result.differs_on.length > DIFFERS_SHOWN && (
-          <p className="fs-quiet">Also differs: {result.differs_on.slice(DIFFERS_SHOWN).join("; ")}.</p>
-        )}
-        {c.work_types.length > 0 && <p className="fs-quiet">Work on site: {c.work_types.map(humanize).join(", ")}.</p>}
-        <p className="fs-quiet">{HAZARD_LABELS[c.hazards[0]]} · {S.score}: {S.scoreHelp}</p>
-        <div className="fs-case__sources">
-          {c.sources.map((src) => <SourceLabel key={src.name} kind="case" name={src.name} url={src.url} date={src.date} />)}
-        </div>
-      </Explain>
+      <button type="button" className="fs-case__open" onClick={onOpen} aria-haspopup="dialog">
+        {plural(common, "thing", "things")} in common{differs > 0 && `, ${plural(differs, "difference", "differences")}`}
+        <span aria-hidden="true"> · Details</span>
+      </button>
     </article>
   );
 }
 
-/** Similarity as a ring that fills to the score, the number inside: "similar", never a probability. */
-function ScoreRing({ score }: { score: number }) {
-  const r = 15;
-  const { circumference, dash } = ringDash(score, r);
-  const pct = Math.round(Math.min(1, Math.max(0, Number.isFinite(score) ? score : 0)) * 100);
+/** The case's details in a popup: in common, different, what happened, sources. X, Esc or a click outside
+    closes it; the map keeps the case's strand behind it. */
+const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/** The card a popup belongs to, measured now (the panel may have scrolled since it opened). */
+function cardRect(caseId: string): DOMRect | null {
+  const card = document.querySelector<HTMLElement>(`.fs-case[data-case-id="${CSS.escape(caseId)}"]`);
+  const rect = card?.getBoundingClientRect();
+  return rect && rect.width > 0 && rect.bottom > 0 && rect.top < window.innerHeight ? rect : null;
+}
+
+/** The transform that lays the popup over the card, for a grow-in or shrink-out. */
+function overCard(dialog: HTMLElement, caseId: string): string | null {
+  const from = cardRect(caseId);
+  if (!from) return null;
+  const to = dialog.getBoundingClientRect();
+  const dx = from.left + from.width / 2 - (to.left + to.width / 2);
+  const dy = from.top + from.height / 2 - (to.top + to.height / 2);
+  return `translate(${dx}px, ${dy}px) scale(${from.width / to.width}, ${from.height / to.height})`;
+}
+
+const GROW = { duration: 420, easing: "cubic-bezier(0.2, 0.9, 0.25, 1.04)" };
+const SHRINK = { duration: 260, easing: "cubic-bezier(0.4, 0, 0.8, 0.4)" };
+
+/** The case's details in a popup that grows out of its card: in common, different, what happened, sources.
+    X, Esc or a click outside shrinks it back into the card; the map keeps the case's strand behind it. */
+function CaseDialog({ result, onClose }: { result: SimilarCase; onClose: () => void }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  const closing = useRef(false);
+  const c = result.case;
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
+
+  const close = useCallback(() => {
+    const dialog = ref.current;
+    if (!dialog || closing.current) return;
+    closing.current = true;
+    const target = reduceMotion() ? null : overCard(dialog, result.case_id);
+    dialog.dataset.state = "closing";
+    if (!target) {
+      closeRef.current();
+      return;
+    }
+    const anim = dialog.animate([{ transform: "none", opacity: 1 }, { transform: target, opacity: 0 }],
+      { ...SHRINK, fill: "forwards" });
+    // Close when the shrink ends, or shortly after in any case: a browser that pauses animations (a
+    // background tab) must never leave the popup stuck open.
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      closeRef.current();
+    };
+    anim.onfinish = finish;
+    window.setTimeout(finish, SHRINK.duration + 150);
+  }, [result.case_id]);
+
+  // Esc fires "cancel": stop the instant close so it can shrink back first.
+  useEffect(() => {
+    const dialog = ref.current;
+    const cancel = (event: Event) => {
+      event.preventDefault();
+      close();
+    };
+    dialog?.addEventListener("cancel", cancel);
+    return () => dialog?.removeEventListener("cancel", cancel);
+  }, [close]);
+
+  useEffect(() => {
+    const dialog = ref.current;
+    // No close() on cleanup: React re-runs this effect in development, and unmounting removes the dialog.
+    if (!dialog || dialog.open) return;
+    dialog.showModal();
+    if (reduceMotion()) return;
+    const from = overCard(dialog, result.case_id);
+    dialog.animate(
+      from ? [{ transform: from, opacity: 0.5 }, { transform: "none", opacity: 1 }]
+        : [{ transform: "translateY(12px) scale(0.97)", opacity: 0 }, { transform: "none", opacity: 1 }],
+      GROW,
+    );
+  }, [result.case_id]);
+
   return (
-    <span className="fs-ring" title={`${S.score} ${pct} out of 100. ${S.scoreHelp}`} role="img" aria-label={`${pct} similar`}>
-      <svg viewBox="0 0 36 36" width="40" height="40" aria-hidden="true">
-        <circle cx="18" cy="18" r={r} className="fs-ring__track" />
-        <circle cx="18" cy="18" r={r} className="fs-ring__fill" strokeLinecap={dash > 0 ? "round" : "butt"} strokeDasharray={`${dash} ${circumference}`} transform="rotate(-90 18 18)" />
-      </svg>
-      <span className="fs-ring__num fs-num">{pct}</span>
+    <dialog ref={ref} className="fs-case-dialog" aria-labelledby="fs-case-dialog-title"
+      onClick={(event) => event.target === ref.current && close()}
+      style={{ "--fs-hz": `var(--fs-hz-${c.hazards[0]})` } as CSSProperties}>
+      <header className="fs-case-dialog__head">
+        <ScoreRing score={result.score} />
+        <div className="fs-case__head">
+          <h3 id="fs-case-dialog-title" className="fs-case__title">{c.title}</h3>
+          <span className="fs-case__meta fs-num">{where(c)}</span>
+        </div>
+        <SeverityBadge level={c.severity} />
+        <button type="button" className="fs-case-dialog__close" onClick={close} aria-label="Close">×</button>
+      </header>
+      <div className="fs-case__body">
+        {result.matched_on.length > 0 && (
+          <section>
+            <h4>In common with this site</h4>
+            <ul>{result.matched_on.map((m) => <li key={m}>{sentence(m)}</li>)}</ul>
+          </section>
+        )}
+        {result.differs_on.length > 0 && (
+          <section>
+            <h4>Different from this site</h4>
+            <ul>{result.differs_on.map((m) => <li key={m}>{sentence(m)}</li>)}</ul>
+          </section>
+        )}
+        <section>
+          <h4>What happened</h4>
+          <p>{c.summary}</p>
+          <p className="fs-quiet">{causeText(c.cause_status, c.cause_as_reported ?? null)}</p>
+        </section>
+        <section>
+          <h4>Sources</h4>
+          <div className="fs-case__sources">
+            {c.sources.map((src) => <SourceLabel key={src.name} kind="case" name={src.name} url={src.url} date={src.date} />)}
+          </div>
+        </section>
+        <p className="fs-quiet">{S.score}: {S.scoreHelp}</p>
+      </div>
+    </dialog>
+  );
+}
+
+/** Similarity as a word and three bars (Strong, Some, Weak): how alike on paper, never a probability. */
+function ScoreRing({ score }: { score: number }) {
+  const { level, word, bars } = resemblance(score);
+  const points = Math.round(Math.min(1, Math.max(0, Number.isFinite(score) ? score : 0)) * 100);
+  return (
+    <span className="fs-match" data-level={level} role="img" aria-label={`${word} resemblance`}
+      title={`${word} resemblance (${points} of 100 points). ${S.scoreHelp}`}>
+      <span className="fs-match__bars" aria-hidden="true">
+        {[1, 2, 3].map((n) => <i key={n} data-on={n <= bars} />)}
+      </span>
+      <span className="fs-match__word">{word}</span>
     </span>
   );
 }

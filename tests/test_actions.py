@@ -155,5 +155,117 @@ class TestActionsFollowTheChosenJob(unittest.TestCase):
         self.assertIn("support_of_excavation", r.text)
 
 
+class TestDepthAndHeight(unittest.TestCase):
+    """Setup's dig depth and new building height decide the survey, monitoring, PE and facade rows."""
+
+    def setUp(self):
+        neighbor = {"bbl": "3000000002", "bins": [], "attached": True, "year_built": 1925, "floors": 3}
+        self.p = dict(_profile(), work_types=["excavation", "foundation"], neighbors=[neighbor])
+
+    def rows(self, **extra):
+        return {a["id"]: a for a in build_actions({**self.p, **extra})}
+
+    def test_survey_not_required_under_5ft(self):
+        self.assertNotIn("action-code-survey", self.rows(excavation_depth_ft=4.9))
+
+    def test_survey_required_at_10ft_next_door(self):
+        self.assertIn("action-code-survey", self.rows(excavation_depth_ft=10))
+
+    def test_no_depth_keeps_row_as_needs_input(self):
+        self.assertIn("needs input: dig depth", self.rows()["action-code-survey"]["why"].lower())
+
+    def test_monitoring_applies_over_5ft(self):
+        row = self.rows(excavation_depth_ft=10)["action-code-monitoring"]
+        self.assertNotIn("needs input", row["why"].lower())
+
+    def test_over_20ft_support_drawings_need_state_pe(self):
+        self.assertIn("NY State PE", self.rows(excavation_depth_ft=21)["action-code-support_drawings"]["why"])
+
+    def test_proposed_storeys_drive_facade_cycle(self):
+        low = dict(self.p["lot"], floors=2)
+        self.assertNotIn("action-facade-inspection-cycle", self.rows(lot=low))
+        self.assertIn("action-facade-inspection-cycle", self.rows(lot=low, proposed_storeys=9))
+
+    def test_no_neighbors_is_needs_input_not_applies(self):
+        self.assertIn("needs input", self.rows(neighbors=[], excavation_depth_ft=8)["action-code-survey"]["why"].lower())
+
+    def test_router_rejects_negative_depth(self):
+        from fastapi.testclient import TestClient
+
+        from api.main import app
+
+        r = TestClient(app).get("/api/sites/3052110073/actions", params={"excavation_depth_ft": "-1"})
+        self.assertEqual(r.status_code, 422, r.text)
+
+
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestPhases(unittest.TestCase):
+    """Each item says when it's due: from the code text where it states timing, else the rule's stage."""
+
+    def test_code_rows_use_the_codes_own_timing(self):
+        from actions.phases import phase_for
+        self.assertEqual(phase_for("checklist:notice"), ("notice", "60 days before work"))
+        self.assertEqual(phase_for("checklist:survey")[0], "before_excavation")
+        self.assertEqual(phase_for("checklist:monitoring"), ("during_work", "During excavation"))
+
+    def test_hazard_rows_use_their_earliest_stage(self):
+        from actions.phases import phase_for
+        self.assertEqual(phase_for("actions:x", ["pre_filing", "construction"]), ("filing", "Before filing"))
+        self.assertEqual(phase_for("actions:y", ["construction"]), ("during_work", "During work"))
+
+    def test_document_rows_and_unknowns(self):
+        from actions.phases import phase_for
+        self.assertEqual(phase_for("actions:geotech:dewatering")[0], "filing")
+        self.assertEqual(phase_for("actions:model:lot-line-notice")[0], "notice")
+        self.assertEqual(phase_for("something-else")[0], "design")
+
+    def test_every_built_item_has_a_phase(self):
+        phases = {"design", "filing", "notice", "before_excavation", "during_work"}
+        for a in build_actions(_profile()):
+            self.assertIn(a.get("phase"), phases, a["id"])
+            self.assertTrue(a.get("when"), a["id"])
+
+
+class TestSiteContext(unittest.TestCase):
+    """Rows about the neighbors name them; rows the records speak to say what the records show."""
+
+    def setUp(self):
+        n = lambda addr, year, floors, attached=True: {"bbl": addr, "bins": [], "address": addr, "attached": attached,  # noqa: E731
+                                                       "year_built": year, "floors": floors}
+        sig = lambda title, date: {"id": title + date, "hazard": "structural", "severity": 0, "title": title,  # noqa: E731
+                                   "explanation": "", "record_ids": [], "source_name": "DOB Complaints Received",
+                                   "date": date}
+        self.p = dict(_profile(), work_types=["excavation", "foundation"], excavation_depth_ft=10,
+                      neighbors=[n("19 MARCUS GARVEY BLVD", 1931, 3.0), n("296 ELLERY STREET", 1931, 3.0),
+                                 n(None, 0, None)],
+                      signals=[sig("Excavation undermining an adjacent building", "2026-02-11"),
+                               sig("Excavation undermining an adjacent building (touching lot 17 MARCUS GARVEY BLVD)", "2026-08-21"),
+                               sig("Adjacent building not protected", "2026-05-15"),
+                               sig("Scaffold or material handling cited", "2026-10-08")])
+
+    def rows(self):
+        return {a["id"]: a for a in build_actions(self.p)}
+
+    def test_neighbor_rows_name_the_buildings(self):
+        applies = self.rows()["action-code-survey"]["applies_to"]
+        self.assertEqual(applies[0], "19 Marcus Garvey Blvd (built 1931, 3 storeys, attached)")
+        self.assertIn("296 Ellery Street (built 1931, 3 storeys, attached)", applies)
+        self.assertIn("an unnamed lot (attached)", applies)
+
+    def test_rows_not_about_neighbors_name_none(self):
+        self.assertEqual(self.rows()["action-code-support_drawings"].get("applies_to"), [])
+
+    def test_matching_records_are_counted_with_their_dates(self):
+        ev = self.rows()["action-code-monitoring"]["evidence"]
+        self.assertTrue(ev.startswith("3 related records here (Feb 2026–Aug 2026), most often "
+                                      "'Excavation undermining an adjacent building'."), ev)
+        self.assertIn("DOB Complaints Received", ev)
+        self.assertIn("reports, not findings", ev)
+        self.assertNotIn("Scaffold", ev)
+
+    def test_no_matching_records_means_no_evidence(self):
+        self.p["signals"] = []
+        self.assertIsNone(self.rows()["action-code-monitoring"]["evidence"])

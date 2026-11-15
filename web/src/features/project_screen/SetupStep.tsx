@@ -2,11 +2,14 @@
 // pre-ticked from the work type; everyone on the project is added so items can be assigned to any role.
 import { type ReactNode, useState } from "react";
 
-import type { ConstructionType, JobType, Role } from "../../contracts";
+import type { ConstructionType, JobType, Role, Stage } from "../../contracts";
 import { Button } from "../../design";
 import { ROLE_LABELS } from "../project/project_client";
 import type { DraftInput } from "./draft";
-import { CONSTRUCTION_CARDS, defaultScope, ROLES, SCOPE_OPTIONS, type ScopeOption, WORK_TYPE_CARDS } from "./model";
+import { KnownFacts } from "./KnownFacts";
+import {
+  asksDepth, CONSTRUCTION_CARDS, defaultScope, DEPTH_BANDS, type DepthBand, ROLES, SCOPE_OPTIONS, type ScopeOption, STAGE_OPTIONS, WORK_TYPE_CARDS,
+} from "./model";
 
 type Props = {
   bbl: string;
@@ -22,6 +25,9 @@ export function SetupStep({ bbl, siteLabel, busy, problem, onDraft }: Props) {
   const [scope, setScope] = useState<ScopeOption[]>([]);
   const [names, setNames] = useState<Record<Role, string>>({ architect: "", structural_engineer: "", developer: "", contractor: "" });
   const [me, setMe] = useState<Role>("architect");
+  const [depth, setDepth] = useState<DepthBand>("unsure");
+  const [storeys, setStoreys] = useState("");
+  const [stage, setStage] = useState<Stage>("design");
 
   const pickJob = (value: JobType) => {
     setJob(value);
@@ -30,6 +36,10 @@ export function SetupStep({ bbl, siteLabel, busy, problem, onDraft }: Props) {
   const toggleScope = (value: ScopeOption) =>
     setScope((s) => (s.includes(value) ? s.filter((x) => x !== value) : [...s, value]));
   const ready = job !== null && construction !== null && !busy;
+  // Depth matters only when the job digs; the new building's height only for new construction.
+  const digs = job !== null && asksDepth(job, scope);
+  const building = job === "new_building";
+  const storeysValue = building && storeys.trim() !== "" && Number(storeys) > 0 ? Number(storeys) : null;
 
   const submit = () => {
     if (!job || !construction) return;
@@ -41,6 +51,9 @@ export function SetupStep({ bbl, siteLabel, busy, problem, onDraft }: Props) {
         constructionType: construction,
         scope,
         members: ROLES.map((role) => ({ name: names[role].trim() || ROLE_LABELS[role], role })),
+        depthFt: digs ? (DEPTH_BANDS.find((b) => b.value === depth)?.feet ?? null) : null,
+        proposedStoreys: storeysValue,
+        stage,
       },
       me,
     );
@@ -48,6 +61,8 @@ export function SetupStep({ bbl, siteLabel, busy, problem, onDraft }: Props) {
 
   return (
     <div className="fs-ps-setup fs-enter">
+      <KnownFacts bbl={bbl} />
+
       <Group title="Work type" help="What is happening on this site?">
         <div className="fs-ps-cards fs-ps-cards--3">
           {WORK_TYPE_CARDS.map((c) => (
@@ -78,6 +93,45 @@ export function SetupStep({ bbl, siteLabel, busy, problem, onDraft }: Props) {
                 {o.label}
               </button>
             ))}
+          </div>
+        </Group>
+      )}
+
+      {job && (
+        <Group title="The job" help="Three quick answers the code turns on. Each one changes the checklist.">
+          <div className="fs-ps-quick">
+            {digs && (
+              <div className="fs-ps-field">
+                <span className="fs-ps-field__label">How deep will you dig?</span>
+                <div className="fs-ps-chips" role="group" aria-label="How deep will you dig?">
+                  {DEPTH_BANDS.map((b) => (
+                    <button key={b.value} type="button" className="fs-chip" aria-pressed={depth === b.value} onClick={() => setDepth(b.value)}>
+                      {b.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {building && (
+              <label className="fs-ps-field">
+                <span className="fs-ps-field__label">New building height</span>
+                <span className="fs-ps-storeys">
+                  <input className="fs-ps-input" type="number" min={1} max={120} inputMode="numeric" placeholder="e.g. 6"
+                    value={storeys} onChange={(e) => setStoreys(e.target.value)} aria-label="New building height in storeys" />
+                  <span className="fs-quiet">storeys</span>
+                </span>
+              </label>
+            )}
+            <div className="fs-ps-field">
+              <span className="fs-ps-field__label">Stage</span>
+              <div className="fs-ps-chips" role="group" aria-label="Stage">
+                {STAGE_OPTIONS.map((o) => (
+                  <button key={o.value} type="button" className="fs-chip" aria-pressed={stage === o.value} onClick={() => setStage(o.value)}>
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </Group>
       )}

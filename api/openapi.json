@@ -587,7 +587,7 @@
     "/api/sites/{bbl}/actions": {
       "get": {
         "summary": "Actions",
-        "description": "`job_type` and `work_types` (comma-separated) are the project screen's setup choices.",
+        "description": "`job_type`, `work_types` (comma-separated), `excavation_depth_ft` and `proposed_storeys` are the\nproject screen's setup choices.",
         "operationId": "actions_api_sites__bbl__actions_get",
         "parameters": [
           {
@@ -645,6 +645,38 @@
                 }
               ],
               "title": "Work Types"
+            }
+          },
+          {
+            "name": "excavation_depth_ft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Excavation Depth Ft"
+            }
+          },
+          {
+            "name": "proposed_storeys",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Proposed Storeys"
             }
           }
         ],
@@ -1264,6 +1296,82 @@
               }
             ],
             "title": "Added At"
+          },
+          "phase": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "design",
+                  "filing",
+                  "notice",
+                  "before_excavation",
+                  "during_work"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phase"
+          },
+          "when": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "When"
+          },
+          "done_by_role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "architect",
+                  "structural_engineer",
+                  "developer",
+                  "contractor"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Done By Role"
+          },
+          "done_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Done At"
+          },
+          "applies_to": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Applies To",
+            "default": []
+          },
+          "evidence": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence"
           }
         },
         "additionalProperties": false,
@@ -1319,6 +1427,23 @@
               }
             ],
             "title": "Owner Role"
+          },
+          "by_role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "architect",
+                  "structural_engineer",
+                  "developer",
+                  "contractor"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "By Role"
           }
         },
         "additionalProperties": false,
@@ -3021,6 +3146,28 @@
             "type": "array",
             "title": "Work Types",
             "default": []
+          },
+          "excavation_depth_ft": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Excavation Depth Ft"
+          },
+          "proposed_storeys": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposed Storeys"
           }
         },
         "additionalProperties": false,
@@ -3129,6 +3276,30 @@
               }
             ],
             "title": "Work Types"
+          },
+          "excavation_depth_ft": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Excavation Depth Ft"
+          },
+          "proposed_storeys": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposed Storeys"
           }
         },
         "additionalProperties": false,

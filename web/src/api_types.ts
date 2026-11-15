@@ -210,7 +210,8 @@ export interface paths {
         };
         /**
          * Actions
-         * @description `job_type` and `work_types` (comma-separated) are the project screen's setup choices.
+         * @description `job_type`, `work_types` (comma-separated), `excavation_depth_ft` and `proposed_storeys` are the
+         *     project screen's setup choices.
          */
         get: operations["actions_api_sites__bbl__actions_get"];
         put?: never;
@@ -438,6 +439,21 @@ export interface components {
             added_reason?: string | null;
             /** Added At */
             added_at?: string | null;
+            /** Phase */
+            phase?: ("design" | "filing" | "notice" | "before_excavation" | "during_work") | null;
+            /** When */
+            when?: string | null;
+            /** Done By Role */
+            done_by_role?: ("architect" | "structural_engineer" | "developer" | "contractor") | null;
+            /** Done At */
+            done_at?: string | null;
+            /**
+             * Applies To
+             * @default []
+             */
+            applies_to: string[];
+            /** Evidence */
+            evidence?: string | null;
         };
         /** ActionItemUpdate */
         ActionItemUpdate: {
@@ -447,6 +463,8 @@ export interface components {
             status?: ("open" | "in_progress" | "done" | "not_applicable") | null;
             /** Owner Role */
             owner_role?: ("architect" | "structural_engineer" | "developer" | "contractor") | null;
+            /** By Role */
+            by_role?: ("architect" | "structural_engineer" | "developer" | "contractor") | null;
         };
         /** BearingWall */
         BearingWall: {
@@ -977,6 +995,10 @@ export interface components {
              * @default []
              */
             work_types: ("earth_work" | "excavation" | "foundation" | "support_of_excavation" | "underpinning" | "structural" | "facade" | "demolition" | "sprinkler" | "standpipe" | "plumbing" | "mechanical" | "sidewalk_shed" | "scaffold" | "construction_fence")[];
+            /** Excavation Depth Ft */
+            excavation_depth_ft?: number | null;
+            /** Proposed Storeys */
+            proposed_storeys?: number | null;
         };
         /** ProjectCreate */
         ProjectCreate: {
@@ -997,6 +1019,10 @@ export interface components {
             construction_type?: ("wood" | "masonry" | "steel" | "concrete" | "unknown") | null;
             /** Work Types */
             work_types?: ("earth_work" | "excavation" | "foundation" | "support_of_excavation" | "underpinning" | "structural" | "facade" | "demolition" | "sprinkler" | "standpipe" | "plumbing" | "mechanical" | "sidewalk_shed" | "scaffold" | "construction_fence")[] | null;
+            /** Excavation Depth Ft */
+            excavation_depth_ft?: number | null;
+            /** Proposed Storeys */
+            proposed_storeys?: number | null;
         };
         /** ProjectMember */
         ProjectMember: {
@@ -1567,6 +1593,8 @@ export interface operations {
                 stage?: string | null;
                 job_type?: string | null;
                 work_types?: string | null;
+                excavation_depth_ft?: number | null;
+                proposed_storeys?: number | null;
             };
             header?: never;
             path: {

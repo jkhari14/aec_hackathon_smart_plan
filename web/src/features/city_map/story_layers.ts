@@ -4,6 +4,7 @@
 import type { Layer, PickingInfo } from "@deck.gl/core";
 import { ArcLayer, ScatterplotLayer } from "@deck.gl/layers";
 
+import { API_BASE } from "../../api/client";
 import type { SimilarCase } from "../../contracts";
 import { buildingKinds, KIND_COLORS } from "./building_kinds";
 import type { Picked } from "./site_lots";
@@ -166,7 +167,7 @@ function analyse(positions: Float32Array, buildings: [number, number, number][])
 /** Fetch and unpack the site model. Throws with the API's reason (no key, Cityweft down) on failure. */
 export async function loadSiteModel(site: Picked, signal?: AbortSignal): Promise<SiteModel> {
   const params = new URLSearchParams({ lat: String(site.lat), lon: String(site.lon) });
-  const response = await fetch(`/api/context3d?${params}`, { signal });
+  const response = await fetch(`${API_BASE}/api/context3d?${params}`, { signal });
   if (!response.ok) {
     let reason = `HTTP ${response.status}`;
     try {
@@ -174,7 +175,7 @@ export async function loadSiteModel(site: Picked, signal?: AbortSignal): Promise
     } catch {
       // not JSON: keep the status
     }
-    throw new Error(reason);
+    throw Object.assign(new Error(reason), { status: response.status });
   }
   const buffer = await response.arrayBuffer();
   const view = new DataView(buffer);

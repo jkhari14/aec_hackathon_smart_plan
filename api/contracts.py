@@ -335,6 +335,15 @@ class ActionItem(Contract):
     added_by_role: Optional[Role] = None
     added_reason: Optional[str] = None
     added_at: Optional[str] = None
+    # When it's due on the project timeline (actions/phases.py), and the sign-off: who marked it done and when.
+    phase: Optional[Literal["design", "filing", "notice", "before_excavation", "during_work"]] = None
+    when: Optional[str] = None
+    done_by_role: Optional[Role] = None
+    done_at: Optional[str] = None
+    # What makes the row about this lot: the neighbouring buildings it concerns, and what the public record
+    # already shows that bears on it (actions/site_context.py).
+    applies_to: list[str] = []
+    evidence: Optional[str] = None
 
 
 # Projects
@@ -378,6 +387,9 @@ class Project(Contract):
     job_type: Optional[JobType] = None
     construction_type: Optional[ConstructionType] = None
     work_types: list[WorkType] = []
+    # Setup's quick answers: how deep the dig goes (ft) and the new building's storeys. Empty when not given.
+    excavation_depth_ft: Optional[float] = None
+    proposed_storeys: Optional[float] = None
 
 
 class ProjectCreate(Contract):
@@ -388,6 +400,8 @@ class ProjectCreate(Contract):
     job_type: Optional[JobType] = None
     construction_type: Optional[ConstructionType] = None
     work_types: Optional[list[WorkType]] = None
+    excavation_depth_ft: Optional[float] = Field(None, ge=0)
+    proposed_storeys: Optional[float] = Field(None, ge=0)
 
 
 class DrawingConfirm(Contract):
@@ -427,6 +441,8 @@ class ActionItemUpdate(Contract):
     id: str
     status: Optional[Literal["open", "in_progress", "done", "not_applicable"]] = None
     owner_role: Optional[Role] = None
+    # The role marking it, recorded as the sign-off when the status becomes done.
+    by_role: Optional[Role] = None
 
 
 class NoteCreate(Contract):
