@@ -1,0 +1,269 @@
+{
+  "version": "1",
+  "note": "Action rules by discipline. Rows sourced from checklist/checklist_rules.py keep that row's id in source_rule and are not restated here; hazard rows are defined below. code_ref cites a section number only; requirement text is paraphrased. code_rule_overrides sets the discipline and hazard per checklist row; it is the domain lead's call, not derived.",
+  "party_to_discipline": {
+    "owner_developer": "contractor",
+    "design_professional": "architect",
+    "excavation_support_engineer": "structural",
+    "geotechnical_engineer": "geotech",
+    "contractor": "contractor",
+    "special_inspector": "structural",
+    "adjoining_owner": null,
+    "dob": null
+  },
+  "owner_role": {
+    "architect": "architect",
+    "structural": "structural_engineer",
+    "geotech": null,
+    "contractor": null
+  },
+  "hazard_rules": [
+    {
+      "id": "flood-design-elevation",
+      "hazard": "flood",
+      "discipline": "architect",
+      "title": "Set design flood elevation and protect building systems",
+      "why": "The lot falls in a mapped flood hazard area, so the lowest floor and the building's mechanical, electrical and plumbing equipment are governed by the flood-resistant construction requirements rather than by the base code alone.",
+      "code_ref": "2022 NYC BC Appendix G",
+      "proof_needed": "Elevation certificate or a design flood elevation shown on the drawings",
+      "life_safety": true,
+      "condition": "flood_zone_mapped",
+      "stages": [
+        "design",
+        "pre_filing"
+      ],
+      "verify": "section"
+    },
+    {
+      "id": "flood-below-grade-egress",
+      "hazard": "flood",
+      "discipline": "architect",
+      "title": "Check egress from any below-grade occupied space",
+      "why": "Below-grade dwelling and occupied spaces have drowned occupants in NYC when stormwater entered through the only exit. Confirm a second means of egress and that the unit is a legal occupancy.",
+      "code_ref": null,
+      "proof_needed": "Egress plan for the below-grade level, and the certificate of occupancy for that use",
+      "life_safety": true,
+      "condition": "has_below_grade_occupancy",
+      "stages": [
+        "pre_acquisition",
+        "design",
+        "pre_filing"
+      ],
+      "verify": "section"
+    },
+    {
+      "id": "flood-stormwater-not-fema",
+      "hazard": "flood",
+      "discipline": "geotech",
+      "title": "Check stormwater flooding outside the FEMA map",
+      "why": "The lot sits outside a mapped FEMA special flood hazard area but in a stormwater flood-prone area. Extreme rainfall flooding is not covered by the FEMA map, so a site outside the map is not therefore a site without flood risk.",
+      "code_ref": null,
+      "proof_needed": "Site drainage design, and the stormwater flood map layer checked with its date",
+      "life_safety": false,
+      "condition": "stormwater_flood_area",
+      "stages": [
+        "pre_acquisition",
+        "design"
+      ],
+      "verify": "none"
+    },
+    {
+      "id": "contamination-e-designation",
+      "hazard": "contamination",
+      "discipline": "architect",
+      "title": "Resolve the E-designation or remediation requirement",
+      "why": "The lot carries an E-designation or sits in a state remediation program, so soil, groundwater or vapour conditions must be addressed before a permit is issued and before occupancy.",
+      "code_ref": null,
+      "proof_needed": "OER or DEC sign-off, remedial action work plan, and the site management plan",
+      "life_safety": true,
+      "condition": "e_designation_or_remediation_site",
+      "stages": [
+        "pre_acquisition",
+        "design",
+        "pre_filing"
+      ],
+      "verify": "agency"
+    },
+    {
+      "id": "contamination-soil-handling",
+      "hazard": "contamination",
+      "discipline": "contractor",
+      "title": "Plan excavated soil handling and worker protection",
+      "why": "Excavation on a lot with a known contamination history generates regulated soil and exposes workers and neighbours to vapour and dust.",
+      "code_ref": null,
+      "proof_needed": "Soil disposal manifests and the community air monitoring plan",
+      "life_safety": true,
+      "condition": "e_designation_or_remediation_site_and_excavation",
+      "stages": [
+        "pre_filing",
+        "construction"
+      ],
+      "verify": "agency"
+    },
+    {
+      "id": "facade-inspection-cycle",
+      "hazard": "facade",
+      "discipline": "architect",
+      "title": "Check the facade inspection cycle and any open report",
+      "why": "Buildings over six storeys report on their facade condition on a recurring cycle. An overdue or unsafe-filed report on this building or an adjacent one is a falling-object hazard over the sidewalk and a sign of deferred maintenance.",
+      "code_ref": null,
+      "proof_needed": "The most recent filed facade report and its status",
+      "life_safety": true,
+      "condition": "facade_cycle_applies",
+      "stages": [
+        "pre_acquisition",
+        "design",
+        "pre_filing",
+        "construction"
+      ],
+      "verify": "program"
+    },
+    {
+      "id": "facade-pedestrian-protection",
+      "hazard": "facade",
+      "discipline": "contractor",
+      "title": "Provide pedestrian protection before work at height",
+      "why": "Work on or above the building line requires protection of the sidewalk and adjacent public way before that work begins, not after a piece has fallen.",
+      "code_ref": "2022 NYC BC 3307",
+      "proof_needed": "Sidewalk shed or fence permit and an installation record",
+      "life_safety": true,
+      "condition": "work_at_height",
+      "stages": [
+        "pre_filing",
+        "construction"
+      ],
+      "verify": "section"
+    },
+    {
+      "id": "fire-egress-during-construction",
+      "hazard": "fire",
+      "discipline": "architect",
+      "title": "Maintain means of egress during construction",
+      "why": "Alteration work in an occupied building can block or reduce the exits the occupants depend on. Egress has to be maintained throughout the work, not restored at the end.",
+      "code_ref": "2022 NYC BC 3310",
+      "proof_needed": "Site safety plan showing egress maintained at each phase",
+      "life_safety": true,
+      "condition": "alteration_with_occupancy",
+      "stages": [
+        "design",
+        "pre_filing",
+        "construction"
+      ],
+      "verify": "section"
+    },
+    {
+      "id": "fire-self-closing-doors",
+      "hazard": "fire",
+      "discipline": "architect",
+      "title": "Verify self-closing doors on dwelling unit entrances",
+      "why": "Smoke spread through a multi-unit building has killed occupants in NYC when apartment entrance and stair doors failed to self-close. Any altered or replaced door assembly in this scope has to keep that function.",
+      "code_ref": null,
+      "proof_needed": "Door schedule showing self-closing hardware, and an installation inspection",
+      "life_safety": true,
+      "condition": "multi_unit_residential",
+      "stages": [
+        "design",
+        "pre_filing",
+        "construction"
+      ],
+      "verify": "program"
+    },
+    {
+      "id": "fire-gas-work-permit",
+      "hazard": "fire",
+      "discipline": "contractor",
+      "title": "Confirm every gas line alteration is permitted and tested",
+      "why": "Unpermitted gas work has destroyed buildings and killed occupants in NYC. Any gas piping touched in this scope needs a permit, a pressure test and a utility sign-off before service is restored.",
+      "code_ref": null,
+      "proof_needed": "Gas work permit, pressure test record and utility authorisation",
+      "life_safety": true,
+      "condition": "gas_work_in_scope",
+      "stages": [
+        "pre_filing",
+        "construction"
+      ],
+      "verify": "program"
+    },
+    {
+      "id": "weather-open-excavation-rain",
+      "hazard": "weather",
+      "discipline": "geotech",
+      "title": "Set a rain and freeze-thaw hold point for the open excavation",
+      "why": "Heavy rain and freeze-thaw cycling change the loads on an excavation support system and on adjoining foundations while the cut is open. Decide the thresholds before the cut is open rather than during a storm.",
+      "code_ref": null,
+      "proof_needed": "Written hold-point criteria in the monitoring plan, with the rainfall and temperature thresholds",
+      "life_safety": true,
+      "condition": "excavation",
+      "stages": [
+        "pre_filing",
+        "construction"
+      ],
+      "verify": "none"
+    },
+    {
+      "id": "weather-winter-protection",
+      "hazard": "weather",
+      "discipline": "contractor",
+      "title": "Protect exposed adjoining walls over the winter",
+      "why": "A party wall exposed by demolition and left through a winter takes freeze-thaw damage that was not in its original design.",
+      "code_ref": null,
+      "proof_needed": "Weather protection detail and the date it was installed",
+      "life_safety": false,
+      "condition": "exposed_wall",
+      "stages": [
+        "construction"
+      ],
+      "verify": "none"
+    }
+  ],
+  "code_rule_overrides": {
+    "notice": {
+      "discipline": "architect",
+      "hazard": "structural"
+    },
+    "license": {
+      "discipline": "architect",
+      "hazard": "structural"
+    },
+    "examination": {
+      "discipline": "structural",
+      "hazard": "structural"
+    },
+    "foundation_protection": {
+      "discipline": "structural",
+      "hazard": "geotech"
+    },
+    "survey": {
+      "discipline": "structural",
+      "hazard": "structural"
+    },
+    "support_drawings": {
+      "discipline": "structural",
+      "hazard": "geotech"
+    },
+    "support_basis": {
+      "discipline": "geotech",
+      "hazard": "geotech"
+    },
+    "underpinning": {
+      "discipline": "structural",
+      "hazard": "geotech"
+    },
+    "underpinning_inspection": {
+      "discipline": "structural",
+      "hazard": "geotech"
+    },
+    "exposed_wall": {
+      "discipline": "structural",
+      "hazard": "structural"
+    },
+    "monitoring": {
+      "discipline": "geotech",
+      "hazard": "geotech"
+    },
+    "hazard_elevations": {
+      "discipline": "geotech",
+      "hazard": "geotech"
+    }
+  }
+}
