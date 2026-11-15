@@ -3,9 +3,11 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 
 import type { ActionItem, Project, Role } from "../../contracts";
-import { Chip, EmptyState, HAZARD_LABELS } from "../../design";
-import { ROLE_LABELS } from "../project/project_client";
+import { api } from "../../api/client";
+import { Button, Chip, EmptyState, HAZARD_LABELS } from "../../design";
+import { projectWrites, ROLE_LABELS, whyNotSaved } from "../project/project_client";
 import type { ProjectWorkspace } from "../project/useProject";
+import { addProjectItems } from "./draft";
 import { groupByOwner } from "./model";
 
 type Status = ActionItem["status"];
@@ -53,11 +55,7 @@ export function ChecklistStep({ project, workspace, notice, onDismissNotice }: P
         </div>
       </div>
 
-      {items.length === 0 && (
-        <EmptyState title="No items for this work type">
-          The rules found nothing to check for this job on this site, or the items could not be added.
-        </EmptyState>
-      )}
+      {items.length === 0 && <NoItems project={project} />}
       {items.length > 0 && shown.length === 0 && <EmptyState title="Nothing matches these filters">Clear a filter to see the rest.</EmptyState>}
 
       {groups.map((group) => (
@@ -77,6 +75,51 @@ export function ChecklistStep({ project, workspace, notice, onDismissNotice }: P
       ))}
       <p className="fs-quiet">A tick is a person's mark that the work was done; 4site does not check it against any record.</p>
     </div>
+  );
+}
+
+/** An empty project: either the items were never saved (retry) or the rules found nothing for this job. */
+function NoItems({ project }: { project: Project }) {
+  const [state, setState] = useState<"idle" | "busy" | "none">("idle");
+  const [problem, setProblem] = useState<string | null>(null);
+  const retry = async () => {
+    setState("busy");
+    setProblem(null);
+    try {
+      let added = 0;
+      await addProjectItems(
+        {
+          actions: api.actions,
+          addItems: async (id, items) => {
+            added = items.length;
+            if (items.length === 0) return;
+            const why = whyNotSaved(await projectWrites.addItems(id, items));
+            if (why) throw new Error(why);
+          },
+        },
+        project,
+      );
+      // New items arrive with the next poll; with none, the rules found nothing for this job.
+      setState(added === 0 ? "none" : "idle");
+    } catch (error) {
+      setProblem(error instanceof Error ? error.message : "Not saved.");
+      setState("idle");
+    }
+  };
+  if (state === "none") {
+    return <EmptyState title="No items for this work type">The rules found nothing to check for this job on this site.</EmptyState>;
+  }
+  return (
+    <EmptyState
+      title="No checklist items on this project yet"
+      action={
+        <Button variant="primary" disabled={state === "busy"} onClick={() => void retry()}>
+          {state === "busy" ? "Adding…" : "Add this job's checklist items"}
+        </Button>
+      }
+    >
+      {problem ?? "They were not saved when the project was made. Try adding them again."}
+    </EmptyState>
   );
 }
 

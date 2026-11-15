@@ -157,3 +157,30 @@ class ProjectSetupRouterTests(ProjectsRouterTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class OldStoreFileTests(unittest.TestCase):
+    """A store file made before the developer/contractor roles refuses them: say so, never a bare 500."""
+
+    def test_old_store_file_refuses_new_roles_with_a_reason(self):
+        import sqlite3
+        from contextlib import closing
+
+        from api.store import project_store_schema as schema
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "projects.sqlite"
+            old_ddl = schema.DDL.replace(", 'developer', 'contractor'", "").replace(", 'document'", "")
+            self.assertNotEqual(old_ddl, schema.DDL)
+            with closing(sqlite3.connect(path)) as db:
+                db.executescript(old_ddl)
+            store = ProjectStore(path)
+            app.dependency_overrides[project_store] = lambda: store
+            try:
+                response = TestClient(app, raise_server_exceptions=False).post("/api/projects", json={
+                    "name": "Four", "site_bbl": "3052110074", "stage": "design",
+                    "members": BOTH + [{"name": "Developer", "role": "developer"}]})
+            finally:
+                app.dependency_overrides.pop(project_store, None)
+            self.assertEqual(response.status_code, 422, response.text)
+            self.assertIn("projects.sqlite", response.json()["detail"])

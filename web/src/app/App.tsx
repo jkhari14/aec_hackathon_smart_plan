@@ -43,9 +43,12 @@ export function App() {
   const workspace = useProject(view.screen === "project" ? projectId : null);
   // A project belongs to the site it was made for: continuing from another site starts a new one.
   const openSiteBbl = workspace.state.status === "ok" ? workspace.state.project.site_bbl : null;
+  // So does a link to a project the store doesn't have (another server, or a store file that was reset).
+  const projectMissing = workspace.state.status === "not_found";
   useEffect(() => {
-    if (view.screen === "project" && view.site && openSiteBbl && openSiteBbl !== view.site) openProject(null);
-  }, [view.screen, view.site, openSiteBbl, openProject]);
+    if (view.screen !== "project" || !view.site) return;
+    if (projectMissing || (openSiteBbl && openSiteBbl !== view.site)) openProject(null);
+  }, [view.screen, view.site, openSiteBbl, projectMissing, openProject]);
 
   useEffect(() => {
     api.layers().then((r) => {

@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { draftProject, type DraftDeps, type DraftInput } from "../src/features/project_screen/draft.ts";
+import { addProjectItems, draftProject, type DraftDeps, type DraftInput } from "../src/features/project_screen/draft.ts";
 
 const input: DraftInput = {
   bbl: "3052110074",
@@ -10,7 +10,7 @@ const input: DraftInput = {
   jobType: "alteration",
   constructionType: "masonry",
   scope: ["structural"],
-  members: [{ name: "Ana", role: "architect" }, { name: "Contractor", role: "contractor" }],
+  members: [{ name: "Ana", role: "architect" }, { name: "Sam", role: "structural_engineer" }, { name: "Contractor", role: "contractor" }],
 };
 
 const item = { id: "a", discipline: "geotech", hazard: "geotech", title: "t", why: "w", status: "open", owner_role: null,
@@ -47,18 +47,46 @@ test("adds the items with owners filled from their discipline", async () => {
   assert.equal(items[0].owner_role, "structural_engineer");
 });
 
-test("sample items are never added to a real project, and the screen is told why", async () => {
+test("sample items stop the draft before any project is made", async () => {
   const { d, calls } = deps({ actions: async () => ({ data: [item], sample: true }) });
-  const result = await draftProject(d, input);
-  assert.equal(result.projectId, "p1");
+  await assert.rejects(draftProject(d, input), /sample/i);
+  assert.equal(calls.create.length, 0);
   assert.equal(calls.addItems.length, 0);
-  assert.match(result.notice ?? "", /sample/i);
 });
 
-test("a project that could not be created stops before loading anything", async () => {
+test("a checklist that fails to load stops the draft before any project is made", async () => {
+  const { d, calls } = deps({ actions: async () => { throw new Error("site profile could not answer"); } });
+  await assert.rejects(draftProject(d, input), /could not answer/);
+  assert.equal(calls.create.length, 0);
+});
+
+test("addProjectItems reloads a saved project's checklist and adds it with owners", async () => {
+  const { d, calls } = deps();
+  await addProjectItems(d, { id: "p9", site_bbl: "3052110074", job_type: "alteration", work_types: ["structural"] });
+  assert.deepEqual(calls.actions[0], ["3052110074", { jobType: "alteration", workTypes: ["structural"] }]);
+  const [id, items] = calls.addItems[0] as [string, { owner_role: string }[]];
+  assert.equal(id, "p9");
+  assert.equal(items[0].owner_role, "structural_engineer");
+});
+
+test("addProjectItems only assigns roles the project has", async () => {
+  const { d, calls } = deps();
+  await addProjectItems(d, { id: "p9", site_bbl: "3052110074", job_type: "alteration", work_types: [],
+    members: [{ name: "A", role: "architect" }] });
+  const [, items] = calls.addItems[0] as [string, { owner_role: string | null }[]];
+  assert.equal(items[0].owner_role, null);
+});
+
+test("addProjectItems refuses sample items", async () => {
+  const { d, calls } = deps({ actions: async () => ({ data: [item], sample: true }) });
+  await assert.rejects(addProjectItems(d, { id: "p9", site_bbl: "3052110074", job_type: "alteration", work_types: [] }), /sample/i);
+  assert.equal(calls.addItems.length, 0);
+});
+
+test("a project that could not be created adds nothing", async () => {
   const { d, calls } = deps({ create: async () => { throw new Error("this project has no developer"); } });
   await assert.rejects(draftProject(d, input), /no developer/);
-  assert.equal(calls.actions.length, 0);
+  assert.equal(calls.addItems.length, 0);
 });
 
 test("items that fail to save keep the project and say so", async () => {

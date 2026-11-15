@@ -1,16 +1,28 @@
 // Step 3: the drawings and reports that matter for this job, each slot shown only when the work makes it
 // relevant. A placeholder for now: attaching records the file's name on the project so the rest of the
 // team sees it was added; the file itself stays on the computer it was picked on.
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import { api } from "../../api/client";
 import type { Project } from "../../contracts";
 import { Button, formatDate } from "../../design";
 import { ROLE_LABELS } from "../project/project_client";
 import type { ProjectWorkspace } from "../project/useProject";
-import { DOC_SLOTS, type DocSlot } from "./model";
+import { DOC_SLOTS, type DocSlot, type SiteFacts } from "./model";
 
 export function DocumentsStep({ project, workspace }: { project: Project; workspace: ProjectWorkspace }) {
-  const slots = DOC_SLOTS.filter((s) => s.relevant(project.job_type ?? null, project.work_types));
+  // Attached neighbours bring the neighbour survey; sample or failed profiles count as unknown, not attached.
+  const [site, setSite] = useState<SiteFacts>({});
+  useEffect(() => {
+    let live = true;
+    api.siteProfile(project.site_bbl).then((p) => {
+      if (live && !p.sample && p.data.bbl === project.site_bbl) setSite({ attached: p.data.neighbors.some((n) => n.attached) });
+    }).catch(() => undefined);
+    return () => {
+      live = false;
+    };
+  }, [project.site_bbl]);
+  const slots = DOC_SLOTS.filter((s) => s.relevant(project.job_type ?? null, project.work_types, site));
   const documents = project.pins.filter((p) => p.kind === "document");
   return (
     <div className="fs-ps-docs fs-enter">

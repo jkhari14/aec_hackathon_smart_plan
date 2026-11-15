@@ -89,9 +89,14 @@ const OWNER: Record<Discipline, Role> = {
 
 export const ownerFor = (discipline: Discipline): Role => OWNER[discipline];
 
-/** Items with an owner set from their discipline where they have none. */
-export const withOwners = (items: ActionItem[]): ActionItem[] =>
-  items.map((item) => (item.owner_role ? item : { ...item, owner_role: ownerFor(item.discipline) }));
+/** Items with an owner set from their discipline where they have none. With `members`, only a role the
+    project has is assigned (the store refuses an owner it has no member for); others stay unassigned. */
+export function withOwners(items: ActionItem[], members?: Role[]): ActionItem[] {
+  return items.map((item) => {
+    const owner = item.owner_role ?? ownerFor(item.discipline);
+    return { ...item, owner_role: !members || members.includes(owner) ? owner : null };
+  });
+}
 
 export type OwnerGroup = { role: Role | null; items: ActionItem[] };
 
@@ -108,7 +113,15 @@ export function groupByOwner(items: ActionItem[]): OwnerGroup[] {
     .filter((g) => g.items.length > 0);
 }
 
-export type DocSlot = { id: string; label: string; hint: string; relevant: (job: JobType | null, scope: WorkType[]) => boolean };
+/** What the site profile says about the neighbours; unknown is treated as not attached. */
+export type SiteFacts = { attached?: boolean };
+
+export type DocSlot = {
+  id: string;
+  label: string;
+  hint: string;
+  relevant: (job: JobType | null, scope: WorkType[], site?: SiteFacts) => boolean;
+};
 
 const has = (scope: WorkType[], ...types: WorkType[]) => types.some((t) => scope.includes(t));
 const digging = (scope: WorkType[]) => has(scope, "earth_work", ...EARTH);
@@ -127,7 +140,7 @@ export const DOC_SLOTS: DocSlot[] = [
   },
   {
     id: "neighbor_survey", label: "Pre-construction survey of neighbours", hint: "Condition of adjoining buildings before work",
-    relevant: (_job, scope) => digging(scope),
+    relevant: (_job, scope, site) => digging(scope) || site?.attached === true,
   },
   { id: "demolition", label: "Demolition plan", hint: "Sequence and protection of the public", relevant: (job) => job === "demolition" },
 ];

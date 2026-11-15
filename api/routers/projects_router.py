@@ -6,6 +6,7 @@ maps its errors to HTTP and returns the whole project.
 """
 
 import os
+import sqlite3
 from functools import lru_cache
 from pathlib import Path
 
@@ -33,6 +34,10 @@ def _run(action, *args):
         raise HTTPException(404, str(error)) from None
     except ProjectStoreError as error:
         raise HTTPException(422, str(error)) from None
+    except sqlite3.IntegrityError:
+        # Values the contract allows but an older store file's CHECK constraints do not (new roles, pin kinds).
+        raise HTTPException(422, "this project store file was made before the developer and contractor roles and "
+                                 "document pins; delete api/store/data/projects.sqlite (see api/store/README.md)") from None
 
 
 def _etag(version: int) -> str:

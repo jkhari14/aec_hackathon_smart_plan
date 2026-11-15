@@ -63,6 +63,11 @@ test("withOwners fills only missing owners", () => {
   assert.deepEqual(out.map((i) => i.owner_role), ["structural_engineer", "developer"]);
 });
 
+test("withOwners leaves an item unassigned when its role is not on the project", () => {
+  const out = withOwners([item("a", "geotech"), item("b", "architect")], ["architect", "contractor"]) as { owner_role: string | null }[];
+  assert.deepEqual(out.map((i) => i.owner_role), [null, "architect"]);
+});
+
 test("groupByOwner keeps role order, puts unassigned last and life safety first", () => {
   const groups = groupByOwner([
     item("x", "contractor", { owner_role: "contractor" }),
@@ -81,4 +86,11 @@ test("document slots show only when the work makes them relevant", () => {
   assert.deepEqual(shown("alteration" as never, ["structural"]), ["survey", "architectural", "structural"]);
   assert.deepEqual(shown("demolition" as never, []), ["survey", "architectural", "demolition"]);
   assert.deepEqual(shown(null as never, []), ["survey", "architectural"]);
+});
+
+test("attached neighbours alone bring the neighbour survey slot", () => {
+  const slot = DOC_SLOTS.find((s) => s.id === "neighbor_survey")!;
+  assert.equal(slot.relevant("alteration" as never, ["structural"] as never, { attached: true }), true);
+  assert.equal(slot.relevant("alteration" as never, ["structural"] as never, { attached: false }), false);
+  assert.equal(slot.relevant("alteration" as never, ["structural"] as never), false);
 });
