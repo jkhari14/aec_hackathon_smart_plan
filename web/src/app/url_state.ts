@@ -8,8 +8,9 @@
 // page loads because the URL is read on load and on popstate.
 import { useCallback, useEffect, useState } from "react";
 
-export type SiteTabKey = "overview" | "similar" | "actions";
-const TABS: SiteTabKey[] = ["overview", "similar", "actions"];
+export type SiteTabKey = "overview" | "similar";
+// The checklist lives on the project screen only; an old ?tab=actions link opens Overview.
+const TABS: SiteTabKey[] = ["overview", "similar"];
 
 export type Screen = "map" | "project";
 
