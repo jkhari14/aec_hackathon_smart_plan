@@ -260,9 +260,9 @@ class TestSiteContext(unittest.TestCase):
 
     def test_matching_records_are_counted_with_their_dates(self):
         ev = self.rows()["action-code-monitoring"]["evidence"]
-        self.assertIn("2 'Excavation undermining an adjacent building'", ev)
-        self.assertIn("1 'Adjacent building not protected'", ev)
-        self.assertIn("Feb 2026–Aug 2026", ev)
+        self.assertTrue(ev.startswith("3 related records here (Feb 2026–Aug 2026), most often "
+                                      "'Excavation undermining an adjacent building'."), ev)
+        self.assertIn("DOB Complaints Received", ev)
         self.assertIn("reports, not findings", ev)
         self.assertNotIn("Scaffold", ev)
 

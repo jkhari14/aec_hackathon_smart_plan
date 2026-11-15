@@ -76,7 +76,7 @@ def _month(iso: str) -> Optional[date]:
 
 
 def evidence(rule_id: str, profile: dict) -> Optional[str]:
-    """'On record here: 2 'X' and 1 'Y' (DOB Complaints Received), Feb 2026–Aug 2026. ...' or None."""
+    """'3 related records here (Feb 2026–Aug 2026), most often 'X'. <sources>. Complaints are ...' or None."""
     titles = EVIDENCE.get(rule_id)
     if not titles:
         return None
@@ -88,13 +88,15 @@ def evidence(rule_id: str, profile: dict) -> Optional[str]:
     if not matched:
         return None
     counts = Counter(base for base, _ in matched)
-    parts = [f"{n} '{title}'" for title, n in counts.most_common()]
+    top = counts.most_common(1)[0][0]
+    total = len(matched)
     sources = sorted({s.get("source_name") for _, s in matched if s.get("source_name")})
     days = sorted(d for d in (_month(s.get("date") or "") for _, s in matched) if d)
     span = ""
     if days:
         first, last = days[0].strftime("%b %Y"), days[-1].strftime("%b %Y")
-        span = f", {first}" if first == last else f", {first}–{last}"
-    joined = parts[0] if len(parts) == 1 else ", ".join(parts[:-1]) + " and " + parts[-1]
-    return (f"On record here: {joined} ({'; '.join(sources)}){span}. "
-            "Complaints are reports, not findings.")
+        span = f" ({first})" if first == last else f" ({first}–{last})"
+    noun = "record" if total == 1 else "records"
+    lead = f"{total} related {noun} here{span}"
+    lead += f": '{top}'." if len(counts) == 1 else f", most often '{top}'."
+    return f"{lead} {'; '.join(sources)}. Complaints are reports, not findings."

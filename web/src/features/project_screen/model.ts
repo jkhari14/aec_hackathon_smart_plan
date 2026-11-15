@@ -230,3 +230,9 @@ export function itemNumbers(groups: { role: Role | null; items: ActionItem[] }[]
   }
   return out;
 }
+
+/** The neighbouring buildings a row concerns: the first few by name, the rest as a count until opened. */
+export function appliesSummary(applies: string[] | undefined, first = 3): { shown: string[]; more: number } {
+  const all = applies ?? [];
+  return { shown: all.slice(0, first), more: Math.max(0, all.length - first) };
+}

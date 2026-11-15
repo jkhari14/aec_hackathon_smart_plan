@@ -10,7 +10,7 @@ import { projectWrites, ROLE_LABELS, whyNotSaved } from "../project/project_clie
 import type { ProjectWorkspace } from "../project/useProject";
 import { addProjectItems } from "./draft";
 import {
-  addedLine, currentMilestone, groupByOwner, itemNumbers, milestoneSummary, MILESTONES, type Phase, phaseOf,
+  addedLine, appliesSummary, currentMilestone, groupByOwner, itemNumbers, milestoneSummary, MILESTONES, type Phase, phaseOf,
 } from "./model";
 
 type Status = ActionItem["status"];
@@ -200,6 +200,8 @@ function ItemRow({ item, number, roles, workspace, flash, isNew }: {
         ) : (
           item.proof_needed && <span className="fs-ps-row__proof">Proof: {item.proof_needed}</span>
         )}
+        <AppliesTo applies={item.applies_to} />
+        {item.evidence && <span className="fs-ps-row__record">{item.evidence}</span>}
         {item.added_reason && (
           <span className="fs-ps-item__why">
             {item.added_reason} <span className="fs-quiet fs-num">{addedLine(item, ROLE_LABELS)}</span>
@@ -237,6 +239,25 @@ function ItemRow({ item, number, roles, workspace, flash, isNew }: {
         </select>
       </span>
     </div>
+  );
+}
+
+/** "Applies to 19 Marcus Garvey Blvd (…), 21 … and 6 more": the neighbours this row concerns, all on a click. */
+function AppliesTo({ applies }: { applies?: string[] }) {
+  const [all, setAll] = useState(false);
+  const { shown, more } = appliesSummary(applies);
+  if (shown.length === 0) return null;
+  const names = all ? applies ?? [] : shown;
+  return (
+    <span className="fs-ps-row__applies">
+      <span className="fs-ps-row__applies-label">Applies to {(applies ?? []).length} building{(applies ?? []).length > 1 ? "s" : ""}:</span>{" "}
+      {names.join(" · ")}
+      {more > 0 && (
+        <button type="button" className="fs-linkbtn" onClick={() => setAll(!all)}>
+          {all ? "show fewer" : `and ${more} more`}
+        </button>
+      )}
+    </span>
   );
 }
 

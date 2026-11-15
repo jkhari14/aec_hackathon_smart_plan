@@ -401,6 +401,27 @@ button.fs-ps-card[aria-pressed="true"]:hover,
   font-size: var(--fs-text-xs);
   color: var(--fs-text-2);
 }
+.fs-ps-row__applies {
+  font-size: var(--fs-text-xs);
+  color: var(--fs-text);
+  line-height: 1.5;
+}
+.fs-ps-row__applies-label {
+  color: var(--fs-text-2);
+  font-weight: 600;
+}
+.fs-ps-row__applies .fs-linkbtn {
+  margin-left: 6px;
+  font-size: var(--fs-text-xs);
+}
+/* What the public record already shows for this row, in the record colour. */
+.fs-ps-row__record {
+  padding: 3px 0 3px 8px;
+  border-left: 2px solid var(--fs-src-record);
+  font-size: var(--fs-text-xs);
+  color: var(--fs-text-2);
+  line-height: 1.45;
+}
 .fs-ps-row__signoff {
   font-size: var(--fs-text-xs);
   font-weight: 600;

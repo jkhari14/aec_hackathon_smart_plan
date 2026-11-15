@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import {
-  asksDepth, currentMilestone, itemNumbers, milestoneSummary, MILESTONES, phaseOf, CONSTRUCTION_CARDS, DEPTH_BANDS, DOC_SLOTS, defaultScope, STAGE_OPTIONS, groupByOwner, ownerFor, ROLES, scopeValues, SCOPE_OPTIONS, withOwners,
+  appliesSummary, asksDepth, currentMilestone, itemNumbers, milestoneSummary, MILESTONES, phaseOf, CONSTRUCTION_CARDS, DEPTH_BANDS, DOC_SLOTS, defaultScope, STAGE_OPTIONS, groupByOwner, ownerFor, ROLES, scopeValues, SCOPE_OPTIONS, withOwners,
   WORK_TYPE_CARDS,
 } from "../src/features/project_screen/model.ts";
 
@@ -147,4 +147,11 @@ test("the project's stage marks where it is on the timeline", () => {
   assert.equal(currentMilestone("pre_filing"), "filing");
   assert.equal(currentMilestone("construction"), "during_work");
   assert.equal(currentMilestone("pre_acquisition"), "design");
+});
+
+test("a row about the neighbors shows the first three by name and counts the rest", () => {
+  const all = ["19 Marcus Garvey Blvd", "21 Marcus Garvey Blvd", "296 Ellery Street", "857 Park Avenue", "17 Marcus Garvey Blvd"];
+  assert.deepEqual(appliesSummary(all), { shown: all.slice(0, 3), more: 2 });
+  assert.deepEqual(appliesSummary(all.slice(0, 2)), { shown: all.slice(0, 2), more: 0 });
+  assert.deepEqual(appliesSummary(undefined), { shown: [], more: 0 });
 });
