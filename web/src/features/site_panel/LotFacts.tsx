@@ -2,6 +2,7 @@
 import type { ReactNode } from "react";
 
 import type { SiteProfile } from "../../contracts";
+import { copy } from "../../copy";
 import { Badge, Count, Explain, humanize, SourceLabel } from "../../design";
 
 function Row({ label, value }: { label: string; value: ReactNode }) {
@@ -38,8 +39,8 @@ export function WorkAndGround({ profile }: { profile: SiteProfile }) {
     <>
       <div className="fs-worktypes">
         <span className="fs-worktypes__label">
-          {profile.job_type ? humanize(profile.job_type) : "Job type not on record"}
-          {profile.stage && <Badge>{humanize(profile.stage)}</Badge>}
+          {profile.job_type ? copy.jobTypes[profile.job_type] : "Job type not on record"}
+          {profile.stage && <Badge title={copy.stageHelp[profile.stage]}>{copy.stages[profile.stage]}</Badge>}
         </span>
         <div className="fs-worktypes__chips">
           {profile.work_types.map((w) => (
@@ -72,7 +73,8 @@ export function Neighbors({ profile }: { profile: SiteProfile }) {
         <li key={n.bbl}>
           <span className="fs-neighbors__addr">{n.address ? titleWords(n.address) : `BBL ${n.bbl}`}</span>
           <span className="fs-neighbors__meta fs-num">
-            {n.attached ? "Attached" : "Detached"} · {n.year_built ?? "year unknown"} · {n.floors != null ? `${n.floors} fl` : "floors unknown"}
+            {n.attached ? copy.sitePanel.attached : copy.sitePanel.detached} · {n.year_built ?? copy.sitePanel.yearUnknown} ·{" "}
+            {n.floors != null ? `${n.floors} fl` : "floors unknown"}
             {n.shared_wall_ft != null ? ` · ${n.shared_wall_ft} ft shared wall` : ""}
           </span>
         </li>

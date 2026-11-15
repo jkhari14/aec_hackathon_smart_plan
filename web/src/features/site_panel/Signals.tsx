@@ -2,6 +2,7 @@
 import { useState } from "react";
 
 import type { DatasetStatus, Signal } from "../../contracts";
+import { copy } from "../../copy";
 import { SEVERITY_LABELS } from "../../contracts";
 import { bySignalPriority, Button, Card, EmptyState, Explain, HAZARD_LABELS, SeverityMark, SourceLabel } from "../../design";
 
@@ -15,10 +16,10 @@ export function Signals({ signals, datasets }: { signals: Signal[]; datasets: Da
 
   if (sorted.length === 0) {
     return (
-      <EmptyState title="No signals on the public record">
+      <EmptyState title={copy.sitePanel.noSignals}>
         {failed.length > 0
           ? `${failed.length} source${failed.length > 1 ? "s" : ""} couldn't load, so this may be incomplete.`
-          : "Nothing in the sources checked points at this lot. That is not the same as safe."}
+          : copy.limitations.points[1]}
       </EmptyState>
     );
   }

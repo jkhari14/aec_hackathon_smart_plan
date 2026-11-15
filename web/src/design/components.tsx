@@ -3,8 +3,8 @@
 import type { ButtonHTMLAttributes, CSSProperties, ReactNode } from "react";
 
 import type { Hazard, Severity } from "../contracts";
-import { SEVERITY_LABELS } from "../contracts";
-import { HAZARD_LABELS } from "./hazards";
+import { copy } from "../copy";
+import { HAZARD_LABELS, SEVERITY_HELP, SEVERITY_TEXT as SEVERITY_LABELS } from "./hazards";
 import { AlertIcon, CloseIcon, InfoIcon } from "./icons";
 
 const hazardVar = (hazard?: Hazard) => (hazard ? ({ "--fs-hz": `var(--fs-hz-${hazard})` } as CSSProperties) : undefined);
@@ -111,8 +111,13 @@ export function HazardChip({ hazard, pressed, onClick }: { hazard: Hazard; press
 
 // ---- Source label --------------------------------------------------------------------------------
 
-export type SourceKind = "record" | "ai" | "user";
-const KIND_TEXT: Record<SourceKind, string> = { record: "Public record", ai: "AI suggestion", user: "User input" };
+export type SourceKind = "record" | "case" | "ai" | "user";
+const KIND_TEXT: Record<SourceKind, string> = {
+  record: copy.sourceLabels.public_record,
+  case: copy.sourceLabels.case,
+  ai: copy.sourceLabels.ai_suggestion,
+  user: copy.sourceLabels.user_input,
+};
 
 type SourceLabelProps = {
   kind?: SourceKind;
@@ -154,8 +159,8 @@ export function Badge({ children, tone = "neutral", title }: BadgeProps) {
 
 export function SampleBadge() {
   return (
-    <Badge tone="sample" title="The API is not answering, so this screen shows fixture data from contracts/fixtures.">
-      Sample data
+    <Badge tone="sample" title={copy.app.sampleDataHint}>
+      {copy.app.sampleData}
     </Badge>
   );
 }
@@ -167,15 +172,15 @@ export function SeverityMark({ level }: { level: Severity }) {
       data-level={level}
       style={{ "--fs-sev": `var(--fs-sev-${level})` } as CSSProperties}
       role="img"
-      aria-label={`Severity: ${SEVERITY_LABELS[level]}`}
-      title={SEVERITY_LABELS[level]}
+      aria-label={`Severity: ${SEVERITY_LABELS[level]}. ${SEVERITY_HELP[level]}`}
+      title={`${SEVERITY_LABELS[level]}: ${SEVERITY_HELP[level]}`}
     />
   );
 }
 
 export function SeverityBadge({ level }: { level: Severity }) {
   return (
-    <Badge>
+    <Badge title={SEVERITY_HELP[level]}>
       <SeverityMark level={level} />
       {SEVERITY_LABELS[level]}
     </Badge>
@@ -184,11 +189,12 @@ export function SeverityBadge({ level }: { level: Severity }) {
 
 /** A count that may be unknown or capped. A failed query is "couldn't load", never zero. */
 export function Count({ value, status = "ok" }: { value?: number | null; status?: "ok" | "error" | "capped" }) {
-  if (status === "error") return <Badge tone="error">Couldn't load</Badge>;
+  if (status === "error") return <Badge tone="error" title={copy.states.couldntLoad}>{copy.queryStatus.error}</Badge>;
+  // An unknown count (the source gave none) is not loading and not zero: say so.
   if (value == null) return <span className="fs-num" style={{ color: "var(--fs-muted)" }}>count unknown</span>;
   return (
     <span className="fs-num">
-      {status === "capped" ? "at least " : ""}
+      {status === "capped" ? `${copy.queryStatus.capped} ` : ""}
       {value.toLocaleString("en-US")}
     </span>
   );
@@ -226,7 +232,7 @@ export function EmptyState({ title, children, action }: StateProps) {
   );
 }
 
-export function ErrorState({ title = "Couldn't load", children, action }: Partial<StateProps>) {
+export function ErrorState({ title = copy.queryStatus.error, children = copy.states.couldntLoad, action }: Partial<StateProps>) {
   return (
     <div className="fs-state" data-tone="error" role="status">
       <p className="fs-state__title">

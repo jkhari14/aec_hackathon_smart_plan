@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react"
 
 import { api } from "../api/client";
 import type { SearchResult } from "../contracts";
+import { copy } from "../copy";
 import { Badge, Kbd, PinIcon, SearchIcon, Skeleton } from "../design";
 
 export type Command = { id: string; label: string; hint?: string; keys?: string; run: () => void };
@@ -99,7 +100,7 @@ export function CommandBar({ open, onClose, onPickSite, commands }: Props) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={onKeyDown}
-            placeholder="Search an address or BBL, or type a command"
+            placeholder="Search an NYC address or BBL, or type a command"
             aria-label="Search an address or BBL"
             aria-controls="fs-cmd-list"
             aria-activedescendant={items[active] ? `fs-cmd-${active}` : undefined}
@@ -108,7 +109,7 @@ export function CommandBar({ open, onClose, onPickSite, commands }: Props) {
             spellCheck={false}
             autoComplete="off"
           />
-          {sample && results.length > 0 && <Badge tone="sample">Sample results</Badge>}
+          {sample && results.length > 0 && <Badge tone="sample" title={copy.app.sampleDataHint}>{copy.app.sampleData}</Badge>}
           <Kbd>Esc</Kbd>
         </div>
 
@@ -120,7 +121,7 @@ export function CommandBar({ open, onClose, onPickSite, commands }: Props) {
             </li>
           )}
           {!loading && query.trim().length >= 2 && results.length === 0 && (
-            <li className="fs-cmd__empty">No address matches "{query.trim()}". Try a street number and name, or a 10-digit BBL.</li>
+            <li className="fs-cmd__empty">{copy.map.searchNoResults}</li>
           )}
           {items.map((item, i) => (
             <li

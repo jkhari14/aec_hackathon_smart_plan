@@ -190,6 +190,12 @@ body {
 .fs-src[data-kind="record"] .fs-src__kind {
   color: var(--fs-src-record);
 }
+.fs-src[data-kind="case"] .fs-src__kind {
+  color: var(--fs-text-2);
+  border-style: double;
+  border-width: 3px;
+  padding: 0 5px;
+}
 .fs-src[data-kind="ai"] .fs-src__kind {
   color: var(--fs-src-ai);
   border-style: dashed;

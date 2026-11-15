@@ -1,3 +1,14 @@
+/* Content that arrives (a tab, a loaded section) rises in once, 220 ms; nothing loops. */
+.fs-enter {
+  animation: fs-enter var(--fs-base) var(--fs-ease-out) both;
+}
+@keyframes fs-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
 .fs-site__bar {
   display: flex;
   flex-direction: column;

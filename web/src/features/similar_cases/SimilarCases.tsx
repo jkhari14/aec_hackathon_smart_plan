@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 
 import type { Hazard, Severity, SimilarCase } from "../../contracts";
 import { SEVERITY_LABELS } from "../../contracts";
+import { causeText, copy } from "../../copy";
 import { Card, Chip, EmptyState, Explain, formatDate, HAZARD_LABELS, humanize, SeverityBadge, SourceLabel } from "../../design";
 
 type Since = "all" | "2020" | "2015";
@@ -16,11 +17,7 @@ const SINCE: { value: Since; label: string }[] = [
   { value: "2020", label: "Since 2020" },
 ];
 
-const CAUSE_LABEL = {
-  reported: "As publicly reported",
-  under_investigation: "Under investigation",
-  unknown: "Cause not publicly reported",
-} as const;
+const S = copy.similarCases;
 
 export function SimilarCases({ results }: { results: SimilarCase[] }) {
   const [hazards, setHazards] = useState<Set<Hazard>>(new Set());
@@ -56,6 +53,7 @@ export function SimilarCases({ results }: { results: SimilarCase[] }) {
 
   return (
     <div className="fs-similar">
+      <p className="fs-quiet">{S.help}</p>
       <div className="fs-filters" role="group" aria-label="Filter similar cases">
         {available.hazards.map((h) => (
           <Chip key={h} hazard={h} pressed={hazards.has(h)} onClick={() => toggle(hazards, h, setHazards)}>
@@ -91,7 +89,7 @@ export function SimilarCases({ results }: { results: SimilarCase[] }) {
         )}
       </p>
 
-      {shown.length === 0 && <EmptyState title="No case matches these filters">Clear a filter to see the rest.</EmptyState>}
+      {shown.length === 0 && <EmptyState title={S.empty}>Clear a filter to see the rest.</EmptyState>}
 
       {shown.map((r) => (
         <CaseCard key={r.case_id} result={r} />
@@ -107,7 +105,7 @@ function CaseCard({ result }: { result: SimilarCase }) {
     <Card
       hazard={primary}
       title={c.title}
-      meta={c.sources.map((s) => <SourceLabel key={s.name} kind="record" name={s.name} url={s.url} date={s.date} />)}
+      meta={c.sources.map((s) => <SourceLabel key={s.name} kind="case" name={s.name} url={s.url} date={s.date} />)}
     >
       <div className="fs-case__line fs-num">
         <span>{c.address}</span>
@@ -116,24 +114,21 @@ function CaseCard({ result }: { result: SimilarCase }) {
       </div>
       <div className="fs-case__match">
         <MatchMeter score={result.score} />
-        <ul className="fs-case__list" aria-label="Matches on">
+        <ul className="fs-case__list" aria-label={`${S.matchesOn} and ${S.differsOn.toLowerCase()}`}>
           {result.matched_on.map((m) => (
-            <li key={m} data-kind="match">{m}</li>
+            <li key={m} data-kind="match" title={S.matchesOn}>{m}</li>
           ))}
           {result.differs_on.map((m) => (
-            <li key={m} data-kind="differ">{m}</li>
+            <li key={m} data-kind="differ" title={S.differsOn}>{m}</li>
           ))}
         </ul>
       </div>
       <Explain label="What happened">
         <p>{c.summary}</p>
-        <p>
-          <strong>{CAUSE_LABEL[c.cause_status]}:</strong> {c.cause_as_reported ?? "no cause has been published."}
-        </p>
+        <p>{causeText(c.cause_status, c.cause_as_reported ?? null)}</p>
         {c.work_types.length > 0 && <p className="fs-quiet">Work on site: {c.work_types.map(humanize).join(", ")}.</p>}
         <p className="fs-quiet">
-          Shown because its profile is close to this site's. Similarity compares conditions; it does not say this site will
-          have the same outcome.
+          {S.score}: {S.scoreHelp}
         </p>
       </Explain>
     </Card>
@@ -144,7 +139,7 @@ function CaseCard({ result }: { result: SimilarCase }) {
 function MatchMeter({ score }: { score: number }) {
   const pct = Math.round(score * 100);
   return (
-    <span className="fs-meter" title={`Similarity ${pct} out of 100: how closely this case's conditions match this site`}>
+    <span className="fs-meter" title={`${S.score} ${pct} out of 100. ${S.scoreHelp}`}>
       <span className="fs-meter__bar" aria-hidden="true">
         <span style={{ width: `${pct}%` }} />
       </span>

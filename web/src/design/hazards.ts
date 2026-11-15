@@ -1,17 +1,12 @@
 // Hazard and severity tokens for TypeScript: the map (deck.gl wants RGB arrays) and any component that
 // needs a label. Colors mirror tokens.css; keep the two in step.
 import type { Hazard, Severity } from "../contracts";
+import { copy } from "../copy";
 
-export const HAZARD_LABELS: Record<Hazard, string> = {
-  structural: "Structural",
-  geotech: "Geotechnical",
-  fire: "Fire",
-  flood: "Flood",
-  contamination: "Contamination",
-  facade: "Facade",
-  weather: "Weather",
-  construction_safety: "Construction safety",
-};
+// Words come from the shared copy file (Ethnie, PR 11) so every screen uses the same ones.
+export const HAZARD_LABELS: Record<Hazard, string> = copy.hazards;
+export const SEVERITY_TEXT: Record<Severity, string> = copy.severity;
+export const SEVERITY_HELP: Record<Severity, string> = copy.severityHelp;
 
 type Rgb = [number, number, number];
 
