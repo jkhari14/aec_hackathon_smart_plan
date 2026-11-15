@@ -25,7 +25,8 @@
 .fs-shell__right {
   position: absolute;
   top: var(--fs-4);
-  bottom: 72px;
+  /* Both columns end above the chat's dock, which runs under them on all but the widest screens. */
+  bottom: calc(var(--fs-dock-bottom) + var(--fs-dock-h) + var(--fs-2));
   /* No z-index here: each panel carries its own, so a moved panel can come in front of either column. */
   display: flex;
   flex-direction: column;
@@ -38,8 +39,6 @@
 }
 .fs-shell__right {
   right: var(--fs-4);
-  /* Ends above the chat's dock, which runs under it on all but the widest screens. */
-  bottom: calc(var(--fs-dock-bottom) + var(--fs-dock-h) + var(--fs-2));
   width: var(--fs-panel-w);
 }
 .fs-shell__left > *,
