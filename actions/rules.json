@@ -453,5 +453,101 @@
       "proof_needed": "Rock removal plan with vibration limits",
       "life_safety": true
     }
+  ],
+  "lesson_rules_note": "Preventive items that lessons from past incidents point to and the code rows don't cover. Added to a project's checklist when its scope overlaps 'scopes'. A code section only where certain; otherwise null.",
+  "lesson_rules": [
+    {
+      "id": "temporary-shoring",
+      "scopes": [
+        "structural",
+        "facade",
+        "demolition"
+      ],
+      "discipline": "structural",
+      "hazard": "structural",
+      "life_safety": true,
+      "title": "Design temporary shoring before cutting or removing structure",
+      "why": "Similar past projects lost a load-bearing wall or pier that was removed or cut without temporary support. Identify every bearing element in the work area and shore it before removal.",
+      "code_ref": null,
+      "proof_needed": "Temporary shoring drawings by a registered design professional, and records that it was installed before removal",
+      "stages": [
+        "design",
+        "pre_filing",
+        "construction"
+      ]
+    },
+    {
+      "id": "existing-condition",
+      "scopes": [
+        "structural",
+        "facade",
+        "demolition"
+      ],
+      "discipline": "structural",
+      "hazard": "structural",
+      "life_safety": true,
+      "title": "Assess the existing building's condition before work",
+      "why": "Similar past buildings with known cracks, bulges or rot came down during or just before work. Survey the existing structure and any open violations before scoping the work.",
+      "code_ref": null,
+      "proof_needed": "A dated condition assessment with photos, and how open violations were resolved",
+      "stages": [
+        "design",
+        "pre_filing"
+      ]
+    },
+    {
+      "id": "hot-work-fire-watch",
+      "scopes": [
+        "demolition",
+        "structural"
+      ],
+      "discipline": "contractor",
+      "hazard": "fire",
+      "life_safety": true,
+      "title": "Hot-work permits and a fire watch during demolition and cutting",
+      "why": "Similar past demolitions caught fire during cutting and abatement. Permit every hot-work operation and keep a fire watch, with standpipes and egress kept working.",
+      "code_ref": "2022 NYC FC Chapter 35",
+      "proof_needed": "Hot-work permits and the fire-watch log",
+      "stages": [
+        "construction"
+      ]
+    },
+    {
+      "id": "crane-hoist-plan",
+      "scopes": [
+        "structural",
+        "demolition"
+      ],
+      "discipline": "contractor",
+      "hazard": "construction_safety",
+      "life_safety": true,
+      "title": "Crane and hoist rigging plan, inspections and wind limits",
+      "why": "Similar past cranes and hoists failed during jumps, in high wind or with unsupported outriggers. Plan the rigging, inspect before use and set wind limits.",
+      "code_ref": "2022 NYC BC 3319",
+      "proof_needed": "The rigging plan, inspection certificates and wind-limit procedure",
+      "stages": [
+        "pre_filing",
+        "construction"
+      ]
+    },
+    {
+      "id": "scaffold-guardrails",
+      "scopes": [
+        "scaffold",
+        "sidewalk_shed",
+        "structural",
+        "excavation"
+      ],
+      "discipline": "contractor",
+      "hazard": "construction_safety",
+      "life_safety": true,
+      "title": "Check scaffolds, guardrails, shafts and trench exits daily",
+      "why": "Similar past sites had unplanked scaffolds, missing guardrails, open shafts, leaning sheds or trenches with no way out. Inspect them daily.",
+      "code_ref": "2022 NYC BC 3314",
+      "proof_needed": "The daily scaffold and fall-protection inspection log",
+      "stages": [
+        "construction"
+      ]
+    }
   ]
 }

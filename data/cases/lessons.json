@@ -1,0 +1,131 @@
+{
+  "note": "How past incidents in data/cases/cases.json failed, each failure mode tied to the checklist items that prevent it. Tagged by reading each case's reported cause (basis 'reported_cause'). Cases with no published cause (under investigation or unknown) are tagged only by what happened (basis 'event_only'), never by a cause. Options: renovate, demolish_rebuild, new_build. Scopes are contract WorkTypes.",
+  "failure_modes": {
+    "neighbor_undermined": {
+      "label": "Digging undermined a neighbor's footings",
+      "hazard": "geotech",
+      "options": ["renovate", "demolish_rebuild", "new_build"],
+      "scopes": ["excavation", "underpinning", "foundation", "support_of_excavation"],
+      "prevent_with": ["checklist:survey", "checklist:underpinning", "checklist:monitoring", "checklist:foundation_protection", "checklist:notice"]
+    },
+    "excavation_support_failed": {
+      "label": "Excavation support or a trench gave way",
+      "hazard": "geotech",
+      "options": ["renovate", "demolish_rebuild", "new_build"],
+      "scopes": ["excavation", "support_of_excavation", "earth_work"],
+      "prevent_with": ["checklist:support_drawings", "checklist:support_basis", "checklist:monitoring", "actions:weather-open-excavation-rain"]
+    },
+    "bearing_element_removed": {
+      "label": "A load-bearing wall or pier was cut or removed without temporary support",
+      "hazard": "structural",
+      "options": ["renovate"],
+      "scopes": ["structural", "facade"],
+      "prevent_with": ["lesson:temporary-shoring", "lesson:existing-condition", "checklist:exposed_wall"]
+    },
+    "deteriorated_building": {
+      "label": "A deteriorated building came down during or before work",
+      "hazard": "structural",
+      "options": ["renovate", "demolish_rebuild"],
+      "scopes": ["structural", "demolition", "facade"],
+      "prevent_with": ["lesson:existing-condition", "lesson:temporary-shoring", "actions:facade-inspection-cycle"]
+    },
+    "facade_falling": {
+      "label": "Facade or masonry fell toward the sidewalk",
+      "hazard": "facade",
+      "options": ["renovate", "demolish_rebuild"],
+      "scopes": ["facade", "scaffold", "sidewalk_shed"],
+      "prevent_with": ["actions:facade-inspection-cycle", "actions:facade-pedestrian-protection"]
+    },
+    "demolition_fire": {
+      "label": "Fire during demolition, abatement or hot work",
+      "hazard": "fire",
+      "options": ["renovate", "demolish_rebuild", "new_build"],
+      "scopes": ["demolition", "structural"],
+      "prevent_with": ["lesson:hot-work-fire-watch", "actions:fire-egress-during-construction"]
+    },
+    "gas_explosion": {
+      "label": "Gas work or a gas leak led to an explosion",
+      "hazard": "fire",
+      "options": ["renovate"],
+      "scopes": ["plumbing", "mechanical"],
+      "prevent_with": ["actions:fire-gas-work-permit"]
+    },
+    "fire_spread": {
+      "label": "Fire spread through an occupied building",
+      "hazard": "fire",
+      "options": ["renovate", "new_build", "demolish_rebuild"],
+      "scopes": ["structural"],
+      "prevent_with": ["actions:fire-self-closing-doors", "actions:fire-egress-during-construction"]
+    },
+    "below_grade_flooding": {
+      "label": "Water flooded below-grade or low-lying space",
+      "hazard": "flood",
+      "options": ["renovate", "demolish_rebuild", "new_build"],
+      "scopes": ["excavation", "foundation"],
+      "prevent_with": ["actions:flood-below-grade-egress", "actions:flood-design-elevation", "actions:flood-stormwater-not-fema"]
+    },
+    "crane_hoist": {
+      "label": "A crane or hoist failed",
+      "hazard": "construction_safety",
+      "options": ["demolish_rebuild", "new_build"],
+      "scopes": ["structural"],
+      "prevent_with": ["lesson:crane-hoist-plan"]
+    },
+    "site_safety_lapse": {
+      "label": "Falls and site safety: guardrails, scaffolds, shafts and sheds",
+      "hazard": "construction_safety",
+      "options": ["renovate", "demolish_rebuild", "new_build"],
+      "scopes": ["scaffold", "sidewalk_shed", "structural", "excavation"],
+      "prevent_with": ["lesson:scaffold-guardrails", "actions:facade-pedestrian-protection"]
+    },
+    "contaminated_soil": {
+      "label": "Contaminated soil met during excavation",
+      "hazard": "contamination",
+      "options": ["demolish_rebuild", "new_build"],
+      "scopes": ["excavation", "earth_work"],
+      "prevent_with": ["actions:contamination-e-designation", "actions:contamination-soil-handling"]
+    }
+  },
+  "cases": {
+    "case-211-e-34th-2020": {"modes": ["neighbor_undermined", "excavation_support_failed"], "basis": "reported_cause"},
+    "case-714-39th-2018": {"modes": ["excavation_support_failed"], "basis": "reported_cause"},
+    "case-102-02-liberty": {"modes": ["neighbor_undermined"], "basis": "event_only"},
+    "case-1915-billingsley-2023": {"modes": ["bearing_element_removed"], "basis": "reported_cause"},
+    "case-57-ann-2023": {"modes": ["bearing_element_removed", "deteriorated_building"], "basis": "reported_cause"},
+    "case-95-quincy-2015": {"modes": ["neighbor_undermined"], "basis": "reported_cause"},
+    "case-656-myrtle-2015": {"modes": ["deteriorated_building", "facade_falling"], "basis": "reported_cause"},
+    "case-729-7th-2019": {"modes": ["facade_falling"], "basis": "reported_cause"},
+    "case-121-2nd-2015": {"modes": ["gas_explosion"], "basis": "reported_cause"},
+    "case-333-e-181-2022": {"modes": ["fire_spread"], "basis": "reported_cause"},
+    "case-ida-basement-2021": {"modes": ["below_grade_flooding"], "basis": "reported_cause"},
+    "case-338-court-2020": {"modes": ["deteriorated_building"], "basis": "reported_cause"},
+    "case-1321-flatbush-2026": {"modes": ["neighbor_undermined"], "basis": "event_only"},
+    "case-303-e-51-2008": {"modes": ["crane_hoist"], "basis": "reported_cause"},
+    "case-e91-crane-2008": {"modes": ["crane_hoist"], "basis": "reported_cause"},
+    "case-493-myrtle-2009": {"modes": ["deteriorated_building"], "basis": "reported_cause"},
+    "case-347-myrtle-2026": {"modes": ["deteriorated_building"], "basis": "reported_cause"},
+    "case-235-e-42-2026": {"modes": ["bearing_element_removed"], "basis": "event_only"},
+    "case-1266-50th-2024": {"modes": ["excavation_support_failed"], "basis": "event_only"},
+    "case-420-melrose-2012": {"modes": ["neighbor_undermined"], "basis": "event_only"},
+    "case-1644-park-2014": {"modes": ["gas_explosion"], "basis": "reported_cause"},
+    "case-130-liberty-2007": {"modes": ["demolition_fire"], "basis": "reported_cause"},
+    "case-60-hudson-crane-2016": {"modes": ["crane_hoist"], "basis": "reported_cause"},
+    "case-2363-prospect-2017": {"modes": ["fire_spread"], "basis": "reported_cause"},
+    "case-305-west-end-2015": {"modes": ["facade_falling"], "basis": "reported_cause"},
+    "case-breezy-point-2012": {"modes": ["below_grade_flooding", "fire_spread"], "basis": "reported_cause"},
+    "case-770-eastern-pkwy-2024": {"modes": ["neighbor_undermined", "excavation_support_failed"], "basis": "reported_cause"},
+    "case-550-10th-ave-2023": {"modes": ["crane_hoist", "demolition_fire"], "basis": "event_only"},
+    "case-152-graham-2020": {"modes": ["contaminated_soil"], "basis": "reported_cause"},
+    "case-250-water-2022": {"modes": ["contaminated_soil"], "basis": "reported_cause"},
+    "case-204-bedford-2020": {"modes": ["facade_falling", "deteriorated_building"], "basis": "reported_cause"},
+    "case-927-grand-2026": {"modes": ["demolition_fire"], "basis": "event_only"},
+    "case-338-court-2020-bulge": {"modes": ["facade_falling"], "basis": "reported_cause"},
+    "case-133-20-rockaway-2019": {"modes": ["neighbor_undermined"], "basis": "reported_cause"},
+    "case-42-sharon-2019": {"modes": ["bearing_element_removed"], "basis": "reported_cause"},
+    "case-595-smith-2019": {"modes": ["site_safety_lapse"], "basis": "reported_cause"},
+    "case-301-e-80-2019": {"modes": ["excavation_support_failed", "site_safety_lapse"], "basis": "reported_cause"},
+    "case-31-ainslie-2019": {"modes": ["crane_hoist"], "basis": "reported_cause"},
+    "case-41-w-45-2019": {"modes": ["site_safety_lapse"], "basis": "reported_cause"},
+    "case-555-west-end-2019": {"modes": ["site_safety_lapse"], "basis": "reported_cause"}
+  }
+}
