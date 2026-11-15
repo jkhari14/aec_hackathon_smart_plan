@@ -1,7 +1,8 @@
 // Lot outlines for the picked site and its touching neighbors, and the click-to-site lookup.
-import type { Feature, FeatureCollection } from "geojson";
+import type { Feature, FeatureCollection, MultiPolygon, Polygon } from "geojson";
 import { api } from "../../api/client";
 import type { SiteProfile } from "../../contracts";
+import { partyWalls } from "./party_walls";
 
 // MapPLUTO tax lot polygons, the same dataset data_pull/lot_neighbors.py uses.
 const TAX_LOTS = "https://data.cityofnewyork.us/resource/i38t-6if2.geojson";
@@ -11,6 +12,7 @@ export type Picked = { label: string; bbl: string; lat: number; lon: number };
 
 export type SiteLots = {
   lots: FeatureCollection;
+  walls: FeatureCollection;
   profile: SiteProfile | null;
   sample: boolean;
   /** Why neighbors are missing, when they are: shown to the user, never as "0 neighbors". */
@@ -44,7 +46,22 @@ export async function loadSiteLots(site: Picked): Promise<SiteLots> {
     const bbl = String(f.properties?.bbl ?? "").split(".")[0];
     f.properties = { bbl, role: bbl === site.bbl ? "site" : "neighbor" };
   }
-  return { lots: { type: "FeatureCollection", features }, profile, sample: result.sample, note };
+  // Party walls only where the profile says the neighbor is attached; detached lots just touch.
+  const attached = new Set(profile?.neighbors.filter((n) => n.attached).map((n) => n.bbl));
+  const siteLot = features.find((f) => f.properties?.role === "site");
+  const polygonal = (f: Feature) => f.geometry.type === "Polygon" || f.geometry.type === "MultiPolygon";
+  const walls = siteLot && polygonal(siteLot)
+    ? partyWalls(siteLot.geometry as Polygon | MultiPolygon, features
+      .filter((f) => attached.has(f.properties?.bbl) && polygonal(f))
+      .map((f) => ({ bbl: f.properties?.bbl, geometry: f.geometry as Polygon | MultiPolygon })))
+    : [];
+  return {
+    lots: { type: "FeatureCollection", features },
+    walls: { type: "FeatureCollection", features: walls },
+    profile,
+    sample: result.sample,
+    note,
+  };
 }
 
 // shortcut: the API has no reverse lookup yet, so a map click asks NYC Planning's GeoSearch directly;

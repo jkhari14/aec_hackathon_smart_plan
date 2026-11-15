@@ -1,6 +1,9 @@
 // The map home: a full-bleed dark city map with every layer from /api/layers (clustered, fading in by
 // zoom), extruded buildings, address search or click to pick a site, a cinematic fly-to, and the site
-// with its touching lots highlighted. The layer panel and search float over it.
+// with its touching lots highlighted, the shared party wall glowing, and similar cases arcing in from
+// across the city. Google Photorealistic 3D Tiles replace the extrusions when a key is set.
+import type { Layer } from "@deck.gl/core";
+import { MapboxOverlay } from "@deck.gl/mapbox";
 import type { FeatureCollection, Point } from "geojson";
 import { type GeoJSONSource, Map as MapLibreMap, type MapGeoJSONFeature, NavigationControl, Popup } from "maplibre-gl";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -15,6 +18,7 @@ import {
   addAreaLayers, addBuildings, addPointLayers, addSiteLayers, areaLayerIds, BASEMAP, NYC_CENTER, pointLayerIds, sourceId,
 } from "./map_style";
 import { loadSiteLots, type Picked, siteAt } from "./site_lots";
+import { GOOGLE_KEY, googleTiles, similarCaseLayers, similarCaseTooltip } from "./story_layers";
 import { SiteSearch } from "./SiteSearch";
 
 // `features` is unused: kept so the PR 0 placeholder App still compiles until Camilo's shell replaces it.
@@ -50,18 +54,35 @@ export function CityMap(_props: Props) {
   const [picked, setPicked] = useState<Picked | null>(null);
   const [siteStatus, setSiteStatus] = useState<string | null>(null);
   const [sample, setSample] = useState(false);
+  const [credits, setCredits] = useState<string | null>(null);
+  const overlayRef = useRef<MapboxOverlay | null>(null);
+  const deckLayers = useRef<{ tiles: Layer[]; arcs: Layer[] }>({ tiles: [], arcs: [] });
+  const drawDeck = () => overlayRef.current?.setProps({ layers: [...deckLayers.current.tiles, ...deckLayers.current.arcs] });
 
   useEffect(() => {
     if (!container.current) return;
     const map = new MapLibreMap({ container: container.current, style: BASEMAP, center: NYC_CENTER, zoom: 10.4, pitch: 30 });
     map.addControl(new NavigationControl({ visualizePitch: true }), "bottom-right");
+    // Not interleaved: with MapLibre 6 the shared-context mode drew nothing; its own canvas works.
+    const overlay = new MapboxOverlay({ interleaved: false, layers: [], getTooltip: similarCaseTooltip as never });
+    map.addControl(overlay);
+    overlayRef.current = overlay;
     map.on("load", () => {
       addBuildings(map);
       addSiteLayers(map);
       setReady(true);
+      if (GOOGLE_KEY) {
+        googleTiles(GOOGLE_KEY, setCredits).then((tiles) => {
+          if (!mapRef.current) return;
+          map.setLayoutProperty("buildings-3d", "visibility", "none");
+          deckLayers.current.tiles = [tiles];
+          drawDeck();
+        }).catch(() => setCredits("Google 3D tiles couldn't load; showing extruded buildings."));
+      }
     });
     mapRef.current = map;
     return () => {
+      overlayRef.current = null;
       mapRef.current = null;
       setReady(false);
       map.remove();
@@ -141,18 +162,45 @@ export function CityMap(_props: Props) {
     if (reducedMotion()) map.jumpTo(camera);
     else map.flyTo({ ...camera, duration: 3200, curve: 1.6, essential: false });
     setSiteStatus("Loading the site and its touching lots…");
-    (map.getSource("site-lots") as GeoJSONSource).setData({ type: "FeatureCollection", features: [] });
-    loadSiteLots(picked).then(({ lots, profile, sample: s, note }) => {
+    const empty: FeatureCollection = { type: "FeatureCollection", features: [] };
+    (map.getSource("site-lots") as GeoJSONSource).setData(empty);
+    (map.getSource("party-walls") as GeoJSONSource).setData(empty);
+    deckLayers.current.arcs = [];
+    drawDeck();
+    let frame = 0;
+    loadSiteLots(picked).then(({ lots, walls, profile, sample: s, note }) => {
       if (cancelled) return;
       setSample((was) => was || s);
       (map.getSource("site-lots") as GeoJSONSource).setData(lots);
+      (map.getSource("party-walls") as GeoJSONSource).setData(walls);
       const touching = profile?.neighbors.length;
       setSiteStatus(note ?? `site and ${touching} touching lot${touching === 1 ? "" : "s"} highlighted`);
     });
+    // Similar cases arc in once the camera has settled on the site.
+    api.similar(picked.bbl).then(({ data, sample: s }) => {
+      // The offline fixture is for one demo lot; never arc its cases into a different site.
+      if (cancelled || data.bbl !== picked.bbl || data.results.length === 0) return;
+      setSample((was) => was || s);
+      const start = performance.now() + (reducedMotion() ? 0 : 2600);
+      const step = (now: number) => {
+        if (cancelled) return;
+        const t = reducedMotion() ? 1 : Math.min(1, Math.max(0, (now - start) / 1200));
+        deckLayers.current.arcs = similarCaseLayers(picked, data.results, 1 - (1 - t) ** 3);
+        drawDeck();
+        if (t < 1) frame = requestAnimationFrame(step);
+      };
+      frame = requestAnimationFrame(step);
+    });
     return () => {
       cancelled = true;
+      cancelAnimationFrame(frame);
     };
   }, [ready, picked]);
+
+  // Keep the site in view when the layer panel opens over the map's right side.
+  const onPanelOpen = useCallback((open: boolean) => {
+    mapRef.current?.easeTo({ padding: { right: open ? 352 : 0, top: 72, left: 0, bottom: 0 }, duration: reducedMotion() ? 0 : 250 });
+  }, []);
 
   const toggle = (layerId: string) => {
     const map = mapRef.current;
@@ -171,7 +219,10 @@ export function CityMap(_props: Props) {
     <div className="absolute inset-0">
       <div ref={container} className="h-full w-full" />
       <SiteSearch picked={picked} status={siteStatus} onPick={pickSite} />
-      <LayerPanel layers={layers} onToggle={toggle} />
+      <LayerPanel layers={layers} onToggle={toggle} onOpenChange={onPanelOpen} />
+      {credits && (
+        <span className="absolute bottom-10 right-4 max-w-md rounded bg-panel/80 px-2 py-0.5 text-[11px] text-muted">{credits}</span>
+      )}
       {sample && (
         <span className="absolute bottom-4 left-4 rounded bg-sample/15 px-2 py-0.5 text-xs font-medium text-sample">
           Sample data

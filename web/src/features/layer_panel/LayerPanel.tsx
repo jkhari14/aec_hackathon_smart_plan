@@ -1,13 +1,13 @@
 // Every data source on the map, with its toggle, status, count, source link and updated date.
 // A failed source says "couldn't load", never zero; a capped one says "at least".
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { LayerCatalogEntry } from "../../contracts";
 import { HAZARD_COLORS } from "../city_map/map_style";
 
 export type LayerState = { entry: LayerCatalogEntry; on: boolean; loaded: number | null; sample: boolean };
 
-type Props = { layers: LayerState[]; onToggle: (layerId: string) => void };
+type Props = { layers: LayerState[]; onToggle: (layerId: string) => void; onOpenChange?: (open: boolean) => void };
 
 export function countLabel({ entry, loaded, sample }: LayerState): string {
   if (entry.status === "error") return "Couldn't load";
@@ -19,8 +19,9 @@ export function countLabel({ entry, loaded, sample }: LayerState): string {
   return entry.status === "capped" ? `at least ${shown}` : shown;
 }
 
-export function LayerPanel({ layers, onToggle }: Props) {
+export function LayerPanel({ layers, onToggle, onOpenChange }: Props) {
   const [open, setOpen] = useState(true);
+  useEffect(() => onOpenChange?.(open), [open, onOpenChange]);
   return (
     <section className="absolute right-4 top-4 w-80 overflow-hidden rounded-lg border border-line bg-panel/90 backdrop-blur"
       aria-label="Map layers">
