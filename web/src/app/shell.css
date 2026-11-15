@@ -56,7 +56,8 @@
   border-width: 0;
 }
 .fs-shell__chat {
-  flex: 0 1 auto;
+  /* Not shrunk below its content: next to a tall site panel the answers were left a strip a line high. */
+  flex: 0 0 auto;
   min-height: 0;
   max-height: 60%;
   display: flex;
