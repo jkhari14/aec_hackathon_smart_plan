@@ -7,7 +7,7 @@ type Discipline = ActionItem["discipline"];
 type ItemStatus = ActionItem["status"];
 type CauseStatus = Case["cause_status"];
 type AnswerKind = ChatResponse["answer_parts"][number]["kind"];
-type Role = "architect" | "structural_engineer";
+type Role = "architect" | "structural_engineer" | "developer" | "contractor";
 type JobType = "new_building" | "alteration" | "demolition";
 type QueryStatus = "ok" | "error" | "capped";
 
@@ -89,6 +89,8 @@ export const copy = {
   roles: {
     architect: "Architect",
     structural_engineer: "Structural engineer",
+    developer: "Developer",
+    contractor: "Contractor",
   } satisfies Record<Role, string>,
 
   disciplines: {

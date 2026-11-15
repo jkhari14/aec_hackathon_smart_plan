@@ -14,7 +14,9 @@ from typing import Optional, get_args
 from fastapi import APIRouter, HTTPException, Response
 from pydantic import TypeAdapter
 
-from api.contracts import ActionItem, EarlyWarning, Hazard, JobType, PatternScore, SimilarCases, SiteProfile, Stage
+from api.contracts import (
+    ActionItem, EarlyWarning, Hazard, JobType, PatternScore, SimilarCases, SiteProfile, Stage, WorkType,
+)
 from api.routers.router_data import (
     DataUnavailable, LoadedData, owner_function, served, valid_as_of, valid_bbl, valid_choice,
 )
@@ -33,7 +35,7 @@ SITE_OPTIONS = {
     "similar": ("hazard", "severity_min"),
     "warnings": ("as_of",),
     "pattern": (),
-    "actions": ("stage",),
+    "actions": ("stage", "job_type", "work_types"),
 }
 _MODELS = {"profile": TypeAdapter(SiteProfile), "similar": TypeAdapter(SimilarCases),
            "warnings": TypeAdapter(list[EarlyWarning]), "pattern": TypeAdapter(PatternScore),
@@ -42,34 +44,49 @@ _MODELS = {"profile": TypeAdapter(SiteProfile), "similar": TypeAdapter(SimilarCa
 sites_router = APIRouter(prefix="/api/sites/{bbl}")
 
 
-def _checked(job_type, stage, as_of, hazard, severity_min) -> dict:
+def _work_types(value) -> Optional[list[str]]:
+    """A comma-separated list (the route) or a list (a Python caller), each one a contract WorkType. Empty is None."""
+    if value is None:
+        return None
+    parts = [p.strip() for p in (value.split(",") if isinstance(value, str) else value)]
+    parts = [p for p in parts if p]
+    for part in parts:
+        valid_choice(part, get_args(WorkType), "work_types")
+    return list(dict.fromkeys(parts)) or None
+
+
+def _checked(job_type, stage, as_of, hazard, severity_min, work_types=None) -> dict:
     if severity_min is not None and (isinstance(severity_min, bool) or not isinstance(severity_min, int)
                                      or not 0 <= severity_min <= 3):
         raise HTTPException(422, "severity_min is 0 to 3")
     return {"job_type": valid_choice(job_type, get_args(JobType), "job_type"),
             "stage": valid_choice(stage, get_args(Stage), "stage"), "as_of": valid_as_of(as_of),
-            "hazard": valid_choice(hazard, get_args(Hazard), "hazard"), "severity_min": severity_min}
+            "hazard": valid_choice(hazard, get_args(Hazard), "hazard"), "severity_min": severity_min,
+            "work_types": _work_types(work_types)}
 
 
 def load_site_part(part: str, bbl: str, job_type: Optional[str] = None, stage: Optional[str] = None,
                    as_of: Optional[str] = None, hazard: Optional[str] = None,
-                   severity_min: Optional[int] = None) -> LoadedData:
+                   severity_min: Optional[int] = None, work_types=None) -> LoadedData:
     """One site part, checked against its contract; `sample` is True while it is the fixture, not this site.
 
     Pass any of the options: each part gets only its own. Bad input is HTTPException(422), as on the route.
     An owner function that fails or answers off its contract is DataUnavailable, never an empty answer.
     """
     valid_bbl(bbl)
-    checked = _checked(job_type, stage, as_of, hazard, severity_min)
+    checked = _checked(job_type, stage, as_of, hazard, severity_min, work_types)
     module_name, function_name, fixture_name = SITE_SOURCES[part]
     where = f"{module_name}.{function_name}"
     build = owner_function(module_name, function_name)
     if build is None:
         return LoadedData(_MODELS[part].validate_python(fixture(fixture_name)), True)
     try:
-        options = {name: checked[name] for name in SITE_OPTIONS[part]}
+        params = inspect.signature(build).parameters
+        takes_any = any(p.kind is inspect.Parameter.VAR_KEYWORD for p in params.values())
+        # An owner gets the options it declares: one written before an option was added keeps working.
+        options = {name: checked[name] for name in SITE_OPTIONS[part] if takes_any or name in params}
         response = Response()
-        if "response" in inspect.signature(build).parameters:
+        if "response" in params:
             options["response"] = response
         answer = build(bbl, **options)
         return LoadedData(_MODELS[part].validate_python(answer), response.headers.get(FIXTURE_HEADER) == "true")
@@ -101,5 +118,7 @@ def pattern(bbl: str, response: Response):
 
 
 @sites_router.get("/actions", response_model=list[ActionItem])
-def actions(bbl: str, response: Response, stage: Optional[str] = None):
-    return served(response, load_site_part, "actions", bbl, stage=stage)
+def actions(bbl: str, response: Response, stage: Optional[str] = None, job_type: Optional[str] = None,
+            work_types: Optional[str] = None):
+    """`job_type` and `work_types` (comma-separated) are the project screen's setup choices."""
+    return served(response, load_site_part, "actions", bbl, stage=stage, job_type=job_type, work_types=work_types)

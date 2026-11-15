@@ -1,4 +1,5 @@
-/* ForeSite design tokens. Dark first; light is the same names under [data-theme="light"].
+/* ForeSite design tokens. Light ("paper", from the 4site deck) is the default theme; dark is the same
+   names on :root, with light under [data-theme="light"].
    Every color pair used for text meets WCAG AA (4.5:1) on --fs-panel in both themes.
    The --color-* names at the end keep the PR 0 Tailwind utilities (bg-panel, text-muted...) on these
    tokens, so screens built on the placeholder theme follow the design system without edits. */
@@ -26,6 +27,10 @@
   --fs-accent-ink: #0a1526;
   --fs-accent-soft: rgb(124 180 255 / 0.14);
   --fs-focus: #9cc6ff;
+  /* Primary buttons: the accent at night; ink on paper (blue is kept for highlights there). */
+  --fs-btn-primary: var(--fs-accent);
+  --fs-btn-primary-ink: var(--fs-accent-ink);
+  --fs-btn-primary-hover: #a3caff;
 
   /* Source labels: who says so. Part of the visual language, not a footnote. */
   --fs-src-record: #8fd3b0;   /* public record */
@@ -51,7 +56,13 @@
   --fs-sev-3: #ff6464;
 
   /* Type: one family, tabular numbers for dates and counts. */
-  --fs-font: "Inter", "Segoe UI Variable Text", "Segoe UI", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --fs-font: "Space Grotesk", "Inter", "Segoe UI Variable Text", "Segoe UI", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  /* The deck's pixel face: only for small uppercase eyebrows, never for reading text. */
+  --fs-pixel: "Silkscreen", var(--fs-mono);
+  /* Drafting-paper grid, for full-page surfaces (not panels). */
+  --fs-grid-line: rgb(255 255 255 / 0.04);
+  --fs-grid: linear-gradient(var(--fs-grid-line) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--fs-grid-line) 1px, transparent 1px) 0 0 / 24px 24px;
   --fs-mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
   --fs-text-xs: 11px;
   --fs-text-sm: 12.5px;
@@ -93,23 +104,29 @@
 :root[data-theme="light"] {
   color-scheme: light;
 
-  --fs-bg: #eef1f5;
-  --fs-panel: #ffffff;
-  --fs-panel-glass: rgb(255 255 255 / 0.9);
-  --fs-raised: #f5f7fa;
-  --fs-hover: #eaeef3;
-  --fs-line: #d8dee6;
-  --fs-line-strong: #b9c3cf;
+  /* Paper, ink and one blue: the 4site deck. */
+  --fs-bg: #f1f0ec;
+  --fs-panel: #fafaf7;
+  --fs-panel-glass: rgb(250 250 247 / 0.92);
+  --fs-raised: #ffffff;
+  --fs-hover: #efeee9;
+  --fs-line: #dad8d1;
+  --fs-line-strong: #bdbab2;
+  --fs-grid-line: #e4e2dc;
 
-  --fs-text: #111821;
-  --fs-text-2: #3c4a5a;
-  --fs-muted: #556373;
-  --fs-faint: #8391a1;
+  --fs-text: #141414;
+  --fs-text-2: #3a3a3a;
+  --fs-muted: #6e6c66;
+  --fs-faint: #a7a49c;
 
-  --fs-accent: #1f63d6;
+  /* #3a5be0: the deck's blue, a step deeper so it reads as text on paper (AA, 4.8:1 on --fs-hover). */
+  --fs-accent: #3a5be0;
   --fs-accent-ink: #ffffff;
-  --fs-accent-soft: rgb(31 99 214 / 0.1);
-  --fs-focus: #1f63d6;
+  --fs-accent-soft: rgb(58 91 224 / 0.12);
+  --fs-focus: #3a5be0;
+  --fs-btn-primary: #141414;
+  --fs-btn-primary-ink: #ffffff;
+  --fs-btn-primary-hover: #333333;
 
   --fs-src-record: #1d7a52;
   --fs-src-ai: #6e44c9;
@@ -131,7 +148,7 @@
   --fs-sev-2: #c35a12;
   --fs-sev-3: #c8222a;
 
-  --fs-shadow: 0 12px 32px rgb(17 24 33 / 0.12), 0 2px 6px rgb(17 24 33 / 0.08);
+  --fs-shadow: 0 10px 28px rgb(20 20 20 / 0.08), 0 1px 3px rgb(20 20 20 / 0.08);
 }
 
 /* Bridge to the PR 0 placeholder theme in app.css. */

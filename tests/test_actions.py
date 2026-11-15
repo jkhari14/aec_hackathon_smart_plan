@@ -101,5 +101,37 @@ class TestActions(unittest.TestCase):
         self.assertEqual(set(group_by_discipline(self.items)), set(DISCIPLINE_ORDER))
 
 
+class TestActionsFollowTheChosenJob(unittest.TestCase):
+    """The project screen's setup picks a job type and scope; the checklist must follow them."""
+
+    def _fake_profile_for(self, bbl, job_type=None):
+        profile = dict(_profile(), work_types=[])
+        if job_type is not None:
+            profile["job_type"] = job_type
+        return profile, False
+
+    def _rules(self, **options):
+        import actions
+        with mock.patch.object(actions, "_profile_for", side_effect=self._fake_profile_for):
+            return {a["source_rule"] for a in actions.actions_for("3052110073", **options)}
+
+    def test_chosen_work_types_replace_inferred_ones(self):
+        self.assertIn("actions:weather-open-excavation-rain", self._rules(work_types=["excavation"]))
+        self.assertNotIn("actions:weather-open-excavation-rain", self._rules(work_types=["facade"]))
+
+    def test_chosen_job_type_reaches_the_rules(self):
+        self.assertIn("actions:fire-egress-during-construction", self._rules(job_type="alteration"))
+        self.assertNotIn("actions:fire-egress-during-construction", self._rules(job_type="new_building"))
+
+    def test_router_rejects_unknown_work_type(self):
+        from fastapi.testclient import TestClient
+
+        from api.main import app
+
+        r = TestClient(app).get("/api/sites/3052110073/actions", params={"work_types": "excavation,digging"})
+        self.assertEqual(r.status_code, 422, r.text)
+        self.assertIn("support_of_excavation", r.text)
+
+
 if __name__ == "__main__":
     unittest.main()

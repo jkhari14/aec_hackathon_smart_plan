@@ -79,7 +79,9 @@
           {
             "enum": [
               "architect",
-              "structural_engineer"
+              "structural_engineer",
+              "developer",
+              "contractor"
             ],
             "type": "string"
           },

@@ -20,15 +20,27 @@ function save(key: string, value: string) {
   }
 }
 
+// A new key since light became the default: the old one saved "dark" for everyone on every visit.
+const THEME_KEY = "foresite.theme.v2";
+
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>(() => (load("foresite.theme") === "light" ? "light" : "dark"));
+  const [theme, setTheme] = useState<Theme>(() => {
+    const saved: Theme = load(THEME_KEY) === "dark" ? "dark" : "light";
+    // Set before the first paint, so the map is made (and its layers coloured) for the right theme.
+    document.documentElement.dataset.theme = saved;
+    return saved;
+  });
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    save("foresite.theme", theme);
   }, [theme]);
 
-  const toggle = useCallback(() => setTheme((t) => (t === "dark" ? "light" : "dark")), []);
+  // Saved only when someone chooses, so the default can change again later.
+  const toggle = useCallback(() => setTheme((t) => {
+    const next = t === "dark" ? "light" : "dark";
+    save(THEME_KEY, next);
+    return next;
+  }), []);
   return [theme, toggle] as const;
 }
 

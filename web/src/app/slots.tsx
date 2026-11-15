@@ -9,6 +9,7 @@ import type { LayerCatalogEntry, SearchResult } from "../contracts";
 import { copy } from "../copy";
 import {
   Badge,
+  Button,
   Count,
   EmptyState,
   ErrorState,
@@ -33,9 +34,11 @@ type LayerSlotProps = {
   layers: LayerCatalogEntry[] | null;
   enabled: Set<string>;
   onToggle: (id: string, on: boolean) => void;
+  /** A similar case is shown on the map, so the record layers are hidden until it is let go. */
+  hiddenForCase?: boolean;
 };
 
-export function LayerSlot({ open, onClose, layers, enabled, onToggle }: LayerSlotProps) {
+export function LayerSlot({ open, onClose, layers, enabled, onToggle, hiddenForCase }: LayerSlotProps) {
   const usable = layers?.filter((l) => l.status !== "error") ?? [];
   const allOn = usable.length > 0 && usable.every((l) => enabled.has(l.layer_id));
   const onCount = usable.filter((l) => enabled.has(l.layer_id)).length;
@@ -55,6 +58,9 @@ export function LayerSlot({ open, onClose, layers, enabled, onToggle }: LayerSlo
           <SkeletonCard lines={1} />
           <SkeletonCard lines={1} />
         </>
+      )}
+      {hiddenForCase && (
+        <p className="fs-quiet" role="status">Layers are hidden while a similar case is shown. Click the case again to bring them back.</p>
       )}
       {layers?.length === 0 && <EmptyState title="No layers yet">The layer catalog came back empty.</EmptyState>}
       {usable.length > 1 && (
@@ -103,9 +109,15 @@ type SiteSlotProps = {
   onClose: () => void;
   tab: SiteTab;
   onTab: (tab: SiteTab) => void;
+  /** Opens the full-screen project view for this site. */
+  onContinue: () => void;
+  focusCase: string | null;
+  onFocusCase: (caseId: string) => void;
+  allStrands: boolean;
+  onAllStrands: (on: boolean) => void;
 };
 
-export function SiteSlot({ bbl, site, onClose, tab, onTab }: SiteSlotProps) {
+export function SiteSlot({ bbl, site, onClose, tab, onTab, onContinue, focusCase, onFocusCase, allStrands, onAllStrands }: SiteSlotProps) {
   const open = Boolean(bbl);
   const data = useSiteData(bbl);
   return (
@@ -125,7 +137,15 @@ export function SiteSlot({ bbl, site, onClose, tab, onTab }: SiteSlotProps) {
       className="fs-shell__site"
       label="Site"
     >
-      {open && <SitePanel data={data} tab={tab} onTab={onTab} />}
+      {open && (
+        <>
+          <Button variant="primary" className="fs-btn fs-site__continue" onClick={onContinue}>
+            Continue to project →
+          </Button>
+          <SitePanel data={data} tab={tab} onTab={onTab}
+            strands={{ focusedId: focusCase, onFocus: onFocusCase, all: allStrands, onAll: onAllStrands }} />
+        </>
+      )}
     </Panel>
   );
 }

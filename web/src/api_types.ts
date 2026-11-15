@@ -167,7 +167,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Actions */
+        /**
+         * Actions
+         * @description `job_type` and `work_types` (comma-separated) are the project screen's setup choices.
+         */
         get: operations["actions_api_sites__bbl__actions_get"];
         put?: never;
         post?: never;
@@ -383,7 +386,7 @@ export interface components {
              */
             status: "open" | "in_progress" | "done" | "not_applicable";
             /** Owner Role */
-            owner_role?: ("architect" | "structural_engineer") | null;
+            owner_role?: ("architect" | "structural_engineer" | "developer" | "contractor") | null;
             /** Source Rule */
             source_rule: string;
             /** Life Safety */
@@ -396,7 +399,7 @@ export interface components {
             /** Status */
             status?: ("open" | "in_progress" | "done" | "not_applicable") | null;
             /** Owner Role */
-            owner_role?: ("architect" | "structural_engineer") | null;
+            owner_role?: ("architect" | "structural_engineer" | "developer" | "contractor") | null;
         };
         /** BearingWall */
         BearingWall: {
@@ -779,7 +782,7 @@ export interface components {
              * Author Role
              * @enum {string}
              */
-            author_role: "architect" | "structural_engineer";
+            author_role: "architect" | "structural_engineer" | "developer" | "contractor";
             /** Text */
             text: string;
         };
@@ -818,7 +821,7 @@ export interface components {
              * Kind
              * @enum {string}
              */
-            kind: "record" | "case" | "warning" | "action" | "chat_answer";
+            kind: "record" | "case" | "warning" | "action" | "chat_answer" | "document";
             /** Ref Id */
             ref_id: string;
             /** Title */
@@ -827,7 +830,7 @@ export interface components {
              * By Role
              * @enum {string}
              */
-            by_role: "architect" | "structural_engineer";
+            by_role: "architect" | "structural_engineer" | "developer" | "contractor";
             /** Body */
             body?: string | null;
         };
@@ -855,6 +858,15 @@ export interface components {
             structural_model?: components["schemas"]["StructuralModel"] | null;
             /** Created At */
             created_at: string;
+            /** Job Type */
+            job_type?: ("new_building" | "alteration" | "demolition") | null;
+            /** Construction Type */
+            construction_type?: ("wood" | "masonry" | "steel" | "concrete" | "unknown") | null;
+            /**
+             * Work Types
+             * @default []
+             */
+            work_types: ("earth_work" | "excavation" | "foundation" | "support_of_excavation" | "underpinning" | "structural" | "facade" | "demolition" | "sprinkler" | "standpipe" | "plumbing" | "mechanical" | "sidewalk_shed" | "scaffold" | "construction_fence")[];
         };
         /** ProjectCreate */
         ProjectCreate: {
@@ -869,6 +881,12 @@ export interface components {
             stage: "pre_acquisition" | "design" | "pre_filing" | "construction";
             /** Members */
             members: components["schemas"]["ProjectMember"][];
+            /** Job Type */
+            job_type?: ("new_building" | "alteration" | "demolition") | null;
+            /** Construction Type */
+            construction_type?: ("wood" | "masonry" | "steel" | "concrete" | "unknown") | null;
+            /** Work Types */
+            work_types?: ("earth_work" | "excavation" | "foundation" | "support_of_excavation" | "underpinning" | "structural" | "facade" | "demolition" | "sprinkler" | "standpipe" | "plumbing" | "mechanical" | "sidewalk_shed" | "scaffold" | "construction_fence")[] | null;
         };
         /** ProjectMember */
         ProjectMember: {
@@ -878,7 +896,7 @@ export interface components {
              * Role
              * @enum {string}
              */
-            role: "architect" | "structural_engineer";
+            role: "architect" | "structural_engineer" | "developer" | "contractor";
         };
         /** ProjectNote */
         ProjectNote: {
@@ -888,7 +906,7 @@ export interface components {
              * Author Role
              * @enum {string}
              */
-            author_role: "architect" | "structural_engineer";
+            author_role: "architect" | "structural_engineer" | "developer" | "contractor";
             /** Text */
             text: string;
             /** Created At */
@@ -902,7 +920,7 @@ export interface components {
              * Kind
              * @enum {string}
              */
-            kind: "record" | "case" | "warning" | "action" | "chat_answer";
+            kind: "record" | "case" | "warning" | "action" | "chat_answer" | "document";
             /** Ref Id */
             ref_id: string;
             /** Title */
@@ -911,7 +929,7 @@ export interface components {
              * By Role
              * @enum {string}
              */
-            by_role: "architect" | "structural_engineer";
+            by_role: "architect" | "structural_engineer" | "developer" | "contractor";
             /** Created At */
             created_at: string;
             /** Body */
@@ -1367,6 +1385,8 @@ export interface operations {
         parameters: {
             query?: {
                 stage?: string | null;
+                job_type?: string | null;
+                work_types?: string | null;
             };
             header?: never;
             path: {

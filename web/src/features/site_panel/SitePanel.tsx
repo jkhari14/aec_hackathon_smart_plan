@@ -9,7 +9,7 @@ import { copy } from "../../copy";
 import type { ActionItem, SimilarCases as SimilarCasesData, SiteProfile } from "../../contracts";
 import { Badge, formatDate, SkeletonCard, Tabs } from "../../design";
 import { ActionsList } from "../actions/ActionsList";
-import { SimilarCases } from "../similar_cases/SimilarCases";
+import { SimilarCases, type StrandControls } from "../similar_cases/SimilarCases";
 import { LotFacts, Neighbors, SourcesChecked, WorkAndGround } from "./LotFacts";
 import { Signals } from "./Signals";
 
@@ -38,7 +38,7 @@ export function useSiteData(bbl: string | null) {
   return data;
 }
 
-export function SitePanel({ data, tab, onTab }: { data: Data; tab: SiteTab; onTab: (t: SiteTab) => void }) {
+export function SitePanel({ data, tab, onTab, strands }: { data: Data; tab: SiteTab; onTab: (t: SiteTab) => void; strands?: StrandControls }) {
   const { profile, similar, actions } = data;
   const sample = [profile, similar, actions].some((x) => x?.sample);
   const count = (n?: number) => (n == null ? "" : ` ${n}`);
@@ -87,7 +87,7 @@ export function SitePanel({ data, tab, onTab }: { data: Data; tab: SiteTab; onTa
           <Loading />
         ))}
 
-      {tab === "similar" && (similar ? <div className="fs-enter"><SimilarCases results={similar.data.results} /></div> : <Loading />)}
+      {tab === "similar" && (similar ? <div className="fs-enter"><SimilarCases results={similar.data.results} strands={strands} /></div> : <Loading />)}
       {tab === "actions" && (actions ? <div className="fs-enter"><ActionsList actions={actions.data} /></div> : <Loading />)}
     </>
   );

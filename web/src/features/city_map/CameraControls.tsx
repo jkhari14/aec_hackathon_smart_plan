@@ -4,6 +4,8 @@
 import type { Map as MapLibreMap } from "maplibre-gl";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { PITCH_3D, viewMode, type ViewMode } from "./selection_blink";
+
 type Props = {
   map: MapLibreMap | null;
   /** The picked site, [lon, lat]: orbiting pivots around it. Without one, around the screen centre. */
@@ -43,16 +45,29 @@ export function CameraControls({ map, site, home }: Props) {
   const frame = useRef(0);
   const holdTimer = useRef(0);
   const [bearing, setBearing] = useState(0);
+  const [mode, setMode] = useState<ViewMode>("3d");
 
   useEffect(() => {
     if (!map) return;
     const update = () => setBearing(map.getBearing());
+    const pitched = () => setMode(viewMode(map.getPitch()));
     map.on("rotate", update);
+    map.on("pitch", pitched);
     update();
+    pitched();
     return () => {
       map.off("rotate", update);
+      map.off("pitch", pitched);
     };
   }, [map]);
+
+  /** 2D is straight down; 3D tilts back to the default angle. The map blinks the site on the switch. */
+  const toggleMode = useCallback(() => {
+    if (!map) return;
+    const pitch = mode === "2d" ? PITCH_3D : 0;
+    if (reducedMotion()) map.jumpTo({ pitch });
+    else map.easeTo({ pitch, duration: 600 });
+  }, [map, mode]);
 
   // Continuous motion while a button or key is held: turn around the site, sliding the centre onto it.
   const loop = useCallback(() => {
@@ -155,10 +170,16 @@ export function CameraControls({ map, site, home }: Props) {
     },
   });
 
-  const button = "grid h-8 w-8 place-items-center rounded text-muted hover:bg-white/10 hover:text-white active:bg-white/20";
+  const button = "fs-cam__btn";
+  const next = mode === "2d" ? "3D" : "2D";
   return (
     <div className="flex flex-col items-start gap-1 text-[11px]">
-      <div className="flex items-center gap-0.5 rounded-lg bg-panel/90 p-1 shadow-lg backdrop-blur" role="toolbar" aria-label="Camera">
+      <div className="fs-cam" role="toolbar" aria-label="Camera">
+        <button type="button" className="fs-cam__btn fs-cam__mode" title={`Switch to ${next} view`} aria-label={`Switch to ${next} view`}
+          onClick={toggleMode}>
+          {next}
+        </button>
+        <span className="fs-cam__sep" aria-hidden="true" />
         <button type="button" className={button} title="Orbit left (Q) · hold to keep turning" aria-label="Orbit left" {...hold({ orbit: 1, tilt: 0 })}><Icon d={ORBIT} /></button>
         <button
           type="button"
@@ -168,19 +189,19 @@ export function CameraControls({ map, site, home }: Props) {
           onClick={reset}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" style={{ transform: `rotate(${-bearing}deg)` }}>
-            <path d="M12 3l4 9h-8z" fill="#ff6b6b" />
+            <path d="M12 3l4 9h-8z" fill="var(--fs-accent)" />
             <path d="M12 21l-4-9h8z" fill="currentColor" />
           </svg>
         </button>
         <button type="button" className={button} title="Orbit right (E) · hold to keep turning" aria-label="Orbit right" {...hold({ orbit: -1, tilt: 0 })}><Icon d={ORBIT} flip /></button>
-        <span className="mx-1 h-5 w-px bg-white/15" aria-hidden="true" />
+        <span className="fs-cam__sep" aria-hidden="true" />
         <button type="button" className={button} title="Tilt up, toward street level · hold to keep tilting" aria-label="Tilt up" {...hold({ orbit: 0, tilt: 1 })}><Icon d={TILT_UP} /></button>
         <button type="button" className={button} title="Tilt down, toward the top view · hold to keep tilting" aria-label="Tilt down" {...hold({ orbit: 0, tilt: -1 })}><Icon d={TILT_DOWN} /></button>
-        <span className="mx-1 h-5 w-px bg-white/15" aria-hidden="true" />
+        <span className="fs-cam__sep" aria-hidden="true" />
         <button type="button" className={button} title="Zoom in" aria-label="Zoom in" onClick={() => map?.zoomIn({ duration: reducedMotion() ? 0 : 300 })}><Icon d={PLUS} /></button>
         <button type="button" className={button} title="Zoom out" aria-label="Zoom out" onClick={() => map?.zoomOut({ duration: reducedMotion() ? 0 : 300 })}><Icon d={MINUS} /></button>
       </div>
-      <span className="rounded bg-panel/70 px-2 py-0.5 text-muted">Hold the arrows or Q / E to orbit · right-drag rotates · R resets</span>
+      <span className="fs-cam__hint">Hold the arrows or Q / E to orbit · right-drag rotates · R resets</span>
     </div>
   );
 }

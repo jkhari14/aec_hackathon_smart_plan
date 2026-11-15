@@ -5,7 +5,7 @@
 //   bottom right the chat button, which opens and closes the chat
 //   bottom left  "What 4site doesn't know", always visible
 // What is open lives in the URL (url_state.ts), so every view can be shared.
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { api } from "../api/client";
 import type { LayerCatalogEntry, SearchResult } from "../contracts";
@@ -15,12 +15,17 @@ import { Button, ChatIcon, CloseIcon, Kbd, KeyboardIcon, LayersIcon, MoonIcon, S
 import { CityMap } from "../features/city_map/CityMap";
 import type { Picked } from "../features/city_map/site_lots";
 import { LimitationsPanel } from "../features/limitations/LimitationsPanel";
-import { CommandBar, type Command } from "./CommandBar";
+import { useProjectIdInUrl } from "../features/project/project_url";
+import { useProject } from "../features/project/useProject";
+import { ProjectScreen } from "../features/project_screen/ProjectScreen";
+import { CommandBar, titleCase, type Command } from "./CommandBar";
+import { Intro } from "./Intro";
 import { useTheme } from "./preferences";
 import { ShortcutsHelp } from "./ShortcutsHelp";
 import { keyLabel, useShortcuts, type Shortcut } from "./shortcuts";
 import { ChatSlot, DataStatus, LayerSlot, SiteSlot } from "./slots";
 import { useViewState } from "./url_state";
+import { layersForWork, shouldApply } from "./work_layers";
 // After the design system's CSS (imported through ../design), so layout rules win over component defaults.
 import "./shell.css";
 
@@ -35,6 +40,40 @@ export function App() {
   const [site, setSite] = useState<SearchResult | null>(null);
   const [sample, setSample] = useState(false);
   const markSample = useCallback(() => setSample(true), []);
+  // The shell materialises once the opening logo has played (or straight away when it is skipped).
+  const [entered, setEntered] = useState(false);
+  const enter = useCallback(() => setEntered(true), []);
+  // One strand at a time: the focused similar case, or every strand when the switch is on.
+  const [focusCase, setFocusCase] = useState<string | null>(null);
+  const [allStrands, setAllStrands] = useState(false);
+  const toggleFocus = useCallback((caseId: string) => setFocusCase((current) => (current === caseId ? null : caseId)), []);
+  useEffect(() => setFocusCase(null), [view.site]);
+  // The project screen's project: polled only while the screen is open (the chat dock has its own).
+  const [projectId, openProject] = useProjectIdInUrl();
+  const workspace = useProject(view.screen === "project" ? projectId : null);
+  // A project belongs to the site it was made for: continuing from another site starts a new one.
+  const openSiteBbl = workspace.state.status === "ok" ? workspace.state.project.site_bbl : null;
+  // Back on the map from a project, its work type switches on the layers that matter for it, once: a
+  // layer toggled by hand afterwards stays as it was set.
+  const projectJob = useRef<string | null>(null);
+  const appliedJob = useRef<string | null>(null);
+  if (workspace.state.status === "ok" && workspace.state.project.job_type) {
+    projectJob.current = `${workspace.state.project.id}:${workspace.state.project.job_type}`;
+  }
+  useEffect(() => {
+    const key = projectJob.current;
+    if (view.screen !== "map" || !layers || !shouldApply(appliedJob.current, key)) return;
+    appliedJob.current = key;
+    const job = key!.split(":")[1] as Parameters<typeof layersForWork>[0];
+    setEnabled(layersForWork(job, layers.filter((l) => l.status !== "error").map((l) => l.layer_id)));
+  }, [view.screen, layers]);
+
+  // So does a link to a project the store doesn't have (another server, or a store file that was reset).
+  const projectMissing = workspace.state.status === "not_found";
+  useEffect(() => {
+    if (view.screen !== "project" || !view.site) return;
+    if (projectMissing || (openSiteBbl && openSiteBbl !== view.site)) openProject(null);
+  }, [view.screen, view.site, openSiteBbl, projectMissing, openProject]);
 
   useEffect(() => {
     api.layers().then((r) => {
@@ -72,6 +111,8 @@ export function App() {
     });
 
   const pickSite = useCallback((result: SearchResult | Picked) => {
+    // A new site lets go of the old site's case at once, before the map can frame or draw it.
+    setFocusCase(null);
     setSite(result);
     setView({ site: result.bbl, tab: "overview" });
   }, [setView]);
@@ -87,6 +128,7 @@ export function App() {
       label: "Close the top panel",
       run: () => {
         if (helpOpen) setHelpOpen(false);
+        else if (view.screen === "project") setView({ screen: "map" });
         else if (view.chat) setView({ chat: false });
         else if (view.site) setView({ site: null });
         else if (view.layers) setView({ layers: false });
@@ -108,13 +150,28 @@ export function App() {
     { id: "help", label: "Keyboard shortcuts", keys: "?", run: () => setHelpOpen(true) },
   ];
 
+  // Behind the project screen, the explorer stays mounted (going back is instant) but out of reach.
+  const behind = view.screen === "project";
+
   return (
-    <main className="fs-shell" data-site={Boolean(view.site)} data-chat={view.chat} data-layers={view.layers}>
-      <div className="fs-shell__map">
-        <CityMap site={site && site.bbl === view.site ? site : null} onPick={pickSite} enabled={enabled} onSample={markSample} />
+    <main className="fs-shell" data-entered={entered} data-site={Boolean(view.site)} data-chat={view.chat} data-layers={view.layers}>
+      <div className="fs-shell__map" inert={behind}>
+        <CityMap
+          site={site && site.bbl === view.site ? site : null}
+          onPick={pickSite}
+          enabled={enabled}
+          onSample={markSample}
+          theme={theme}
+          focusCaseId={focusCase}
+          showAllStrands={allStrands}
+          onFocusCase={(caseId) => {
+            toggleFocus(caseId);
+            setView({ tab: "similar" });
+          }}
+        />
       </div>
 
-      <div className="fs-shell__left">
+      <div className="fs-shell__left" inert={behind}>
         <header className="fs-topbar fs-panel">
           <span className="fs-brand">
             <img className="fs-brand__logo" src={logo} alt={copy.app.name} />
@@ -125,8 +182,11 @@ export function App() {
             <Kbd>/</Kbd>
           </button>
           <div className="fs-topbar__tools">
-            <Button variant="ghost" size="icon" aria-label={`Layers (${keyLabel("l")})`} aria-pressed={view.layers} title="Layers (L)" onClick={() => setView({ layers: !view.layers })}>
+            <Button variant="ghost" className="fs-btn fs-layers-btn" aria-label={`Layers, ${enabled.size} on (${keyLabel("l")})`}
+              aria-pressed={view.layers} title="Layers (L)" onClick={() => setView({ layers: !view.layers })}>
               <LayersIcon />
+              <span>Layers</span>
+              <span className="fs-num fs-layers-btn__count">{enabled.size}</span>
             </Button>
             <Button variant="ghost" size="icon" aria-label={theme === "dark" ? "Light theme (T)" : "Dark theme (T)"} title="Theme (T)" onClick={toggleTheme}>
               {theme === "dark" ? <SunIcon /> : <MoonIcon />}
@@ -143,16 +203,25 @@ export function App() {
           layers={layers}
           enabled={enabled}
           onToggle={toggleLayer}
+          hiddenForCase={focusCase !== null}
         />
       </div>
 
-      <div className="fs-shell__right">
+      <div className="fs-shell__right" inert={behind}>
         <SiteSlot
           bbl={view.site}
           site={site}
-          onClose={() => setView({ site: null, tab: "overview" })}
+          onClose={() => {
+            setFocusCase(null);
+            setView({ site: null, tab: "overview" });
+          }}
           tab={view.tab}
           onTab={(tab) => setView({ tab })}
+          onContinue={() => setView({ screen: "project" })}
+          focusCase={focusCase}
+          onFocusCase={toggleFocus}
+          allStrands={allStrands}
+          onAllStrands={setAllStrands}
         />
         <ChatSlot
           open={view.chat}
@@ -163,12 +232,12 @@ export function App() {
         />
       </div>
 
-      <div className="fs-shell__bottom">
+      <div className="fs-shell__bottom" inert={behind}>
         <LimitationsPanel />
         <DataStatus layers={layers} sample={sample} />
       </div>
 
-      <button type="button" className="fs-chat-fab" aria-label={view.chat ? "Close the chat (C)" : "Ask about this site (C)"}
+      <button type="button" className="fs-chat-fab" inert={behind} aria-label={view.chat ? "Close the chat (C)" : "Ask about this site (C)"}
         aria-pressed={view.chat} title="Chat (C)" onClick={() => setView({ chat: !view.chat })}>
         {view.chat ? <CloseIcon /> : <ChatIcon />}
       </button>
@@ -178,6 +247,18 @@ export function App() {
           Press <Kbd>/</Kbd> to find a site, or pick one on the map
         </div>
       )}
+
+      {view.screen === "project" && (
+        <ProjectScreen
+          bbl={view.site}
+          siteLabel={site && site.bbl === view.site ? titleCase(site.label).split(",")[0] : undefined}
+          workspace={workspace}
+          onProjectCreated={openProject}
+          onBack={() => setView({ screen: "map" })}
+        />
+      )}
+
+      <Intro onDone={enter} />
 
       <CommandBar open={commandOpen} onClose={() => setCommandOpen(false)} onPickSite={pickSite} commands={commands} />
       <ShortcutsHelp open={helpOpen} onClose={() => setHelpOpen(false)} shortcuts={shortcuts} />

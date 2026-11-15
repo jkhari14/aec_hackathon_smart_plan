@@ -26,7 +26,8 @@
 }
 .fs-shell__left {
   left: var(--fs-4);
-  width: 400px;
+  /* Room for the search field next to the labelled Layers button. */
+  width: 460px;
 }
 .fs-shell__right {
   right: var(--fs-4);
@@ -81,8 +82,8 @@
   height: var(--fs-fab);
   border-radius: 999px;
   border: 1px solid var(--fs-line-strong);
-  background: var(--fs-accent);
-  color: var(--fs-bg);
+  background: var(--fs-btn-primary);
+  color: var(--fs-btn-primary-ink);
   box-shadow: 0 6px 20px rgb(0 0 0 / 0.35);
   cursor: pointer;
   transition: transform var(--fs-fast) var(--fs-ease);
@@ -523,5 +524,103 @@
   .fs-shell[data-site="true"] .maplibregl-ctrl-bottom-right,
   .fs-shell[data-chat="true"] .maplibregl-ctrl-bottom-right {
     right: 0;
+  }
+}
+
+/* The way from exploring a site into working on it: the project screen. */
+.fs-site__continue {
+  width: 100%;
+  justify-content: center;
+  margin-bottom: var(--fs-3);
+}
+
+/* Layers, said in words with how many are on, so it never reads as a mystery icon. */
+.fs-layers-btn {
+  gap: 6px;
+  padding-inline: 10px;
+  font-weight: 500;
+}
+.fs-layers-btn__count {
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--fs-accent-soft);
+  color: var(--fs-text);
+  font-size: var(--fs-text-xs);
+  line-height: 18px;
+}
+
+/* The opening: the logo builds itself on paper, then fades as the shell materialises. */
+.fs-intro {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--fs-z-overlay) + 10);
+  display: grid;
+  place-items: center;
+  /* The video's own paper and vignette, so its edges disappear into the page. */
+  background: radial-gradient(ellipse at center, #ede8dd 35%, #ded9cf 100%);
+  cursor: pointer;
+  transition: opacity 400ms var(--fs-ease-out);
+}
+.fs-intro[data-state="leaving"] {
+  opacity: 0;
+  pointer-events: none;
+}
+.fs-intro__video {
+  width: min(92vw, 1100px);
+  height: auto;
+  image-rendering: pixelated;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 55%, transparent 78%);
+  mask-image: radial-gradient(ellipse at center, #000 55%, transparent 78%);
+}
+.fs-intro__skip {
+  position: absolute;
+  bottom: var(--fs-6);
+  font: 400 10px/1 var(--fs-pixel);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8a877f;
+}
+
+/* Materialise: the map fades up, the panels rise into place one after another. */
+.fs-shell__map,
+.fs-shell__left,
+.fs-shell__right,
+.fs-shell__bottom,
+.fs-chat-fab {
+  transition:
+    opacity 700ms var(--fs-ease-out),
+    transform 700ms var(--fs-ease-out);
+}
+.fs-shell[data-entered="false"] .fs-shell__map {
+  opacity: 0;
+}
+.fs-shell[data-entered="false"] .fs-shell__left,
+.fs-shell[data-entered="false"] .fs-shell__right,
+.fs-shell[data-entered="false"] .fs-shell__bottom,
+.fs-shell[data-entered="false"] .fs-chat-fab {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.fs-shell__left { transition-delay: 120ms; }
+.fs-shell__right { transition-delay: 220ms; }
+.fs-shell__bottom,
+.fs-chat-fab { transition-delay: 320ms; }
+
+/* The flat 4site logo in the top bar; inverted at night so the ink reads on dark. */
+.fs-brand__logo {
+  height: 30px;
+}
+:root:not([data-theme="light"]) .fs-brand__logo {
+  filter: invert(1) hue-rotate(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .fs-shell__map,
+  .fs-shell__left,
+  .fs-shell__right,
+  .fs-shell__bottom,
+  .fs-chat-fab,
+  .fs-intro {
+    transition: none;
   }
 }

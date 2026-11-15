@@ -13,8 +13,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from api.store.project_store_schema import (
-    ADDED_COLUMNS, DDL, DISCIPLINES, HAZARDS, ITEM_STATUSES, MAX_MODEL_BYTES, MAX_ROWS_PER_PROJECT, MAX_TEXT, PIN_KINDS, ROLES,
-    STAGES,
+    ADDED_COLUMNS, CONSTRUCTION_TYPES, DDL, DISCIPLINES, HAZARDS, ITEM_STATUSES, JOB_TYPES, MAX_MODEL_BYTES, MAX_ROWS_PER_PROJECT,
+    MAX_TEXT, PIN_KINDS, ROLES, STAGES, WORK_TYPES,
 )
 
 _BBL = re.compile(r"[1-5][0-9]{9}", re.ASCII)  # fullmatch: no trailing newline gets through
@@ -124,8 +124,15 @@ class ProjectStore:
     def _touch(self, db, project_id: str) -> None:
         db.execute("UPDATE projects SET version = version + 1, updated_at = ? WHERE id = ?", (_now(), project_id))
 
-    def create_project(self, name, site_bbl, stage, members: list[dict]) -> dict:
+    def create_project(self, name, site_bbl, stage, members: list[dict], job_type=None, construction_type=None,
+                       work_types=None) -> dict:
+        """`job_type`, `construction_type` and `work_types` are what the team picked on the setup step; all optional."""
         name = _text(name, "name", "name")
+        job_type = _choice(job_type, "job_type", JOB_TYPES, nullable=True)
+        construction_type = _choice(construction_type, "construction_type", CONSTRUCTION_TYPES, nullable=True)
+        if work_types is not None and not isinstance(work_types, list):
+            raise ProjectStoreError("work_types must be a list")
+        scope = list(dict.fromkeys(_choice(w, "work_types", WORK_TYPES) for w in work_types or []))
         if not isinstance(site_bbl, str) or not _BBL.fullmatch(site_bbl):
             raise ProjectStoreError("site_bbl must be a 10-digit BBL")
         stage = _choice(stage, "stage", STAGES)
@@ -135,8 +142,9 @@ class ProjectStore:
                 for m in members]
         project_id, now = secrets.token_hex(8), _now()
         with self._db(write=True) as db:
-            db.execute("INSERT INTO projects (id, name, site_bbl, stage, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)",
-                       (project_id, name, site_bbl, stage, now, now))
+            db.execute("INSERT INTO projects (id, name, site_bbl, stage, created_at, updated_at, job_type, construction_type,"
+                       " work_types_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                       (project_id, name, site_bbl, stage, now, now, job_type, construction_type, json.dumps(scope)))
             db.executemany("INSERT INTO members (project_id, position, name, role) VALUES (?, ?, ?, ?)",
                            [(project_id, i, n, r) for i, (n, r) in enumerate(rows)])
         return self.get_project(project_id)
@@ -249,5 +257,8 @@ class ProjectStore:
                              " ORDER BY created_at, rowid"),
                 "structural_model": json.loads(row["structural_model_json"]) if row["structural_model_json"] else None,
                 "created_at": row["created_at"],
+                "job_type": row["job_type"],
+                "construction_type": row["construction_type"],
+                "work_types": json.loads(row["work_types_json"]) if row["work_types_json"] else [],
             }
             return project, row["version"]

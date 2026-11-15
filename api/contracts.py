@@ -50,7 +50,10 @@ WorkType = Literal[
 
 Discipline = Literal["architect", "structural", "geotech", "contractor"]
 
-Role = Literal["architect", "structural_engineer"]
+Role = Literal["architect", "structural_engineer", "developer", "contractor"]
+
+# What the building is mostly built of, as the user picks it on the project screen.
+ConstructionType = Literal["wood", "masonry", "steel", "concrete", "unknown"]
 
 QueryStatus = Literal["ok", "error", "capped"]
 
@@ -346,7 +349,7 @@ class ProjectNote(Contract):
 
 class ProjectPin(Contract):
     id: str
-    kind: Literal["record", "case", "warning", "action", "chat_answer"]
+    kind: Literal["record", "case", "warning", "action", "chat_answer", "document"]
     ref_id: str
     title: str
     by_role: Role
@@ -366,6 +369,10 @@ class Project(Contract):
     pins: list[ProjectPin]
     structural_model: Optional[StructuralModel] = None
     created_at: str
+    # What the team said the job is, on the project screen's setup step. Empty on older projects.
+    job_type: Optional[JobType] = None
+    construction_type: Optional[ConstructionType] = None
+    work_types: list[WorkType] = []
 
 
 class ProjectCreate(Contract):
@@ -373,6 +380,9 @@ class ProjectCreate(Contract):
     site_bbl: str
     stage: Stage
     members: list[ProjectMember]
+    job_type: Optional[JobType] = None
+    construction_type: Optional[ConstructionType] = None
+    work_types: Optional[list[WorkType]] = None
 
 
 class ActionItemUpdate(Contract):
@@ -387,7 +397,7 @@ class NoteCreate(Contract):
 
 
 class PinCreate(Contract):
-    kind: Literal["record", "case", "warning", "action", "chat_answer"]
+    kind: Literal["record", "case", "warning", "action", "chat_answer", "document"]
     ref_id: str
     title: str
     by_role: Role

@@ -7,10 +7,13 @@ SQLite file holds every project; each write bumps its project's `version`, which
 
 from typing import get_args
 
-from api.contracts import ActionItem, Discipline, Hazard, ProjectPin, Role, Stage
+from api.contracts import ActionItem, ConstructionType, Discipline, Hazard, JobType, ProjectPin, Role, Stage, WorkType
 
 ROLES = get_args(Role)
 STAGES = get_args(Stage)
+JOB_TYPES = get_args(JobType)
+CONSTRUCTION_TYPES = get_args(ConstructionType)
+WORK_TYPES = get_args(WorkType)
 DISCIPLINES = get_args(Discipline)
 HAZARDS = get_args(Hazard)
 ITEM_STATUSES = get_args(ActionItem.model_fields["status"].annotation)
@@ -84,4 +87,5 @@ CREATE INDEX IF NOT EXISTS pins_by_project ON pins(project_id);
 """
 
 # Columns added after the first release, as (table, column, type): a store file made before one gets it on open.
-ADDED_COLUMNS = (("pins", "body", "TEXT"),)
+ADDED_COLUMNS = (("pins", "body", "TEXT"), ("projects", "job_type", "TEXT"), ("projects", "construction_type", "TEXT"),
+                 ("projects", "work_types_json", "TEXT"))

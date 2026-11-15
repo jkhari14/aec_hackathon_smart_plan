@@ -78,7 +78,9 @@
             {
               "enum": [
                 "architect",
-                "structural_engineer"
+                "structural_engineer",
+                "developer",
+                "contractor"
               ],
               "type": "string"
             },
@@ -171,7 +173,9 @@
         "role": {
           "enum": [
             "architect",
-            "structural_engineer"
+            "structural_engineer",
+            "developer",
+            "contractor"
           ],
           "title": "Role",
           "type": "string"
@@ -194,7 +198,9 @@
         "author_role": {
           "enum": [
             "architect",
-            "structural_engineer"
+            "structural_engineer",
+            "developer",
+            "contractor"
           ],
           "title": "Author Role",
           "type": "string"
@@ -230,7 +236,8 @@
             "case",
             "warning",
             "action",
-            "chat_answer"
+            "chat_answer",
+            "document"
           ],
           "title": "Kind",
           "type": "string"
@@ -246,7 +253,9 @@
         "by_role": {
           "enum": [
             "architect",
-            "structural_engineer"
+            "structural_engineer",
+            "developer",
+            "contractor"
           ],
           "title": "By Role",
           "type": "string"
@@ -439,6 +448,67 @@
     "created_at": {
       "title": "Created At",
       "type": "string"
+    },
+    "job_type": {
+      "anyOf": [
+        {
+          "enum": [
+            "new_building",
+            "alteration",
+            "demolition"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Job Type"
+    },
+    "construction_type": {
+      "anyOf": [
+        {
+          "enum": [
+            "wood",
+            "masonry",
+            "steel",
+            "concrete",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Construction Type"
+    },
+    "work_types": {
+      "default": [],
+      "items": {
+        "enum": [
+          "earth_work",
+          "excavation",
+          "foundation",
+          "support_of_excavation",
+          "underpinning",
+          "structural",
+          "facade",
+          "demolition",
+          "sprinkler",
+          "standpipe",
+          "plumbing",
+          "mechanical",
+          "sidewalk_shed",
+          "scaffold",
+          "construction_fence"
+        ],
+        "type": "string"
+      },
+      "title": "Work Types",
+      "type": "array"
     }
   },
   "required": [

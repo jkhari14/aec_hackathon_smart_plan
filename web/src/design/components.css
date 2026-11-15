@@ -374,9 +374,13 @@ body {
   border-color: var(--fs-line-strong);
 }
 .fs-btn[data-variant="primary"] {
-  background: var(--fs-accent);
-  border-color: var(--fs-accent);
-  color: var(--fs-accent-ink);
+  background: var(--fs-btn-primary);
+  border-color: var(--fs-btn-primary);
+  color: var(--fs-btn-primary-ink);
+}
+.fs-btn[data-variant="primary"]:hover {
+  background: var(--fs-btn-primary-hover);
+  border-color: var(--fs-btn-primary-hover);
 }
 .fs-btn[data-variant="ghost"] {
   background: transparent;
@@ -498,9 +502,10 @@ body {
 }
 
 .fs-label {
-  font-size: var(--fs-text-xs);
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-family: var(--fs-pixel);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--fs-muted);
   margin: 0;

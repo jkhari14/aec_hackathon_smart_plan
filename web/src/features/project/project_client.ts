@@ -10,7 +10,12 @@ export type PinCreate = S["PinCreate"];
 export type ProjectPin = S["ProjectPin"];
 export type ActionItemUpdate = S["ActionItemUpdate"];
 
-export const ROLE_LABELS: Record<Role, string> = { architect: "Architect", structural_engineer: "Structural engineer" };
+export const ROLE_LABELS: Record<Role, string> = {
+  architect: "Architect",
+  structural_engineer: "Structural engineer",
+  developer: "Developer",
+  contractor: "Contractor",
+};
 
 export type ProjectRead =
   | { status: "ok"; project: Project; etag: string | null; sample: boolean }

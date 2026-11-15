@@ -5,13 +5,22 @@ import type { Layer, PickingInfo } from "@deck.gl/core";
 import { ArcLayer, ScatterplotLayer } from "@deck.gl/layers";
 
 import type { SimilarCase } from "../../contracts";
+import { buildingKinds, KIND_COLORS } from "./building_kinds";
 import type { Picked } from "./site_lots";
 
-const ARC_FROM: [number, number, number] = [126, 168, 222];
-const ARC_TO: [number, number, number] = [255, 181, 71];
+// The strand runs from the case (ink) to the site (the accent blue).
+const ARC_FROM: [number, number, number] = [20, 20, 20];
+const ARC_TO: [number, number, number] = [74, 108, 240];
 
-/** Arcs from each similar case to the site. `progress` 0..1 draws them in from the case end. */
-export function similarCaseLayers(site: Picked, results: SimilarCase[], progress: number): Layer[] {
+/** Strands from similar cases to the site. `progress` 0..1 draws them in from the case end. The focused
+    case's dot is larger, with an ink ring; clicking a dot focuses its case. */
+export function similarCaseLayers(
+  site: Picked,
+  results: SimilarCase[],
+  progress: number,
+  focusId: string | null = null,
+  onPick?: (caseId: string) => void,
+): Layer[] {
   const target: [number, number] = [site.lon, site.lat];
   const toward = (c: SimilarCase): [number, number] => [
     c.case.lon + (target[0] - c.case.lon) * progress,
@@ -23,25 +32,45 @@ export function similarCaseLayers(site: Picked, results: SimilarCase[], progress
       data: results,
       getSourcePosition: (c) => [c.case.lon, c.case.lat],
       getTargetPosition: toward,
-      getSourceColor: [...ARC_FROM, 200],
-      getTargetColor: [...ARC_TO, 230],
+      getSourceColor: [...ARC_FROM, 220],
+      getTargetColor: [...ARC_TO, 240],
       // Closer matches draw a little bolder; the score is similarity, never a prediction.
-      getWidth: (c) => 1.5 + 2.5 * c.score,
+      getWidth: (c) => (c.case_id === focusId ? 4 : 1.5 + 2 * c.score),
       getHeight: 0.35,
       greatCircle: false,
-      updateTriggers: { getTargetPosition: progress },
+      updateTriggers: { getTargetPosition: progress, getWidth: focusId },
     }),
     new ScatterplotLayer<SimilarCase>({
       id: "similar-case-origins",
       data: results,
       getPosition: (c) => [c.case.lon, c.case.lat],
-      getFillColor: [...ARC_FROM, 230],
-      getLineColor: [245, 247, 250, 255],
+      getFillColor: (c) => (c.case_id === focusId ? [...ARC_TO, 255] : [255, 255, 255, 240]),
+      getLineColor: [...ARC_FROM, 255],
       stroked: true,
-      lineWidthMinPixels: 1,
-      radiusMinPixels: 5,
-      radiusMaxPixels: 9,
-      getRadius: 60,
+      lineWidthMinPixels: 1.5,
+      radiusMinPixels: 6,
+      radiusMaxPixels: 12,
+      getRadius: (c) => (c.case_id === focusId ? 90 : 60),
+      pickable: true,
+      onClick: (info) => {
+        if (info.object) onPick?.(info.object.case_id);
+        return true;
+      },
+      updateTriggers: { getFillColor: focusId, getRadius: focusId },
+    }),
+    // The site's end of the strand: the same blue pin, so both places read at any zoom.
+    new ScatterplotLayer<{ position: [number, number] }>({
+      id: "strand-site",
+      data: results.length ? [{ position: target }] : [],
+      getPosition: (d) => d.position,
+      getFillColor: [...ARC_TO, 255],
+      getLineColor: [255, 255, 255, 255],
+      stroked: true,
+      lineWidthMinPixels: 2,
+      radiusMinPixels: 8,
+      radiusMaxPixels: 14,
+      getRadius: 90,
+      // Pickable so a click on it is the pin's, not a pick of whatever lot lies under it.
       pickable: true,
     }),
   ];
@@ -79,7 +108,7 @@ export type SiteModel = {
   counts: Record<ModelScope, number>;
   /** The tallest adjacent building, in metres: the camera backs off for towers. */
   tallestNearby: number;
-  /** One mesh per scope sharing the same vertices, coloured by height with the site's building in cyan. */
+  /** One mesh per scope sharing the same vertices: the site in blue, attached neighbours charcoal, the rest pale. */
   meshes: Record<ModelScope, Mesh>;
 };
 
@@ -87,28 +116,7 @@ export type SiteModel = {
     the ones across a street. */
 export const ADJACENT_M = 30;
 
-// Building height (metres) -> colour: deep indigo for low-rise, through violet and rose, to warm gold for towers.
-export const HEIGHT_RAMP: [number, [number, number, number]][] = [
-  [0, [58, 66, 138]],
-  [20, [84, 92, 190]],
-  [45, [138, 92, 200]],
-  [90, [206, 98, 160]],
-  [160, [246, 140, 104]],
-  [260, [252, 206, 120]],
-];
-export const SITE_COLOR: [number, number, number] = [72, 226, 255];
-
-export function heightColor(height: number): [number, number, number] {
-  for (let i = 1; i < HEIGHT_RAMP.length; i++) {
-    const [h1, c1] = HEIGHT_RAMP[i];
-    if (height <= h1) {
-      const [h0, c0] = HEIGHT_RAMP[i - 1];
-      const t = (height - h0) / (h1 - h0);
-      return [0, 1, 2].map((k) => c0[k] + (c1[k] - c0[k]) * t) as [number, number, number];
-    }
-  }
-  return HEIGHT_RAMP[HEIGHT_RAMP.length - 1][1];
-}
+export { KIND_COLORS } from "./building_kinds";
 
 type Box = [number, number, number, number]; // x0, y0, x1, y1 in metres from the site
 
@@ -152,7 +160,7 @@ function analyse(positions: Float32Array, buildings: [number, number, number][])
     const dy = Math.max(0, siteBox[1] - y1, y0 - siteBox[3]);
     if (Math.hypot(dx, dy) <= ADJACENT_M) adjacent.add(b);
   });
-  return { site, adjacent };
+  return { site, adjacent, kinds: buildingKinds(boxes, site) };
 }
 
 /** Fetch and unpack the site model. Throws with the API's reason (no key, Cityweft down) on failure. */
@@ -180,16 +188,17 @@ export async function loadSiteModel(site: Picked, signal?: AbortSignal): Promise
   const indices = new Uint32Array(buffer, start + header.vertex_count * 12, header.index_count);
   // An older cached answer has no per-building list: treat it as one building, coloured by vertex height.
   const buildings = header.buildings ?? [];
-  const { site: siteParts, adjacent } = analyse(positions, buildings);
+  const { adjacent, kinds } = analyse(positions, buildings);
 
   const colors = new Float32Array(positions.length);
   const owner = new Int32Array(header.vertex_count).fill(-1);
   if (buildings.length === 0) {
-    for (let v = 0; v < header.vertex_count; v++) colors.set(heightColor(positions[3 * v + 2]).map((c) => c / 255), 3 * v);
+    const other = KIND_COLORS.other.map((c) => c / 255);
+    for (let v = 0; v < header.vertex_count; v++) colors.set(other, 3 * v);
   }
   let tallestNearby = 0;
   buildings.forEach(([first, count, height], b) => {
-    const rgb = (siteParts.has(b) ? SITE_COLOR : heightColor(height)).map((c) => c / 255);
+    const rgb = KIND_COLORS[kinds[b]].map((c) => c / 255);
     for (let v = first; v < first + count; v++) {
       colors.set(rgb, 3 * v);
       owner[v] = b;

@@ -7,6 +7,7 @@ import type {
   ChatRequest,
   ChatResponse,
   EarlyWarning,
+  JobType,
   LayerCatalogEntry,
   LayerFeatureCollection,
   PatternScore,
@@ -15,6 +16,7 @@ import type {
   SimilarCases,
   SiteProfile,
   WarningRuleCheck,
+  WorkType,
 } from "../contracts";
 
 import actionsFixture from "../../../contracts/fixtures/actions.json";
@@ -102,7 +104,14 @@ export const api = {
   warningChecks: (bbl: string, asOf?: string) =>
     request<WarningRuleCheck[]>(`${site(bbl)}/warnings/checks${asOf ? `?as_of=${encodeURIComponent(asOf)}` : ""}`, warningChecksFixture),
   pattern: (bbl: string) => request<PatternScore>(`${site(bbl)}/pattern`, patternFixture),
-  actions: (bbl: string) => request<ActionItem[]>(`${site(bbl)}/actions`, actionsFixture),
+  /** With the project screen's setup choices, the checklist follows the job type and scope picked there. */
+  actions: (bbl: string, opts: { jobType?: JobType; workTypes?: WorkType[] } = {}) => {
+    const q = new URLSearchParams();
+    if (opts.jobType) q.set("job_type", opts.jobType);
+    if (opts.workTypes?.length) q.set("work_types", opts.workTypes.join(","));
+    const query = q.toString();
+    return request<ActionItem[]>(`${site(bbl)}/actions${query ? `?${query}` : ""}`, actionsFixture);
+  },
   cases: () => request<Case[]>("/api/cases", casesFixture),
   project: (id: string) => request<Project>(`/api/projects/${encodeURIComponent(id)}`, projectFixture),
   chat: (body: ChatRequest) =>
