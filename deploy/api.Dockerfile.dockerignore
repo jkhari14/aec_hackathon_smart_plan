@@ -1,0 +1,18 @@
+# An allow-list: the unredacted transcripts and PDFs in the repo root, .env files and the web app never
+# reach the image. Add a new top-level Python module here when it lands.
+*
+!api/
+!contracts/
+!data/
+!data_pull/
+!checklist/
+!manual_imports/
+!early_warning/
+!site_profile/
+!foresight_model/
+!model_input/
+!actions/
+!city_layers/
+**/__pycache__/
+**/.env*
+data/manual_imports/**/raw/

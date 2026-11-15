@@ -8,6 +8,8 @@ its stub as soon as it is included. Delete the replaced stub in the same PR.
 
 from __future__ import annotations
 
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -30,7 +32,9 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    # FORESITE_WEB_ORIGINS: the deployed web app's origins, comma-separated.
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173",
+                   *filter(None, (o.strip() for o in os.environ.get("FORESITE_WEB_ORIGINS", "").split(",")))],
     allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=[stubs.FIXTURE_HEADER, "ETag"],
