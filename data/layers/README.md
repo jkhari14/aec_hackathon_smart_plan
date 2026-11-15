@@ -37,8 +37,11 @@ python3 -m city_layers.build_layers --catalog   # only rebuild catalog.json from
 - **`bbl`** is the lot when the record names one or its building leads to one, else null.
 - **`severity`** and **`hazard`** are set per feature. A layer's own `hazard` is the one most of its
   features carry; `construction_incidents` and `structural_complaints` also hold `geotech` features.
-- **`sandy_inundation`** is polygons simplified to about 10 m, good for a wash on the map. Do not
-  use it to decide whether one lot was flooded.
+- **`sandy_inundation`** and **`fema_flood_zones`** are polygons simplified to about 10 m, good for
+  a wash on the map. Do not use them to decide about one lot; ask `city_layers.site_context`.
+- **`fema_flood_zones`** and **`remediation_sites`** have no dates: they are standing context, so an
+  as-of view keeps them.
+- **`refresh_log.json`** is the scheduled refresh's log of its last runs, not a layer.
 
 ## Adding a layer from another module
 

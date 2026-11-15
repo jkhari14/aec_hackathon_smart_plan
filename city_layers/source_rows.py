@@ -22,21 +22,23 @@ LOOKUP_BATCH = 300
 PLUTO = "64uk-42ks"
 BUILDING_FOOTPRINTS = "5zhs-2jue"
 TAX_LOT_POLYGONS = "i38t-6if2"
-_VIEWS = "https://data.cityofnewyork.us/api/views"
+NYC_OPEN_DATA = "data.cityofnewyork.us"
 
 
-def all_rows(dataset_id: str, params: dict[str, str], max_rows: int = MAX_ROWS) -> tuple[list[dict], bool]:
+def all_rows(dataset_id: str, params: dict[str, str], max_rows: int = MAX_ROWS, portal: str | None = None) -> tuple[list[dict], bool]:
     """Every row of one query, a page at a time: (rows, capped).
 
     `capped` is True when `max_rows` were read and the source may hold more, so the count is a floor.
     A failed page fails the whole read: part of a dataset is never passed off as all of it.
+    `portal` is another Socrata host, such as "data.ny.gov"; the default is NYC Open Data.
     """
     params = {"order": ":id", **params}
+    elsewhere = {"base": f"https://{portal}/resource"} if portal else {}
     rows: list[dict] = []
     while len(rows) < max_rows:
         size = min(PAGE_ROWS, max_rows - len(rows))
         try:
-            page, _ = soda_client.query(dataset_id, {**params, "limit": str(size), "offset": str(len(rows))})
+            page, _ = soda_client.query(dataset_id, {**params, "limit": str(size), "offset": str(len(rows))}, **elsewhere)
         except soda_client.SodaQueryError as error:
             raise LayerPullError(str(error)) from error
         rows.extend(page)
@@ -54,10 +56,10 @@ def count_rows(dataset_id: str, where: str | None = None) -> int:
         raise LayerPullError(f"{dataset_id}: could not count rows ({error})") from error
 
 
-def rows_updated_at(dataset_id: str) -> str | None:
-    """The date Open Data says the dataset's rows last changed; None when that cannot be read."""
+def rows_updated_at(dataset_id: str, portal: str = NYC_OPEN_DATA) -> str | None:
+    """The date the portal says the dataset's rows last changed; None when that cannot be read."""
     try:
-        with urllib.request.urlopen(f"{_VIEWS}/{dataset_id}.json", timeout=30) as response:
+        with urllib.request.urlopen(f"https://{portal}/api/views/{dataset_id}.json", timeout=30) as response:
             stamp = json.load(response).get("rowsUpdatedAt")
         return datetime.fromtimestamp(int(stamp), timezone.utc).date().isoformat()
     except (urllib.error.URLError, TimeoutError, OSError, ValueError, TypeError, AttributeError):
