@@ -12,6 +12,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api import stubs
+from model_input.router import router as model_input_router
 
 app = FastAPI(
     title="ForeSite API",
@@ -34,5 +35,7 @@ def health() -> dict[str, str]:
 
 
 # Owners' routers go here, above the stubs.
+
+app.include_router(model_input_router)  # Rishabh, PR 13: drawing upload (not in the schema yet)
 
 app.include_router(stubs.router)

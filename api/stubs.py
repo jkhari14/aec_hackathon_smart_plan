@@ -14,6 +14,7 @@ from typing import Optional
 
 from fastapi import APIRouter, HTTPException, Response
 
+from model_input import router as model_input_routes
 from site_profile import router as site_profile_routes
 
 from api.contracts import (
@@ -148,7 +149,8 @@ def add_pin(project_id: str, body: PinCreate, response: Response):
 
 @router.post("/projects/{project_id}/model", response_model=Project)
 def add_structural_model(project_id: str, body: StructuralModel, response: Response):
-    return {**sample(response, "project"), "structural_model": body.model_dump()}
+    # Real (Rishabh, PR 13): normalized and saved for the site's profile, similar cases and pattern score.
+    return model_input_routes.add_structural_model(project_id, body, response)
 
 
 @router.post("/chat", response_model=ChatResponse)

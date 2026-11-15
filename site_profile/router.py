@@ -65,6 +65,10 @@ def _as_of(value: Optional[str]) -> Optional[str]:
 
 def get_profile(bbl: str, job_type: Optional[str] = None, stage: Optional[str] = None,
                 as_of: Optional[str] = None, structural_model: Optional[dict] = None) -> dict:
+    if structural_model is None:
+        from model_input import store  # a Revit export or drawing uploaded for this site (PR 13)
+
+        structural_model = store.for_site(bbl)
     try:
         return builder.build_profile(_pull(bbl), job_type, stage, _as_of(as_of), structural_model)
     except ValueError as error:
