@@ -34,12 +34,20 @@ VIOLATION_PATTERNS = [
      "structural", "Protection for adjacent property not provided"),
     (r"UNDERPIN|SHORING|BRAC(E|ING)|SUPPORT OF EXCAVATION|SOE\b", "geotech", "Shoring, bracing or underpinning issue"),
     (r"EXCAVAT", "geotech", "Excavation issue"),
-    (r"STRUCTURAL|UNSAFE|CRACK|BULG|LEANING", "structural", "Structural condition cited"),
+    # Structural only when the text is about the building itself. "UNSAFE" alone is not structural:
+    # inspectors write it about scaffolds, deliveries and sidewalks too.
+    (r"STRUCTURAL|BULG|LEANING|UNSAFE (BUILDING|STRUCTURE)|"
+     r"CRACK\w*[^.]{0,40}(WALL|FOUNDATION|FOOTING|BEAM|COLUMN|SLAB|LINTEL|PARAPET)",
+     "structural", "Structural condition cited"),
     (r"CONTINU\w*[^.]{0,40}STOP\s*-?\s*WORK|STOP\s*-?\s*WORK[^.]{0,80}CONTINU|CONTRARY TO[^.]{0,30}STOP",
      "construction_safety", "Work continued during a stop-work order"),
     (r"STOP\s*-?\s*WORK|28-207\.2", "construction_safety", "Stop-work order mentioned"),
+    (r"SCAFFOLD|HOIST|MATERIAL (DELIVERY|STORAGE|HANDLING)", "construction_safety", "Scaffold or material handling cited"),
+    (r"CONCRETE WASH|WASHOUT", "construction_safety", "Concrete washout not handled properly"),
     (r"SAFEGUARD|OVERHEAD PROTECTION|SIDEWALK SHED|FENCE", "construction_safety", "Site safeguarding cited"),
+    (r"PEDESTRIAN|WALKWAY", "construction_safety", "Pedestrian walkway not kept safe"),
     (r"FACADE|PARAPET|FALLING", "facade", "Facade or falling-debris condition cited"),
+    (r"UNSAFE|HAZARD", "construction_safety", "Unsafe site condition cited"),
 ]
 _COMPILED = [(re.compile(p), h, t) for p, h, t in VIOLATION_PATTERNS]
 

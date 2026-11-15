@@ -1,7 +1,25 @@
 // The project screen's rules, kept free of React and the API so they can be tested on their own
 // (web/tests/project_screen_model.test.ts): the setup cards, the scope sent to the checklist, who owns an
 // item, how the checklist groups, and when a document slot is worth showing.
-import type { ActionItem, ConstructionType, Discipline, JobType, Role, WorkType } from "../../contracts";
+import type { ActionItem, ConstructionType, Discipline, JobType, Role, Stage, WorkType } from "../../contracts";
+
+export type DepthBand = "unsure" | "under5" | "5to10" | "10to20" | "over20";
+
+/** Dig depth as bands. Each sends its deepest depth, so a code threshold is never under-called;
+    "Not sure" sends nothing and the depth rows say they need it. */
+export const DEPTH_BANDS: { value: DepthBand; label: string; feet: number | null }[] = [
+  { value: "unsure", label: "Not sure", feet: null },
+  { value: "under5", label: "Under 5 ft", feet: 4.9 },
+  { value: "5to10", label: "5-10 ft", feet: 10 },
+  { value: "10to20", label: "10-20 ft", feet: 20 },
+  { value: "over20", label: "Over 20 ft", feet: 21 },
+];
+
+export const STAGE_OPTIONS: { value: Stage; label: string }[] = [
+  { value: "design", label: "Design" },
+  { value: "pre_filing", label: "Filing" },
+  { value: "construction", label: "Construction" },
+];
 
 export const WORK_TYPE_CARDS: { value: JobType; label: string; hint: string }[] = [
   { value: "new_building", label: "New construction", hint: "A new building on the lot" },
@@ -18,9 +36,11 @@ export const CONSTRUCTION_CARDS: { value: ConstructionType; label: string }[] = 
 ];
 
 /** The scope a user can tick. "scaffold" stands for scaffolding and the sidewalk shed together. */
-export type ScopeOption = "excavation" | "foundation" | "support_of_excavation" | "underpinning" | "structural" | "facade" | "scaffold";
+export type ScopeOption = "excavation" | "foundation" | "support_of_excavation" | "underpinning" | "structural" | "facade" | "scaffold"
+  | "demolition";
 
 export const SCOPE_OPTIONS: { value: ScopeOption; label: string }[] = [
+  { value: "demolition", label: "Demolition" },
   { value: "excavation", label: "Excavation" },
   { value: "foundation", label: "Foundation" },
   { value: "support_of_excavation", label: "Support of excavation" },
@@ -43,7 +63,7 @@ const JOB_DEFAULTS: Record<JobType, WorkType[]> = {
 };
 const EARTH: WorkType[] = ["excavation", "foundation", "support_of_excavation", "underpinning"];
 // Work types the scope cards decide; every other default of the job is kept as it is.
-const DECIDED_BY_SCOPE = new Set<WorkType>(["earth_work", ...EARTH, "structural", "facade", "scaffold", "sidewalk_shed"]);
+const DECIDED_BY_SCOPE = new Set<WorkType>(["earth_work", ...EARTH, "structural", "facade", "scaffold", "sidewalk_shed", "demolition"]);
 
 const ordered = (types: Iterable<WorkType>): WorkType[] => {
   const wanted = new Set(types);
@@ -58,6 +78,9 @@ export function defaultScope(job: JobType): ScopeOption[] {
 }
 
 /** The work types sent to the checklist: the job's other work, plus what was ticked. */
+/** Whether setup should ask how deep the dig goes: any earth work in the scope, the same test the checklist uses. */
+export const asksDepth = (job: JobType, picked: ScopeOption[]) => scopeValues(job, picked).includes("earth_work");
+
 export function scopeValues(job: JobType, picked: ScopeOption[]): WorkType[] {
   const out = new Set<WorkType>(JOB_DEFAULTS[job].filter((w) => !DECIDED_BY_SCOPE.has(w)));
   for (const option of picked) {
@@ -161,4 +184,63 @@ export function addedLine(item: Pick<ActionItem, "added_by_role" | "added_at">, 
     ? item.added_at
     : at.toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
   return `${roleLabels[item.added_by_role]} · ${when}`;
+}
+
+// ---- The register and its timeline ------------------------------------------------------------------
+
+export type Phase = NonNullable<ActionItem["phase"]>;
+
+/** The project's checkpoints, in order. The "when" under each comes from the code's own timing. */
+export const MILESTONES: { phase: Phase; label: string; sub: string }[] = [
+  { phase: "design", label: "Design", sub: "During design" },
+  { phase: "filing", label: "DOB filing", sub: "Before filing" },
+  { phase: "notice", label: "Neighbors notified", sub: "60 days before work" },
+  { phase: "before_excavation", label: "Survey done", sub: "Before excavation" },
+  { phase: "during_work", label: "Excavation", sub: "During work" },
+];
+
+/** An item saved before phases existed has none: it sits in Design. */
+export const phaseOf = (item: Pick<ActionItem, "phase">): Phase => item.phase ?? "design";
+
+const isFinished = (s: ActionItem["status"]) => s === "done" || s === "not_applicable";
+
+export function milestoneSummary(items: ActionItem[]): { phase: Phase; total: number; done: number; lifeSafety: boolean }[] {
+  return MILESTONES.map(({ phase }) => {
+    const here = items.filter((i) => phaseOf(i) === phase);
+    return {
+      phase,
+      total: here.length,
+      done: here.filter((i) => isFinished(i.status)).length,
+      lifeSafety: here.some((i) => i.life_safety),
+    };
+  });
+}
+
+/** Where the project is on the timeline, from its stage. */
+export function currentMilestone(stage: Stage): Phase {
+  return ({ pre_acquisition: "design", design: "design", pre_filing: "filing", construction: "during_work" } as const)[stage];
+}
+
+const GROUP_LETTER: Record<Role, string> = { architect: "A", structural_engineer: "S", developer: "D", contractor: "C" };
+
+/** "A1", "S3"… by owner group, from the full list, so numbers stay put while filters are on. */
+export function itemNumbers(groups: { role: Role | null; items: ActionItem[] }[]): Map<string, string> {
+  const out = new Map<string, string>();
+  for (const group of groups) {
+    const letter = group.role ? GROUP_LETTER[group.role] : "U";
+    group.items.forEach((item, i) => out.set(item.id, `${letter}${i + 1}`));
+  }
+  return out;
+}
+
+/** The neighbouring buildings a row concerns: the first few by name, the rest as a count until opened. */
+export function appliesSummary(applies: string[] | undefined, first = 3): { shown: string[]; more: number } {
+  const all = applies ?? [];
+  return { shown: all.slice(0, first), more: Math.max(0, all.length - first) };
+}
+
+/** A document's trail on an item, as one word for its tag: a new item it added, or an existing one it flagged. */
+export function trailKind(reason: string | null | undefined): "Added" | "Flagged" | null {
+  if (!reason) return null;
+  return reason.startsWith("Flagged") ? "Flagged" : "Added";
 }

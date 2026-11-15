@@ -5,6 +5,8 @@ Two sources feed it:
     from that module's party names onto the contract's four disciplines, kept only when the job's scope
     can call for them (CODE_SCOPE: no digging, no excavation duties; no underpinning, no underpinning duties);
   * the hazard rules in `actions/rules.json` (flood, fire, contamination, facade, weather).
+  * pre-filing items where DOB NOW filings like this project are held at plan-exam objections more than
+    usual for their job type (`actions/filing_objections.py`).
 
 Nothing here marks an item done. Every row's proof is a document that public data does not
 hold, so an item's status is always "open" until a person changes it.
@@ -17,6 +19,10 @@ import pathlib
 from typing import Any, Iterable, Optional
 
 from checklist.checklist_rules import RULES as CODE_RULES
+from actions.phases import phase_for
+from actions.filing_objections import objection_actions
+from actions.site_context import applies_to, evidence
+from checklist.applicability import _monitoring, _survey
 
 RULES_PATH = pathlib.Path(__file__).with_name("rules.json")
 
@@ -75,7 +81,7 @@ def evaluate_condition(name: str, profile: dict) -> Optional[bool]:
             return None
         return bool(site and dig)
     if name == "facade_cycle_applies":
-        floors = (profile.get("lot") or {}).get("floors")
+        floors = profile.get("proposed_storeys") or (profile.get("lot") or {}).get("floors")
         if floors is None:
             return None
         return float(floors) > 6
@@ -143,6 +149,26 @@ def _discipline_for(parties: Iterable[str], mapping: dict) -> Optional[str]:
     return None
 
 
+# Rows the code ties to dig depth and distance. Setup gives the depth; a touching lot is 0 ft away.
+DEPTH_RULES = {"survey_threshold": _survey, "monitoring_distance": _monitoring}
+
+
+def depth_check(condition: str, profile: dict) -> dict:
+    """The applicability engine's answer for a depth row, with each attached neighbor at 0 ft."""
+    attached = [n["bbl"] for n in profile.get("neighbors") or [] if n.get("attached")]
+    inputs = {"excavation_depth_ft": profile.get("excavation_depth_ft"),
+              "distance_to_building_ft": {bbl: 0 for bbl in attached}}
+    return DEPTH_RULES[condition](inputs, {"status": "applies"}, attached[0] if attached else None)
+
+
+def needs_input_note(found: dict) -> str:
+    if "excavation_depth_ft" in found["needs"]:
+        return "Needs input: dig depth."
+    if "distance_to_building_ft" in found["needs"]:
+        return "Needs input: distance to the adjacent buildings."
+    return "Needs input: " + (found["notes"][0] if found["notes"] else ", ".join(found["needs"]))
+
+
 def code_actions(profile: dict, cfg: dict) -> list[dict]:
     mapping = cfg["party_to_discipline"]
     overrides = cfg.get("code_rule_overrides", {})
@@ -163,6 +189,12 @@ def code_actions(profile: dict, cfg: dict) -> list[dict]:
         why = rule.requirement
         if applies is None:
             why += " Whether this applies could not be determined from the work picked for this job."
+        elif rule.condition in DEPTH_RULES:
+            found = depth_check(rule.condition, profile)
+            if found["status"] == "does_not_apply":
+                continue  # the code's depth and distance thresholds rule it out
+            if found["status"] == "needs_input":
+                why += " " + needs_input_note(found)
         out.append({
             "id": f"action-code-{rule.id}",
             "discipline": discipline,
@@ -175,6 +207,9 @@ def code_actions(profile: dict, cfg: dict) -> list[dict]:
             "owner_role": owner_roles.get(discipline),
             "source_rule": f"checklist:{rule.id}",
             "life_safety": rule.life_safety,
+            **dict(zip(("phase", "when"), phase_for(f"checklist:{rule.id}"))),
+            "applies_to": applies_to(rule.id, profile),
+            "evidence": evidence(rule.id, profile),
         })
     return out
 
@@ -205,6 +240,34 @@ def hazard_actions(profile: dict, cfg: dict, stage: Optional[str]) -> list[dict]
             "owner_role": owner_roles.get(r["discipline"]),
             "source_rule": f"actions:{r['id']}",
             "life_safety": r["life_safety"],
+            **dict(zip(("phase", "when"), phase_for(f"actions:{r['id']}", r["stages"]))),
+        })
+    return out
+
+
+# --- the lesson rows --------------------------------------------------------
+
+def lesson_actions(profile: dict, cfg: dict) -> list[dict]:
+    """Prevention that lessons from past incidents point to and the code rows don't cover, when the scope fits."""
+    owner_roles = cfg["owner_role"]
+    work = set(profile.get("work_types") or [])
+    out = []
+    for r in cfg.get("lesson_rules", []):
+        if not work & set(r["scopes"]):
+            continue
+        out.append({
+            "id": f"action-lesson-{r['id']}",
+            "discipline": r["discipline"],
+            "hazard": r["hazard"],
+            "title": r["title"],
+            "why": r["why"],
+            "code_ref": r["code_ref"],
+            "proof_needed": r["proof_needed"],
+            "status": "open",
+            "owner_role": owner_roles.get(r["discipline"]),
+            "source_rule": f"lesson:{r['id']}",
+            "life_safety": r["life_safety"],
+            **dict(zip(("phase", "when"), phase_for(f"lesson:{r['id']}", r["stages"]))),
         })
     return out
 
@@ -219,7 +282,8 @@ def build_actions(profile: dict, stage: Optional[str] = None) -> list[dict]:
     if stage is not None and stage not in STAGES:
         raise ValueError(f"unknown stage: {stage}")
     cfg = _load()
-    items = code_actions(profile, cfg) + hazard_actions(profile, cfg, stage)
+    items = code_actions(profile, cfg) + hazard_actions(profile, cfg, stage) + lesson_actions(profile, cfg)
+    items += objection_actions(profile, stage, cfg["owner_role"])
     items.sort(key=lambda a: (DISCIPLINE_ORDER.index(a["discipline"]),
                               not a["life_safety"],
                               a["title"]))

@@ -8,8 +8,10 @@
 // page loads because the URL is read on load and on popstate.
 import { useCallback, useEffect, useState } from "react";
 
-export type SiteTabKey = "overview" | "similar" | "actions";
-const TABS: SiteTabKey[] = ["overview", "similar", "actions"];
+export type SiteTabKey = "similar" | "overview";
+// The checklist lives on the project screen only; an old ?tab=actions link opens Overview.
+// Similar projects (with their lessons) is the first tab; an old ?tab=lessons link opens it too.
+const TABS: SiteTabKey[] = ["similar", "overview"];
 
 export type Screen = "map" | "project";
 
@@ -29,7 +31,7 @@ function read(): ViewState {
     site: q.get("site"),
     layers: q.get("layers") === "1",
     chat: q.get("chat") === "1",
-    tab: tab && TABS.includes(tab) ? tab : "overview",
+    tab: tab && TABS.includes(tab) ? tab : "similar",
   };
 }
 
@@ -40,7 +42,7 @@ function write(state: ViewState, push: boolean) {
   set("site", state.site);
   set("layers", state.layers ? "1" : null);
   set("chat", state.chat ? "1" : null);
-  set("tab", state.site && state.tab !== "overview" ? state.tab : null);
+  set("tab", state.site && state.tab !== "similar" ? state.tab : null);
   const search = q.toString();
   const url = `${window.location.pathname}${search ? `?${search}` : ""}${window.location.hash}`;
   if (url === `${window.location.pathname}${window.location.search}${window.location.hash}`) return;

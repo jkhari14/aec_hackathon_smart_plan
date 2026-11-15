@@ -75,6 +75,45 @@ class ProjectsRouterTests(ProjectsRouterTestCase):
         self.assertEqual(self.architect_tab.post(f"{self.path}/model", json=model).json()["structural_model"], model)
         self.assertEqual(self.architect_tab.post(f"{self.path}/model", json={**model, "confidence": 2}).status_code, 422)
 
+    def test_project_keeps_depth_and_storeys(self):
+        body = {"name": "Park", "site_bbl": "3015790010", "stage": "design", "members": BOTH,
+                "excavation_depth_ft": 20, "proposed_storeys": 9}
+        made = self.architect_tab.post("/api/projects", json=body)
+        self.assertEqual(made.status_code, 200, made.text)
+        got = self.architect_tab.get(f"/api/projects/{made.json()['id']}").json()
+        self.assertEqual((got["excavation_depth_ft"], got["proposed_storeys"], got["stage"]), (20, 9, "design"))
+        # An older body without them still creates a project, with both left empty.
+        old = self.architect_tab.get(self.path).json()
+        self.assertEqual((old["excavation_depth_ft"], old["proposed_storeys"]), (None, None))
+        bad = self.architect_tab.post("/api/projects", json={**body, "excavation_depth_ft": -1})
+        self.assertEqual(bad.status_code, 422, bad.text)
+
+    def test_items_keep_phase_and_the_done_sign_off(self):
+        item = {**fixture("actions")[0], "phase": "notice", "when": "60 days before work"}
+        self.architect_tab.post(f"{self.path}/items", json=[item])
+        got = {i["id"]: i for i in self.architect_tab.get(self.path).json()["items"]}[item["id"]]
+        self.assertEqual((got["phase"], got["when"]), ("notice", "60 days before work"))
+        done = self.engineer_tab.patch(f"{self.path}/items",
+                                       json=[{"id": item["id"], "status": "done", "by_role": "structural_engineer"}]).json()
+        row = {i["id"]: i for i in done["items"]}[item["id"]]
+        self.assertEqual(row["done_by_role"], "structural_engineer")
+        self.assertTrue(row["done_at"])
+        reopened = self.engineer_tab.patch(f"{self.path}/items", json=[{"id": item["id"], "status": "open"}]).json()
+        row = {i["id"]: i for i in reopened["items"]}[item["id"]]
+        self.assertEqual((row["done_by_role"], row["done_at"]), (None, None))
+        anon = self.engineer_tab.patch(f"{self.path}/items", json=[{"id": item["id"], "status": "done"}]).json()
+        row = {i["id"]: i for i in anon["items"]}[item["id"]]
+        self.assertIsNone(row["done_by_role"])
+        self.assertTrue(row["done_at"])
+
+    def test_items_keep_their_neighbors_and_record_line(self):
+        item = {**fixture("actions")[0], "applies_to": ["19 Marcus Garvey Blvd (built 1931, attached)"],
+                "evidence": "On record here: 2 complaints."}
+        self.architect_tab.post(f"{self.path}/items", json=[item])
+        got = {i["id"]: i for i in self.architect_tab.get(self.path).json()["items"]}[item["id"]]
+        self.assertEqual(got["applies_to"], item["applies_to"])
+        self.assertEqual(got["evidence"], item["evidence"])
+
     def test_unknown_projects_and_items_are_404(self):
         for response in (
             self.architect_tab.get("/api/projects/0123456789abcdef"),

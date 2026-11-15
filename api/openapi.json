@@ -587,7 +587,7 @@
     "/api/sites/{bbl}/actions": {
       "get": {
         "summary": "Actions",
-        "description": "`job_type` and `work_types` (comma-separated) are the project screen's setup choices.",
+        "description": "`job_type`, `work_types` (comma-separated), `excavation_depth_ft` and `proposed_storeys` are the\nproject screen's setup choices.",
         "operationId": "actions_api_sites__bbl__actions_get",
         "parameters": [
           {
@@ -646,6 +646,38 @@
               ],
               "title": "Work Types"
             }
+          },
+          {
+            "name": "excavation_depth_ft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Excavation Depth Ft"
+            }
+          },
+          {
+            "name": "proposed_storeys",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Proposed Storeys"
+            }
           }
         ],
         "responses": {
@@ -659,6 +691,46 @@
                     "$ref": "#/components/schemas/ActionItem"
                   },
                   "title": "Response Actions Api Sites  Bbl  Actions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sites/{bbl}/outlook": {
+      "get": {
+        "summary": "Outlook",
+        "description": "What could go wrong here, for every option: lessons from similar past projects, from this lot's profile.",
+        "operationId": "outlook_api_sites__bbl__outlook_get",
+        "parameters": [
+          {
+            "name": "bbl",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bbl"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiteOutlook"
                 }
               }
             }
@@ -1264,6 +1336,82 @@
               }
             ],
             "title": "Added At"
+          },
+          "phase": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "design",
+                  "filing",
+                  "notice",
+                  "before_excavation",
+                  "during_work"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phase"
+          },
+          "when": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "When"
+          },
+          "done_by_role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "architect",
+                  "structural_engineer",
+                  "developer",
+                  "contractor"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Done By Role"
+          },
+          "done_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Done At"
+          },
+          "applies_to": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Applies To",
+            "default": []
+          },
+          "evidence": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence"
           }
         },
         "additionalProperties": false,
@@ -1319,6 +1467,23 @@
               }
             ],
             "title": "Owner Role"
+          },
+          "by_role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "architect",
+                  "structural_engineer",
+                  "developer",
+                  "contractor"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "By Role"
           }
         },
         "additionalProperties": false,
@@ -2526,6 +2691,240 @@
         ],
         "title": "LayerFeatureProperties"
       },
+      "Lesson": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "hazard": {
+            "type": "string",
+            "enum": [
+              "structural",
+              "geotech",
+              "fire",
+              "flood",
+              "contamination",
+              "facade",
+              "weather",
+              "construction_safety"
+            ],
+            "title": "Hazard"
+          },
+          "options": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "renovate",
+                "demolish_rebuild",
+                "new_build"
+              ]
+            },
+            "type": "array",
+            "title": "Options"
+          },
+          "scopes": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "earth_work",
+                "excavation",
+                "foundation",
+                "support_of_excavation",
+                "underpinning",
+                "structural",
+                "facade",
+                "demolition",
+                "sprinkler",
+                "standpipe",
+                "plumbing",
+                "mechanical",
+                "sidewalk_shed",
+                "scaffold",
+                "construction_fence"
+              ]
+            },
+            "type": "array",
+            "title": "Scopes"
+          },
+          "cases": {
+            "items": {
+              "$ref": "#/components/schemas/LessonCase"
+            },
+            "type": "array",
+            "title": "Cases"
+          },
+          "case_count": {
+            "type": "integer",
+            "title": "Case Count"
+          },
+          "tagged": {
+            "items": {
+              "$ref": "#/components/schemas/LessonTag"
+            },
+            "type": "array",
+            "title": "Tagged",
+            "default": []
+          },
+          "prevent_with": {
+            "items": {
+              "$ref": "#/components/schemas/LessonItem"
+            },
+            "type": "array",
+            "title": "Prevent With"
+          },
+          "here": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Here"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "hazard",
+          "options",
+          "scopes",
+          "cases",
+          "case_count",
+          "prevent_with"
+        ],
+        "title": "Lesson",
+        "description": "A failure mode seen on similar past projects: the incidents, what prevents it, and this lot's own records."
+      },
+      "LessonCase": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "title": "Case Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "date": {
+            "type": "string",
+            "title": "Date"
+          },
+          "severity": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "title": "Severity"
+          },
+          "basis": {
+            "type": "string",
+            "enum": [
+              "reported_cause",
+              "event_only"
+            ],
+            "title": "Basis"
+          },
+          "source_name": {
+            "type": "string",
+            "title": "Source Name"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "case_id",
+          "title",
+          "address",
+          "date",
+          "severity",
+          "basis",
+          "source_name"
+        ],
+        "title": "LessonCase",
+        "description": "A past incident behind a lesson. `basis` says whether its failure mode comes from a reported cause or only\nfrom what happened (no cause published)."
+      },
+      "LessonItem": {
+        "properties": {
+          "source_rule": {
+            "type": "string",
+            "title": "Source Rule"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "code_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code Ref"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source_rule",
+          "title"
+        ],
+        "title": "LessonItem",
+        "description": "A checklist item that prevents the failure mode."
+      },
+      "LessonTag": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "title": "Case Id"
+          },
+          "basis": {
+            "type": "string",
+            "enum": [
+              "reported_cause",
+              "event_only"
+            ],
+            "title": "Basis"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "case_id",
+          "basis"
+        ],
+        "title": "LessonTag",
+        "description": "One case tagged with this lesson's failure mode, and the basis of the tag."
+      },
       "LotFacts": {
         "properties": {
           "address": {
@@ -3021,6 +3420,28 @@
             "type": "array",
             "title": "Work Types",
             "default": []
+          },
+          "excavation_depth_ft": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Excavation Depth Ft"
+          },
+          "proposed_storeys": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposed Storeys"
           }
         },
         "additionalProperties": false,
@@ -3129,6 +3550,30 @@
               }
             ],
             "title": "Work Types"
+          },
+          "excavation_depth_ft": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Excavation Depth Ft"
+          },
+          "proposed_storeys": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposed Storeys"
           }
         },
         "additionalProperties": false,
@@ -3441,6 +3886,29 @@
           "results"
         ],
         "title": "SimilarCases"
+      },
+      "SiteOutlook": {
+        "properties": {
+          "bbl": {
+            "type": "string",
+            "title": "Bbl"
+          },
+          "lessons": {
+            "items": {
+              "$ref": "#/components/schemas/Lesson"
+            },
+            "type": "array",
+            "title": "Lessons"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "bbl",
+          "lessons"
+        ],
+        "title": "SiteOutlook",
+        "description": "What could go wrong here, for every option: lessons from similar past projects, worst first."
       },
       "SiteProfile": {
         "properties": {
