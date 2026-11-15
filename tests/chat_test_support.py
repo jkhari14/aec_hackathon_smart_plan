@@ -151,6 +151,10 @@ class ScriptedModel:
         self.opened_with = {"system": system, "messages": messages, "allow_web": allow_web, "client_tools": client_tools}
         return self
 
+    def open_first(self, system, messages):
+        self.first_opened_with = {"system": system, "messages": messages}
+        return self
+
     def turn(self, problems=None):
         if self.fails:
             raise self.fails

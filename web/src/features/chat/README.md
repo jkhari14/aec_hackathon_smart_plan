@@ -26,6 +26,10 @@ The slot is a bar centred along the map's lower edge. It tells `ChatDock` how mu
 Asking a question calls `onActivate`, and the shell opens the conversation above the box. The Project
 tab is reached only from the full view.
 
+With a live model, a question goes out twice at once (`chat_client.ts`): `askChat` for the full answer
+and `askChatFirst` for the server's quick first answer, which is shown only while the question is still
+waiting and is replaced by the full one. It is not kept: history and pins use answered exchanges only.
+
 `ChatPanel` with `embedded` renders only the conversation and the question box, for a frame someone
 else draws. Without it, it is a self-contained dock:
 

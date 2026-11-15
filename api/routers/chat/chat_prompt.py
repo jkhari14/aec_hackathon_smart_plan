@@ -145,6 +145,23 @@ def system_blocks(view: SiteView) -> list[dict]:
     ]
 
 
+FIRST_PASS = """\
+THIS CALL: THE FIRST ANSWER, BEFORE THE FULL ONE
+The reader has just asked. A fuller answer, with searches of the records, the past cases and the web, is \
+being prepared separately and will replace yours when it is ready. Yours is shown in the meantime, so it \
+must be quick and short: at most three items, each one or two sentences, leading with what most directly \
+answers the question from the SITE DATA above. You have no search tools and no web in this call, and the \
+page takes no actions from it: leave the actions list empty, and leave what the SITE DATA cannot answer \
+to the fuller answer. If the SITE DATA holds nothing on the question, submit one gap item naming the \
+topic: it is not shown, and the reader simply waits for the fuller answer.
+"""
+
+
+def first_pass_blocks(view: SiteView) -> list[dict]:
+    """The same instructions and site data, then what is different about the quick first answer."""
+    return system_blocks(view) + [{"type": "text", "text": FIRST_PASS}]
+
+
 def conversation(history: list[Exchange], question: str) -> list[dict]:
     """Earlier answers go back as the text the reader saw."""
     messages = []

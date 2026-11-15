@@ -59,6 +59,8 @@ NOTICES = {
     "the records and the past cases, count records in a dataset, list warnings and action items, show or hide a "
     "map layer, and pin the last answer.",
     "live_failed": "The live model call did not complete, so this is a mock answer.",
+    "first_pass": "A first answer, from this site's data alone. The fuller answer, which also searches the records, "
+    "the past cases and the web, is still being prepared and will replace this one.",
 }
 # The codes a model may ask for. The rest are the server's own.
 MODEL_NOTICES = ("not_a_determination", "names_withheld", "cause_not_established", "out_of_scope", "status_is_todays",
