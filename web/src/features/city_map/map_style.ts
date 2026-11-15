@@ -21,6 +21,7 @@ export const HAZARD_COLORS: Record<Hazard, string> = {
 
 const SITE = "#f5f7fa";
 const NEIGHBOR = "#e8a33d";
+const PARTY_WALL = "#ffb547";
 
 // Opacity that grows with zoom, so far-out views stay quiet.
 const fadeIn = (from: number, to: number, low: number, high: number): ExpressionSpecification =>
@@ -32,6 +33,8 @@ export const areaLayerIds = (layerId: string) => [`${layerId}-fill`, `${layerId}
 
 /** Soft extruded buildings from the basemap's own footprints (heights from OpenStreetMap). */
 export function addBuildings(map: MapLibreMap): void {
+  // A low, warm key light so facades read as volumes instead of flat blocks.
+  map.setLight({ anchor: "map", position: [1.4, 210, 35], color: "#dfe7f2", intensity: 0.35 });
   const firstLabel = map.getStyle().layers.find((l) => l.type === "symbol")?.id;
   map.addLayer(
     {
@@ -41,7 +44,8 @@ export function addBuildings(map: MapLibreMap): void {
       "source-layer": "building",
       minzoom: 14,
       paint: {
-        "fill-extrusion-color": "#1c2633",
+        // Taller buildings catch a little more light, which reads as depth without adding color.
+        "fill-extrusion-color": ["interpolate", ["linear"], ["coalesce", ["get", "render_height"], 10], 0, "#18212c", 60, "#243243", 200, "#30425a"],
         "fill-extrusion-height": ["coalesce", ["get", "render_height"], 10],
         "fill-extrusion-base": ["coalesce", ["get", "render_min_height"], 0],
         "fill-extrusion-opacity": fadeIn(14, 15.5, 0, 0.85),
@@ -143,5 +147,21 @@ export function addSiteLayers(map: MapLibreMap): void {
       "line-width": ["match", ["get", "role"], "site", 2.5, 1.5],
       "line-blur": 0.5,
     },
+  });
+  // The shared party wall: a wide soft glow under a thin bright core.
+  map.addSource("party-walls", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
+  map.addLayer({
+    id: "party-walls-glow",
+    type: "line",
+    source: "party-walls",
+    layout: { "line-cap": "round" },
+    paint: { "line-color": PARTY_WALL, "line-width": 14, "line-blur": 10, "line-opacity": 0.55 },
+  });
+  map.addLayer({
+    id: "party-walls-core",
+    type: "line",
+    source: "party-walls",
+    layout: { "line-cap": "round" },
+    paint: { "line-color": "#fff4d6", "line-width": 2.5 },
   });
 }
