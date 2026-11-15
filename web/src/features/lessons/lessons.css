@@ -1,0 +1,80 @@
+/* What could go wrong here: one calm card per lesson, prevention first, incidents one click away. */
+.fs-lessons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fs-lessons__scopes .fs-chip {
+  font-size: var(--fs-text-xs);
+}
+.fs-lesson {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border: 1px solid var(--fs-line);
+  border-left: 3px solid var(--fs-hz, var(--fs-line));
+  border-radius: 0 var(--fs-radius) var(--fs-radius) 0;
+  background: var(--fs-raised);
+}
+.fs-lesson__title {
+  margin: 0;
+  font-size: var(--fs-text-md);
+  font-weight: 600;
+  line-height: 1.3;
+}
+.fs-lesson__meta {
+  margin: 0;
+  font-size: var(--fs-text-xs);
+  color: var(--fs-text-2);
+}
+.fs-lesson__here {
+  margin: 0;
+  padding: 3px 0 3px 8px;
+  border-left: 2px solid var(--fs-src-record);
+  font-size: var(--fs-text-xs);
+  color: var(--fs-text-2);
+  line-height: 1.45;
+}
+.fs-lesson__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fs-text-2);
+}
+.fs-lesson__prevent ul,
+.fs-lesson__cases {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--fs-text-sm);
+  line-height: 1.4;
+}
+.fs-lesson__cases {
+  padding-left: 0;
+  list-style: none;
+  gap: 6px;
+}
+.fs-lesson__cases li {
+  display: flex;
+  flex-direction: column;
+}
+.fs-lesson__toggle {
+  align-self: flex-start;
+  font-size: var(--fs-text-xs);
+}
+.fs-lessons__start {
+  position: sticky;
+  bottom: 0;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: var(--fs-radius);
+  background: var(--fs-btn-primary);
+  color: var(--fs-btn-primary-ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}

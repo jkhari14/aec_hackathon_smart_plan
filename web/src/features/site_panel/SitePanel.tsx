@@ -9,11 +9,12 @@ import { api, type Loaded } from "../../api/client";
 import { copy } from "../../copy";
 import type { SimilarCases as SimilarCasesData, SiteProfile } from "../../contracts";
 import { Badge, formatDate, SkeletonCard, Tabs } from "../../design";
+import { Lessons } from "../lessons/Lessons";
 import { SimilarCases, type StrandControls } from "../similar_cases/SimilarCases";
 import { LotFacts, Neighbors, SourcesChecked, WorkAndGround } from "./LotFacts";
 import { Signals } from "./Signals";
 
-export type SiteTab = "overview" | "similar";
+export type SiteTab = "lessons" | "overview" | "similar";
 
 type Data = {
   profile?: Loaded<SiteProfile>;
@@ -36,7 +37,9 @@ export function useSiteData(bbl: string | null) {
   return data;
 }
 
-export function SitePanel({ data, tab, onTab, strands }: { data: Data; tab: SiteTab; onTab: (t: SiteTab) => void; strands?: StrandControls }) {
+export function SitePanel({ bbl, data, tab, onTab, strands, onStart }: {
+  bbl: string; data: Data; tab: SiteTab; onTab: (t: SiteTab) => void; strands?: StrandControls; onStart?: () => void;
+}) {
   const { profile, similar } = data;
   const sample = [profile, similar].some((x) => x?.sample);
   const count = (n?: number) => (n == null ? "" : ` ${n}`);
@@ -49,7 +52,8 @@ export function SitePanel({ data, tab, onTab, strands }: { data: Data; tab: Site
           value={tab}
           onChange={onTab}
           options={[
-            { value: "overview", label: "Overview" },
+            { value: "lessons", label: "Lessons" },
+            { value: "overview", label: "This lot" },
             { value: "similar", label: <span className="fs-num">Similar{count(similar?.data.results.length)}</span> },
           ]}
         />
@@ -59,6 +63,7 @@ export function SitePanel({ data, tab, onTab, strands }: { data: Data; tab: Site
         </div>
       </div>
 
+      {tab === "lessons" && <div className="fs-enter"><Lessons bbl={bbl} onStart={onStart} /></div>}
       {tab === "overview" &&
         (profile ? (
           <>

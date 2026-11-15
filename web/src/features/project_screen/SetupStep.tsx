@@ -7,6 +7,7 @@ import { Button } from "../../design";
 import { ROLE_LABELS } from "../project/project_client";
 import type { DraftInput } from "./draft";
 import { KnownFacts } from "./KnownFacts";
+import { takePrefill } from "../lessons/prefill";
 import {
   asksDepth, CONSTRUCTION_CARDS, defaultScope, DEPTH_BANDS, type DepthBand, ROLES, SCOPE_OPTIONS, type ScopeOption, STAGE_OPTIONS, WORK_TYPE_CARDS,
 } from "./model";
@@ -20,9 +21,12 @@ type Props = {
 };
 
 export function SetupStep({ bbl, siteLabel, busy, problem, onDraft }: Props) {
-  const [job, setJob] = useState<JobType | null>(null);
+  // An option picked on "What could go wrong here" arrives pre-filled: the work type and the scopes chosen there.
+  const [prefill] = useState(() => takePrefill(bbl));
+  const [job, setJob] = useState<JobType | null>(prefill?.jobType ?? null);
   const [construction, setConstruction] = useState<ConstructionType | null>(null);
-  const [scope, setScope] = useState<ScopeOption[]>([]);
+  const [scope, setScope] = useState<ScopeOption[]>(() =>
+    prefill ? [...new Set([...defaultScope(prefill.jobType), ...prefill.scope])] : []);
   const [names, setNames] = useState<Record<Role, string>>({ architect: "", structural_engineer: "", developer: "", contractor: "" });
   const [me, setMe] = useState<Role>("architect");
   const [depth, setDepth] = useState<DepthBand>("unsure");

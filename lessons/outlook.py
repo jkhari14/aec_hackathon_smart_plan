@@ -32,7 +32,6 @@ HERE = {
     "facade_falling": ("Facade or falling-debris condition cited", "Site safeguarding cited"),
     "site_safety_lapse": ("Scaffold or material handling cited", "Site safeguarding cited", "Pedestrian walkway not kept safe",
                           "Unsafe site condition cited"),
-    "demolition_fire": ("Work continued during a stop-work order",),
 }
 
 
