@@ -1,6 +1,7 @@
 /* App shell layout: full-bleed map, floating columns over it. */
 
 .fs-shell {
+  --fs-fab: 52px;
   position: relative;
   height: 100%;
   overflow: hidden;
@@ -29,7 +30,7 @@
 }
 .fs-shell__right {
   right: var(--fs-4);
-  bottom: var(--fs-4);
+  bottom: calc(var(--fs-4) + var(--fs-fab) + var(--fs-3));
   width: var(--fs-panel-w);
 }
 .fs-shell__left > *,
@@ -54,18 +55,53 @@
   border-width: 0;
 }
 .fs-shell__chat {
-  flex: 0 0 auto;
-  max-height: 46%;
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: 60%;
+  display: flex;
+  flex-direction: column;
 }
 .fs-shell__chat[data-open="false"] {
   display: none;
 }
 .fs-shell[data-site="false"] .fs-shell__chat {
   margin-top: auto;
+  max-height: 100%;
 }
 
-/* Keep the map's own controls clear of the right column. */
+/* The chat button, bottom right */
+.fs-chat-fab {
+  position: absolute;
+  right: var(--fs-4);
+  bottom: var(--fs-4);
+  z-index: var(--fs-z-bar);
+  display: grid;
+  place-items: center;
+  width: var(--fs-fab);
+  height: var(--fs-fab);
+  border-radius: 999px;
+  border: 1px solid var(--fs-line-strong);
+  background: var(--fs-accent);
+  color: var(--fs-bg);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.35);
+  cursor: pointer;
+  transition: transform var(--fs-fast) var(--fs-ease);
+}
+.fs-chat-fab:hover {
+  transform: scale(1.05);
+}
+.fs-chat-fab:focus-visible {
+  outline: 2px solid var(--fs-accent);
+  outline-offset: 3px;
+}
+.fs-chat-fab svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Keep the map's own controls clear of the right column and the chat button. */
 .fs-shell .maplibregl-ctrl-bottom-right {
+  right: calc(var(--fs-fab) + var(--fs-5));
   transition: right var(--fs-base) var(--fs-ease-out);
 }
 .fs-shell[data-site="true"] .maplibregl-ctrl-bottom-right,
@@ -102,12 +138,14 @@
   font-size: var(--fs-text-lg);
   white-space: nowrap;
 }
-.fs-brand__mark {
-  width: 14px;
-  height: 14px;
-  border-radius: 4px;
-  background: conic-gradient(from 210deg, var(--fs-accent), var(--fs-hz-flood), var(--fs-accent));
-  box-shadow: 0 0 0 3px var(--fs-accent-soft);
+.fs-brand {
+  flex: none;
+}
+.fs-brand__logo {
+  display: block;
+  flex: none;
+  height: 48px;
+  width: auto;
 }
 .fs-search {
   flex: 1;
@@ -151,6 +189,9 @@
   gap: 2px;
   padding-bottom: var(--fs-3);
   border-bottom: 1px solid var(--fs-line);
+}
+.fs-layer--all {
+  border-bottom-color: var(--fs-line-strong);
 }
 .fs-layer:last-child {
   border-bottom: 0;
@@ -254,8 +295,7 @@
 .fs-hint {
   position: absolute;
   left: 50%;
-  /* below the map's address search, which also sits top-centre */
-  top: calc(var(--fs-4) + 56px);
+  top: var(--fs-4);
   transform: translateX(-50%);
   z-index: var(--fs-z-panel);
   display: flex;
@@ -457,15 +497,19 @@
     left: var(--fs-2);
     right: var(--fs-2);
     top: auto;
-    bottom: 56px;
+    bottom: calc(var(--fs-fab) + var(--fs-2) * 2);
     width: auto;
     max-height: 58%;
   }
   .fs-shell__bottom {
     left: var(--fs-2);
-    right: var(--fs-2);
+    right: calc(var(--fs-fab) + var(--fs-2) * 2);
     bottom: var(--fs-2);
     max-width: none;
+  }
+  .fs-chat-fab {
+    right: var(--fs-2);
+    bottom: var(--fs-2);
   }
   .fs-limits {
     flex: 1;

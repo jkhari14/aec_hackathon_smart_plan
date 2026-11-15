@@ -14,7 +14,7 @@ const asOf = params.get("as_of") ?? undefined;
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <main className="relative h-full overflow-hidden">
-      <CityMap features={[]} />
+      <CityMap />
       <div className="absolute right-4 top-4">
         <WarningsPanel bbl={bbl} asOf={asOf} />
       </div>

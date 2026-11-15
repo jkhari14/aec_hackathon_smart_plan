@@ -36,6 +36,9 @@ type LayerSlotProps = {
 };
 
 export function LayerSlot({ open, onClose, layers, enabled, onToggle }: LayerSlotProps) {
+  const usable = layers?.filter((l) => l.status !== "error") ?? [];
+  const allOn = usable.length > 0 && usable.every((l) => enabled.has(l.layer_id));
+  const onCount = usable.filter((l) => enabled.has(l.layer_id)).length;
   return (
     <Panel
       title="Layers"
@@ -54,6 +57,16 @@ export function LayerSlot({ open, onClose, layers, enabled, onToggle }: LayerSlo
         </>
       )}
       {layers?.length === 0 && <EmptyState title="No layers yet">The layer catalog came back empty.</EmptyState>}
+      {usable.length > 1 && (
+        <div className="fs-layer fs-layer--all">
+          <Toggle
+            checked={allOn}
+            onChange={(on) => usable.forEach((l) => onToggle(l.layer_id, on))}
+            label={<span className="fs-layer__name">All layers</span>}
+            hint={`${onCount} of ${usable.length} on`}
+          />
+        </div>
+      )}
       {layers?.map((layer) => (
         <div key={layer.layer_id} className="fs-layer" style={{ "--fs-hz": `var(--fs-hz-${layer.hazard})` } as CSSProperties}>
           {layer.status === "error" ? (
@@ -121,16 +134,16 @@ export function SiteSlot({ bbl, site, onClose, tab, onTab }: SiteSlotProps) {
 
 type ChatSlotProps = {
   open: boolean;
-  onClose: () => void;
   bbl: string | null;
   site: SearchResult | null;
   onPickBbl: (bbl: string) => void;
   onToggleLayer: (id: string, on: boolean) => void;
 };
 
-export function ChatSlot({ open, onClose, bbl, site, onPickBbl, onToggleLayer }: ChatSlotProps) {
+// Opened and closed by the chat button; the panel stays mounted while closed, so the conversation survives.
+export function ChatSlot({ open, bbl, site, onPickBbl, onToggleLayer }: ChatSlotProps) {
   return (
-    <Panel title={copy.chat.title} open={open} edge="bottom" onClose={onClose} className="fs-shell__chat" label="Chat">
+    <Panel title={copy.chat.title} open={open} edge="bottom" className="fs-shell__chat" label="Chat">
       <ChatDock
         bbl={bbl}
         siteLabel={site ? titleCase(site.label).split(",")[0] : undefined}

@@ -99,7 +99,7 @@ export function ProjectItems({ items, role, onUpdate }: Props) {
         ))}
       </ul>
       <p className="text-[0.7rem] leading-snug text-muted">
-        Status and owner are set by the people on this project. ForeSite does not check proof, and "done" here is not a finding
+        Status and owner are set by the people on this project. 4site does not check proof, and "done" here is not a finding
         that a duty was met.
       </p>
     </div>

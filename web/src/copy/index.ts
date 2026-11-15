@@ -13,7 +13,7 @@ type QueryStatus = "ok" | "error" | "capped";
 
 export const copy = {
   app: {
-    name: "ForeSite",
+    name: "4site",
     tagline: "See what the public record says about a site and its neighbors, before work starts.",
     sampleData: "Sample data",
     sampleDataHint: "The live service is unavailable, so this screen shows saved sample records.",
@@ -21,7 +21,7 @@ export const copy = {
 
   // Always visible on every screen (the forensic advisor: "checking these boxes doesn't mean you're good").
   limitations: {
-    title: "What ForeSite doesn't know",
+    title: "What 4site doesn't know",
     short: "Public records and reported cases only. Not exhaustive, and not engineering advice.",
     points: [
       "It shows what public records and reported cases say. It does not inspect buildings or read drawings it was not given.",
@@ -195,7 +195,7 @@ export const copy = {
     proofNeeded: "Proof needed",
     codeRef: "Code",
     lifeSafety: "Life safety",
-    proofNote: "Proof comes from the team. ForeSite never treats a public record as proof.",
+    proofNote: "Proof comes from the team. 4site never treats a public record as proof.",
     empty: "No actions for this stage yet.",
   },
 
