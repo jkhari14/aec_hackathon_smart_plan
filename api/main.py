@@ -20,6 +20,7 @@ from api.routers.projects_router import projects_router
 from api.routers.search_router import search_router
 from api.routers.sites_router import sites_router
 from early_warning import api as early_warning_api
+from model_input.router import router as model_input_router
 
 app = FastAPI(
     title="ForeSite API",
@@ -44,6 +45,7 @@ def health() -> dict[str, str]:
 # Owners' routers go here, above the stubs.
 app.include_router(early_warning_api.router)
 
+app.include_router(model_input_router)  # Rishabh, PR 13: drawing upload (not in the schema yet)
 for owner_router in (layers_router, search_router, sites_router, cases_router, projects_router):
     app.include_router(owner_router)
 # The chat reads each site part through the same function its route uses.
