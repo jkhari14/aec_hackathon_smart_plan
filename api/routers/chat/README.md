@@ -8,12 +8,9 @@ from, plus **actions** for the page to carry out. Ported from the reference in `
 returns the shared contract's `ChatResponse`. It reads each site part through the function that
 part's route answers from (PR 4), so it shows real data as soon as an owner's module lands and the
 labelled sample until then. No contract carries a site's list of records, so a record search
-answers "unknown", not "none found". No real model call has been made.
+answers "unknown", not "none found". Live answers: see "Live and mock" below.
 
-This PR sits on a small contract change (its own PR): `ChatAnswerPart.kind` gains `warning`,
-`action`, `not_found`, `unknown` and `notice`; `ChatRequest` gains optional `job_type`, `stage` and
-`history`; and a project pin gains an optional `body`, the text of a pinned chat answer. The
-contract's `ai_suggestion` and `user_input` kinds are not produced: every part here rests on a
+The contract's `ai_suggestion` and `user_input` kinds are not produced: every part here rests on a
 source or is a fixed server line.
 
 ## What an answer holds
@@ -48,12 +45,55 @@ prediction, or a company name. One correction round, then what still fails is dr
 **As-of:** a record, past case or warning dated on or after the day is not in the view, the searches
 or the model's reading text; neither is text added later or today's status; web search is off.
 
-**No key:** the chat runs in mock mode. A typed question is matched by keyword to a search, a count,
-the warnings, the action items or a page action, through the same checks, and is labeled as a mock.
+**Mock mode:** a typed question is matched by keyword to a search, a count, the warnings, the action
+items or a page action, through the same checks, and is labeled as a mock. A question nothing matches
+is answered with a line saying so and what the mock can do; it never makes an answer up.
 
 **No server:** the web chat panel shows answers saved ahead of time for the sample site
 (`chat_saved_answers_export.py` writes them into `web/src/features/chat/`, built from the site's data
 through the same checks and labeled as saved). They are redone for the demo sites once those are picked.
+
+## Live and mock
+
+**State.** The integrator reported on 2026-11-14 that a key is set on the demo host and the chat
+answered live there (the closing note on pull request #28). What that call checked is not recorded
+here, and the items under "Not yet covered" below still stand. Without a key the chat answers in mock
+mode; with no server the web panel offers saved answers. Each says so on the answer.
+
+**Which mode is running.** `GET /api/chat/setup` returns `"live": true` only when all three hold:
+`FORESITE_CHAT_LIVE` is not `0`, a key is in the server's environment (`ANTHROPIC_API_KEY`), and the
+`anthropic` package can be imported. Otherwise it returns `"live": false` and does not say which is
+missing. To tell them apart on the server: read `FORESITE_CHAT_LIVE`, check the key variable is set
+(without printing it), and run `python -c "import anthropic"`.
+
+| What the reader sees | Meaning |
+|---|---|
+| "· offline answers" above the conversation | `/api/chat/setup` said `live: false`, or could not be reached |
+| "Offline answer: no model was called", with the mock notice as the first line | A mock answer: `"offline": true` in the response |
+| The same, with "The live model call did not complete, so this is a mock answer." first | The server is live, this call failed, and the answer is a mock |
+| "Saved answer: the chat server could not be reached" | No server answered: an answer saved ahead of time, for the sample site only |
+| None of these | A model answered: `"offline": false` |
+
+**When a live call fails** the reader never sees an error. The server logs one warning,
+`live chat call failed: ChatModelError: <reason>`, and answers in mock mode. The reason is the SDK's
+error name (`AuthenticationError`, `BadRequestError`, `NotFoundError` for a model id the key cannot
+use, `RateLimitError`, `APITimeoutError`, `APIConnectionError`), or one of: the model declined the
+request; the answer ran past the token limit (8000); no answer was submitted within the request limit
+(8 requests a question, each with a 120-second timeout and one retry). The fallback option is in beta:
+after a 400 the code asks once more without it, and logs nothing.
+
+**Not yet covered.** Worth doing before the demo leans on live answers:
+
+- No test runs the stop reasons `refusal`, `max_tokens` or `pause_turn`, the retry after a 400, the
+  reading of web search results off a response, or the limit of 12 live questions a minute. The tests
+  use a scripted stand-in for the model, and one test runs the request loop against a fake SDK client.
+- Token and search counts are counted for each live answer and then dropped: not logged, not returned.
+  Read usage on the provider's console.
+- A live answer is worth reading against the site routes once: every case, warning and action part has
+  a `record_id` the matching route (`/similar`, `/warnings`, `/actions`) also returns; a `web` part's
+  link is one the search returned; an as-of view has no web part and nothing dated on or after the day.
+- `FORESITE_CHAT_LIVE=0` keeps a server with a key in mock mode. The key and any spend are the key
+  holder's call.
 
 ## What it reads
 
@@ -72,8 +112,8 @@ owner's module that lands is picked up by the chat with no change here.
 - **Early-warning rule checks** (`SiteContext.warning_checks`): when a rule could not run, "no warnings"
   is answered "unknown", a count of warnings is "at least", and warnings cited without a count carry a
   line saying some rules were not checked. The chat is ready for this, but `app_context` does not fill
-  it yet: the rule-checks contract and route are in an open pull request, and no site function serves
-  them on this branch. Until it is wired, an empty warnings list reads "none found".
+  it yet: the rule-checks contract and route have landed on `main` since, and `load_site_part` has no
+  part for them. Until it is wired, an empty warnings list reads "none found".
 
 Every piece that can fail to load is a `Loaded` with a status, because "could not load" must never
 reach the chat as an empty list.
@@ -101,8 +141,11 @@ chat_router.py         POST /api/chat, GET /api/chat/setup, 12 live questions a 
 ```
 
 Tests: `python -m unittest discover -s tests -t .` (`tests/test_chat_core.py`, `tests/test_chat_service.py`,
-`tests/test_chat_saved_answers.py`, `tests/test_chat_app_context.py`; offline, a scripted model, no key). Settings: `ANTHROPIC_API_KEY` (server only), `FORESITE_CHAT_LIVE=0`
-to force mock mode, `FORESITE_CHAT_MODEL`, `FORESITE_CHAT_EFFORT`.
+`tests/test_chat_saved_answers.py`, `tests/test_chat_app_context.py`; offline, a scripted model, no key).
+
+Settings, all read from the server's environment: `ANTHROPIC_API_KEY` (the server only; never in the
+repo or the web build), `FORESITE_CHAT_LIVE=0` to keep mock mode even with a key, `FORESITE_CHAT_MODEL`
+(default `claude-opus-5-5`), `FORESITE_CHAT_EFFORT` (default `medium`).
 
 ## Limits
 
@@ -112,5 +155,5 @@ to force mock mode, `FORESITE_CHAT_MODEL`, `FORESITE_CHAT_EFFORT`.
   links the first.
 - The word-list checks catch plain phrasings and miss others. A person's name cannot be detected in code.
 - The searches match words, not meaning.
-- The web chat panel (`web/src/features/chat/`) and project panel (`web/src/features/project/`) are built on
-  the placeholder tokens and are not mounted in the app shell yet.
+- The web chat panel (`web/src/features/chat/`) and project panel (`web/src/features/project/`) sit in the
+  app shell's chat slot, as two tabs.
