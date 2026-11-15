@@ -5,7 +5,7 @@ import "./similar_cases.css";
 
 import { type CSSProperties, type MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import type { Hazard, Severity, SimilarCase } from "../../contracts";
+import type { Hazard, Lesson, Severity, SimilarCase } from "../../contracts";
 import { SEVERITY_LABELS } from "../../contracts";
 import { causeText, copy } from "../../copy";
 import { Chip, EmptyState, formatDate, HAZARD_LABELS, SeverityBadge, SourceLabel, Toggle } from "../../design";
@@ -23,7 +23,13 @@ const S = copy.similarCases;
 /** One strand at a time: the case joined to the site on the map, and the switch that draws them all. */
 export type StrandControls = { focusedId: string | null; onFocus: (caseId: string) => void; all: boolean; onAll: (on: boolean) => void };
 
-export function SimilarCases({ results, strands }: { results: SimilarCase[]; strands?: StrandControls }) {
+/** Lessons a case belongs to, for its popup (from the lessons outlook). */
+export type CaseLessons = Map<string, { lesson: Lesson; basis: "reported_cause" | "event_only" }[]>;
+
+/** `embedded`: inside the Similar projects tab, which has its own narrowing chips and owns the popup (`onOpen`). */
+export function SimilarCases({ results, strands, embedded = false, onOpen }: {
+  results: SimilarCase[]; strands?: StrandControls; embedded?: boolean; onOpen?: (caseId: string) => void;
+}) {
   const [hazards, setHazards] = useState<Set<Hazard>>(new Set());
   const [severities, setSeverities] = useState<Set<Severity>>(new Set());
   const [since, setSince] = useState<Since>("all");
@@ -58,13 +64,14 @@ export function SimilarCases({ results, strands }: { results: SimilarCase[]; str
 
   return (
     <div className="fs-similar">
-      <p className="fs-quiet">{S.help}</p>
+      {!embedded && <p className="fs-quiet">{S.help}</p>}
       {strands && (
         <div className="fs-similar__strands">
           <Toggle checked={strands.all} onChange={strands.onAll} label="Show all strands"
             hint="Or pick a case to see it joined to this site on the map" />
         </div>
       )}
+      {!embedded && (
       <div className="fs-filters" role="group" aria-label="Filter similar cases">
         {available.hazards.map((h) => (
           <Chip key={h} hazard={h} pressed={hazards.has(h)} onClick={() => toggle(hazards, h, setHazards)}>
@@ -82,6 +89,7 @@ export function SimilarCases({ results, strands }: { results: SimilarCase[]; str
           </Chip>
         ))}
       </div>
+      )}
 
       <p className="fs-quiet fs-num">
         {shown.length} of {results.length} case{results.length > 1 ? "s" : ""}, closest first
@@ -104,9 +112,10 @@ export function SimilarCases({ results, strands }: { results: SimilarCase[]; str
 
       {shown.map((r) => (
         <CaseCard key={r.case_id} result={r} focused={strands?.focusedId === r.case_id}
-          onFocus={strands ? () => strands.onFocus(r.case_id) : undefined} onOpen={() => setOpenId(r.case_id)} />
+          onFocus={strands ? () => strands.onFocus(r.case_id) : undefined}
+          onOpen={() => (onOpen ? onOpen(r.case_id) : setOpenId(r.case_id))} />
       ))}
-      {(() => {
+      {!onOpen && (() => {
         const open = results.find((r) => r.case_id === openId);
         return open ? <CaseDialog key={open.case_id} result={open} onClose={() => setOpenId(null)} /> : null;
       })()}
@@ -182,7 +191,9 @@ const SHRINK = { duration: 260, easing: "cubic-bezier(0.4, 0, 0.8, 0.4)" };
 
 /** The case's details in a popup that grows out of its card: in common, different, what happened, sources.
     X, Esc or a click outside shrinks it back into the card; the map keeps the case's strand behind it. */
-function CaseDialog({ result, onClose }: { result: SimilarCase; onClose: () => void }) {
+export function CaseDialog({ result, lessons, onClose }: {
+  result: SimilarCase; lessons?: { lesson: Lesson; basis: "reported_cause" | "event_only" }[]; onClose: () => void;
+}) {
   const ref = useRef<HTMLDialogElement>(null);
   const closing = useRef(false);
   const c = result.case;
@@ -262,6 +273,25 @@ function CaseDialog({ result, onClose }: { result: SimilarCase; onClose: () => v
           <section>
             <h4>Different from this site</h4>
             <ul>{result.differs_on.map((m) => <li key={m}>{sentence(m)}</li>)}</ul>
+          </section>
+        )}
+        {lessons && lessons.length > 0 && (
+          <section className="fs-case__lessons">
+            <h4>Lessons from this case</h4>
+            {lessons.map(({ lesson, basis }) => (
+              <div key={lesson.id} className="fs-case__lesson">
+                <p className="fs-case__lesson-title">{lesson.label}</p>
+                <p className="fs-quiet">
+                  {basis === "event_only" ? "Tagged by what happened: no cause has been published." : "Tagged from the cause as reported."}
+                </p>
+                <p className="fs-case__lesson-label">Checklist items for this risk</p>
+                <ul>
+                  {lesson.prevent_with.map((p) => (
+                    <li key={p.source_rule}>{p.title}{p.code_ref ? ` · ${p.code_ref.replace(/^2022 NYC /, "")}` : ""}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </section>
         )}
         <section>

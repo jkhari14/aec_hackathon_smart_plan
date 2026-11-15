@@ -2762,6 +2762,14 @@
             "type": "integer",
             "title": "Case Count"
           },
+          "tagged": {
+            "items": {
+              "$ref": "#/components/schemas/LessonTag"
+            },
+            "type": "array",
+            "title": "Tagged",
+            "default": []
+          },
           "prevent_with": {
             "items": {
               "$ref": "#/components/schemas/LessonItem"
@@ -2892,6 +2900,30 @@
         ],
         "title": "LessonItem",
         "description": "A checklist item that prevents the failure mode."
+      },
+      "LessonTag": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "title": "Case Id"
+          },
+          "basis": {
+            "type": "string",
+            "enum": [
+              "reported_cause",
+              "event_only"
+            ],
+            "title": "Basis"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "case_id",
+          "basis"
+        ],
+        "title": "LessonTag",
+        "description": "One case tagged with this lesson's failure mode, and the basis of the tag."
       },
       "LotFacts": {
         "properties": {

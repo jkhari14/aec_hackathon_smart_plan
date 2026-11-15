@@ -78,3 +78,8 @@
   font-weight: 600;
   cursor: pointer;
 }
+.fs-lesson__case {
+  padding: 0;
+  text-align: left;
+  font-size: var(--fs-text-sm);
+}

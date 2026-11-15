@@ -1,21 +1,17 @@
-// "What could go wrong here": lessons from similar past projects for every option, worst first. Pick an option,
-// then scopes, to narrow; each lesson lists the checklist items for that risk and what this lot's own records show.
-// Not blame: incidents are what happened on similar projects, causes only as reported.
+// Lessons from similar past projects: a card per risk (failure mode) with its incidents, the checklist items
+// for it and what this lot's own records show. Shown inside the Similar projects tab. Not blame: incidents are
+// what happened on similar projects, causes only as reported.
 import "./lessons.css";
 
 import { useEffect, useState, type CSSProperties } from "react";
 
 import { api } from "../../api/client";
-import type { Lesson, SiteOutlook, WorkType } from "../../contracts";
-import { Chip, EmptyState, HAZARD_LABELS, humanize, Skeleton } from "../../design";
-import { filterLessons, type Option, OPTIONS, scopeChoices, setupFor } from "./model";
-import { savePrefill } from "./prefill";
+import type { Lesson, SiteOutlook } from "../../contracts";
+import { HAZARD_LABELS } from "../../design";
 
-export function Lessons({ bbl, onStart }: { bbl: string; onStart?: () => void }) {
+/** The lessons for a lot (null while loading, "failed" when the API couldn't answer: sample lessons are never shown). */
+export function useOutlook(bbl: string): SiteOutlook | null | "failed" {
   const [outlook, setOutlook] = useState<SiteOutlook | null | "failed">(null);
-  const [option, setOption] = useState<Option>("all");
-  const [scopes, setScopes] = useState<WorkType[]>([]);
-
   useEffect(() => {
     let live = true;
     setOutlook(null);
@@ -24,55 +20,13 @@ export function Lessons({ bbl, onStart }: { bbl: string; onStart?: () => void })
       live = false;
     };
   }, [bbl]);
-
-  if (outlook === null) return <div className="fs-lessons"><Skeleton height={64} /><Skeleton height={64} /></div>;
-  if (outlook === "failed") {
-    return <EmptyState title="Lessons couldn't load">The lessons for this lot need the 4site API. Try again in a moment.</EmptyState>;
-  }
-
-  const choices = scopeChoices(outlook.lessons, option);
-  const picked = scopes.filter((s) => choices.includes(s));
-  const shown = filterLessons(outlook.lessons, option, picked);
-  const setup = setupFor(option, picked);
-  const toggle = (s: WorkType) => setScopes((xs) => (xs.includes(s) ? xs.filter((x) => x !== s) : [...xs, s]));
-
-  return (
-    <div className="fs-lessons">
-      <p className="fs-quiet">
-        What happened on similar past projects, and the checklist items for each risk. Pick what you might do here
-        to narrow it.
-      </p>
-      <div className="fs-filters" role="group" aria-label="What you might do">
-        {OPTIONS.map((o) => (
-          <Chip key={o.value} pressed={option === o.value} onClick={() => setOption(o.value)}>{o.label}</Chip>
-        ))}
-      </div>
-      {/* Scopes come after an option: address, then everything, then what you'd do, then how. */}
-      {option !== "all" && choices.length > 0 && (
-        <div className="fs-filters fs-lessons__scopes" role="group" aria-label="Scope">
-          {choices.map((s) => (
-            <Chip key={s} pressed={picked.includes(s)} onClick={() => toggle(s)}>{humanize(s)}</Chip>
-          ))}
-        </div>
-      )}
-      <p className="fs-quiet fs-num">{shown.length} of {outlook.lessons.length} lessons</p>
-
-      {shown.length === 0 && <EmptyState title="No lessons match">Clear a scope to see the rest.</EmptyState>}
-      {shown.map((l) => <LessonCard key={l.id} lesson={l} />)}
-
-      {setup && onStart && (
-        <button type="button" className="fs-btn fs-lessons__start" onClick={() => {
-          savePrefill({ bbl, ...setup });
-          onStart();
-        }}>
-          Start a project: {OPTIONS.find((o) => o.value === option)?.label} →
-        </button>
-      )}
-    </div>
-  );
+  return outlook;
 }
 
-function LessonCard({ lesson }: { lesson: Lesson }) {
+/** `openable` are the incidents that are also among this lot's similar cases: those open their popup. */
+export function LessonCard({ lesson, openable, onOpenCase }: {
+  lesson: Lesson; openable?: Set<string>; onOpenCase?: (caseId: string) => void;
+}) {
   const [open, setOpen] = useState(false);
   return (
     <article className="fs-lesson" style={{ "--fs-hz": `var(--fs-hz-${lesson.hazard})` } as CSSProperties}>
@@ -99,7 +53,11 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
         <ul className="fs-lesson__cases">
           {lesson.cases.map((c) => (
             <li key={c.case_id}>
-              <span>{c.title}</span>
+              {onOpenCase && openable?.has(c.case_id) ? (
+                <button type="button" className="fs-linkbtn fs-lesson__case" onClick={() => onOpenCase(c.case_id)}>{c.title}</button>
+              ) : (
+                <span>{c.title}</span>
+              )}
               <span className="fs-quiet fs-num">
                 {c.address.split(",")[0]} · {c.date.slice(0, 4)}
                 {c.basis === "event_only" ? " · no cause published" : " · cause as reported"}

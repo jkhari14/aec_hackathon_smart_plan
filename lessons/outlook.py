@@ -66,6 +66,7 @@ def site_outlook(profile: dict, cases: Optional[list[dict]] = None, bbl: Optiona
             "options": mode["options"],
             "scopes": mode["scopes"],
             "case_count": len(tagged),
+            "tagged": [{"case_id": c["id"], "basis": basis} for c, basis in ranked],
             "cases": [{"case_id": c["id"], "title": c["title"], "address": c["address"], "date": c["date"],
                        "severity": c["severity"], "basis": basis,
                        "source_name": (c.get("sources") or [{}])[0].get("name") or "Case library",

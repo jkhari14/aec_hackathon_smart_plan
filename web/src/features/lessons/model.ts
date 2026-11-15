@@ -36,3 +36,23 @@ export function setupFor(option: Option, scopes: WorkType[]): { jobType: JobType
   if (option === "demolish_rebuild") return { jobType: "new_building", scope: picked.length ? picked : ["demolition"] };
   return { jobType: "new_building", scope: picked };
 }
+
+type Tagged = Narrowable & Pick<Lesson, "id" | "tagged">;
+
+/** For a case's popup: every lesson the case is tagged with, and whether from a reported cause or the event only. */
+export function lessonsByCase<T extends Tagged>(lessons: T[]): Map<string, { lesson: T; basis: Lesson["tagged"][number]["basis"] }[]> {
+  const out = new Map<string, { lesson: T; basis: Lesson["tagged"][number]["basis"] }[]>();
+  for (const lesson of lessons) {
+    for (const t of lesson.tagged ?? []) {
+      out.set(t.case_id, [...(out.get(t.case_id) ?? []), { lesson, basis: t.basis }]);
+    }
+  }
+  return out;
+}
+
+/** "By project": every similar case for every option; once narrowed, only cases in the lessons that remain. */
+export function casesFor<R extends { case_id: string }>(results: R[], lessons: Tagged[], option: Option, scopes: WorkType[]): R[] {
+  if (option === "all" && scopes.length === 0) return results;
+  const keep = new Set(filterLessons(lessons, option, scopes).flatMap((l) => (l.tagged ?? []).map((t) => t.case_id)));
+  return results.filter((r) => keep.has(r.case_id));
+}

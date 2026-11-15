@@ -902,6 +902,11 @@ export interface components {
             cases: components["schemas"]["LessonCase"][];
             /** Case Count */
             case_count: number;
+            /**
+             * Tagged
+             * @default []
+             */
+            tagged: components["schemas"]["LessonTag"][];
             /** Prevent With */
             prevent_with: components["schemas"]["LessonItem"][];
             /** Here */
@@ -947,6 +952,19 @@ export interface components {
             title: string;
             /** Code Ref */
             code_ref?: string | null;
+        };
+        /**
+         * LessonTag
+         * @description One case tagged with this lesson's failure mode, and the basis of the tag.
+         */
+        LessonTag: {
+            /** Case Id */
+            case_id: string;
+            /**
+             * Basis
+             * @enum {string}
+             */
+            basis: "reported_cause" | "event_only";
         };
         /** LotFacts */
         LotFacts: {

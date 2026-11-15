@@ -91,6 +91,13 @@ class Outlook(unittest.TestCase):
         order = [worst[l["id"]] for l in site_outlook(self.profile)["lessons"]]
         self.assertEqual(order, sorted(order, reverse=True))
 
+    def test_each_lesson_lists_every_tagged_case_with_its_basis(self):
+        lessons = load("data/cases/lessons.json")
+        for lesson in self.result["lessons"]:
+            tagged = {cid for cid, t in lessons["cases"].items() if lesson["id"] in t["modes"]}
+            self.assertEqual({t["case_id"] for t in lesson["tagged"]}, tagged, lesson["id"])
+            self.assertEqual(len(lesson["tagged"]), lesson["case_count"])
+
     def test_every_incident_line_names_its_source(self):
         for lesson in self.result["lessons"]:
             for c in lesson["cases"]:

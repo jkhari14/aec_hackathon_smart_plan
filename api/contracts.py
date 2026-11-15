@@ -285,6 +285,13 @@ class LessonCase(Contract):
     source_url: Optional[str] = None
 
 
+class LessonTag(Contract):
+    """One case tagged with this lesson's failure mode, and the basis of the tag."""
+
+    case_id: str
+    basis: Literal["reported_cause", "event_only"]
+
+
 class LessonItem(Contract):
     """A checklist item that prevents the failure mode."""
 
@@ -303,6 +310,8 @@ class Lesson(Contract):
     scopes: list[WorkType]
     cases: list[LessonCase]
     case_count: int
+    # Every case tagged with this mode (the three in `cases` are the closest), so a case can show its lessons.
+    tagged: list[LessonTag] = []
     prevent_with: list[LessonItem]
     here: Optional[str] = None
 

@@ -9,12 +9,12 @@ import { api, type Loaded } from "../../api/client";
 import { copy } from "../../copy";
 import type { SimilarCases as SimilarCasesData, SiteProfile } from "../../contracts";
 import { Badge, formatDate, SkeletonCard, Tabs } from "../../design";
-import { Lessons } from "../lessons/Lessons";
-import { SimilarCases, type StrandControls } from "../similar_cases/SimilarCases";
+import { SimilarProjects } from "../lessons/SimilarProjects";
+import type { StrandControls } from "../similar_cases/SimilarCases";
 import { LotFacts, Neighbors, SourcesChecked, WorkAndGround } from "./LotFacts";
 import { Signals } from "./Signals";
 
-export type SiteTab = "lessons" | "overview" | "similar";
+export type SiteTab = "similar" | "overview";
 
 type Data = {
   profile?: Loaded<SiteProfile>;
@@ -52,9 +52,8 @@ export function SitePanel({ bbl, data, tab, onTab, strands, onStart }: {
           value={tab}
           onChange={onTab}
           options={[
-            { value: "lessons", label: "Lessons" },
+            { value: "similar", label: <span className="fs-num">Similar projects{count(similar?.data.results.length)}</span> },
             { value: "overview", label: "This lot" },
-            { value: "similar", label: <span className="fs-num">Similar{count(similar?.data.results.length)}</span> },
           ]}
         />
         <div className="fs-site__meta">
@@ -63,7 +62,6 @@ export function SitePanel({ bbl, data, tab, onTab, strands, onStart }: {
         </div>
       </div>
 
-      {tab === "lessons" && <div className="fs-enter"><Lessons bbl={bbl} onStart={onStart} /></div>}
       {tab === "overview" &&
         (profile ? (
           <>
@@ -89,7 +87,9 @@ export function SitePanel({ bbl, data, tab, onTab, strands, onStart }: {
           <Loading />
         ))}
 
-      {tab === "similar" && (similar ? <div className="fs-enter"><SimilarCases results={similar.data.results} strands={strands} /></div> : <Loading />)}
+      {tab === "similar" && (similar
+        ? <div className="fs-enter"><SimilarProjects bbl={bbl} results={similar.data.results} strands={strands} onStart={onStart} /></div>
+        : <Loading />)}
     </>
   );
 }
