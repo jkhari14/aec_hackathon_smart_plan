@@ -9,6 +9,14 @@ export type Role = S["ProjectMember"]["role"];
 export type PinCreate = S["PinCreate"];
 export type ProjectPin = S["ProjectPin"];
 export type ActionItemUpdate = S["ActionItemUpdate"];
+export type DrawingConfirm = S["DrawingConfirm"];
+export type StructuralModel = S["StructuralModel"];
+
+/** A drawing reading: the AI's suggestion, saved nowhere until the uploader confirms it. */
+export type DrawingReading =
+  | { status: "ok"; model: StructuralModel; evidence: string; note: string }
+  | { status: "refused"; reason: string }
+  | { status: "unreachable" };
 
 export const ROLE_LABELS: Record<Role, string> = {
   architect: "Architect",
@@ -82,7 +90,28 @@ export const projectWrites = {
   updateItems: (projectId: string, updates: ActionItemUpdate[]) => write(url(projectId, "/items"), "PATCH", updates),
   addNote: (projectId: string, role: Role, text: string) => write(url(projectId, "/notes"), "POST", { author_role: role, text }),
   addPin: (projectId: string, pin: PinCreate) => write(url(projectId, "/pins"), "POST", pin),
+  confirmDrawing: (projectId: string, body: DrawingConfirm) => write(url(projectId, "/model/confirm"), "POST", body),
 };
+
+/** Send a PDF to the drawing reader (10 to 30 s). 422: not a readable PDF; 503: no reader on this server. */
+export async function readDrawing(projectId: string, file: Blob, signal?: AbortSignal): Promise<DrawingReading> {
+  if (STATIC) return { status: "unreachable" };
+  try {
+    const response = await fetch(url(projectId, "/model/drawing"), {
+      method: "POST", headers: { "Content-Type": "application/pdf" }, body: file, signal,
+    });
+    const payload = (await response.json().catch(() => null)) as
+      | { model?: StructuralModel; evidence?: string; note?: string; detail?: unknown } | null;
+    if (response.ok && payload?.model && Array.isArray(payload.model.bearing_walls_on_lot_line)) {
+      return { status: "ok", model: payload.model, evidence: payload.evidence ?? "", note: payload.note ?? "" };
+    }
+    const reason = reasonFrom(payload?.detail);
+    return reason ? { status: "refused", reason } : { status: "unreachable" };
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") throw error;
+    return { status: "unreachable" };
+  }
+}
 
 /** The line to show when a write did not save, or null when it did. */
 export function whyNotSaved(result: ProjectWrite): string | null {

@@ -98,6 +98,48 @@
         "life_safety": {
           "title": "Life Safety",
           "type": "boolean"
+        },
+        "added_by_role": {
+          "anyOf": [
+            {
+              "enum": [
+                "architect",
+                "structural_engineer",
+                "developer",
+                "contractor"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Added By Role"
+        },
+        "added_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Added Reason"
+        },
+        "added_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Added At"
         }
       },
       "required": [

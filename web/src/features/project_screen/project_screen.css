@@ -464,3 +464,96 @@ button.fs-ps-card[aria-pressed="true"]:hover,
     padding-left: var(--fs-3);
   }
 }
+
+/* Living checklist: why an item is there, and what is new for this role */
+.fs-ps-new {
+  border-color: var(--fs-accent);
+  background: var(--fs-accent-soft);
+}
+.fs-ps-newtag,
+.fs-ps__newcount {
+  margin-left: 6px;
+  padding: 0 6px;
+  border: 1px solid var(--fs-accent);
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--fs-accent);
+  white-space: nowrap;
+}
+.fs-ps__newcount {
+  background: var(--fs-accent);
+  color: var(--fs-accent-ink);
+}
+.fs-ps-item__why {
+  margin: 0;
+  padding: 0 var(--fs-3) var(--fs-2) calc(104px + var(--fs-3) * 2);
+  font-size: var(--fs-text-xs);
+  color: var(--fs-accent);
+}
+
+/* Reading a drawing */
+.fs-ps-reader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-4);
+}
+.fs-ps-reader__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-3);
+}
+.fs-ps-reader__form p {
+  margin: 4px 0 0;
+}
+.fs-ps-reader__field {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  align-items: center;
+  gap: var(--fs-3);
+  font-size: var(--fs-text-sm);
+}
+.fs-ps-reader__walls {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: var(--fs-text-sm);
+}
+.fs-ps-reader__walls label {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+.fs-ps-reader__actions {
+  display: flex;
+  gap: var(--fs-2);
+  flex-wrap: wrap;
+}
+.fs-ps-reader__changes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-text-sm);
+}
+.fs-ps-reader__changes li {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: var(--fs-3);
+}
+@media (max-width: 640px) {
+  .fs-ps-item__why {
+    padding-left: var(--fs-3);
+  }
+  .fs-ps-reader__field,
+  .fs-ps-reader__changes li {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}

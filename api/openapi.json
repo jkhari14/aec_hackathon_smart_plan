@@ -92,6 +92,56 @@
         }
       }
     },
+    "/api/projects/{project_id}/model/confirm": {
+      "post": {
+        "summary": "Confirm Drawing",
+        "description": "The uploader confirmed a reading: keep it as the project's model (and the site's, for the profile),\nlist the document, and add or flag the checklist items it calls for, each saying who and why.",
+        "operationId": "confirm_drawing_api_projects__project_id__model_confirm_post",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DrawingConfirm"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/layers": {
       "get": {
         "summary": "List Layers",
@@ -1125,6 +1175,45 @@
           "life_safety": {
             "type": "boolean",
             "title": "Life Safety"
+          },
+          "added_by_role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "architect",
+                  "structural_engineer",
+                  "developer",
+                  "contractor"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Added By Role"
+          },
+          "added_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Added Reason"
+          },
+          "added_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Added At"
           }
         },
         "additionalProperties": false,
@@ -1786,6 +1875,57 @@
         ],
         "title": "DatasetStatus",
         "description": "How one source answered for one site. An error is never shown as zero; capped is \"at least\"."
+      },
+      "DrawingConfirm": {
+        "properties": {
+          "model": {
+            "$ref": "#/components/schemas/StructuralModel"
+          },
+          "by_role": {
+            "type": "string",
+            "enum": [
+              "architect",
+              "structural_engineer",
+              "developer",
+              "contractor"
+            ],
+            "title": "By Role"
+          },
+          "document": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Document"
+          },
+          "slot": {
+            "type": "string",
+            "maxLength": 60,
+            "minLength": 1,
+            "title": "Slot",
+            "default": "structural"
+          },
+          "evidence": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "model",
+          "by_role",
+          "document"
+        ],
+        "title": "DrawingConfirm",
+        "description": "A drawing reading the uploader checked and confirmed: it becomes the project's structural model and\nturns into checklist items for the roles it concerns (each saying which document added it and who)."
       },
       "EarlyWarning": {
         "properties": {

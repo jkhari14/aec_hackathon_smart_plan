@@ -330,6 +330,11 @@ class ActionItem(Contract):
     owner_role: Optional[Role] = None
     source_rule: str
     life_safety: bool
+    # Provenance, set by the project store when a team member's document added or flagged the item (for
+    # example a confirmed drawing reading). Never set for the checklist drafted from the site's rules.
+    added_by_role: Optional[Role] = None
+    added_reason: Optional[str] = None
+    added_at: Optional[str] = None
 
 
 # Projects
@@ -383,6 +388,17 @@ class ProjectCreate(Contract):
     job_type: Optional[JobType] = None
     construction_type: Optional[ConstructionType] = None
     work_types: Optional[list[WorkType]] = None
+
+
+class DrawingConfirm(Contract):
+    """A drawing reading the uploader checked and confirmed: it becomes the project's structural model and
+    turns into checklist items for the roles it concerns (each saying which document added it and who)."""
+
+    model: StructuralModel
+    by_role: Role
+    document: str = Field(min_length=1, max_length=200)  # the file's name, e.g. "S-101.pdf"
+    slot: str = Field(default="structural", min_length=1, max_length=60)  # the Documents slot it was added to
+    evidence: Optional[str] = Field(default=None, max_length=2000)  # the reader's note on the sheets it used
 
 
 class ActionItemUpdate(Contract):

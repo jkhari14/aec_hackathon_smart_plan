@@ -144,3 +144,21 @@ export const DOC_SLOTS: DocSlot[] = [
   },
   { id: "demolition", label: "Demolition plan", hint: "Sequence and protection of the public", relevant: (job) => job === "demolition" },
 ];
+
+/** Items someone else's document added to `role`'s list (or flagged there) after `since` (an ISO time):
+    the "new for you" set. Drafted items carry no `added_at`, so they are never new. */
+export function newForRole(items: ActionItem[], role: Role, since: string | null): ActionItem[] {
+  const after = since ? Date.parse(since) : Number.NEGATIVE_INFINITY;
+  return items.filter((i) =>
+    i.owner_role === role && i.added_at && i.added_by_role && i.added_by_role !== role && Date.parse(i.added_at) > after);
+}
+
+/** A short line for an item's provenance: who and when (the reason itself is `added_reason`). */
+export function addedLine(item: Pick<ActionItem, "added_by_role" | "added_at">, roleLabels: Record<Role, string>): string | null {
+  if (!item.added_by_role || !item.added_at) return null;
+  const at = new Date(item.added_at);
+  const when = Number.isNaN(at.getTime())
+    ? item.added_at
+    : at.toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+  return `${roleLabels[item.added_by_role]} · ${when}`;
+}

@@ -1,0 +1,315 @@
+/* The drawing-reading animation (DrawingScan.tsx): scan, then the plan tilts and its walls rise. */
+
+@property --fs-scan-h {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+.fs-scan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-3);
+  padding: var(--fs-4);
+  border: 1px solid var(--fs-line);
+  border-radius: var(--fs-radius-lg);
+  background: var(--fs-grid), var(--fs-panel);
+  overflow: hidden;
+  --fs-scan-wall: var(--fs-text);
+  --fs-scan-wall-s: color-mix(in srgb, var(--fs-text) 78%, var(--fs-bg));
+  --fs-scan-wall-w: color-mix(in srgb, var(--fs-text) 64%, var(--fs-bg));
+  --fs-scan-party: var(--fs-accent);
+  --fs-scan-party-s: color-mix(in srgb, var(--fs-accent) 82%, var(--fs-bg));
+  --fs-scan-party-w: color-mix(in srgb, var(--fs-accent) 66%, var(--fs-bg));
+}
+.fs-scan__caption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.fs-scan__doc {
+  font-size: var(--fs-text-lg);
+}
+.fs-scan__step {
+  min-height: 18px;
+  font-size: var(--fs-text-sm);
+  color: var(--fs-muted);
+}
+.fs-scan__tag {
+  position: absolute;
+  top: var(--fs-4);
+  right: var(--fs-4);
+  font-family: var(--fs-pixel);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fs-muted);
+  border: 1px dashed var(--fs-line-strong);
+  padding: 5px 7px;
+}
+
+.fs-scan__stage {
+  position: relative;
+  width: 100%;
+  perspective: 1600px;
+  perspective-origin: 50% 35%;
+}
+.fs-scan__fit {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 600px;
+  height: 420px;
+  margin-left: -300px;
+  transform-origin: 50% 0;
+  transform-style: preserve-3d;
+}
+.fs-scan__sheet {
+  position: relative;
+  width: 600px;
+  height: 420px;
+  background: var(--fs-raised);
+  border: 1px solid var(--fs-line-strong);
+  box-shadow: 0 18px 40px rgb(0 0 0 / 0.12), 0 2px 4px rgb(0 0 0 / 0.06);
+  transform-style: preserve-3d;
+  transform: translateY(40px) scale(0.96);
+  opacity: 0;
+  transition: transform 1.3s var(--fs-ease-out), opacity 0.6s, box-shadow 1s, background 1s, border-color 1s;
+}
+.fs-scan__sheet[data-in="true"] {
+  transform: none;
+  opacity: 1;
+}
+.fs-scan__sheet[data-iso="true"] {
+  transform: translateY(10px) rotateX(58deg) rotateZ(-36deg) scale(0.86);
+  background: color-mix(in srgb, var(--fs-raised) 55%, transparent);
+  border-color: color-mix(in srgb, var(--fs-line-strong) 60%, transparent);
+  box-shadow: 0 50px 60px rgb(0 0 0 / 0.1);
+}
+.fs-scan__svg {
+  position: absolute;
+  inset: 0;
+}
+.fs-scan__annot {
+  stroke: var(--fs-faint);
+  transition: opacity 0.8s;
+}
+.fs-scan__annot circle,
+.fs-scan__annot rect {
+  fill: var(--fs-raised);
+}
+.fs-scan__text {
+  fill: var(--fs-muted);
+  font-family: var(--fs-font);
+  font-size: 9px;
+}
+.fs-scan__text .fs-scan__party-label {
+  fill: var(--fs-accent);
+  letter-spacing: 1px;
+}
+.fs-scan__text .fs-scan__title {
+  font-family: var(--fs-pixel);
+  fill: var(--fs-text);
+}
+.fs-scan__sheet[data-iso="true"] .fs-scan__annot,
+.fs-scan__sheet[data-iso="true"] .fs-scan__text {
+  opacity: 0.35;
+}
+
+.fs-scan__reveal {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+.fs-scan__reveal[data-scanning="true"] {
+  clip-path: inset(0 0 100% 0);
+  animation: fs-scan-reveal 1.2s linear forwards;
+}
+@keyframes fs-scan-reveal {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+.fs-scan__line {
+  position: absolute;
+  left: -12px;
+  right: -12px;
+  top: 0;
+  height: 2px;
+  background: var(--fs-accent);
+  box-shadow: 0 0 18px 6px color-mix(in srgb, var(--fs-accent) 35%, transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+.fs-scan__line[data-go="true"] {
+  animation: fs-scan-line 1.2s linear forwards;
+}
+/* While waiting on the reader, the line keeps sweeping the tilted sheet. */
+.fs-scan__sheet[data-live="true"] .fs-scan__line {
+  animation: fs-scan-line 2.4s linear infinite;
+}
+@keyframes fs-scan-line {
+  0% { top: 0; opacity: 1; }
+  96% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.fs-scan__glow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--fs-accent) 8%, transparent));
+}
+.fs-scan__glow[data-go="true"] {
+  animation: fs-scan-glow 1.2s linear forwards;
+}
+@keyframes fs-scan-glow {
+  0% { height: 0; opacity: 1; }
+  90% { opacity: 1; }
+  100% { height: 100%; opacity: 0; }
+}
+
+.fs-scan__floor {
+  position: absolute;
+  background: color-mix(in srgb, var(--fs-accent) 6%, transparent);
+}
+.fs-scan__wall,
+.fs-scan__ghost {
+  position: absolute;
+  transform-style: preserve-3d;
+  --fs-scan-h: 0px;
+}
+.fs-scan__wall {
+  background: var(--fs-scan-wall);
+  transition: --fs-scan-h 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.fs-scan__wall[data-party] {
+  background: var(--fs-scan-party);
+}
+.fs-scan__sheet[data-iso="true"] .fs-scan__wall {
+  --fs-scan-h: var(--to);
+}
+.fs-scan__cap {
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  transform: translateZ(var(--fs-scan-h));
+}
+.fs-scan__s {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 100%;
+  height: var(--fs-scan-h);
+  background: var(--fs-scan-wall-s);
+  transform-origin: top;
+  transform: rotateX(90deg);
+}
+.fs-scan__w {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--fs-scan-h);
+  height: 100%;
+  background: var(--fs-scan-wall-w);
+  transform-origin: left;
+  transform: rotateY(-90deg);
+}
+.fs-scan__wall[data-party] .fs-scan__s {
+  background: var(--fs-scan-party-s);
+}
+.fs-scan__wall[data-party] .fs-scan__w {
+  background: var(--fs-scan-party-w);
+}
+.fs-scan__ghost {
+  opacity: 0;
+  transition: --fs-scan-h 1.4s 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.6s;
+}
+.fs-scan__sheet[data-iso="true"] .fs-scan__ghost {
+  --fs-scan-h: var(--to);
+  opacity: 1;
+}
+.fs-scan__ghost .fs-scan__cap {
+  background: var(--fs-hover);
+  border: 1px solid var(--fs-line);
+}
+.fs-scan__ghost .fs-scan__s {
+  background: var(--fs-line);
+}
+.fs-scan__ghost .fs-scan__w {
+  background: var(--fs-line-strong);
+}
+
+.fs-scan__ingest {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-2);
+  min-height: 34px;
+}
+.fs-scan__stamp {
+  align-self: flex-start;
+  font-family: var(--fs-pixel);
+  font-size: 18px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fs-accent);
+  border: 3px solid var(--fs-accent);
+  padding: 8px 12px 6px;
+  background: var(--fs-panel);
+  transform: rotate(-4deg) scale(1.6);
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.2, 1.6, 0.4, 1), opacity 0.2s;
+}
+.fs-scan__stamp[data-on="true"] {
+  transform: rotate(-4deg) scale(1);
+  opacity: 1;
+}
+.fs-scan__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.fs-scan__fact {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--fs-raised);
+  border: 1px solid var(--fs-line-strong);
+  font-size: var(--fs-text-sm);
+  opacity: 0;
+  animation: fs-scan-fact 0.35s var(--fs-ease-out) forwards;
+}
+@keyframes fs-scan-fact {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.fs-scan__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--fs-scan-wall);
+}
+.fs-scan__dot[data-party] {
+  background: var(--fs-scan-party);
+}
+.fs-scan__src {
+  font-size: var(--fs-text-xs);
+  color: var(--fs-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fs-scan *,
+  .fs-scan *::before {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .fs-scan__sheet[data-live="true"] .fs-scan__line {
+    animation: none;
+  }
+}
