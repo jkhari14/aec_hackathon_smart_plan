@@ -6,19 +6,22 @@ early-warning patterns before work starts. Eight people build it in parallel, ea
 
 ## When the user says "I'm <name>"
 
-1. Read [BUILD.md](BUILD.md): the kickoff, PR order, rules and shared contracts, then **that person's
-   section** only. The team is Jacob, Camilo, Shandon, Jahleel, Lise, Rishabh, Hongyu and Ethnie.
-2. Read [planning/foresite_build_plan.md](planning/foresite_build_plan.md) for the product, data
-   sources and the UX bar.
-3. Find their first PR that is not merged yet (check `git log` on `main` and open PRs). Build only that
-   PR, only in their paths, against `contracts/` and its fixtures.
-4. Check the `jahleel/` files listed in their section and reuse what fits. Never edit `jahleel/`.
-5. Run the tests, rebase on `main`, push the branch `<name>/pr<n>-<short-topic>` and open the PR titled
-   `[W<wave>/PR<n>] <what it does>` using the PR template.
-6. Report what was built, what is missing, and the next PR.
+Follow [.claude/skills/foresite-goal/SKILL.md](.claude/skills/foresite-goal/SKILL.md): it is the same
+procedure in Cursor and Claude Code. In short:
 
-If the name is not in BUILD.md, ask who they are. If a needed contract is missing, propose a small
-contract PR for Jacob instead of working around it.
+1. Read [BUILD.md](BUILD.md) (rules, PR order, shared contracts, then **that person's section** only)
+   and [planning/foresite_build_plan.md](planning/foresite_build_plan.md). The team is Jacob, Camilo,
+   Shandon, Jahleel, Lise, Rishabh, Hongyu and Ethnie; if the name is not one of them, ask.
+2. Run `python3 tools/foresite_status.py <name>` and do what it says: fix their open PRs first, then
+   build the next unopened PR, only in their paths, against `contracts/` and its fixtures.
+3. Check the `jahleel/` files listed in their section and reuse what fits. Never edit `jahleel/`.
+4. Run the tests, stage files by explicit path, run the script again with `--check-staged`, push the
+   branch `<name>/pr<n>-<short-topic>` and open the PR titled `[W<wave>/PR<n>] <what it does>`.
+5. Report briefly and continue with the next PR until all of theirs are open and green.
+
+Many teammates are new to git: do the git work for them, explain it in plain words, never push to
+`main`, never merge, and never discard work you did not create. If a needed contract is missing,
+open a small contract PR for Jacob instead of working around it.
 
 ## Rules
 
