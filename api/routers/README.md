@@ -22,8 +22,8 @@ keeps features dated on or before it; an undated feature is kept only on a layer
 | --- | --- | --- |
 | `/api/sites/{bbl}/profile` | `site_profile.router` | `site_profile(bbl, response, job_type, stage, as_of)` (PR 6) |
 | `/api/sites/{bbl}/similar` | `site_profile.router` | `similar_cases(bbl, response, hazard, severity_min)` (PR 6) |
-| `/api/sites/{bbl}/warnings` | `early_warning` | `warnings_for(bbl, as_of)` |
-| `/api/sites/{bbl}/pattern` | `foresight_model` | `pattern_score_for(bbl)` |
+| `/api/sites/{bbl}/warnings` | `early_warning.api` | `site_warnings(bbl, as_of)`, as_of a `datetime.date` (PR 7) |
+| `/api/sites/{bbl}/pattern` | `foresight_model.router` | `pattern(bbl, response)` (PR 12) |
 | `/api/sites/{bbl}/actions` | `actions` | `actions_for(bbl, stage)` |
 
 Arguments come as keywords, already checked (the BBL, the closed sets, the date). Return the route's

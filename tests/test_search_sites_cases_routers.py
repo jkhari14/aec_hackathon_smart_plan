@@ -6,6 +6,7 @@ import tempfile
 import types
 import unittest
 import urllib.error
+from datetime import date
 from pathlib import Path
 from unittest import mock
 
@@ -226,6 +227,31 @@ class OwnerRouteFunctionTests(unittest.TestCase):
             with self.assertRaises(DataUnavailable):
                 load_site_part("profile", BBL)
         self.assertEqual((response.status_code, response.headers.get(FIXTURE_HEADER)), (500, None))
+
+
+class WarningsAndPatternOwnerTests(unittest.TestCase):
+    """PR 7 and PR 12's shapes: early_warning.api.site_warnings takes a date; foresight_model.router.pattern a response."""
+
+    def test_their_functions_answer_with_the_date_they_expect(self):
+        seen = []
+
+        def site_warnings(bbl, as_of=None):
+            seen.append(as_of)
+            return fixture("warnings")
+
+        def pattern(bbl, response, as_of=None):
+            return {**fixture("pattern_score"), "bbl": bbl}
+
+        warnings_module, pattern_module = types.ModuleType("early_warning.api"), types.ModuleType("foresight_model.router")
+        warnings_module.site_warnings, pattern_module.pattern = site_warnings, pattern
+        client = TestClient(app)
+        with mock.patch.dict(sys.modules, {"early_warning.api": warnings_module, "foresight_model.router": pattern_module}):
+            warned = client.get(f"/api/sites/{BBL}/warnings?as_of=2026-06-01")
+            scored = client.get(f"/api/sites/{BBL}/pattern")
+            load_site_part("warnings", BBL)
+        self.assertEqual((warned.status_code, warned.headers.get(FIXTURE_HEADER)), (200, None))
+        self.assertEqual((scored.status_code, scored.headers.get(FIXTURE_HEADER)), (200, None))
+        self.assertEqual(seen, [date(2026, 6, 1), None])
 
 
 if __name__ == "__main__":

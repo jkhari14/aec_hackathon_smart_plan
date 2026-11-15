@@ -10,6 +10,7 @@ stays labelled as sample data.
 
 import importlib
 import inspect
+from datetime import date
 from typing import Optional, get_args
 
 from fastapi import APIRouter, HTTPException, Response
@@ -23,8 +24,8 @@ from api.stubs import FIXTURE_HEADER, fixture
 SITE_SOURCES = {
     "profile": ("site_profile.router", "site_profile", "site_profile"),  # PR 6
     "similar": ("site_profile.router", "similar_cases", "similar_cases"),  # PR 6
-    "warnings": ("early_warning", "warnings_for", "warnings"),  # PR 7
-    "pattern": ("foresight_model", "pattern_score_for", "pattern_score"),  # PR 12
+    "warnings": ("early_warning.api", "site_warnings", "warnings"),  # PR 7
+    "pattern": ("foresight_model.router", "pattern", "pattern_score"),  # PR 12
     "actions": ("actions", "actions_for", "actions"),  # PR 8
 }
 SITE_OPTIONS = {
@@ -34,6 +35,7 @@ SITE_OPTIONS = {
     "pattern": (),
     "actions": ("stage",),
 }
+_AS_OF_AS_DATE = {"warnings"}  # PR 7's functions take as_of as a datetime.date, the others as YYYY-MM-DD
 _MODELS = {"profile": TypeAdapter(SiteProfile), "similar": TypeAdapter(SimilarCases),
            "warnings": TypeAdapter(list[EarlyWarning]), "pattern": TypeAdapter(PatternScore),
            "actions": TypeAdapter(list[ActionItem])}
@@ -81,6 +83,8 @@ def load_site_part(part: str, bbl: str, job_type: Optional[str] = None, stage: O
         return LoadedData(_MODELS[part].validate_python(fixture(fixture_name)), True)
     try:
         options = {name: checked[name] for name in SITE_OPTIONS[part]}
+        if part in _AS_OF_AS_DATE and options.get("as_of") is not None:
+            options["as_of"] = date.fromisoformat(options["as_of"])
         response = Response()
         if "response" in inspect.signature(build).parameters:
             options["response"] = response
