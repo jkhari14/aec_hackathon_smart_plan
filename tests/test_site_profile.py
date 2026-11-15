@@ -142,7 +142,17 @@ class Similarity(unittest.TestCase):
         self.assertIn("1900 to 1937", joined)
         self.assertIn("attached", joined)
         self.assertIn("earth work", joined)
-        self.assertIn("Manhattan, not Brooklyn", found["differs_on"])
+        # The borough is not a structural difference, so it is never listed as one.
+        self.assertFalse(any("Manhattan" in d for d in found["differs_on"]))
+
+    def test_near_miss_in_age_is_half_credit_not_a_difference(self):
+        here = {"label": "the neighbor", "year_built": 1931, "era": "built 1900 to 1937 (before the 1938 code)",
+                "floors": None, "floors_band": None, "wall_system": None, "attached": None}
+        there = {**here, "year_built": 1940, "era": "built 1938 to 1967 (1938 code)"}
+        found = similarity.compare_buildings(here, there)
+        self.assertEqual(found["near"], ["era"])
+        self.assertEqual(found["differs"], [])
+        self.assertAlmostEqual(found["score"], similarity.WEIGHTS["building_era"] / 2)
 
     def test_unreported_condition_is_not_a_difference(self):
         case = {"id": "c", "hazards": ["fire"], "severity": 1, "work_types": [], "conditions": {}}

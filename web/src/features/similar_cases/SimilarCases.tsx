@@ -9,7 +9,7 @@ import type { Hazard, Severity, SimilarCase } from "../../contracts";
 import { SEVERITY_LABELS } from "../../contracts";
 import { causeText, copy } from "../../copy";
 import { Chip, EmptyState, formatDate, HAZARD_LABELS, SeverityBadge, SourceLabel, Toggle } from "../../design";
-import { ringDash } from "./ring";
+import { resemblance } from "./ring";
 
 type Since = "all" | "2020" | "2015";
 const SINCE: { value: Since; label: string }[] = [
@@ -281,18 +281,17 @@ function CaseDialog({ result, onClose }: { result: SimilarCase; onClose: () => v
   );
 }
 
-/** Similarity as a ring that fills to the score, the number inside: "similar", never a probability. */
+/** Similarity as a word and three bars (Strong, Some, Weak): how alike on paper, never a probability. */
 function ScoreRing({ score }: { score: number }) {
-  const r = 15;
-  const { circumference, dash } = ringDash(score, r);
-  const pct = Math.round(Math.min(1, Math.max(0, Number.isFinite(score) ? score : 0)) * 100);
+  const { level, word, bars } = resemblance(score);
+  const points = Math.round(Math.min(1, Math.max(0, Number.isFinite(score) ? score : 0)) * 100);
   return (
-    <span className="fs-ring" title={`${S.score} ${pct} out of 100. ${S.scoreHelp}`} role="img" aria-label={`${pct} similar`}>
-      <svg viewBox="0 0 36 36" width="40" height="40" aria-hidden="true">
-        <circle cx="18" cy="18" r={r} className="fs-ring__track" />
-        <circle cx="18" cy="18" r={r} className="fs-ring__fill" strokeLinecap={dash > 0 ? "round" : "butt"} strokeDasharray={`${dash} ${circumference}`} transform="rotate(-90 18 18)" />
-      </svg>
-      <span className="fs-ring__num fs-num">{pct}</span>
+    <span className="fs-match" data-level={level} role="img" aria-label={`${word} resemblance`}
+      title={`${word} resemblance (${points} of 100 points). ${S.scoreHelp}`}>
+      <span className="fs-match__bars" aria-hidden="true">
+        {[1, 2, 3].map((n) => <i key={n} data-on={n <= bars} />)}
+      </span>
+      <span className="fs-match__word">{word}</span>
     </span>
   );
 }

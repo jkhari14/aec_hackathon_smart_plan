@@ -269,3 +269,39 @@
   font-weight: 700;
   color: var(--fs-text);
 }
+
+/* Resemblance: three rising bars and a word, in place of a number. */
+.fs-match {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 44px;
+}
+.fs-match__bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 18px;
+}
+.fs-match__bars i {
+  width: 6px;
+  border-radius: 2px;
+  background: var(--fs-line);
+}
+.fs-match__bars i:nth-child(1) { height: 8px; }
+.fs-match__bars i:nth-child(2) { height: 13px; }
+.fs-match__bars i:nth-child(3) { height: 18px; }
+.fs-match__bars i[data-on="true"] {
+  background: var(--fs-accent);
+}
+.fs-match[data-level="weak"] .fs-match__bars i[data-on="true"] {
+  background: var(--fs-muted);
+}
+.fs-match__word {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fs-text-2);
+}
