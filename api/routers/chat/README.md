@@ -98,6 +98,35 @@ request; the answer ran past the token limit (8000); no answer was submitted wit
 (8 requests a question, each with a 120-second timeout and one retry). The fallback option is in beta:
 after a 400 the code asks once more without it, and logs nothing.
 
+**The quick first answer.** A full live answer takes 15 to 45 seconds, so with a live model the page
+asks two things at once: `POST /api/chat` (the full answer) and `POST /api/chat/first`. The first route
+makes one request to a fast model (`FORESITE_CHAT_FIRST_MODEL`, default `claude-haiku-5-5`, low effort,
+20-second timeout) with the same instructions and site data, the answer tool forced, and no search of
+any kind. What it proposes goes through the same checks as a full answer; a gap is dropped (a pass
+that searched nothing cannot say "not found") and no page action is taken. The page shows it under the
+line "A first answer, from this site's data alone…" with "Still working on the full answer…" below,
+and the full answer replaces it. It is never sent back as history and never pinned.
+
+The route answers with no parts whenever there is no first answer to show (no live model,
+`FORESITE_CHAT_FIRST=0`, over 12 a minute, a failed or slow call, nothing that passed the checks), and
+the page keeps waiting. It never refuses: why a question is refused is the full route's to say. A
+failed first call logs `first chat answer failed: <reason>`. It costs a second, small model call for
+each live question. When nothing it proposed passes the checks, it is sent back once with the reasons
+(a second request); when something passes, that is shown at once. A first answer with nothing to show
+logs `first chat answer had nothing to show: <reasons>`.
+
+**What a live run of it has checked.** On 2026-11-14, two questions on screen for the sample site, a
+local server with a key:
+
+| Question | First answer | Full answer |
+|---|---|---|
+| What early warnings are there for this site? | 3.7 s: the server's count of rule results, under the first-answer notice | 25.8 s, replacing it |
+| What happened next door? | 3.0 s: nothing to show, so the page kept "Looking this up" | 33.0 s |
+
+So the fast model accepts the request (a strict tool, a forced tool call, low effort). Why the second
+question had nothing to show is not known: that run logged no reason. The correction round and the
+log line above were added after it and have not been run live.
+
 **Not yet covered.** Worth doing before the demo leans on live answers:
 
 - No test runs the stop reasons `refusal`, `max_tokens` or `pause_turn`, the retry after a 400, the
