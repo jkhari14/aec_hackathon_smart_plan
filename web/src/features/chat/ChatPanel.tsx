@@ -9,7 +9,7 @@ import { api } from "../../api/client";
 import { copy } from "../../copy";
 import type { Case, ChatRequest, ChatResponse } from "../../contracts";
 import { ChatAnswerParts } from "./ChatAnswerParts";
-import { askChat, DEFAULT_CHAT_SETUP, loadChatSetup, type ChatSetup } from "./chat_client";
+import { askChat, askChatFirst, DEFAULT_CHAT_SETUP, loadChatSetup, type ChatSetup } from "./chat_client";
 import { historyFor, isAnswered, type Exchange } from "./chat_conversation";
 import { carryOutActions, pinDraft, type ChatPageHandlers } from "./chat_page_actions";
 import { EXAMPLE_QUESTIONS, savedAnswersFor, savedAnswerTo } from "./chat_saved_answers";
@@ -121,6 +121,16 @@ export function ChatPanel(props: ChatPanelProps) {
     const stop = new AbortController();
     inFlight.current = stop;
     const body = { question: asked, bbl, project_id: projectId, as_of: asOf, job_type: jobType, stage, history: historyFor(earlier, setup) };
+    // With a live model the full answer takes a while, so a quick first one is asked for alongside it
+    // and shown only while this question is still waiting.
+    if (setup.live) {
+      void askChatFirst(body, stop.signal).then((first) => {
+        if (!first || stop.signal.aborted) return;
+        setExchanges((current) =>
+          current.map((exchange) => (exchange.id === id && exchange.outcome.state === "waiting" ? { ...exchange, outcome: { state: "waiting", first } } : exchange)),
+        );
+      });
+    }
     try {
       const result = await askChat(body, stop.signal);
       if (stop.signal.aborted) return; // the site or the day changed: this answer belongs to no conversation
@@ -199,7 +209,19 @@ export function ChatPanel(props: ChatPanelProps) {
                     <span className="sr-only">You asked: </span>
                     {exchange.question}
                   </p>
-                  {outcome.state === "waiting" && <p className="text-sm text-muted">Looking this up…</p>}
+                  {outcome.state === "waiting" && outcome.first && bbl && (
+                    <ChatAnswerParts
+                      parts={outcome.first.response.answer_parts}
+                      siteBbl={bbl}
+                      cases={cases.sample && !outcome.first.sample ? [] : cases.list}
+                      onFlyTo={onFlyTo}
+                    />
+                  )}
+                  {outcome.state === "waiting" && (
+                    <p role="status" className="animate-pulse text-sm text-muted motion-reduce:animate-none">
+                      {outcome.first ? "Still working on the full answer: searching the records, the past cases and the web…" : "Looking this up…"}
+                    </p>
+                  )}
                   {outcome.state === "refused" && (
                     <p className="border-l-2 border-[color:var(--fs-error)] pl-2.5 text-sm">Not answered: {outcome.reason}</p>
                   )}
