@@ -27,7 +27,8 @@ class Snapshot(unittest.TestCase):
     def setUpClass(cls):
         cls.tmp = tempfile.TemporaryDirectory()
         cls.out = Path(cls.tmp.name) / "snapshot"
-        cls.manifest = snapshot(cls.out, ["2026-06-01"])
+        # Only the cached site, so the test never pulls a lot or its weather live.
+        cls.manifest = snapshot(cls.out, ["2026-06-01"], sites=[{"bbl": BEDFORD, "address": "2625 Bedford Ave, Brooklyn"}])
 
     @classmethod
     def tearDownClass(cls):

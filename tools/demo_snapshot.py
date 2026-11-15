@@ -60,7 +60,8 @@ def refresh_cache() -> None:
     pull_main(["--demo"])
 
 
-def snapshot(out: Path = OUT, as_of_dates: list[str] | None = None) -> dict:
+def snapshot(out: Path = OUT, as_of_dates: list[str] | None = None, sites: list[dict] | None = None) -> dict:
+    """Save every answer for `sites` (default: demo_sites()); a site with no cached pull is pulled live."""
     from fastapi.testclient import TestClient
 
     from api.main import app
@@ -93,7 +94,7 @@ def snapshot(out: Path = OUT, as_of_dates: list[str] | None = None) -> dict:
     if DEMO_ADDRESSES.exists():
         for address in json.loads(DEMO_ADDRESSES.read_text()).get("addresses", []):
             save(f"/api/search?{urllib.parse.urlencode({'q': address})}")
-    for site in demo_sites():
+    for site in demo_sites() if sites is None else sites:
         bbl = site["bbl"]
         if site.get("address"):
             save(f"/api/search?{urllib.parse.urlencode({'q': site['address']})}")
