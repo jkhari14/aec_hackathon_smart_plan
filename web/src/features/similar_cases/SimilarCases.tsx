@@ -3,12 +3,12 @@
 // prevented". Filters narrow by hazard, severity and date.
 import "./similar_cases.css";
 
-import { type CSSProperties, useMemo, useState } from "react";
+import { type CSSProperties, type MouseEvent, useMemo, useState } from "react";
 
 import type { Hazard, Severity, SimilarCase } from "../../contracts";
 import { SEVERITY_LABELS } from "../../contracts";
 import { causeText, copy } from "../../copy";
-import { Chip, EmptyState, Explain, formatDate, HAZARD_LABELS, humanize, SeverityBadge, SourceLabel, Toggle } from "../../design";
+import { Chip, EmptyState, formatDate, HAZARD_LABELS, SeverityBadge, SourceLabel, Toggle } from "../../design";
 import { ringDash } from "./ring";
 
 type Since = "all" | "2020" | "2015";
@@ -109,19 +109,26 @@ export function SimilarCases({ results, strands }: { results: SimilarCase[]; str
   );
 }
 
-const MATCHES_SHOWN = 3;
-const DIFFERS_SHOWN = 2;
+const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+const sentence = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 
-/** A case in a few lines: the ring, what it was and when, where, and what matches. The rest folds away.
-    Clicking the card shows it joined to the site on the map; clicking again lets go. */
+/** A case in two lines: the ring, what it was, where and when, and how much it shares with this site. The
+    details (what's in common, what differs, what happened, sources) open as plain lists. Clicking anywhere on
+    a card shows that case joined to the site on the map; clicking its title row again lets go. */
 function CaseCard({ result, focused, onFocus }: { result: SimilarCase; focused: boolean; onFocus?: () => void }) {
   const c = result.case;
-  const matches = result.matched_on.slice(0, MATCHES_SHOWN);
-  const differs = result.differs_on.slice(0, DIFFERS_SHOWN);
-  const more = result.matched_on.length + result.differs_on.length - matches.length - differs.length;
   const borough = c.address.split(",").slice(1).join(",").trim();
+  const common = result.matched_on.length;
+  const differs = result.differs_on.length;
+  // Any click on an unfocused card picks it, even on the details toggle or a source link. The title row is
+  // the one place that also lets go, so it is left to its own button.
+  const pick = (event: MouseEvent) => {
+    if (!onFocus || focused || (event.target as HTMLElement).closest(".fs-case__main")) return;
+    onFocus();
+  };
   return (
-    <article className="fs-case" data-focused={focused} style={{ "--fs-hz": `var(--fs-hz-${c.hazards[0]})` } as CSSProperties}>
+    <article className="fs-case" data-focused={focused} data-pickable={Boolean(onFocus) && !focused} onClickCapture={pick}
+      style={{ "--fs-hz": `var(--fs-hz-${c.hazards[0]})` } as CSSProperties}>
       <button type="button" className="fs-case__main" aria-pressed={focused} onClick={onFocus} disabled={!onFocus}
         title={focused ? "Hide it on the map" : "Show it joined to this site on the map"}>
         <ScoreRing score={result.score} />
@@ -134,29 +141,36 @@ function CaseCard({ result, focused, onFocus }: { result: SimilarCase; focused: 
         </span>
         <SeverityBadge level={c.severity} />
       </button>
-      <ul className="fs-case__chips" aria-label={`${S.matchesOn} and ${S.differsOn.toLowerCase()}`}>
-        {matches.map((m) => (
-          <li key={m} data-kind="match" title={`${S.matchesOn}: ${m}`}>{m}</li>
-        ))}
-        {differs.map((m) => (
-          <li key={m} data-kind="differ" title={`${S.differsOn}: ${m}`}>{m}</li>
-        ))}
-      </ul>
-      <Explain label={more > 0 ? `What happened, and ${more} more` : "What happened"}>
-        <p>{c.summary}</p>
-        <p>{causeText(c.cause_status, c.cause_as_reported ?? null)}</p>
-        {result.matched_on.length > MATCHES_SHOWN && (
-          <p className="fs-quiet">Also matches: {result.matched_on.slice(MATCHES_SHOWN).join("; ")}.</p>
-        )}
-        {result.differs_on.length > DIFFERS_SHOWN && (
-          <p className="fs-quiet">Also differs: {result.differs_on.slice(DIFFERS_SHOWN).join("; ")}.</p>
-        )}
-        {c.work_types.length > 0 && <p className="fs-quiet">Work on site: {c.work_types.map(humanize).join(", ")}.</p>}
-        <p className="fs-quiet">{HAZARD_LABELS[c.hazards[0]]} · {S.score}: {S.scoreHelp}</p>
-        <div className="fs-case__sources">
-          {c.sources.map((src) => <SourceLabel key={src.name} kind="case" name={src.name} url={src.url} date={src.date} />)}
+      <details className="fs-case__more">
+        <summary>
+          {plural(common, "thing", "things")} in common{differs > 0 && `, ${plural(differs, "difference", "differences")}`}
+        </summary>
+        <div className="fs-case__body">
+          {common > 0 && (
+            <section>
+              <h4>In common with this site</h4>
+              <ul>{result.matched_on.map((m) => <li key={m}>{sentence(m)}</li>)}</ul>
+            </section>
+          )}
+          {differs > 0 && (
+            <section>
+              <h4>Different from this site</h4>
+              <ul>{result.differs_on.map((m) => <li key={m}>{sentence(m)}</li>)}</ul>
+            </section>
+          )}
+          <section>
+            <h4>What happened</h4>
+            <p>{c.summary}</p>
+            <p className="fs-quiet">{causeText(c.cause_status, c.cause_as_reported ?? null)}</p>
+          </section>
+          <section>
+            <h4>Sources</h4>
+            <div className="fs-case__sources">
+              {c.sources.map((src) => <SourceLabel key={src.name} kind="case" name={src.name} url={src.url} date={src.date} />)}
+            </div>
+          </section>
         </div>
-      </Explain>
+      </details>
     </article>
   );
 }

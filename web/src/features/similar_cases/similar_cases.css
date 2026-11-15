@@ -70,41 +70,68 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.fs-case__chips {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
+.fs-case[data-pickable="true"] {
+  cursor: pointer;
 }
-.fs-case__chips li {
+.fs-case[data-pickable="true"]:hover {
+  border-color: var(--fs-accent);
+}
+/* The details: one quiet line closed; plain lists under small headings when open. */
+.fs-case__more summary {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  max-width: 100%;
-  padding: 2px 8px;
-  border-radius: 999px;
-  border: 1px solid var(--fs-line);
+  cursor: pointer;
+  list-style: none;
   font-size: var(--fs-text-xs);
   color: var(--fs-text-2);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
-.fs-case__chips li::before {
-  font-weight: 700;
+.fs-case__more summary::-webkit-details-marker {
+  display: none;
 }
-.fs-case__chips li[data-kind="match"]::before {
-  content: "✓";
+.fs-case__more summary::after {
+  content: "›";
+  display: inline-block;
   color: var(--fs-accent);
+  transition: transform var(--fs-fast) var(--fs-ease);
 }
-.fs-case__chips li[data-kind="differ"] {
-  border-style: dashed;
-  color: var(--fs-muted);
+.fs-case__more[open] summary::after {
+  transform: rotate(90deg);
 }
-.fs-case__chips li[data-kind="differ"]::before {
-  content: "≠";
+.fs-case__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--fs-line);
+  font-size: var(--fs-text-sm);
+  line-height: 1.5;
+  color: var(--fs-text);
+}
+.fs-case__body section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.fs-case__body h4 {
+  margin: 0;
+  font-size: var(--fs-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fs-text-2);
+}
+.fs-case__body ul {
+  margin: 0;
+  padding-left: 18px;
+  list-style: disc;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.fs-case__body p {
+  margin: 0;
 }
 .fs-case__sources {
   display: flex;
