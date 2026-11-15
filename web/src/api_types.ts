@@ -444,13 +444,20 @@ export interface components {
                 [key: string]: unknown;
             };
         };
-        /** ChatAnswerPart */
+        /**
+         * ChatAnswerPart
+         * @description One part of an answer, labeled by where it came from.
+         *
+         *     `warning` and `action` are results of the early-warning and action rules, not records. `not_found`
+         *     means it was looked for and nothing was found; `unknown` means a query or a load failed, which is
+         *     never shown as zero or none. `notice` is a fixed line from the server (limitations, what was held back).
+         */
         ChatAnswerPart: {
             /**
              * Kind
              * @enum {string}
              */
-            kind: "public_record" | "case" | "ai_suggestion" | "web" | "user_input";
+            kind: "public_record" | "case" | "warning" | "action" | "ai_suggestion" | "web" | "user_input" | "not_found" | "unknown" | "notice";
             /** Text */
             text: string;
             /** Source Name */
@@ -459,6 +466,16 @@ export interface components {
             source_url?: string | null;
             /** Record Id */
             record_id?: string | null;
+        };
+        /**
+         * ChatExchange
+         * @description One earlier question and the answer text the reader saw, so a follow-up question has its context.
+         */
+        ChatExchange: {
+            /** Question */
+            question: string;
+            /** Answer */
+            answer: string;
         };
         /** ChatRequest */
         ChatRequest: {
@@ -470,6 +487,12 @@ export interface components {
             project_id?: string | null;
             /** As Of */
             as_of?: string | null;
+            /** Job Type */
+            job_type?: ("new_building" | "alteration" | "demolition") | null;
+            /** Stage */
+            stage?: ("pre_acquisition" | "design" | "pre_filing" | "construction") | null;
+            /** History */
+            history?: components["schemas"]["ChatExchange"][];
         };
         /** ChatResponse */
         ChatResponse: {
@@ -730,6 +753,8 @@ export interface components {
              * @enum {string}
              */
             by_role: "architect" | "structural_engineer";
+            /** Body */
+            body?: string | null;
         };
         /** Project */
         Project: {
@@ -814,6 +839,8 @@ export interface components {
             by_role: "architect" | "structural_engineer";
             /** Created At */
             created_at: string;
+            /** Body */
+            body?: string | null;
         };
         /** SearchResult */
         SearchResult: {

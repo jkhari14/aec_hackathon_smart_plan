@@ -27,14 +27,20 @@
     },
     "ChatAnswerPart": {
       "additionalProperties": false,
+      "description": "One part of an answer, labeled by where it came from.\n\n`warning` and `action` are results of the early-warning and action rules, not records. `not_found`\nmeans it was looked for and nothing was found; `unknown` means a query or a load failed, which is\nnever shown as zero or none. `notice` is a fixed line from the server (limitations, what was held back).",
       "properties": {
         "kind": {
           "enum": [
             "public_record",
             "case",
+            "warning",
+            "action",
             "ai_suggestion",
             "web",
-            "user_input"
+            "user_input",
+            "not_found",
+            "unknown",
+            "notice"
           ],
           "title": "Kind",
           "type": "string"

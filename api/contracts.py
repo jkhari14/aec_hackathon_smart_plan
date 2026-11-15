@@ -338,6 +338,8 @@ class ProjectPin(Contract):
     title: str
     by_role: Role
     created_at: str
+    # The pinned text as the reader saw it (a chat answer, each part led by its source label). Kept as sent.
+    body: Optional[str] = None
 
 
 class Project(Contract):
@@ -376,9 +378,17 @@ class PinCreate(Contract):
     ref_id: str
     title: str
     by_role: Role
+    body: Optional[str] = None
 
 
 # Chat
+
+
+class ChatExchange(Contract):
+    """One earlier question and the answer text the reader saw, so a follow-up question has its context."""
+
+    question: str
+    answer: str
 
 
 class ChatRequest(Contract):
@@ -386,10 +396,21 @@ class ChatRequest(Contract):
     bbl: Optional[str] = None
     project_id: Optional[str] = None
     as_of: Optional[str] = None
+    job_type: Optional[JobType] = None
+    stage: Optional[Stage] = None
+    history: list[ChatExchange] = Field(default_factory=list)
 
 
 class ChatAnswerPart(Contract):
-    kind: Literal["public_record", "case", "ai_suggestion", "web", "user_input"]
+    """One part of an answer, labeled by where it came from.
+
+    `warning` and `action` are results of the early-warning and action rules, not records. `not_found`
+    means it was looked for and nothing was found; `unknown` means a query or a load failed, which is
+    never shown as zero or none. `notice` is a fixed line from the server (limitations, what was held back).
+    """
+
+    kind: Literal["public_record", "case", "warning", "action", "ai_suggestion", "web", "user_input",
+                  "not_found", "unknown", "notice"]
     text: str
     source_name: Optional[str] = None
     source_url: Optional[str] = None
