@@ -138,12 +138,14 @@
   font-size: var(--fs-text-lg);
   white-space: nowrap;
 }
-.fs-brand__mark {
-  width: 14px;
-  height: 14px;
-  border-radius: 4px;
-  background: conic-gradient(from 210deg, var(--fs-accent), var(--fs-hz-flood), var(--fs-accent));
-  box-shadow: 0 0 0 3px var(--fs-accent-soft);
+.fs-brand {
+  flex: none;
+}
+.fs-brand__logo {
+  display: block;
+  flex: none;
+  height: 48px;
+  width: auto;
 }
 .fs-search {
   flex: 1;

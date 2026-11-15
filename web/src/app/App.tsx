@@ -3,12 +3,14 @@
 //   left         layers (Shandon's PR 5 fills it)
 //   right        the picked site (PR 10), with the chat (Jahleel's PR 9) under it
 //   bottom right the chat button, which opens and closes the chat
-//   bottom left  "What ForeSite doesn't know", always visible
+//   bottom left  "What 4site doesn't know", always visible
 // What is open lives in the URL (url_state.ts), so every view can be shared.
 import { useCallback, useEffect, useState } from "react";
 
 import { api } from "../api/client";
 import type { LayerCatalogEntry, SearchResult } from "../contracts";
+import { copy } from "../copy";
+import logo from "../design/brand/4site-logo.png";
 import { Button, ChatIcon, CloseIcon, Kbd, KeyboardIcon, LayersIcon, MoonIcon, SearchIcon, SunIcon } from "../design";
 import { CityMap } from "../features/city_map/CityMap";
 import type { Picked } from "../features/city_map/site_lots";
@@ -115,8 +117,7 @@ export function App() {
       <div className="fs-shell__left">
         <header className="fs-topbar fs-panel">
           <span className="fs-brand">
-            <span className="fs-brand__mark" aria-hidden="true" />
-            ForeSite
+            <img className="fs-brand__logo" src={logo} alt={copy.app.name} />
           </span>
           <button type="button" className="fs-search" onClick={() => setCommandOpen(true)} aria-label="Search an address">
             <SearchIcon width={16} height={16} />
