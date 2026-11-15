@@ -113,7 +113,7 @@ that the cause is under investigation. Nothing about what could have prevented i
 
 ## 4:17 How we built it (19 s)
 **4:17 The process.**
-> We recorded our brainstorms with Wispr Flow, synthesized them with Cursor and Claude, iterated on the
+> For our process we also took on Alex's meta hackathon provocation and the challenge of how to collaborate on a hackathon in this new era of agents. We recorded our brainstorms with Wispr Flow, synthesized them with Cursor and Claude, iterated on the
 > plan, made concept videos, and took feedback, including from a Thornton Tomasetti forensic expert.
 
 **4:31 The build.**
