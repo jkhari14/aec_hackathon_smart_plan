@@ -1,5 +1,5 @@
 // "What could go wrong here": lessons from similar past projects for every option, worst first. Pick an option,
-// then scopes, to narrow; each lesson says what prevents it and what this lot's own records already show.
+// then scopes, to narrow; each lesson lists the checklist items for that risk and what this lot's own records show.
 // Not blame: incidents are what happened on similar projects, causes only as reported.
 import "./lessons.css";
 
@@ -39,7 +39,8 @@ export function Lessons({ bbl, onStart }: { bbl: string; onStart?: () => void })
   return (
     <div className="fs-lessons">
       <p className="fs-quiet">
-        What went wrong on similar past projects, and what prevents it. Pick what you might do here to narrow it.
+        What happened on similar past projects, and the checklist items for each risk. Pick what you might do here
+        to narrow it.
       </p>
       <div className="fs-filters" role="group" aria-label="What you might do">
         {OPTIONS.map((o) => (
@@ -81,7 +82,7 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
       </p>
       {lesson.here && <p className="fs-lesson__here">{lesson.here}</p>}
       <div className="fs-lesson__prevent">
-        <span className="fs-lesson__label">Prevent it with</span>
+        <span className="fs-lesson__label">Checklist items for this risk</span>
         <ul>
           {lesson.prevent_with.map((p) => (
             <li key={p.source_rule}>
@@ -102,6 +103,10 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
               <span className="fs-quiet fs-num">
                 {c.address.split(",")[0]} · {c.date.slice(0, 4)}
                 {c.basis === "event_only" ? " · no cause published" : " · cause as reported"}
+              </span>
+              <span className="fs-quiet">
+                Source:{" "}
+                {c.source_url ? <a href={c.source_url} target="_blank" rel="noreferrer">{c.source_name}</a> : c.source_name}
               </span>
             </li>
           ))}

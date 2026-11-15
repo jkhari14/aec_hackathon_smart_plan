@@ -280,6 +280,9 @@ class LessonCase(Contract):
     date: str
     severity: Severity
     basis: Literal["reported_cause", "event_only"]
+    # Where the incident is reported (the case's first source).
+    source_name: str
+    source_url: Optional[str] = None
 
 
 class LessonItem(Contract):

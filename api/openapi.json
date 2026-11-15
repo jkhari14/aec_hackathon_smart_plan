@@ -2831,6 +2831,21 @@
               "event_only"
             ],
             "title": "Basis"
+          },
+          "source_name": {
+            "type": "string",
+            "title": "Source Name"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
           }
         },
         "additionalProperties": false,
@@ -2841,7 +2856,8 @@
           "address",
           "date",
           "severity",
-          "basis"
+          "basis",
+          "source_name"
         ],
         "title": "LessonCase",
         "description": "A past incident behind a lesson. `basis` says whether its failure mode comes from a reported cause or only\nfrom what happened (no cause published)."

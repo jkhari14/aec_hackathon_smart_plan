@@ -146,4 +146,4 @@ def outlook(bbl: str, response: Response):
     from lessons.outlook import site_outlook
 
     profile = served(response, load_site_part, "profile", bbl)
-    return site_outlook(profile.model_dump() if hasattr(profile, "model_dump") else profile)
+    return site_outlook(profile.model_dump() if hasattr(profile, "model_dump") else profile, bbl=bbl)

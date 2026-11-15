@@ -931,6 +931,10 @@ export interface components {
              * @enum {string}
              */
             basis: "reported_cause" | "event_only";
+            /** Source Name */
+            source_name: string;
+            /** Source Url */
+            source_url?: string | null;
         };
         /**
          * LessonItem

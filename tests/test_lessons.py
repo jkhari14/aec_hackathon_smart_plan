@@ -32,6 +32,11 @@ class LessonData(unittest.TestCase):
             if self.cases[case_id]["cause_status"] != "reported":
                 self.assertEqual(tag["basis"], "event_only", case_id)
 
+    def test_a_case_with_no_cause_text_is_never_tagged_from_a_cause(self):
+        for case_id, tag in self.lessons["cases"].items():
+            if not self.cases[case_id].get("cause_as_reported"):
+                self.assertEqual(tag["basis"], "event_only", case_id)
+
     def test_every_mode_says_what_prevents_it_and_where_it_applies(self):
         for mode_id, mode in self.lessons["failure_modes"].items():
             self.assertTrue(mode["prevent_with"], mode_id)
@@ -77,9 +82,19 @@ class Outlook(unittest.TestCase):
         if "case-1321-flatbush-2026" in cases:
             self.assertEqual(cases["case-1321-flatbush-2026"]["basis"], "event_only")
 
-    def test_ranked_worst_first(self):
-        worst = [max(c["severity"] for c in l["cases"]) for l in self.result["lessons"]]
-        self.assertEqual(worst, sorted(worst, reverse=True))
+    def test_ranked_by_the_worst_incident_in_the_mode_not_just_the_three_shown(self):
+        from lessons.outlook import site_outlook
+        lessons = load("data/cases/lessons.json")
+        cases = {c["id"]: c for c in load("data/cases/cases.json")}
+        worst = {m: max(cases[cid]["severity"] for cid, t in lessons["cases"].items() if m in t["modes"])
+                 for m in lessons["failure_modes"]}
+        order = [worst[l["id"]] for l in site_outlook(self.profile)["lessons"]]
+        self.assertEqual(order, sorted(order, reverse=True))
+
+    def test_every_incident_line_names_its_source(self):
+        for lesson in self.result["lessons"]:
+            for c in lesson["cases"]:
+                self.assertTrue(c["source_name"], c["case_id"])
 
     def test_route(self):
         from fastapi.testclient import TestClient
