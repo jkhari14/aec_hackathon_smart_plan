@@ -1,15 +1,17 @@
 // The app shell: a full-bleed map with floating panels that slide over it. The user never leaves the map.
-//   top left    brand, search (/ or Cmd/Ctrl-K), panel buttons
-//   left        layers (Shandon's PR 5 fills it)
-//   right       the picked site (PR 10), with the chat dock under it (Jahleel's PR 9)
-//   bottom left "What ForeSite doesn't know", always visible
+//   top left     brand, search (/ or Cmd/Ctrl-K), panel buttons
+//   left         layers (Shandon's PR 5 fills it)
+//   right        the picked site (PR 10), with the chat (Jahleel's PR 9) under it
+//   bottom right the chat button, which opens and closes the chat
+//   bottom left  "What ForeSite doesn't know", always visible
 // What is open lives in the URL (url_state.ts), so every view can be shared.
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { api } from "../api/client";
-import type { LayerCatalogEntry, LayerFeature, SearchResult } from "../contracts";
-import { Button, ChatIcon, Kbd, KeyboardIcon, LayersIcon, MoonIcon, SearchIcon, SunIcon } from "../design";
+import type { LayerCatalogEntry, SearchResult } from "../contracts";
+import { Button, ChatIcon, CloseIcon, Kbd, KeyboardIcon, LayersIcon, MoonIcon, SearchIcon, SunIcon } from "../design";
 import { CityMap } from "../features/city_map/CityMap";
+import type { Picked } from "../features/city_map/site_lots";
 import { LimitationsPanel } from "../features/limitations/LimitationsPanel";
 import { CommandBar, type Command } from "./CommandBar";
 import { useTheme } from "./preferences";
@@ -28,9 +30,9 @@ export function App() {
 
   const [layers, setLayers] = useState<LayerCatalogEntry[] | null>(null);
   const [enabled, setEnabled] = useState<Set<string>>(new Set());
-  const [features, setFeatures] = useState<LayerFeature[]>([]);
   const [site, setSite] = useState<SearchResult | null>(null);
   const [sample, setSample] = useState(false);
+  const markSample = useCallback(() => setSample(true), []);
 
   useEffect(() => {
     api.layers().then((r) => {
@@ -38,25 +40,26 @@ export function App() {
       setEnabled(new Set(r.data.filter((l) => l.default_on && l.status !== "error").map((l) => l.layer_id)));
       setSample((s) => s || r.sample);
     });
-    api.layerFeatures("construction_incidents").then((r) => {
-      setFeatures(r.data.features);
-      setSample((s) => s || r.sample);
-    });
   }, []);
 
-  // A shared link carries only the BBL; look the address up so the panel can show it.
+  // A shared link carries only the BBL; look the address up so the panel can show it and the map can fly
+  // there. Search does not match every BBL, so the site profile is the fallback.
   useEffect(() => {
-    if (!view.site || site?.bbl === view.site) return;
+    const bbl = view.site;
+    if (!bbl || site?.bbl === bbl) return;
     let live = true;
-    api.search(view.site).then((r) => {
-      if (live) setSite(r.data.find((x) => x.bbl === view.site) ?? null);
+    api.search(bbl).then(async (r) => {
+      const found = r.data.find((x) => x.bbl === bbl);
+      if (found) return live && setSite(found);
+      const p = await api.siteProfile(bbl);
+      if (!live || p.data.bbl !== bbl) return;
+      if (p.sample) setSample(true);
+      setSite({ label: p.data.address_matched, bbl, bin: p.data.bins[0] ?? null, lat: p.data.lat, lon: p.data.lon });
     });
     return () => {
       live = false;
     };
   }, [view.site, site?.bbl]);
-
-  const visible = useMemo(() => (enabled.has("construction_incidents") ? features : []), [enabled, features]);
 
   const toggleLayer = (id: string, on: boolean) =>
     setEnabled((prev) => {
@@ -66,10 +69,10 @@ export function App() {
       return next;
     });
 
-  const pickSite = (result: SearchResult) => {
+  const pickSite = useCallback((result: SearchResult | Picked) => {
     setSite(result);
     setView({ site: result.bbl, tab: "overview" });
-  };
+  }, [setView]);
 
   const shortcuts: Shortcut[] = [
     { keys: ["/", "Mod+k"], label: "Search an address", run: () => setCommandOpen(true), allowInFields: true },
@@ -106,7 +109,7 @@ export function App() {
   return (
     <main className="fs-shell" data-site={Boolean(view.site)} data-chat={view.chat} data-layers={view.layers}>
       <div className="fs-shell__map">
-        <CityMap features={visible} />
+        <CityMap site={site && site.bbl === view.site ? site : null} onPick={pickSite} enabled={enabled} onSample={markSample} />
       </div>
 
       <div className="fs-shell__left">
@@ -123,9 +126,6 @@ export function App() {
           <div className="fs-topbar__tools">
             <Button variant="ghost" size="icon" aria-label={`Layers (${keyLabel("l")})`} aria-pressed={view.layers} title="Layers (L)" onClick={() => setView({ layers: !view.layers })}>
               <LayersIcon />
-            </Button>
-            <Button variant="ghost" size="icon" aria-label="Chat (C)" aria-pressed={view.chat} title="Chat (C)" onClick={() => setView({ chat: !view.chat })}>
-              <ChatIcon />
             </Button>
             <Button variant="ghost" size="icon" aria-label={theme === "dark" ? "Light theme (T)" : "Dark theme (T)"} title="Theme (T)" onClick={toggleTheme}>
               {theme === "dark" ? <SunIcon /> : <MoonIcon />}
@@ -155,7 +155,6 @@ export function App() {
         />
         <ChatSlot
           open={view.chat}
-          onClose={() => setView({ chat: false })}
           bbl={view.site}
           site={site}
           onPickBbl={(bbl) => setView({ site: bbl, tab: "overview" })}
@@ -167,6 +166,11 @@ export function App() {
         <LimitationsPanel />
         <DataStatus layers={layers} sample={sample} />
       </div>
+
+      <button type="button" className="fs-chat-fab" aria-label={view.chat ? "Close the chat (C)" : "Ask about this site (C)"}
+        aria-pressed={view.chat} title="Chat (C)" onClick={() => setView({ chat: !view.chat })}>
+        {view.chat ? <CloseIcon /> : <ChatIcon />}
+      </button>
 
       {!view.site && !commandOpen && (
         <div className="fs-hint" role="note">
