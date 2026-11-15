@@ -113,7 +113,9 @@ class Similarity(unittest.TestCase):
                 "work_types": ["excavation"], "conditions": {"neighbor_year_built": 1910, "attached": True}}
         found = similarity.compare(self.profile, case)
         joined = " ".join(found["matched_on"])
-        self.assertIn("before 1940", joined)
+        self.assertIn("the neighbor at", joined)
+        self.assertIn("1900 to 1937", joined)
+        self.assertIn("attached", joined)
         self.assertIn("earth work", joined)
         self.assertIn("Manhattan, not Brooklyn", found["differs_on"])
 

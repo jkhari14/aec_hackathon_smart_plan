@@ -109,9 +109,10 @@ class Routes(unittest.TestCase):
         profile = self.client.get("/api/sites/3052110074/profile").json()
         self.assertEqual(profile["structural_model"]["source"], "revit")
         after = self.client.get("/api/sites/3052110074/similar").json()
-        matched = " ".join(m for r in after["results"] for m in r["matched_on"])
-        self.assertIn("construction: masonry", matched)
-        self.assertNotIn("construction: masonry", " ".join(m for r in before["results"] for m in r["matched_on"]))
+        # The model's material becomes the site building's stated wall system; before it, the wall was a guess.
+        stated = "the site (2625 BEDFORD AVENUE) is like the building in this case: masonry bearing wall,"
+        self.assertIn(stated, " ".join(m for r in after["results"] for m in r["matched_on"]))
+        self.assertNotIn(stated, " ".join(m for r in before["results"] for m in r["matched_on"]))
 
     def test_drawing_without_credentials_says_so(self):
         original = drawing._client
