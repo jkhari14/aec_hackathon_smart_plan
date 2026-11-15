@@ -294,6 +294,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/chat/setup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Chat Setup */
+        get: operations["chat_setup_api_chat_setup_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/chat": {
         parameters: {
             query?: never;
@@ -303,8 +320,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Chat */
-        post: operations["chat_api_chat_post"];
+        /**
+         * Chat Answer
+         * @description A question about one site, answered in parts that each say where they came from.
+         */
+        post: operations["chat_answer_api_chat_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -504,6 +524,34 @@ export interface components {
             offline: boolean;
         };
         /**
+         * ChatSetup
+         * @description What a client needs before the first question.
+         */
+        ChatSetup: {
+            /** Live */
+            live: boolean;
+            /**
+             * Examples
+             * @default []
+             */
+            examples: components["schemas"]["ExampleQuestion"][];
+            /**
+             * Max Question Chars
+             * @default 1000
+             */
+            max_question_chars: number;
+            /**
+             * Max Earlier Exchanges
+             * @default 8
+             */
+            max_earlier_exchanges: number;
+            /**
+             * Max History Chars
+             * @default 12000
+             */
+            max_history_chars: number;
+        };
+        /**
          * DatasetStatus
          * @description How one source answered for one site. An error is never shown as zero; capped is "at least".
          */
@@ -548,6 +596,13 @@ export interface components {
             first_seen: string;
             /** As Of */
             as_of?: string | null;
+        };
+        /** ExampleQuestion */
+        ExampleQuestion: {
+            /** Id */
+            id: string;
+            /** Question */
+            question: string;
         };
         /** FloodContext */
         FloodContext: {
@@ -1553,7 +1608,27 @@ export interface operations {
             };
         };
     };
-    chat_api_chat_post: {
+    chat_setup_api_chat_setup_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatSetup"];
+                };
+            };
+        };
+    };
+    chat_answer_api_chat_post: {
         parameters: {
             query?: never;
             header?: never;

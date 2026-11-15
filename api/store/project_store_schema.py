@@ -17,7 +17,7 @@ ITEM_STATUSES = get_args(ActionItem.model_fields["status"].annotation)
 PIN_KINDS = get_args(ProjectPin.model_fields["kind"].annotation)
 
 # A request over a cap is refused, never cut, so one project cannot grow without bound.
-MAX_TEXT = {"name": 120, "member_name": 80, "title": 200, "ref": 200, "note": 4000, "item_text": 2000}
+MAX_TEXT = {"name": 120, "member_name": 80, "title": 200, "ref": 200, "note": 4000, "item_text": 2000, "pin_body": 8000}
 MAX_MODEL_BYTES = 200_000
 MAX_ROWS_PER_PROJECT = {"members": 20, "items": 500, "notes": 2000, "pins": 500}
 
@@ -76,8 +76,12 @@ CREATE TABLE IF NOT EXISTS pins (
   ref_id TEXT NOT NULL,
   title TEXT NOT NULL,
   by_role TEXT NOT NULL {_one_of("by_role", ROLES)},
-  created_at TEXT NOT NULL
+  created_at TEXT NOT NULL,
+  body TEXT
 );
 CREATE INDEX IF NOT EXISTS notes_by_project ON notes(project_id);
 CREATE INDEX IF NOT EXISTS pins_by_project ON pins(project_id);
 """
+
+# Columns added after the first release, as (table, column, type): a store file made before one gets it on open.
+ADDED_COLUMNS = (("pins", "body", "TEXT"),)

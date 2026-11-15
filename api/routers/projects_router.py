@@ -87,7 +87,7 @@ def add_note(project_id: str, body: NoteCreate, response: Response, store: Proje
 
 @projects_router.post("/{project_id}/pins", response_model=Project)
 def add_pin(project_id: str, body: PinCreate, response: Response, store: ProjectStore = Depends(project_store)):
-    _run(store.add_pin, project_id, body.kind, body.ref_id, body.title, body.by_role)
+    _run(store.add_pin, project_id, body.kind, body.ref_id, body.title, body.by_role, body.body)
     return _answer(response, store, project_id)
 
 

@@ -13,6 +13,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api import stubs
 from api.routers.cases_router import cases_router
+from api.routers.chat.chat_app_context import app_context
+from api.routers.chat.chat_router import chat_router_for
 from api.routers.layers_router import layers_router
 from api.routers.projects_router import projects_router
 from api.routers.search_router import search_router
@@ -42,4 +44,6 @@ def health() -> dict[str, str]:
 
 for owner_router in (layers_router, search_router, sites_router, cases_router, projects_router):
     app.include_router(owner_router)
+# The chat reads each site part through the same function its route uses.
+app.include_router(chat_router_for(app_context))
 app.include_router(stubs.router)
