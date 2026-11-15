@@ -55,7 +55,7 @@ def _answer(response: Response, store: ProjectStore, project_id: str) -> dict:
 def create_project(body: ProjectCreate, response: Response, store: ProjectStore = Depends(project_store)):
     members = [member.model_dump() for member in body.members]
     project = _run(store.create_project, body.name, body.site_bbl, body.stage, members, body.job_type,
-                   body.construction_type, list(body.work_types or []))
+                   body.construction_type, list(body.work_types or []), body.excavation_depth_ft, body.proposed_storeys)
     return _answer(response, store, project["id"])
 
 

@@ -75,6 +75,19 @@ class ProjectsRouterTests(ProjectsRouterTestCase):
         self.assertEqual(self.architect_tab.post(f"{self.path}/model", json=model).json()["structural_model"], model)
         self.assertEqual(self.architect_tab.post(f"{self.path}/model", json={**model, "confidence": 2}).status_code, 422)
 
+    def test_project_keeps_depth_and_storeys(self):
+        body = {"name": "Park", "site_bbl": "3015790010", "stage": "design", "members": BOTH,
+                "excavation_depth_ft": 20, "proposed_storeys": 9}
+        made = self.architect_tab.post("/api/projects", json=body)
+        self.assertEqual(made.status_code, 200, made.text)
+        got = self.architect_tab.get(f"/api/projects/{made.json()['id']}").json()
+        self.assertEqual((got["excavation_depth_ft"], got["proposed_storeys"], got["stage"]), (20, 9, "design"))
+        # An older body without them still creates a project, with both left empty.
+        old = self.architect_tab.get(self.path).json()
+        self.assertEqual((old["excavation_depth_ft"], old["proposed_storeys"]), (None, None))
+        bad = self.architect_tab.post("/api/projects", json={**body, "excavation_depth_ft": -1})
+        self.assertEqual(bad.status_code, 422, bad.text)
+
     def test_unknown_projects_and_items_are_404(self):
         for response in (
             self.architect_tab.get("/api/projects/0123456789abcdef"),

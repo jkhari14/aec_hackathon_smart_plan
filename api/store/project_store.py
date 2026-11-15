@@ -76,6 +76,15 @@ def _item_row(item: dict) -> dict:
     }
 
 
+def _amount(value, field: str):
+    """A number of feet or storeys, 0 or more, or None."""
+    if value is None:
+        return None
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or value < 0:
+        raise ProjectStoreError(f"{field} must be a number, 0 or more")
+    return float(value)
+
+
 class ProjectStore:
     def __init__(self, db_path: str | Path):
         self.db_path = Path(db_path)
@@ -126,8 +135,11 @@ class ProjectStore:
         db.execute("UPDATE projects SET version = version + 1, updated_at = ? WHERE id = ?", (_now(), project_id))
 
     def create_project(self, name, site_bbl, stage, members: list[dict], job_type=None, construction_type=None,
-                       work_types=None) -> dict:
-        """`job_type`, `construction_type` and `work_types` are what the team picked on the setup step; all optional."""
+                       work_types=None, excavation_depth_ft=None, proposed_storeys=None) -> dict:
+        """`job_type`, `construction_type`, `work_types`, the dig depth and the new building's storeys are what the
+        team picked on the setup step; all optional."""
+        depth = _amount(excavation_depth_ft, "excavation_depth_ft")
+        storeys = _amount(proposed_storeys, "proposed_storeys")
         name = _text(name, "name", "name")
         job_type = _choice(job_type, "job_type", JOB_TYPES, nullable=True)
         construction_type = _choice(construction_type, "construction_type", CONSTRUCTION_TYPES, nullable=True)
@@ -144,8 +156,9 @@ class ProjectStore:
         project_id, now = secrets.token_hex(8), _now()
         with self._db(write=True) as db:
             db.execute("INSERT INTO projects (id, name, site_bbl, stage, created_at, updated_at, job_type, construction_type,"
-                       " work_types_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                       (project_id, name, site_bbl, stage, now, now, job_type, construction_type, json.dumps(scope)))
+                       " work_types_json, excavation_depth_ft, proposed_storeys) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                       (project_id, name, site_bbl, stage, now, now, job_type, construction_type, json.dumps(scope),
+                        depth, storeys))
             db.executemany("INSERT INTO members (project_id, position, name, role) VALUES (?, ?, ?, ?)",
                            [(project_id, i, n, r) for i, (n, r) in enumerate(rows)])
         return self.get_project(project_id)
@@ -303,5 +316,7 @@ class ProjectStore:
                 "job_type": row["job_type"],
                 "construction_type": row["construction_type"],
                 "work_types": json.loads(row["work_types_json"]) if row["work_types_json"] else [],
+                "excavation_depth_ft": row["excavation_depth_ft"],
+                "proposed_storeys": row["proposed_storeys"],
             }
             return project, row["version"]

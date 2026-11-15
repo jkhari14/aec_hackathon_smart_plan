@@ -551,6 +551,30 @@
       },
       "title": "Work Types",
       "type": "array"
+    },
+    "excavation_depth_ft": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Excavation Depth Ft"
+    },
+    "proposed_storeys": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Proposed Storeys"
     }
   },
   "required": [

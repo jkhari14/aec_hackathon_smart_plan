@@ -378,6 +378,9 @@ class Project(Contract):
     job_type: Optional[JobType] = None
     construction_type: Optional[ConstructionType] = None
     work_types: list[WorkType] = []
+    # Setup's quick answers: how deep the dig goes (ft) and the new building's storeys. Empty when not given.
+    excavation_depth_ft: Optional[float] = None
+    proposed_storeys: Optional[float] = None
 
 
 class ProjectCreate(Contract):
@@ -388,6 +391,8 @@ class ProjectCreate(Contract):
     job_type: Optional[JobType] = None
     construction_type: Optional[ConstructionType] = None
     work_types: Optional[list[WorkType]] = None
+    excavation_depth_ft: Optional[float] = Field(None, ge=0)
+    proposed_storeys: Optional[float] = Field(None, ge=0)
 
 
 class DrawingConfirm(Contract):

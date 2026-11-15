@@ -3053,6 +3053,28 @@
             "type": "array",
             "title": "Work Types",
             "default": []
+          },
+          "excavation_depth_ft": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Excavation Depth Ft"
+          },
+          "proposed_storeys": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposed Storeys"
           }
         },
         "additionalProperties": false,
@@ -3161,6 +3183,30 @@
               }
             ],
             "title": "Work Types"
+          },
+          "excavation_depth_ft": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Excavation Depth Ft"
+          },
+          "proposed_storeys": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposed Storeys"
           }
         },
         "additionalProperties": false,

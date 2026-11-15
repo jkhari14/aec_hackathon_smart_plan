@@ -978,6 +978,10 @@ export interface components {
              * @default []
              */
             work_types: ("earth_work" | "excavation" | "foundation" | "support_of_excavation" | "underpinning" | "structural" | "facade" | "demolition" | "sprinkler" | "standpipe" | "plumbing" | "mechanical" | "sidewalk_shed" | "scaffold" | "construction_fence")[];
+            /** Excavation Depth Ft */
+            excavation_depth_ft?: number | null;
+            /** Proposed Storeys */
+            proposed_storeys?: number | null;
         };
         /** ProjectCreate */
         ProjectCreate: {
@@ -998,6 +1002,10 @@ export interface components {
             construction_type?: ("wood" | "masonry" | "steel" | "concrete" | "unknown") | null;
             /** Work Types */
             work_types?: ("earth_work" | "excavation" | "foundation" | "support_of_excavation" | "underpinning" | "structural" | "facade" | "demolition" | "sprinkler" | "standpipe" | "plumbing" | "mechanical" | "sidewalk_shed" | "scaffold" | "construction_fence")[] | null;
+            /** Excavation Depth Ft */
+            excavation_depth_ft?: number | null;
+            /** Proposed Storeys */
+            proposed_storeys?: number | null;
         };
         /** ProjectMember */
         ProjectMember: {
