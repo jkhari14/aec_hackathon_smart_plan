@@ -5,6 +5,7 @@ import "./site_panel.css";
 import { useEffect, useState, type ReactNode } from "react";
 
 import { api, type Loaded } from "../../api/client";
+import { copy } from "../../copy";
 import type { ActionItem, SimilarCases as SimilarCasesData, SiteProfile } from "../../contracts";
 import { Badge, formatDate, SkeletonCard, Tabs } from "../../design";
 import { ActionsList } from "../actions/ActionsList";
@@ -56,7 +57,7 @@ export function SitePanel({ data, tab, onTab }: { data: Data; tab: SiteTab; onTa
           ]}
         />
         <div className="fs-site__meta">
-          {profile?.data.as_of && <span className="fs-num">Records dated before {formatDate(profile.data.as_of)}</span>}
+          {profile?.data.as_of && <span className="fs-num">{copy.sitePanel.asOf} {formatDate(profile.data.as_of)}</span>}
           {sample && <Badge tone="sample">Sample data</Badge>}
         </div>
       </div>
@@ -64,37 +65,40 @@ export function SitePanel({ data, tab, onTab }: { data: Data; tab: SiteTab; onTa
       {tab === "overview" &&
         (profile ? (
           <>
-            <Section title="Top signals">
+            <Section title={copy.sitePanel.topSignals} help={copy.sitePanel.topSignalsHelp}>
               <Signals signals={profile.data.signals} datasets={profile.data.datasets} />
             </Section>
             <Section title="Work and ground" collapsible>
               <WorkAndGround profile={profile.data} />
             </Section>
-            <Section title={`Neighbors (${profile.data.neighbors.length})`} collapsible>
+            <Section title={`${copy.sitePanel.neighbors} (${profile.data.neighbors.length})`} collapsible>
               <Neighbors profile={profile.data} />
             </Section>
-            <Section title="Lot facts" collapsible>
+            <Section title={copy.sitePanel.lotFacts} collapsible>
               <LotFacts profile={profile.data} />
             </Section>
             <Section title="Sources checked" collapsible>
               <SourcesChecked profile={profile.data} />
+              <p className="fs-quiet">{copy.sitePanel.housingNotScored}</p>
+              <p className="fs-quiet">{copy.sitePanel.count311Apart}</p>
             </Section>
           </>
         ) : (
           <Loading />
         ))}
 
-      {tab === "similar" && (similar ? <SimilarCases results={similar.data.results} /> : <Loading />)}
-      {tab === "actions" && (actions ? <ActionsList actions={actions.data} /> : <Loading />)}
+      {tab === "similar" && (similar ? <div className="fs-enter"><SimilarCases results={similar.data.results} /></div> : <Loading />)}
+      {tab === "actions" && (actions ? <div className="fs-enter"><ActionsList actions={actions.data} /></div> : <Loading />)}
     </>
   );
 }
 
-function Section({ title, children, collapsible }: { title: string; children: ReactNode; collapsible?: boolean }) {
+function Section({ title, help, children, collapsible }: { title: string; help?: string; children: ReactNode; collapsible?: boolean }) {
   if (!collapsible) {
     return (
-      <section className="fs-site__section">
+      <section className="fs-site__section fs-enter">
         <h3 className="fs-label">{title}</h3>
+        {help && <p className="fs-quiet">{help}</p>}
         {children}
       </section>
     );

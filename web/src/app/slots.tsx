@@ -6,6 +6,7 @@
 import type { CSSProperties } from "react";
 
 import type { LayerCatalogEntry, SearchResult } from "../contracts";
+import { copy } from "../copy";
 import {
   Badge,
   Count,
@@ -15,6 +16,8 @@ import {
   HAZARD_LABELS,
   Kbd,
   Panel,
+  SampleBadge,
+  Skeleton,
   SkeletonCard,
   SourceLabel,
   Toggle,
@@ -54,9 +57,7 @@ export function LayerSlot({ open, onClose, layers, enabled, onToggle }: LayerSlo
       {layers?.map((layer) => (
         <div key={layer.layer_id} className="fs-layer" style={{ "--fs-hz": `var(--fs-hz-${layer.hazard})` } as CSSProperties}>
           {layer.status === "error" ? (
-            <ErrorState title={`${layer.name}: couldn't load`}>
-              The source did not answer, so nothing is drawn. This is not the same as zero records.
-            </ErrorState>
+            <ErrorState title={`${layer.name}: ${copy.queryStatus.error.toLowerCase()}`}>{copy.states.couldntLoad}</ErrorState>
           ) : (
             <Toggle
               checked={enabled.has(layer.layer_id)}
@@ -96,7 +97,7 @@ export function SiteSlot({ bbl, site, onClose, tab, onTab }: SiteSlotProps) {
   const data = useSiteData(bbl);
   return (
     <Panel
-      title={site ? titleCase(site.label).split(",")[0] : bbl ? `BBL ${bbl}` : "Site"}
+      title={site ? titleCase(site.label).split(",")[0] : bbl ? <Skeleton width={180} height={14} /> : "Site"}
       subtitle={
         site ? (
           <span className="fs-num">
@@ -120,12 +121,12 @@ export function SiteSlot({ bbl, site, onClose, tab, onTab }: SiteSlotProps) {
 
 export function ChatSlot({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
-    <Panel title="Ask about this site" open={open} edge="bottom" onClose={onClose} className="fs-shell__chat" label="Chat">
+    <Panel title={copy.chat.title} open={open} edge="bottom" onClose={onClose} className="fs-shell__chat" label="Chat">
       <EmptyState title="Chat arrives in PR 9">
         Answers come back as cards with source chips. Click a chip to fly to the record; pin any answer to the project.
       </EmptyState>
       <div className="fs-chat__input" aria-disabled="true">
-        <span>Ask a question about the site</span>
+        <span>{copy.chat.placeholder}</span>
         <Kbd>Enter</Kbd>
       </div>
     </Panel>
@@ -140,8 +141,12 @@ export function DataStatus({ layers, sample }: { layers: LayerCatalogEntry[] | n
   const newest = layers.map((l) => l.updated_at).filter(Boolean).sort().pop();
   return (
     <div className="fs-status" role="status">
-      {sample && <Badge tone="sample">Sample data</Badge>}
-      {failed > 0 && <Badge tone="error">{failed} layer{failed > 1 ? "s" : ""} couldn't load</Badge>}
+      {sample && <SampleBadge />}
+      {failed > 0 && (
+        <Badge tone="error" title={copy.states.couldntLoad}>
+          {failed} layer{failed > 1 ? "s" : ""}: {copy.queryStatus.error.toLowerCase()}
+        </Badge>
+      )}
       {newest && <span className="fs-num">Data as of {formatDate(newest)}</span>}
     </div>
   );
