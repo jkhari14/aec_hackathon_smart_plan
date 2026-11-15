@@ -14,6 +14,7 @@ from typing import Optional
 
 from fastapi import APIRouter, HTTPException, Response
 
+from foresight_model import router as foresight_routes
 from site_profile import router as site_profile_routes
 
 from api.contracts import (
@@ -95,7 +96,8 @@ def warnings(bbl: str, response: Response, as_of: Optional[str] = None):
 
 @router.get("/sites/{bbl}/pattern", response_model=PatternScore)
 def pattern(bbl: str, response: Response):
-    return sample(response, "pattern_score")
+    # Real (Rishabh, PR 12): the pattern model, compared with similar past filings.
+    return foresight_routes.pattern(bbl, response)
 
 
 @router.get("/sites/{bbl}/actions", response_model=list[ActionItem])

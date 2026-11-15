@@ -75,7 +75,6 @@ class StubApiServesEveryRoute(unittest.TestCase):
             "/api/layers/construction_incidents",
             "/api/search?q=2625%20Bedford",
             f"/api/sites/{bbl}/warnings",
-            f"/api/sites/{bbl}/pattern",
             f"/api/sites/{bbl}/actions",
             "/api/cases",
             "/api/cases/case-714-39th-2018",
