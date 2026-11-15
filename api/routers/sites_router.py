@@ -35,7 +35,7 @@ SITE_OPTIONS = {
     "similar": ("hazard", "severity_min"),
     "warnings": ("as_of",),
     "pattern": (),
-    "actions": ("stage", "job_type", "work_types"),
+    "actions": ("stage", "job_type", "work_types", "excavation_depth_ft", "proposed_storeys"),
 }
 _MODELS = {"profile": TypeAdapter(SiteProfile), "similar": TypeAdapter(SimilarCases),
            "warnings": TypeAdapter(list[EarlyWarning]), "pattern": TypeAdapter(PatternScore),
@@ -55,26 +55,39 @@ def _work_types(value) -> Optional[list[str]]:
     return list(dict.fromkeys(parts)) or None
 
 
-def _checked(job_type, stage, as_of, hazard, severity_min, work_types=None) -> dict:
+def _feet(value, name: str) -> Optional[float]:
+    """A number of feet or storeys, 0 or more, or None."""
+    if value is None:
+        return None
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or value < 0:
+        raise HTTPException(422, f"{name} must be a number, 0 or more")
+    return float(value)
+
+
+def _checked(job_type, stage, as_of, hazard, severity_min, work_types=None, excavation_depth_ft=None,
+             proposed_storeys=None) -> dict:
     if severity_min is not None and (isinstance(severity_min, bool) or not isinstance(severity_min, int)
                                      or not 0 <= severity_min <= 3):
         raise HTTPException(422, "severity_min is 0 to 3")
     return {"job_type": valid_choice(job_type, get_args(JobType), "job_type"),
             "stage": valid_choice(stage, get_args(Stage), "stage"), "as_of": valid_as_of(as_of),
             "hazard": valid_choice(hazard, get_args(Hazard), "hazard"), "severity_min": severity_min,
-            "work_types": _work_types(work_types)}
+            "work_types": _work_types(work_types),
+            "excavation_depth_ft": _feet(excavation_depth_ft, "excavation_depth_ft"),
+            "proposed_storeys": _feet(proposed_storeys, "proposed_storeys")}
 
 
 def load_site_part(part: str, bbl: str, job_type: Optional[str] = None, stage: Optional[str] = None,
                    as_of: Optional[str] = None, hazard: Optional[str] = None,
-                   severity_min: Optional[int] = None, work_types=None) -> LoadedData:
+                   severity_min: Optional[int] = None, work_types=None, excavation_depth_ft=None,
+                   proposed_storeys=None) -> LoadedData:
     """One site part, checked against its contract; `sample` is True while it is the fixture, not this site.
 
     Pass any of the options: each part gets only its own. Bad input is HTTPException(422), as on the route.
     An owner function that fails or answers off its contract is DataUnavailable, never an empty answer.
     """
     valid_bbl(bbl)
-    checked = _checked(job_type, stage, as_of, hazard, severity_min, work_types)
+    checked = _checked(job_type, stage, as_of, hazard, severity_min, work_types, excavation_depth_ft, proposed_storeys)
     module_name, function_name, fixture_name = SITE_SOURCES[part]
     where = f"{module_name}.{function_name}"
     build = owner_function(module_name, function_name)
@@ -119,6 +132,9 @@ def pattern(bbl: str, response: Response):
 
 @sites_router.get("/actions", response_model=list[ActionItem])
 def actions(bbl: str, response: Response, stage: Optional[str] = None, job_type: Optional[str] = None,
-            work_types: Optional[str] = None):
-    """`job_type` and `work_types` (comma-separated) are the project screen's setup choices."""
-    return served(response, load_site_part, "actions", bbl, stage=stage, job_type=job_type, work_types=work_types)
+            work_types: Optional[str] = None, excavation_depth_ft: Optional[float] = None,
+            proposed_storeys: Optional[float] = None):
+    """`job_type`, `work_types` (comma-separated), `excavation_depth_ft` and `proposed_storeys` are the
+    project screen's setup choices."""
+    return served(response, load_site_part, "actions", bbl, stage=stage, job_type=job_type, work_types=work_types,
+                  excavation_depth_ft=excavation_depth_ft, proposed_storeys=proposed_storeys)

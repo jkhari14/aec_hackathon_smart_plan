@@ -17,6 +17,7 @@ import pathlib
 from typing import Any, Iterable, Optional
 
 from checklist.checklist_rules import RULES as CODE_RULES
+from checklist.applicability import _monitoring, _survey
 
 RULES_PATH = pathlib.Path(__file__).with_name("rules.json")
 
@@ -75,7 +76,7 @@ def evaluate_condition(name: str, profile: dict) -> Optional[bool]:
             return None
         return bool(site and dig)
     if name == "facade_cycle_applies":
-        floors = (profile.get("lot") or {}).get("floors")
+        floors = profile.get("proposed_storeys") or (profile.get("lot") or {}).get("floors")
         if floors is None:
             return None
         return float(floors) > 6
@@ -143,6 +144,26 @@ def _discipline_for(parties: Iterable[str], mapping: dict) -> Optional[str]:
     return None
 
 
+# Rows the code ties to dig depth and distance. Setup gives the depth; a touching lot is 0 ft away.
+DEPTH_RULES = {"survey_threshold": _survey, "monitoring_distance": _monitoring}
+
+
+def depth_check(condition: str, profile: dict) -> dict:
+    """The applicability engine's answer for a depth row, with each attached neighbor at 0 ft."""
+    attached = [n["bbl"] for n in profile.get("neighbors") or [] if n.get("attached")]
+    inputs = {"excavation_depth_ft": profile.get("excavation_depth_ft"),
+              "distance_to_building_ft": {bbl: 0 for bbl in attached}}
+    return DEPTH_RULES[condition](inputs, {"status": "applies"}, attached[0] if attached else None)
+
+
+def needs_input_note(found: dict) -> str:
+    if "excavation_depth_ft" in found["needs"]:
+        return "Needs input: dig depth."
+    if "distance_to_building_ft" in found["needs"]:
+        return "Needs input: distance to the adjacent buildings."
+    return "Needs input: " + (found["notes"][0] if found["notes"] else ", ".join(found["needs"]))
+
+
 def code_actions(profile: dict, cfg: dict) -> list[dict]:
     mapping = cfg["party_to_discipline"]
     overrides = cfg.get("code_rule_overrides", {})
@@ -163,6 +184,12 @@ def code_actions(profile: dict, cfg: dict) -> list[dict]:
         why = rule.requirement
         if applies is None:
             why += " Whether this applies could not be determined from the work picked for this job."
+        elif rule.condition in DEPTH_RULES:
+            found = depth_check(rule.condition, profile)
+            if found["status"] == "does_not_apply":
+                continue  # the code's depth and distance thresholds rule it out
+            if found["status"] == "needs_input":
+                why += " " + needs_input_note(found)
         out.append({
             "id": f"action-code-{rule.id}",
             "discipline": discipline,

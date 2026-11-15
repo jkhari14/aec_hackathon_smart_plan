@@ -587,7 +587,7 @@
     "/api/sites/{bbl}/actions": {
       "get": {
         "summary": "Actions",
-        "description": "`job_type` and `work_types` (comma-separated) are the project screen's setup choices.",
+        "description": "`job_type`, `work_types` (comma-separated), `excavation_depth_ft` and `proposed_storeys` are the\nproject screen's setup choices.",
         "operationId": "actions_api_sites__bbl__actions_get",
         "parameters": [
           {
@@ -645,6 +645,38 @@
                 }
               ],
               "title": "Work Types"
+            }
+          },
+          {
+            "name": "excavation_depth_ft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Excavation Depth Ft"
+            }
+          },
+          {
+            "name": "proposed_storeys",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Proposed Storeys"
             }
           }
         ],

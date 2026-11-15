@@ -155,5 +155,48 @@ class TestActionsFollowTheChosenJob(unittest.TestCase):
         self.assertIn("support_of_excavation", r.text)
 
 
+class TestDepthAndHeight(unittest.TestCase):
+    """Setup's dig depth and new building height decide the survey, monitoring, PE and facade rows."""
+
+    def setUp(self):
+        neighbor = {"bbl": "3000000002", "bins": [], "attached": True, "year_built": 1925, "floors": 3}
+        self.p = dict(_profile(), work_types=["excavation", "foundation"], neighbors=[neighbor])
+
+    def rows(self, **extra):
+        return {a["id"]: a for a in build_actions({**self.p, **extra})}
+
+    def test_survey_not_required_under_5ft(self):
+        self.assertNotIn("action-code-survey", self.rows(excavation_depth_ft=4.9))
+
+    def test_survey_required_at_10ft_next_door(self):
+        self.assertIn("action-code-survey", self.rows(excavation_depth_ft=10))
+
+    def test_no_depth_keeps_row_as_needs_input(self):
+        self.assertIn("needs input: dig depth", self.rows()["action-code-survey"]["why"].lower())
+
+    def test_monitoring_applies_over_5ft(self):
+        row = self.rows(excavation_depth_ft=10)["action-code-monitoring"]
+        self.assertNotIn("needs input", row["why"].lower())
+
+    def test_over_20ft_support_drawings_need_state_pe(self):
+        self.assertIn("NY State PE", self.rows(excavation_depth_ft=21)["action-code-support_drawings"]["why"])
+
+    def test_proposed_storeys_drive_facade_cycle(self):
+        low = dict(self.p["lot"], floors=2)
+        self.assertNotIn("action-facade-inspection-cycle", self.rows(lot=low))
+        self.assertIn("action-facade-inspection-cycle", self.rows(lot=low, proposed_storeys=9))
+
+    def test_no_neighbors_is_needs_input_not_applies(self):
+        self.assertIn("needs input", self.rows(neighbors=[], excavation_depth_ft=8)["action-code-survey"]["why"].lower())
+
+    def test_router_rejects_negative_depth(self):
+        from fastapi.testclient import TestClient
+
+        from api.main import app
+
+        r = TestClient(app).get("/api/sites/3052110073/actions", params={"excavation_depth_ft": "-1"})
+        self.assertEqual(r.status_code, 422, r.text)
+
+
 if __name__ == "__main__":
     unittest.main()

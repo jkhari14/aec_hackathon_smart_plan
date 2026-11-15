@@ -210,7 +210,8 @@ export interface paths {
         };
         /**
          * Actions
-         * @description `job_type` and `work_types` (comma-separated) are the project screen's setup choices.
+         * @description `job_type`, `work_types` (comma-separated), `excavation_depth_ft` and `proposed_storeys` are the
+         *     project screen's setup choices.
          */
         get: operations["actions_api_sites__bbl__actions_get"];
         put?: never;
@@ -1567,6 +1568,8 @@ export interface operations {
                 stage?: string | null;
                 job_type?: string | null;
                 work_types?: string | null;
+                excavation_depth_ft?: number | null;
+                proposed_storeys?: number | null;
             };
             header?: never;
             path: {
