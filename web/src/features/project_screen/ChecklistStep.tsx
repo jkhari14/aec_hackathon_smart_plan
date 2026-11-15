@@ -10,7 +10,7 @@ import { projectWrites, ROLE_LABELS, whyNotSaved } from "../project/project_clie
 import type { ProjectWorkspace } from "../project/useProject";
 import { addProjectItems } from "./draft";
 import {
-  addedLine, appliesSummary, currentMilestone, groupByOwner, itemNumbers, milestoneSummary, MILESTONES, type Phase, phaseOf,
+  addedLine, appliesSummary, currentMilestone, trailKind, groupByOwner, itemNumbers, milestoneSummary, MILESTONES, type Phase, phaseOf,
 } from "./model";
 
 type Status = ActionItem["status"];
@@ -202,11 +202,7 @@ function ItemRow({ item, number, roles, workspace, flash, isNew }: {
         )}
         <AppliesTo applies={item.applies_to} />
         {item.evidence && <span className="fs-ps-row__record">{item.evidence}</span>}
-        {item.added_reason && (
-          <span className="fs-ps-item__why">
-            {item.added_reason} <span className="fs-quiet fs-num">{addedLine(item, ROLE_LABELS)}</span>
-          </span>
-        )}
+        <Trail item={item} />
         {open && (
           <div className="fs-ps-item__more">
             <p>{item.why}</p>
@@ -239,6 +235,26 @@ function ItemRow({ item, number, roles, workspace, flash, isNew }: {
         </select>
       </span>
     </div>
+  );
+}
+
+/** A document's trail on the row: a blue "Added" or "Flagged" tag with who and when; the full reason on a click. */
+function Trail({ item }: { item: ActionItem }) {
+  const [open, setOpen] = useState(false);
+  const kind = trailKind(item.added_reason);
+  if (!kind) return null;
+  const by = addedLine(item, ROLE_LABELS);
+  return (
+    <span className="fs-ps-trail">
+      <span className="fs-ps-trail__line">
+        <span className="fs-ps-trail__tag">{kind}</span>
+        {by && <span className="fs-quiet fs-num">{by}</span>}
+        <button type="button" className="fs-linkbtn" aria-expanded={open} onClick={() => setOpen(!open)}>
+          {open ? "Hide trail" : "View trail"}
+        </button>
+      </span>
+      {open && <span className="fs-ps-trail__reason">{item.added_reason}</span>}
+    </span>
   );
 }
 

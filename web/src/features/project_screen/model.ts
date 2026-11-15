@@ -238,3 +238,9 @@ export function appliesSummary(applies: string[] | undefined, first = 3): { show
   const all = applies ?? [];
   return { shown: all.slice(0, first), more: Math.max(0, all.length - first) };
 }
+
+/** A document's trail on an item, as one word for its tag: a new item it added, or an existing one it flagged. */
+export function trailKind(reason: string | null | undefined): "Added" | "Flagged" | null {
+  if (!reason) return null;
+  return reason.startsWith("Flagged") ? "Flagged" : "Added";
+}
