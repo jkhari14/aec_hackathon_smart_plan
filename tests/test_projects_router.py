@@ -144,5 +144,16 @@ class ModelInputHookTests(ProjectsRouterTestCase):
         self.assertIsNone(self.engineer_tab.get(self.path).json()["structural_model"])
 
 
+class ProjectSetupRouterTests(ProjectsRouterTestCase):
+    def test_create_round_trips_setup_fields(self):
+        created = self.architect_tab.post("/api/projects", json={
+            "name": "Setup", "site_bbl": "3052110074", "stage": "pre_filing", "members": BOTH,
+            "job_type": "new_building", "construction_type": "concrete", "work_types": ["excavation", "foundation"]})
+        self.assertEqual(created.status_code, 200, created.text)
+        read = self.engineer_tab.get(f"/api/projects/{created.json()['id']}").json()
+        self.assertEqual((read["job_type"], read["construction_type"], read["work_types"]),
+                         ("new_building", "concrete", ["excavation", "foundation"]))
+
+
 if __name__ == "__main__":
     unittest.main()

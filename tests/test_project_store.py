@@ -161,5 +161,41 @@ class CapTests(ProjectStoreTestCase):
             self.assertEqual(self.store.get_project(self.project_id)["items"], [], "a refused batch adds none of it")
 
 
+ALL_FOUR = BOTH + [{"name": "Developer", "role": "developer"}, {"name": "Contractor", "role": "contractor"}]
+
+
+class ProjectSetupTests(ProjectStoreTestCase):
+    def test_project_keeps_work_type_construction_and_scope(self):
+        pid = self.store.create_project("Setup", BBL, "pre_filing", BOTH, job_type="alteration",
+                                        construction_type="masonry", work_types=["structural", "facade"])["id"]
+        project = self.store.get_project(pid)
+        self.assertEqual(project["job_type"], "alteration")
+        self.assertEqual(project["construction_type"], "masonry")
+        self.assertEqual(project["work_types"], ["structural", "facade"])
+
+    def test_old_projects_read_with_empty_setup(self):
+        project = self.store.get_project(self.project_id)
+        self.assertIsNone(project["job_type"])
+        self.assertIsNone(project["construction_type"])
+        self.assertEqual(project["work_types"], [])
+
+    def test_developer_and_contractor_can_be_members_and_own_items(self):
+        pid = self.store.create_project("Four", BBL, "design", ALL_FOUR)["id"]
+        self.store.add_items(pid, self.items)
+        item_id = self.items[0]["id"]
+        self.store.update_items(pid, [{"id": item_id, "owner_role": "contractor"}])
+        self.store.add_pin(pid, "document", "survey", "survey.pdf", "developer")
+        project = self.store.get_project(pid)
+        self.assertEqual(next(i for i in project["items"] if i["id"] == item_id)["owner_role"], "contractor")
+        self.assertEqual(project["pins"][0]["kind"], "document")
+        self.assertEqual(project["pins"][0]["by_role"], "developer")
+
+    def test_unknown_construction_type_and_work_type_are_refused(self):
+        with self.assertRaises(ProjectStoreError):
+            self.store.create_project("Bad", BBL, "design", BOTH, construction_type="adobe")
+        with self.assertRaises(ProjectStoreError):
+            self.store.create_project("Bad", BBL, "design", BOTH, work_types=["digging"])
+
+
 if __name__ == "__main__":
     unittest.main()

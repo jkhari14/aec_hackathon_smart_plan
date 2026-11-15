@@ -34,6 +34,7 @@ const PIN_KINDS: Record<ProjectPin["kind"], string> = {
   warning: "Early warning",
   action: "Action item",
   chat_answer: "Chat answer",
+  document: "Document",
 };
 const STAGES: Record<ProjectCreate["stage"], string> = {
   pre_acquisition: "Before acquisition",
@@ -51,7 +52,7 @@ const message = (error: unknown) => (error instanceof Error ? error.message : "n
 function StartProject({ workspace, siteBbl, siteLabel, onProjectCreated }: ProjectPanelProps) {
   const [name, setName] = useState(siteLabel ? `Project: ${siteLabel}` : "");
   const [stage, setStage] = useState<ProjectCreate["stage"]>("pre_filing");
-  const [members, setMembers] = useState<Record<Role, string>>({ architect: "", structural_engineer: "" });
+  const [members, setMembers] = useState<Record<Role, string>>({ architect: "", structural_engineer: "", developer: "", contractor: "" });
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
   if (!siteBbl) return <p className="text-sm text-muted">Pick a site on the map to start a project for it.</p>;
