@@ -582,3 +582,49 @@ button.fs-ps-card[aria-pressed="true"]:hover,
 .fs-ps-storeys .fs-ps-input {
   width: 96px;
 }
+
+/* "What we already know about this lot": real facts at the top of setup, each with its source. */
+.fs-ps-known {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 18px;
+  border: 1px solid var(--fs-line);
+  border-radius: 12px;
+  background: var(--fs-raised);
+}
+.fs-ps-known__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.fs-ps-known__head h3 {
+  margin: 0;
+}
+.fs-ps-known__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px 20px;
+  margin: 0;
+}
+.fs-ps-known__row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.fs-ps-known__row dt {
+  font-size: var(--fs-text-xs);
+  color: var(--fs-text-2);
+}
+.fs-ps-known__row dd {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  color: var(--fs-text);
+}
+.fs-ps-known__src {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--fs-muted);
+}

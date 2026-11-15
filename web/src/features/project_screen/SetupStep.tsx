@@ -6,6 +6,7 @@ import type { ConstructionType, JobType, Role, Stage } from "../../contracts";
 import { Button } from "../../design";
 import { ROLE_LABELS } from "../project/project_client";
 import type { DraftInput } from "./draft";
+import { KnownFacts } from "./KnownFacts";
 import {
   CONSTRUCTION_CARDS, defaultScope, DEPTH_BANDS, type DepthBand, ROLES, SCOPE_OPTIONS, type ScopeOption, STAGE_OPTIONS, WORK_TYPE_CARDS,
 } from "./model";
@@ -60,6 +61,8 @@ export function SetupStep({ bbl, siteLabel, busy, problem, onDraft }: Props) {
 
   return (
     <div className="fs-ps-setup fs-enter">
+      <KnownFacts bbl={bbl} />
+
       <Group title="Work type" help="What is happening on this site?">
         <div className="fs-ps-cards fs-ps-cards--3">
           {WORK_TYPE_CARDS.map((c) => (
