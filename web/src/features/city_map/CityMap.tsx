@@ -387,8 +387,12 @@ export function CityMap({
         };
         riseFrame = requestAnimationFrame(step);
       })
-      .catch((error: Error) => {
-        if (!cancelled) setCityweftNote(`Cityweft model unavailable: ${error.message}. Showing extruded buildings.`);
+      .catch((error: Error & { status?: number }) => {
+        if (cancelled || error.name === "AbortError") return;
+        // 503 means this API has no Cityweft key: a setup choice, not a failure, so say it plainly.
+        setCityweftNote(error.status === 503
+          ? "Showing extruded buildings (Cityweft 3D isn't set up on this server)."
+          : `Cityweft model unavailable: ${error.message}. Showing extruded buildings.`);
       });
     Promise.all([loadSiteLots(picked), loadSiteBuildings(picked.bbl)]).then(([{ lots, walls, profile, sample: s, note }, buildings]) => {
       if (cancelled) return;

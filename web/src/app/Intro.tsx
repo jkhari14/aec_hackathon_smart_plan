@@ -4,10 +4,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const SEEN = "foresite.intro.seen";
-// The whole opening is at most 2 s: a 1.6 s build and a 0.4 s fade. If the video hasn't finished by
-// then (slow network, autoplay blocked), it gets out of the way anyway.
-const GIVE_UP_MS = 1600;
-const FADE_MS = 400;
+// The whole opening is 4 s: the 1.6 s build, a hold on the finished logo, then a 0.8 s fade-and-zoom
+// into the map. A click or key skips it at any point; a video error skips it at once.
+const HOLD_MS = 3200;
+const FADE_MS = 800;
 
 function alreadySeen(): boolean {
   try {
@@ -48,7 +48,7 @@ export function Intro({ onDone }: { onDone: () => void }) {
 
   useEffect(() => {
     if (state !== "playing") return;
-    const timer = window.setTimeout(finish, GIVE_UP_MS);
+    const timer = window.setTimeout(finish, HOLD_MS);
     const key = () => finish();
     window.addEventListener("keydown", key);
     return () => {
@@ -68,7 +68,6 @@ export function Intro({ onDone }: { onDone: () => void }) {
         muted
         playsInline
         preload="auto"
-        onEnded={finish}
         onError={finish}
         aria-label="4site"
       />
