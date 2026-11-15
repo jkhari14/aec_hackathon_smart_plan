@@ -3,11 +3,24 @@
     "rule_id": "adjacent_protection_no_follow_up",
     "title": "Adjacent-protection violation, then nothing recorded for 21 days",
     "status": "ok",
-    "detail": "Checked DOB, ECB and safety violations and DOB complaints (code 03) on the site and 5 touching lots, dated in the year before 2026-06-01.",
+    "detail": "Checked DOB, ECB and safety violations and DOB complaints (code 03) on the site and its 5 touching lots, dated in the year before 2026-06-01.",
     "warnings": 1,
     "sources": [
-      {"name": "DOB ECB violations", "url": "https://data.cityofnewyork.us/d/6bgk-3dad", "date": "2026-11-14"},
-      {"name": "DOB complaints", "url": "https://data.cityofnewyork.us/d/eabe-havv", "date": "2026-11-14"}
+      {
+        "name": "ECB violations",
+        "url": "https://data.cityofnewyork.us/d/6bgk-3dad",
+        "date": "2026-11-14"
+      },
+      {
+        "name": "DOB violations",
+        "url": "https://data.cityofnewyork.us/d/3h2n-5cm9",
+        "date": "2026-11-14"
+      },
+      {
+        "name": "DOB complaints",
+        "url": "https://data.cityofnewyork.us/d/eabe-havv",
+        "date": "2026-11-14"
+      }
     ],
     "as_of": "2026-06-01"
   },
@@ -15,11 +28,24 @@
     "rule_id": "stop_work_then_work_continued",
     "title": "Stop-work order, then a violation for continuing work",
     "status": "ok",
-    "detail": "Checked violation text and 311 resolutions on the site and 5 touching lots, dated in the year before 2026-06-01.",
+    "detail": "Checked violation text, complaint dispositions and 311 resolutions on the site and its 5 touching lots, dated in the year before 2026-06-01.",
     "warnings": 1,
     "sources": [
-      {"name": "DOB ECB violations", "url": "https://data.cityofnewyork.us/d/6bgk-3dad", "date": "2026-11-14"},
-      {"name": "311 requests routed to DOB", "url": "https://data.cityofnewyork.us/d/erm2-nwe9", "date": "2026-11-14"}
+      {
+        "name": "ECB violations",
+        "url": "https://data.cityofnewyork.us/d/6bgk-3dad",
+        "date": "2026-11-14"
+      },
+      {
+        "name": "DOB complaints",
+        "url": "https://data.cityofnewyork.us/d/eabe-havv",
+        "date": "2026-11-14"
+      },
+      {
+        "name": "311 service requests routed to DOB (2020 on)",
+        "url": "https://data.cityofnewyork.us/d/erm2-nwe9",
+        "date": "2026-11-14"
+      }
     ],
     "as_of": "2026-06-01"
   },
@@ -27,11 +53,19 @@
     "rule_id": "structural_complaint_near_earth_work",
     "title": "Structural complaint within 90 days of earth work next door",
     "status": "ok",
-    "detail": "1 earth-work, foundation or SOE filing on the site or a touching lot. No complaint in codes 30, 14, 16 or 5C on a lot next to it within 90 days of its filing or permit, before 2026-06-01.",
+    "detail": "1 earth-work, foundation or SOE job across the site and its 5 touching lots, each checked for complaints in codes 30, 14, 16 or 5C on the lots next to it within 90 days of its filing or first permit, before 2026-06-01.",
     "warnings": 0,
     "sources": [
-      {"name": "DOB NOW job filings", "url": "https://data.cityofnewyork.us/d/w9ak-ipjd", "date": "2026-11-14"},
-      {"name": "DOB complaints", "url": "https://data.cityofnewyork.us/d/eabe-havv", "date": "2026-11-14"}
+      {
+        "name": "DOB NOW job filings",
+        "url": "https://data.cityofnewyork.us/d/w9ak-ipjd",
+        "date": "2026-11-14"
+      },
+      {
+        "name": "DOB complaints",
+        "url": "https://data.cityofnewyork.us/d/eabe-havv",
+        "date": "2026-11-14"
+      }
     ],
     "as_of": "2026-06-01"
   },
@@ -39,10 +73,14 @@
     "rule_id": "weather_during_open_excavation",
     "title": "Heavy rain or freeze-thaw during an open excavation",
     "status": "not_applicable",
-    "detail": "No earth-work, foundation or SOE permit on the site was issued before 2026-06-01, so there was no open excavation to check the weather against.",
+    "detail": "No earth-work, foundation or SOE permit across the site and its 5 touching lots was issued before 2026-06-01, so there was no open excavation to check the weather against.",
     "warnings": 0,
     "sources": [
-      {"name": "DOB NOW job filings", "url": "https://data.cityofnewyork.us/d/w9ak-ipjd", "date": "2026-11-14"}
+      {
+        "name": "DOB NOW job filings",
+        "url": "https://data.cityofnewyork.us/d/w9ak-ipjd",
+        "date": "2026-11-14"
+      }
     ],
     "as_of": "2026-06-01"
   }
