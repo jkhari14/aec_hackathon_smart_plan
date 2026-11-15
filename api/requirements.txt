@@ -1,5 +1,7 @@
 fastapi==0.141.1
 uvicorn==0.53.0
+# The chat and the drawing reader; without it they answer offline even with ANTHROPIC_API_KEY set.
+anthropic==2.8.0
 # Tests: the API test client and the fixture checks against contracts/schemas/.
 httpx==0.28.1
 jsonschema==4.26.0
