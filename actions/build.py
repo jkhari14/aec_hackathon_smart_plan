@@ -17,6 +17,7 @@ import pathlib
 from typing import Any, Iterable, Optional
 
 from checklist.checklist_rules import RULES as CODE_RULES
+from actions.phases import phase_for
 from checklist.applicability import _monitoring, _survey
 
 RULES_PATH = pathlib.Path(__file__).with_name("rules.json")
@@ -202,6 +203,7 @@ def code_actions(profile: dict, cfg: dict) -> list[dict]:
             "owner_role": owner_roles.get(discipline),
             "source_rule": f"checklist:{rule.id}",
             "life_safety": rule.life_safety,
+            **dict(zip(("phase", "when"), phase_for(f"checklist:{rule.id}"))),
         })
     return out
 
@@ -232,6 +234,7 @@ def hazard_actions(profile: dict, cfg: dict, stage: Optional[str]) -> list[dict]
             "owner_role": owner_roles.get(r["discipline"]),
             "source_rule": f"actions:{r['id']}",
             "life_safety": r["life_safety"],
+            **dict(zip(("phase", "when"), phase_for(f"actions:{r['id']}", r["stages"]))),
         })
     return out
 

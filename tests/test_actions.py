@@ -200,3 +200,30 @@ class TestDepthAndHeight(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestPhases(unittest.TestCase):
+    """Each item says when it's due: from the code text where it states timing, else the rule's stage."""
+
+    def test_code_rows_use_the_codes_own_timing(self):
+        from actions.phases import phase_for
+        self.assertEqual(phase_for("checklist:notice"), ("notice", "60 days before work"))
+        self.assertEqual(phase_for("checklist:survey")[0], "before_excavation")
+        self.assertEqual(phase_for("checklist:monitoring"), ("during_work", "During excavation"))
+
+    def test_hazard_rows_use_their_earliest_stage(self):
+        from actions.phases import phase_for
+        self.assertEqual(phase_for("actions:x", ["pre_filing", "construction"]), ("filing", "Before filing"))
+        self.assertEqual(phase_for("actions:y", ["construction"]), ("during_work", "During work"))
+
+    def test_document_rows_and_unknowns(self):
+        from actions.phases import phase_for
+        self.assertEqual(phase_for("actions:geotech:dewatering")[0], "filing")
+        self.assertEqual(phase_for("actions:model:lot-line-notice")[0], "notice")
+        self.assertEqual(phase_for("something-else")[0], "design")
+
+    def test_every_built_item_has_a_phase(self):
+        phases = {"design", "filing", "notice", "before_excavation", "during_work"}
+        for a in build_actions(_profile()):
+            self.assertIn(a.get("phase"), phases, a["id"])
+            self.assertTrue(a.get("when"), a["id"])

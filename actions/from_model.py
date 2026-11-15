@@ -16,6 +16,8 @@ import json
 import pathlib
 from typing import Optional
 
+from actions.phases import phase_for
+
 RULES_PATH = pathlib.Path(__file__).with_name("rules.json")
 
 ROLE_WORDS = {"architect": "architect", "structural_engineer": "structural engineer",
@@ -123,6 +125,7 @@ def _items(rules: list[dict], finding_for, document: str, by_role: str, kind: st
             "owner_role": rule["owner_role"],
             "source_rule": f"actions:{kind}:{rule['id']}",
             "life_safety": rule["life_safety"],
+            **dict(zip(("phase", "when"), phase_for(f"actions:{kind}:{rule['id']}"))),
             "added_reason": f"Added because the {who} uploaded {doc} and confirmed its reading: {finding}.",
             # Used instead when the project already has this item: it was there, the document flags it.
             "flagged_reason": f"Flagged because the {who} uploaded {doc} and confirmed its reading: {finding}.",
