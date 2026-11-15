@@ -60,6 +60,18 @@
     "default_on": false
   },
   {
+    "layer_id": "fema_flood_zones",
+    "name": "FEMA flood zones",
+    "description": "The special flood hazard areas on FEMA's effective flood map for the city (zones A, AE and VE). Outlines are simplified to about 10 m for the map, so check a single lot against the source. Not on the map: 2 of 604 areas (too small to draw at this detail, or no id). Pulled 2026-11-14.",
+    "hazard": "flood",
+    "source_name": "FEMA National Flood Hazard Layer",
+    "source_url": "https://hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer/28",
+    "updated_at": null,
+    "feature_count": 602,
+    "status": "ok",
+    "default_on": false
+  },
+  {
     "layer_id": "sandy_inundation",
     "name": "Sandy inundation zone",
     "description": "The areas flooded by Hurricane Sandy's storm surge in October 2012, as surveyed afterwards. Outlines are simplified to about 10 m for the map, so check a single lot against the source. Not on the map: 6 of 492 areas (too small to draw at this detail). Pulled 2026-11-14.",
@@ -72,6 +84,18 @@
     "default_on": false
   },
   {
+    "layer_id": "flooding_complaints",
+    "name": "311 flooding reports",
+    "description": "311 requests routed to DEP for street or highway flooding, sewer backups and water in basements, over the last twelve months. A request is a caller's report, not a finding, and one storm can bring many requests for the same spot. Requests created from 2025-11-14 on. Not on the map: 217 of 15,862 requests (no usable coordinates; highway requests rarely have them). Not added to DOB complaints, which can repeat a request. Pulled 2026-11-14.",
+    "hazard": "flood",
+    "source_name": "311 Service Requests from 2020 to Present",
+    "source_url": "https://data.cityofnewyork.us/d/erm2-nwe9",
+    "updated_at": "2026-11-14",
+    "feature_count": 15645,
+    "status": "ok",
+    "default_on": false
+  },
+  {
     "layer_id": "e_designations",
     "name": "E-designations (hazardous materials)",
     "description": "Lots with an environmental (E) designation for hazardous materials; each shows the requirement as the record states it. A requirement on the lot, not a violation. Not on the map: 1,364 of 10,753 designated lots (the lot is in neither PLUTO nor the tax map). Not shown: 3,266 designations for air quality or noise alone. Pulled 2026-11-14.",
@@ -80,6 +104,18 @@
     "source_url": "https://data.cityofnewyork.us/d/hxm3-23vy",
     "updated_at": "2026-11-05",
     "feature_count": 9389,
+    "status": "ok",
+    "default_on": false
+  },
+  {
+    "layer_id": "remediation_sites",
+    "name": "State remediation sites",
+    "description": "Sites in New York State DEC's remediation programs (brownfield, voluntary cleanup, state superfund and others) in the five boroughs, one mark per site with the contaminants DEC lists. Being listed is not a finding about today's condition: many sites are cleaned up and closed. Not on the map: 27 of 1,437 sites (no usable coordinates). Pulled 2026-11-14.",
+    "hazard": "contamination",
+    "source_name": "NYS DEC Environmental Remediation Sites",
+    "source_url": "https://data.ny.gov/d/c6ci-rzpg",
+    "updated_at": "2026-11-14",
+    "feature_count": 1410,
     "status": "ok",
     "default_on": false
   }
