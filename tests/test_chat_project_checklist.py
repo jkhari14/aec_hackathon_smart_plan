@@ -16,7 +16,7 @@ from api.routers.chat.chat_models import ChatRequest
 from api.routers.chat.chat_project_checklist import ANOTHER_LOT, NO_PROJECT, NOT_IN_AS_OF
 from api.routers.chat.chat_site_view import SiteView
 from api.store.project_store import ProjectStore
-from tests.chat_test_support import item
+from tests.chat_test_support import ScriptedModel, item
 from tests.test_chat_app_context import OTHER_BBL, SAMPLE_BBL, fixture, site_parts
 
 TEAM = [{"name": "Person One", "role": "architect"}, {"name": "Person Two", "role": "structural_engineer"}]
@@ -104,6 +104,15 @@ class OpenProjectTests(ProjectChecklistTestCase):
         self.assertEqual((context.project.status, context.actions.value), ("ok", []))
         self.assertIn("none on this project yet", SiteView(context).digest())
         self.assertIn("None found: no action item on the open project's checklist.", self.answer("Any action items?", empty).plain_text)
+
+    def test_the_first_answer_reads_the_projects_checklist_too(self):
+        model = ScriptedModel([item("dataset_check", dataset_key="action_items")])
+        request = ChatRequest(bbl=OTHER_BBL, question="Who owns the checklist items?", project_id=self.project_id)
+        with site_parts(bbl=OTHER_BBL):
+            answer = chat_service.first_answer(request, app_context, model)
+        self.assertIn("PROJECT CHECKLIST", " ".join(block["text"] for block in model.first_opened_with["system"]))
+        self.assertIn("on the open project's checklist", answer.plain_text)
+        self.assertNotIn("names_withheld", [part.code for part in answer.parts if part.kind == "notice"])
 
 
 class NoProjectToReadTests(ProjectChecklistTestCase):
