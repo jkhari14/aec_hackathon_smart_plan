@@ -1,15 +1,28 @@
 [
   {
-    "id": "warn-stop-work-continued",
+    "id": "stop_work_then_work_continued:ecb_violations:39553409Z",
     "rule_id": "stop_work_then_work_continued",
-    "hazard": "structural",
+    "hazard": "construction_safety",
     "severity": 1,
     "title": "Work continued after a stop-work order",
-    "explanation": "A stop-work order was followed by a violation for continuing work. On similar sites, this sequence calls for a check of what was done while the order stood.",
+    "explanation": "ECB violation 39553409Z (2026-04-23, on the site) cites work contrary to a stop-work order (28-207.2.2). Its own text refers to the earlier order; no separate stop-work record dated before it was found. This sequence calls for a check of what was done while the order stood.",
     "evidence_record_ids": [
       "ecb_violations:39553409Z"
     ],
     "first_seen": "2026-04-23",
+    "as_of": "2026-06-01"
+  },
+  {
+    "id": "adjacent_protection_no_follow_up:ecb_violations:39552071X",
+    "rule_id": "adjacent_protection_no_follow_up",
+    "hazard": "structural",
+    "severity": 1,
+    "title": "Nothing recorded for 21 days after an adjacent-protection violation",
+    "explanation": "ECB violation 39552071X (2026-03-20, on the site) concerns protection of adjacent property. No DOB record on that lot is dated in the 21 days after it; the next is dated 2026-04-23. The gap is a prompt to confirm the protection was put in place, not a finding that it was not.",
+    "evidence_record_ids": [
+      "ecb_violations:39552071X"
+    ],
+    "first_seen": "2026-04-10",
     "as_of": "2026-06-01"
   }
 ]

@@ -21,6 +21,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/sites/{bbl}/warnings/checks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Site Warning Checks
+         * @description One entry per rule: checked, couldn't be checked, or not applicable to this site.
+         */
+        get: operations["site_warning_checks_api_sites__bbl__warnings_checks_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/layers": {
         parameters: {
             query?: never;
@@ -294,6 +314,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/chat/setup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Chat Setup */
+        get: operations["chat_setup_api_chat_setup_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/chat": {
         parameters: {
             query?: never;
@@ -303,8 +340,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Chat */
-        post: operations["chat_api_chat_post"];
+        /**
+         * Chat Answer
+         * @description A question about one site, answered in parts that each say where they came from.
+         */
+        post: operations["chat_answer_api_chat_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -444,13 +484,20 @@ export interface components {
                 [key: string]: unknown;
             };
         };
-        /** ChatAnswerPart */
+        /**
+         * ChatAnswerPart
+         * @description One part of an answer, labeled by where it came from.
+         *
+         *     `warning` and `action` are results of the early-warning and action rules, not records. `not_found`
+         *     means it was looked for and nothing was found; `unknown` means a query or a load failed, which is
+         *     never shown as zero or none. `notice` is a fixed line from the server (limitations, what was held back).
+         */
         ChatAnswerPart: {
             /**
              * Kind
              * @enum {string}
              */
-            kind: "public_record" | "case" | "ai_suggestion" | "web" | "user_input";
+            kind: "public_record" | "case" | "warning" | "action" | "ai_suggestion" | "web" | "user_input" | "not_found" | "unknown" | "notice";
             /** Text */
             text: string;
             /** Source Name */
@@ -459,6 +506,16 @@ export interface components {
             source_url?: string | null;
             /** Record Id */
             record_id?: string | null;
+        };
+        /**
+         * ChatExchange
+         * @description One earlier question and the answer text the reader saw, so a follow-up question has its context.
+         */
+        ChatExchange: {
+            /** Question */
+            question: string;
+            /** Answer */
+            answer: string;
         };
         /** ChatRequest */
         ChatRequest: {
@@ -470,6 +527,12 @@ export interface components {
             project_id?: string | null;
             /** As Of */
             as_of?: string | null;
+            /** Job Type */
+            job_type?: ("new_building" | "alteration" | "demolition") | null;
+            /** Stage */
+            stage?: ("pre_acquisition" | "design" | "pre_filing" | "construction") | null;
+            /** History */
+            history?: components["schemas"]["ChatExchange"][];
         };
         /** ChatResponse */
         ChatResponse: {
@@ -479,6 +542,34 @@ export interface components {
             actions: components["schemas"]["ChatAction"][];
             /** Offline */
             offline: boolean;
+        };
+        /**
+         * ChatSetup
+         * @description What a client needs before the first question.
+         */
+        ChatSetup: {
+            /** Live */
+            live: boolean;
+            /**
+             * Examples
+             * @default []
+             */
+            examples: components["schemas"]["ExampleQuestion"][];
+            /**
+             * Max Question Chars
+             * @default 1000
+             */
+            max_question_chars: number;
+            /**
+             * Max Earlier Exchanges
+             * @default 8
+             */
+            max_earlier_exchanges: number;
+            /**
+             * Max History Chars
+             * @default 12000
+             */
+            max_history_chars: number;
         };
         /**
          * DatasetStatus
@@ -525,6 +616,13 @@ export interface components {
             first_seen: string;
             /** As Of */
             as_of?: string | null;
+        };
+        /** ExampleQuestion */
+        ExampleQuestion: {
+            /** Id */
+            id: string;
+            /** Question */
+            question: string;
         };
         /** FloodContext */
         FloodContext: {
@@ -730,6 +828,8 @@ export interface components {
              * @enum {string}
              */
             by_role: "architect" | "structural_engineer";
+            /** Body */
+            body?: string | null;
         };
         /** Project */
         Project: {
@@ -814,6 +914,8 @@ export interface components {
             by_role: "architect" | "structural_engineer";
             /** Created At */
             created_at: string;
+            /** Body */
+            body?: string | null;
         };
         /** SearchResult */
         SearchResult: {
@@ -954,6 +1056,30 @@ export interface components {
             /** Context */
             ctx?: Record<string, never>;
         };
+        /**
+         * WarningRuleCheck
+         * @description Whether one early-warning rule could be checked for a site. A rule that could not run is an
+         *     error, never "no warning"; not_applicable says why the rule does not apply to this site.
+         */
+        WarningRuleCheck: {
+            /** Rule Id */
+            rule_id: string;
+            /** Title */
+            title: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ok" | "error" | "not_applicable";
+            /** Detail */
+            detail: string;
+            /** Warnings */
+            warnings: number;
+            /** Sources */
+            sources: components["schemas"]["Source"][];
+            /** As Of */
+            as_of?: string | null;
+        };
     };
     responses: never;
     parameters: never;
@@ -981,6 +1107,40 @@ export interface operations {
                     "application/json": {
                         [key: string]: string;
                     };
+                };
+            };
+        };
+    };
+    site_warning_checks_api_sites__bbl__warnings_checks_get: {
+        parameters: {
+            query?: {
+                as_of?: string | null;
+            };
+            header?: never;
+            path: {
+                /** @description 10-digit borough-block-lot */
+                bbl: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarningRuleCheck"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -1526,7 +1686,27 @@ export interface operations {
             };
         };
     };
-    chat_api_chat_post: {
+    chat_setup_api_chat_setup_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatSetup"];
+                };
+            };
+        };
+    };
+    chat_answer_api_chat_post: {
         parameters: {
             query?: never;
             header?: never;

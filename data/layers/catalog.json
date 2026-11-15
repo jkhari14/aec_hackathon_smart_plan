@@ -1,0 +1,98 @@
+[
+  {
+    "layer_id": "construction_incidents",
+    "name": "Construction incidents",
+    "description": "Accidents, incidents and notifications DOB records at construction sites, 2024 on. Injury and fatality counts are DOB's at the time of entry, and the source gives no cause. Not on the map: 16 of 1,511 records (no usable coordinates). Pulled 2026-11-14.",
+    "hazard": "construction_safety",
+    "source_name": "DOB Construction-Related Incidents",
+    "source_url": "https://data.cityofnewyork.us/d/bf97-mjsy",
+    "updated_at": "2026-11-14",
+    "feature_count": 1495,
+    "status": "ok",
+    "default_on": true
+  },
+  {
+    "layer_id": "structural_complaints",
+    "name": "Structural complaints",
+    "description": "DOB complaints in the structural categories: adjacent building not protected (03), excavation undermining (14), inadequate shoring (16), structural stability (30), retaining wall (54), structurally compromised (2K), new building stability (5C). A complaint is a report, not a finding; each shows DOB's disposition with its date when one is recorded. Complaints entered from 2024-01-01 on. Not on the map: 1,470 of 18,051 complaints (the building has no footprint or lot point, or a placeholder BIN). Category wording is from DOB's printed list, imported by hand and not yet checked by a second person. Not added to 311 requests, which can repeat a complaint. Pulled 2026-11-14.",
+    "hazard": "structural",
+    "source_name": "DOB Complaints Received",
+    "source_url": "https://data.cityofnewyork.us/d/eabe-havv",
+    "updated_at": "2026-11-14",
+    "feature_count": 16581,
+    "status": "ok",
+    "default_on": true
+  },
+  {
+    "layer_id": "vacate_orders",
+    "name": "Vacate orders (fire damage)",
+    "description": "HPD orders to vacate a building or part of one because of fire damage, 2012 on, with the rescind date when HPD has recorded one. Not on the map: 1 of 4,865 fire-damage orders (no usable coordinates). Not shown: 3,495 for illegal occupancy, 642 for habitability; those are housing matters, not a hazard this map tracks. Pulled 2026-11-14.",
+    "hazard": "fire",
+    "source_name": "HPD Order to Repair/Vacate Orders",
+    "source_url": "https://data.cityofnewyork.us/d/tb8q-a3ar",
+    "updated_at": "2026-11-14",
+    "feature_count": 4864,
+    "status": "ok",
+    "default_on": false
+  },
+  {
+    "layer_id": "fdny_vacates",
+    "name": "FDNY vacate orders",
+    "description": "Buildings the Fire Department ordered vacated (Fire Operations or the Bureau of Fire Prevention). The list gives no reason for an order; its status is quoted as recorded. Not on the map: 9 of 357 orders (the lot is in neither PLUTO nor the tax map). Pulled 2026-11-14.",
+    "hazard": "fire",
+    "source_name": "NYC Fire Department Building Vacate List",
+    "source_url": "https://data.cityofnewyork.us/d/n5xc-7jfa",
+    "updated_at": "2026-01-05",
+    "feature_count": 348,
+    "status": "ok",
+    "default_on": false
+  },
+  {
+    "layer_id": "unsafe_facades",
+    "name": "Unsafe facades",
+    "description": "Buildings whose newest facade inspection filing has the status UNSAFE, or SWARMP (safe with a repair and maintenance program). One mark per building; the status is the one on record at the pull and the date is that filing's. The inspection program covers buildings taller than six stories, so a building with no mark was not necessarily inspected. Not on the map: 16 of 7,153 buildings (the lot is in neither PLUTO nor the tax map). Pulled 2026-11-14.",
+    "hazard": "facade",
+    "source_name": "DOB NOW: Safety - Facades Compliance Filings",
+    "source_url": "https://data.cityofnewyork.us/d/xubg-57si",
+    "updated_at": "2026-11-14",
+    "feature_count": 7137,
+    "status": "ok",
+    "default_on": false
+  },
+  {
+    "layer_id": "sandy_inundation",
+    "name": "Sandy inundation zone",
+    "description": "The areas flooded by Hurricane Sandy's storm surge in October 2012, as surveyed afterwards. Outlines are simplified to about 10 m for the map, so check a single lot against the source. Not on the map: 6 of 492 areas (too small to draw at this detail). Pulled 2026-11-14.",
+    "hazard": "flood",
+    "source_name": "Sandy Inundation Zone",
+    "source_url": "https://data.cityofnewyork.us/d/5xsi-dfpx",
+    "updated_at": "2015-11-09",
+    "feature_count": 486,
+    "status": "ok",
+    "default_on": false
+  },
+  {
+    "layer_id": "e_designations",
+    "name": "E-designations (hazardous materials)",
+    "description": "Lots with an environmental (E) designation for hazardous materials; each shows the requirement as the record states it. A requirement on the lot, not a violation. Not on the map: 1,364 of 10,753 designated lots (the lot is in neither PLUTO nor the tax map). Not shown: 3,266 designations for air quality or noise alone. Pulled 2026-11-14.",
+    "hazard": "contamination",
+    "source_name": "E-Designations",
+    "source_url": "https://data.cityofnewyork.us/d/hxm3-23vy",
+    "updated_at": "2026-11-05",
+    "feature_count": 9389,
+    "status": "ok",
+    "default_on": false
+  },
+  {
+    "layer_id": "watchlist",
+    "name": "Excavation watchlist",
+    "description": "Active DOB NOW earth-work, foundation or SOE permits from the 12 months before 2026-11-14, on lots next to a building from before 1940 that reaches the shared lot line. Year built is PLUTO's, which is often an estimate. A prompt to look, not a finding.",
+    "hazard": "geotech",
+    "source_name": "DOB NOW job filings (w9ak-ipjd), tax lots (i38t-6if2), PLUTO (64uk-42ks), footprints (5zhs-2jue)",
+    "source_url": "https://data.cityofnewyork.us/d/w9ak-ipjd",
+    "updated_at": "2026-11-15T00:33:51+00:00",
+    "feature_count": 1187,
+    "status": "ok",
+    "default_on": true
+  }
+]

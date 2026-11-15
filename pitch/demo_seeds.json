@@ -1,0 +1,23 @@
+{
+  "updated": "2026-11-14",
+  "note": "What the live demo and the video load. The hero comes from data/demo_sites.json; change hero_site_id there and here together once the team confirms it. Jacob's PR 19 caches these for the offline fallback.",
+  "hero_site_id": "861-park-ave-brooklyn",
+  "backup_site_id": "3728-bronx-blvd",
+  "offline_site_id": "2625-bedford-ave-brooklyn",
+  "project": {
+    "name": "Demo project",
+    "stage": "construction",
+    "job_type": "new_building",
+    "members": [
+      { "name": "Architect (demo)", "role": "architect" },
+      { "name": "Structural engineer (demo)", "role": "structural_engineer" }
+    ]
+  },
+  "layers_on": ["structural_complaints", "construction_incidents", "watchlist"],
+  "chat_questions": [
+    "What has been reported about the buildings next to this site?",
+    "Which similar cases match this site, and what was different about them?",
+    "What should the structural engineer check before excavation continues?"
+  ],
+  "as_of_example": null
+}

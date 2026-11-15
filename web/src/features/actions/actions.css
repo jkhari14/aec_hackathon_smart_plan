@@ -1,0 +1,39 @@
+.fs-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-4);
+}
+.fs-actions__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-2);
+}
+.fs-actions__group .fs-label span {
+  margin-left: 4px;
+  color: var(--fs-text-2);
+}
+.fs-action__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.fs-action__proof {
+  margin: 0;
+  font-size: var(--fs-text-sm);
+}
+/* Status by shape: open is a hollow ring, in progress half filled, done filled. */
+.fs-action__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+}
+.fs-action__dot[data-status="in_progress"] {
+  background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+}
+.fs-action__dot[data-status="done"] {
+  background: currentColor;
+}
+.fs-action__dot[data-status="not_applicable"] {
+  border-style: dashed;
+}

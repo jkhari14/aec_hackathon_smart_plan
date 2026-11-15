@@ -1,0 +1,105 @@
+{
+  "title": "WarningRuleCheck list",
+  "type": "array",
+  "items": {
+    "additionalProperties": false,
+    "description": "Whether one early-warning rule could be checked for a site. A rule that could not run is an\nerror, never \"no warning\"; not_applicable says why the rule does not apply to this site.",
+    "properties": {
+      "rule_id": {
+        "title": "Rule Id",
+        "type": "string"
+      },
+      "title": {
+        "title": "Title",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "ok",
+          "error",
+          "not_applicable"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "detail": {
+        "title": "Detail",
+        "type": "string"
+      },
+      "warnings": {
+        "minimum": 0,
+        "title": "Warnings",
+        "type": "integer"
+      },
+      "sources": {
+        "items": {
+          "$ref": "#/$defs/Source"
+        },
+        "title": "Sources",
+        "type": "array"
+      },
+      "as_of": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "As Of"
+      }
+    },
+    "required": [
+      "rule_id",
+      "title",
+      "status",
+      "detail",
+      "warnings",
+      "sources"
+    ],
+    "title": "WarningRuleCheck",
+    "type": "object"
+  },
+  "$defs": {
+    "Source": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        },
+        "date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Date"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Source",
+      "type": "object"
+    }
+  }
+}
