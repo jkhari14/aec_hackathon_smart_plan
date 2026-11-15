@@ -254,7 +254,8 @@
 .fs-hint {
   position: absolute;
   left: 50%;
-  top: var(--fs-4);
+  /* below the map's address search, which also sits top-centre */
+  top: calc(var(--fs-4) + 56px);
   transform: translateX(-50%);
   z-index: var(--fs-z-panel);
   display: flex;
