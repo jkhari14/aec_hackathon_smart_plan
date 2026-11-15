@@ -121,6 +121,18 @@ class StatementTests(unittest.TestCase):
         words = FULL.items[MARCH_WARNING].source.explanation
         self.assertEqual(one(FULL, says(f'The rule says: "{words}"', MARCH_WARNING)).kind, "warning")
 
+    def test_a_long_explanation_is_still_the_rules_own_words(self):
+        # A real one runs past 300 characters once it names a touching lot.
+        long = ("ECB violation 39552071X (2026-03-23, on touching lot 3000010002 (12 Example Street)) concerns protection of "
+                "adjacent property. No DOB record on that lot is dated in the 21 days after it; the next is dated 2026-04-23. "
+                "The gap is a prompt to confirm the protection was put in place, not a finding that it was not. " * 2).strip()
+        self.assertGreater(len(long), 600)
+        warnings = [{**w, "explanation": long} if w["id"] == "w1" else w for w in example_context().warnings.value]
+        view = SiteView(example_context(warnings=Loaded.ok(warnings)))
+        self.assertEqual(one(view, says(f'Early warning "{warnings[0]["title"]}": "{long}"', MARCH_WARNING)).kind, "warning")
+        # Only an exact quote is the record's: the same length with a word changed is the writer's own claim.
+        self.assertTrue(build(view, says(f'The rule says: "{long.replace("adjacent", "nearby")}"', MARCH_WARNING)).problems)
+
 
 class CountAndSearchTests(unittest.TestCase):
     def test_the_server_writes_counts_none_unknown_and_at_least(self):

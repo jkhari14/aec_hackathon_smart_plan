@@ -38,7 +38,8 @@ _PREDICTION = re.compile(
     r"(?:collapse|fail|fall|crack|settle|flood|burn|be damaged|cause damage)\b"
     r"|\b(?:predicts?|predicted|forecasts?|probability of (?:collapse|failure)|chance of (?:collapse|failure)|"
     r"(?:high|low|elevated) risk of (?:collapse|failure))\b", re.I)
-_QUOTED = re.compile(r"[\"\u201c]([^\"\u201c\u201d]{3,300})[\"\u201d]")
+# Up to a statement's own length (chat_answer_build.MAX_STATEMENT_CHARS): a rule's explanation runs past 300.
+_QUOTED = re.compile(r"[\"\u201c]([^\"\u201c\u201d]{3,700})[\"\u201d]")
 
 
 def _runs(text: str) -> set[str]:
