@@ -1,0 +1,147 @@
+{
+ "rows": 434,
+ "positives": 32,
+ "train_rows": 335,
+ "test_rows": 99,
+ "split": "train: filings before 2024-07-01; test: filings from 2024-07-01 on",
+ "test_base_rate": 0.131,
+ "test_roc_auc": 0.64,
+ "test_average_precision": 0.248,
+ "test_brier_uncalibrated": 0.1174,
+ "test_brier_calibrated": 0.1161,
+ "test_brier_base_rate_only": 0.1141,
+ "test_reliability_calibrated": [
+  {
+   "mean_predicted": 0.029,
+   "observed_rate": 0.053,
+   "n": 19
+  },
+  {
+   "mean_predicted": 0.045,
+   "observed_rate": 0.105,
+   "n": 19
+  },
+  {
+   "mean_predicted": 0.057,
+   "observed_rate": 0.105,
+   "n": 19
+  },
+  {
+   "mean_predicted": 0.07,
+   "observed_rate": 0.158,
+   "n": 19
+  },
+  {
+   "mean_predicted": 0.093,
+   "observed_rate": 0.211,
+   "n": 19
+  },
+  {
+   "mean_predicted": 0.146,
+   "observed_rate": 0.25,
+   "n": 4
+  }
+ ],
+ "baseline_rule_pre1940_attached": {
+  "flagged": 69,
+  "precision": 0.159,
+  "recall": 0.846
+ },
+ "feature_importance": [
+  {
+   "feature": "max_neighbor_height_ft",
+   "label": "tallest neighbor (roof height, ft)",
+   "importance": 0.304
+  },
+  {
+   "feature": "oldest_neighbor_year",
+   "label": "oldest neighbor (year built)",
+   "importance": 0.156
+  },
+  {
+   "feature": "max_neighbor_floors",
+   "label": "tallest neighbor (floors)",
+   "importance": 0.143
+  },
+  {
+   "feature": "masonry_era_walkups",
+   "label": "pre-1940 residential or mixed-use neighbors",
+   "importance": 0.081
+  },
+  {
+   "feature": "job_new_building",
+   "label": "new building",
+   "importance": 0.077
+  },
+  {
+   "feature": "touching_lots",
+   "label": "touching lots",
+   "importance": 0.051
+  },
+  {
+   "feature": "attached_neighbors",
+   "label": "touching lots with a building",
+   "importance": 0.05
+  },
+  {
+   "feature": "pre1940_attached",
+   "label": "attached neighbors built before 1940",
+   "importance": 0.048
+  },
+  {
+   "feature": "boro_brooklyn",
+   "label": "in Brooklyn",
+   "importance": 0.03
+  },
+  {
+   "feature": "boro_bronx",
+   "label": "in Bronx",
+   "importance": 0.021
+  },
+  {
+   "feature": "flag_foundation",
+   "label": "foundation work filed",
+   "importance": 0.017
+  },
+  {
+   "feature": "prior_structural_complaints",
+   "label": "structural complaints in the 3 years before",
+   "importance": 0.01
+  },
+  {
+   "feature": "boro_manhattan",
+   "label": "in Manhattan",
+   "importance": 0.007
+  },
+  {
+   "feature": "boro_queens",
+   "label": "in Queens",
+   "importance": 0.004
+  },
+  {
+   "feature": "prior_adjacent_complaints",
+   "label": "'adjacent building not protected' complaints in the 3 years before",
+   "importance": 0.001
+  },
+  {
+   "feature": "boro_staten_island",
+   "label": "in Staten Island",
+   "importance": 0.001
+  },
+  {
+   "feature": "flag_earth_work",
+   "label": "earth work filed",
+   "importance": 0.0
+  },
+  {
+   "feature": "flag_soe",
+   "label": "support of excavation filed",
+   "importance": 0.0
+  },
+  {
+   "feature": "prior_incidents",
+   "label": "construction incidents in the 3 years before",
+   "importance": 0.0
+  }
+ ]
+}
