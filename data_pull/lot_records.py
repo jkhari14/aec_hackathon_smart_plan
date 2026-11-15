@@ -16,7 +16,7 @@ DATASETS = {
         "64uk-42ks", "PLUTO (lot data)",
         "bbl,address,yearbuilt,numfloors,numbldgs,bldgclass,landuse,unitsres,lotfront,"
         "lotdepth,lotarea,bldgarea,zonedist1,builtfar,residfar,commfar,facilfar,landmark,histdist,"
-        "latitude,longitude,version",
+        "proxcode,bsmtcode,latitude,longitude,version",
         None,
     ),
     "dob_now_filings": (

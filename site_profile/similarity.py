@@ -1,9 +1,12 @@
 """Rank past cases and open-data incidents by how much they resemble a site's profile.
 
-The score is a weighted sum of plain features, each one a sentence a structural engineer can check:
-"matches on: excavation next to an attached building built before 1940". A feature the case does not
-report counts as no match and is not listed as a difference, because "not reported" is not "different".
-The score says how alike two sites look on paper, nothing about what will happen.
+The score is a weighted sum of plain features, each one a sentence a structural engineer can check.
+Half of it is the building: a case's write-up describes the building that was hurt, and it is
+compared with the site's own building and each touching neighbor on four facts (era, wall system,
+height, attachment: see building_profile.py). The best-matching building is named in the explanation.
+The other half is the work and the ground. A feature the case does not report counts as no match and
+is not listed as a difference, because "not reported" is not "different". The score says how alike
+two sites look on paper, nothing about what will happen.
 
 Weights (Hongyu reviews these, see BUILD.md):
 """
@@ -15,6 +18,7 @@ from pathlib import Path
 from typing import Iterable, Optional
 
 from api.contracts import Case, SimilarCases
+from site_profile.building_profile import case_building, describe, site_buildings
 from site_profile.work_types import EARTH_WORK
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -23,16 +27,14 @@ CASE_FIXTURE = REPO_ROOT / "contracts" / "fixtures" / "cases.json"
 LAYERS_DIR = REPO_ROOT / "data" / "layers"
 INCIDENT_LAYERS = ("construction_incidents",)
 
-OLD_NEIGHBOR_YEAR = 1940  # pre-war masonry era; the plan's "attached pre-1940" watch rule
-
 WEIGHTS = {
-    "old_attached_neighbor": 0.25,
-    "earth_work": 0.25,
-    "attached": 0.10,
-    "work_types": 0.10,
-    "signal_hazards": 0.10,
-    "construction": 0.08,
-    "job_type": 0.04,
+    "building_era": 0.18,
+    "building_wall_system": 0.18,
+    "building_height": 0.10,
+    "building_attached": 0.10,
+    "earth_work": 0.20,
+    "work_types": 0.08,
+    "signal_hazards": 0.08,
     "soil": 0.04,
     "flood": 0.04,
 }
@@ -120,16 +122,66 @@ def load_incidents(layers_dir: Path = LAYERS_DIR) -> list[dict]:
 # Profile features
 
 
-def _old_attached(profile: dict) -> Optional[dict]:
-    """The oldest attached neighbor built before 1940, if any."""
-    old = [n for n in profile.get("neighbors", []) if n.get("attached") and n.get("year_built")
-           and n["year_built"] < OLD_NEIGHBOR_YEAR]
-    return min(old, key=lambda n: n["year_built"]) if old else None
+def compare_buildings(here: dict, there: dict) -> dict:
+    """{score, matched, differs} for one site building against the case's building, on the four facts."""
+    score, matched, differs = 0.0, [], []
+    for key, weight in (("era", "building_era"), ("wall_system", "building_wall_system"),
+                        ("floors_band", "building_height"), ("attached", "building_attached")):
+        a, b = here.get(key), there.get(key)
+        if a is None or b is None:
+            continue  # not reported on one side: neither a match nor a difference
+        if a == b:
+            score += WEIGHTS[weight]
+            matched.append(key)
+        else:
+            differs.append(key)
+    return {"score": score, "matched": matched, "differs": differs}
 
 
-def _construction(profile: dict) -> Optional[str]:
-    model = profile.get("structural_model") or {}
-    return (model.get("material") or "").lower() or None
+def _best_building(profile: dict, case: dict) -> Optional[tuple[dict, dict]]:
+    """The site building most like the case's, with its comparison; None when nothing can be compared.
+
+    When the case involved earth work and the site is a new building or a demolition (or its job type
+    is unknown and it has earth work), the building that was hurt stood next to the dig, so only the
+    site's neighbors are compared; the site's own building is the one being replaced. For an
+    alteration the site's building is at risk too.
+    Ties go to a building whose wall system is stated over one whose wall system is a guess, then to
+    the site's own building, then to the oldest.
+    """
+    there = case_building(case)
+    candidates = site_buildings(profile)
+    site_digs = bool(set(profile.get("work_types") or []) & EARTH_WORK)
+    replacing = profile.get("job_type") in ("new_building", "demolition") or (profile.get("job_type") is None and site_digs)
+    if set(case.get("work_types") or []) & EARTH_WORK and replacing:
+        candidates = candidates[1:]
+    best = None
+    for here in candidates:
+        found = compare_buildings(here, there)
+        if not (found["matched"] or found["differs"]):
+            continue
+        key = (found["score"], here.get("wall_basis") == "stated", here is candidates[0] and here["label"].startswith("the site"),
+               -(here.get("year_built") or 9999))
+        if best is None or key > best[0]:
+            best = (key, here, found)
+    return (best[1], best[2]) if best else None
+
+
+_FACT_WORDS = {"era": "era", "wall_system": "wall system", "floors_band": "height", "attached": "attachment"}
+
+
+def _building_sentences(here: dict, there: dict, found: dict) -> tuple[list[str], list[str]]:
+    """One sentence for the facts that match, one per fact that differs."""
+    matched, differs = [], []
+    if found["matched"]:
+        shown = {k: here.get(k) for k in ("year_built", "wall_basis")}
+        shown.update({k: here[k] for k in found["matched"]})
+        matched.append(f"{here['label']} is like the building in this case: {describe(shown)}")
+    for key in found["differs"]:
+        a, b = here[key], there[key]
+        if key == "attached":
+            a, b = ("attached" if a else "freestanding"), ("attached" if b else "freestanding")
+        differs.append(f"{_FACT_WORDS[key]}: {here['label']} is {a}, the case's building was {b}")
+    return matched, differs
 
 
 def _borough(bbl: Optional[str]) -> Optional[str]:
@@ -156,27 +208,14 @@ def compare(profile: dict, case: dict) -> dict:
     case_types = set(case.get("work_types") or [])
     site_earth, case_earth = bool(site_types & EARTH_WORK), bool(case_types & EARTH_WORK)
 
-    # Old attached neighbor.
-    old = _old_attached(profile)
-    case_year = conditions.get("neighbor_year_built")
-    case_attached = conditions.get("attached")
-    if case_year is not None:
-        if old and case_year < OLD_NEIGHBOR_YEAR:
-            score += WEIGHTS["old_attached_neighbor"]
-            matched.append(f"attached neighbor built before {OLD_NEIGHBOR_YEAR} "
-                           f"(here {old['year_built']}, there {case_year})")
-        elif old or case_year < OLD_NEIGHBOR_YEAR:
-            here = f"built {old['year_built']}" if old else f"no attached neighbor before {OLD_NEIGHBOR_YEAR}"
-            differs.append(f"neighbor age: here {here}, there built {case_year}")
-
-    # Attached at all.
-    site_attached = any(n.get("attached") for n in profile.get("neighbors", []))
-    if case_attached is not None:
-        if case_attached == site_attached:
-            score += WEIGHTS["attached"]
-            matched.append("attached to a neighboring building" if site_attached else "freestanding")
-        else:
-            differs.append("attached here, freestanding there" if site_attached else "freestanding here, attached there")
+    # The building: the case's hurt building against the site's own building and each neighbor.
+    best = _best_building(profile, case)
+    if best:
+        here, found = best
+        score += found["score"]
+        same, other = _building_sentences(here, case_building(case), found)
+        matched.extend(same)
+        differs.extend(other)
 
     # Earth work next door, the core pattern.
     if site_earth and case_earth:
@@ -193,29 +232,12 @@ def compare(profile: dict, case: dict) -> dict:
             score += WEIGHTS["work_types"] * overlap
             matched.append(f"same work: {_readable(other_site & other_case)}")
 
-    # Construction (needs the Revit or drawing input here, and a reported construction there).
-    here, there = _construction(profile), (conditions.get("construction") or "").lower() or None
-    if here and there:
-        if "masonry" in here and "masonry" in there or here == there:
-            score += WEIGHTS["construction"]
-            matched.append(f"construction: {there}")
-        else:
-            differs.append(f"construction: here {here}, there {there}")
-
     # Signals: do the site's record signals point at the same hazards the case had?
     site_hazards = {s["hazard"] for s in profile.get("signals", []) if s["severity"] >= 1}
     shared = site_hazards & set(case.get("hazards") or [])
     if shared:
         score += WEIGHTS["signal_hazards"]
         matched.append(f"this site has {_readable(shared)} enforcement records, the hazard in this case")
-
-    if profile.get("job_type") and case.get("job_type"):
-        if profile["job_type"] == case["job_type"]:
-            score += WEIGHTS["job_type"]
-            matched.append(f"job type: {profile['job_type'].replace('_', ' ')}")
-        else:
-            differs.append(f"job type: here {profile['job_type'].replace('_', ' ')}, "
-                           f"there {case['job_type'].replace('_', ' ')}")
 
     if profile.get("soil") and conditions.get("soil"):
         if profile["soil"].split(",")[0].lower() == conditions["soil"].split(",")[0].lower():
@@ -253,8 +275,12 @@ def rank(
             continue
         if severity_min is not None and case.get("severity", 0) < severity_min:
             continue
-        if case.get("bbl") and case["bbl"] == profile.get("bbl"):
-            continue  # the site's own history is in its signals, not a "similar case"
+        own_lots = {profile.get("bbl"), *(n.get("bbl") for n in profile.get("neighbors") or [])}
+        if case.get("bbl") and case["bbl"] in own_lots:
+            continue  # the site's own history, or a neighbor's, is in its signals, not a "similar case"
+        when = str(case.get("date") or "")[:10]
+        if profile.get("as_of") and when[:4].isdigit() and when > profile["as_of"]:
+            continue  # not yet happened as of that day (an undated incident is kept)
         found = compare(profile, case)
         if not found["matched_on"]:
             continue

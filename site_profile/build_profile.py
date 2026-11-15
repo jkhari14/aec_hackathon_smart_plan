@@ -20,6 +20,7 @@ from typing import Optional
 
 from api.contracts import SiteProfile
 from data_pull import soda_client
+from site_profile.building_profile import PROXCODE
 from site_profile import signals as signal_rules
 from site_profile import work_types
 
@@ -125,16 +126,18 @@ def lot_facts(lot: dict) -> dict:
 
 
 def neighbor(lot: dict) -> dict:
-    """A touching lot. `attached` means the lots touch on the tax map and the neighbor lot has a building:
-    the public data does not say whether the walls are shared, so shared_wall_ft stays unknown."""
+    """A touching lot. `attached` is PLUTO's proximity code when it has one (attached or semi-attached
+    against detached); otherwise it means the lots touch on the tax map and the neighbor lot has a
+    building. The public data does not say whether walls are shared, so shared_wall_ft stays unknown."""
     pluto = _pluto(lot)
+    attached = PROXCODE.get(str(pluto.get("proxcode") or "").strip())
     heights = [h for h in (_num(b.get("height_roof")) for b in _footprints(lot)) if h]
     years = [y for y in (_int(b.get("construction_year")) for b in _footprints(lot)) if y]
     return {
         "bbl": lot["bbl"],
         "bins": _bins(lot),
         "address": pluto.get("address"),
-        "attached": _has_building(lot),
+        "attached": attached if attached is not None else _has_building(lot),
         "year_built": _int(pluto.get("yearbuilt")) or (min(years) if years else None),
         "floors": _num(pluto.get("numfloors")),
         "building_class": pluto.get("bldgclass"),
