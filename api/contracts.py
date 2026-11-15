@@ -284,6 +284,19 @@ class EarlyWarning(Contract):
     as_of: Optional[str] = None
 
 
+class WarningRuleCheck(Contract):
+    """Whether one early-warning rule could be checked for a site. A rule that could not run is an
+    error, never "no warning"; not_applicable says why the rule does not apply to this site."""
+
+    rule_id: str
+    title: str
+    status: Literal["ok", "error", "not_applicable"]
+    detail: str
+    warnings: int = Field(ge=0)
+    sources: list[Source]
+    as_of: Optional[str] = None
+
+
 class PatternFactor(Contract):
     feature: str
     value: Optional[str] = None
@@ -438,6 +451,7 @@ FIXTURES: dict[str, tuple[type[BaseModel], bool]] = {
     "site_profile": (SiteProfile, False),
     "similar_cases": (SimilarCases, False),
     "warnings": (EarlyWarning, True),
+    "warning_checks": (WarningRuleCheck, True),
     "pattern_score": (PatternScore, False),
     "actions": (ActionItem, True),
     "project": (Project, False),

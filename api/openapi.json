@@ -930,6 +930,65 @@
           }
         }
       }
+    },
+    "/api/sites/{bbl}/warnings/checks": {
+      "get": {
+        "summary": "Warning Checks",
+        "operationId": "warning_checks_api_sites__bbl__warnings_checks_get",
+        "parameters": [
+          {
+            "name": "bbl",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bbl"
+            }
+          },
+          {
+            "name": "as_of",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "As Of"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WarningRuleCheck"
+                  },
+                  "title": "Response Warning Checks Api Sites  Bbl  Warnings Checks Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3224,6 +3283,66 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "WarningRuleCheck": {
+        "properties": {
+          "rule_id": {
+            "type": "string",
+            "title": "Rule Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "error",
+              "not_applicable"
+            ],
+            "title": "Status"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          },
+          "warnings": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Warnings"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "rule_id",
+          "title",
+          "status",
+          "detail",
+          "warnings",
+          "sources"
+        ],
+        "title": "WarningRuleCheck",
+        "description": "Whether one early-warning rule could be checked for a site. A rule that could not run is an\nerror, never \"no warning\"; not_applicable says why the rule does not apply to this site."
       }
     }
   }
