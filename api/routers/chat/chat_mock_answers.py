@@ -20,10 +20,12 @@ _FILLER = set("a an any all the of for in on at about with records record that w
               "contain contains containing please site lot lots this these those here there is are do does".split())
 _CASE_CUE = re.compile(r"\bsimilar\b|\bpast cases?\b|\bcases?\b|\bprecedents?\b|\bhappened (?:before|elsewhere)\b", re.I)
 _WARNING_CUE = re.compile(r"\bwarnings?\b|\bearly[- ]warning\b|\bred flags?\b|\bpatterns?\b", re.I)
-_ACTION_CUE = re.compile(r"\baction(?:s| items?)?\b|\bto[- ]do\b|\bwhat (?:should|do) (?:we|i)\b|\bnext steps?\b|\bduties\b", re.I)
+_ACTION_CUE = re.compile(r"\baction(?:s| items?)?\b|\bto[- ]do\b|\bwhat (?:should|do|must)\b.*\bdo\b|\bwhat (?:should|do) (?:we|i)\b|"
+                         r"\bnext steps?\b|\bduties\b|\bresponsib\w+\b", re.I)
 _PIN_CUE = re.compile(r"\b(?:pin|save)\b.*\b(?:answer|this|that|project)\b|\bpin (?:it|that|this)\b", re.I)
 _LAYER_CUE = re.compile(r"\b(show|turn on|display|add|hide|turn off|remove)\b(.*)", re.I)
 _FLY_CUE = re.compile(r"\b(?:fly|zoom|go|take me|jump)\s+to\b(.*)", re.I)
+_LAYER_FILLER = set("layer layers map and next older zone fly zoom similar cases case".split())
 _DISCIPLINES = ("architect", "structural", "geotech", "contractor")
 
 
@@ -72,9 +74,15 @@ def _layer_actions(view: SiteView, question: str) -> list[dict]:
     if not cue or not view.layers:
         return []
     on = cue.group(1).lower() in ("show", "turn on", "display", "add")
-    asked = set(re.findall(r"[a-z0-9]+", cue.group(2).lower())) - _FILLER - {"layer", "layers", "map"}
-    return [_action("toggle_layer", layer_id=layer_id, on=on) for layer_id, name in view.layers.items()
-            if asked & (set(re.findall(r"[a-z0-9]+", f"{layer_id.replace('_', ' ')} {name}".lower())) - _FILLER)][:4]
+    asked = {w for w in re.findall(r"[a-z0-9]+", cue.group(2).lower()) if len(w) > 2} - _FILLER - _LAYER_FILLER
+
+    def words(text: str) -> set[str]:
+        return set(re.findall(r"[a-z0-9]+", text.lower().replace("_", " ")))
+
+    # A layer named in the question; failing that, the layers showing the hazard it names.
+    named = [layer_id for layer_id, name in view.layers.items() if asked & words(f"{layer_id} {name}")]
+    chosen = named or [layer_id for layer_id in view.layers if asked & words(view.layer_hazards.get(layer_id, ""))]
+    return [_action("toggle_layer", layer_id=layer_id, on=on) for layer_id in chosen][:4]
 
 
 def _fly_action(view: SiteView, question: str) -> list[dict]:
@@ -105,16 +113,19 @@ def propose(view: SiteView, question: str) -> Optional[dict]:
     if words:
         words = [w for w in words if w.lower() not in dataset.replace("_", " ").split()] or words
         return {"items": [_item("record_search", text=" ".join(words)[:60], dataset_key=dataset)], "actions": []}
-    if _WARNING_CUE.search(question) and view.piece("warnings").status == "ok":
+    if _WARNING_CUE.search(question):
         items = [_says(f'Early warning "{w.get("title")}": "{w.get("explanation")}"', f"warning:{w['id']}") for w in view.warnings[:6]]
-        return {"items": items or [_item("gap", text="an early warning for this site in this view")], "actions": []}
-    if _ACTION_CUE.search(question) and view.piece("actions").status == "ok":
+        # With nothing to quote, the server says whether that is none or unknown (the list did not load).
+        return {"items": items or [_item("dataset_check", dataset_key="early_warnings")], "actions": []}
+    if _ACTION_CUE.search(question):
         wanted = [d for d in _DISCIPLINES if d in question.lower()]
         chosen = [a for a in view.actions if not wanted or a.get("discipline") in wanted]
         chosen.sort(key=lambda a: not a.get("life_safety"))  # life safety first
         items = [_says(f'Action item ({a.get("discipline")}): "{a.get("title")}". Proof needed: "{a.get("proof_needed")}".',
                        f"action:{a['id']}") for a in chosen[:6]]
-        return {"items": items or [_item("gap", text="an action item for this site")], "actions": []}
+        if not items and view.actions:  # the list loaded, with nothing for the discipline asked about
+            items = [_item("gap", text=f"an action item for the {' or '.join(wanted)} discipline")]
+        return {"items": items or [_item("dataset_check", dataset_key="action_items")], "actions": []}
     if dataset:
         return {"items": [_item("dataset_check", bbl=bbl, dataset_key=key) for (bbl, key) in view.datasets if key == dataset][:8],
                 "actions": []}

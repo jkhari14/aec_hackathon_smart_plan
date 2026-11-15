@@ -117,12 +117,20 @@ class MockTests(unittest.TestCase):
     def test_life_safety_action_items_come_first(self):
         answer, _ = self.body("What should we do next?")
         self.assertEqual([p.sources[0].life_safety for p in answer.parts[1:]], [True, False])
+        answer, got = self.body("What should the structural engineer do first?")
+        self.assertEqual((got, [p.sources[0].discipline for p in answer.parts[1:]]), (["action"], ["structural"]))
 
     def test_page_actions_are_matched_and_checked(self):
         answer, got = self.body("Show the Sandy layer")
         self.assertEqual((got, [(a.type, a.layer_id, a.on) for a in answer.actions]), (["page_action"], [("toggle_layer", "sandy_inundation", True)]))
         answer, _ = self.body("hide the sandy layer")
         self.assertFalse(answer.actions[0].on)
+        # By the hazard a layer shows when no layer is named, and never on a small word such as "to".
+        self.assertEqual([a.layer_id for a in self.body("Show the flood layer and fly to the site")[0].actions], ["sandy_inundation"])
+        self.assertEqual([a.layer_id for a in self.body("Show the structural complaints")[0].actions], ["dob_complaints_structural"])
+        watchlist = loader(layers=Loaded.ok([{"layer_id": "watchlist", "name": "Excavation next to older attached buildings", "hazard": "structural"}]))
+        self.assertEqual(self.body("Show me the way to the door", load=watchlist)[0].actions, [])
+        self.assertEqual([a.layer_id for a in self.body("Show the excavation layer", load=watchlist)[0].actions], ["watchlist"])
         answer, _ = self.body("Fly to case ex-underpinning-2019")
         self.assertEqual(answer.actions[0].ref, OLD_CASE)
         answer, got = self.body("Pin that", project_id="p1", history=[{"question": "q", "answer": "a"}])
@@ -133,7 +141,15 @@ class MockTests(unittest.TestCase):
     def test_nothing_is_made_up_when_no_keyword_matches_or_a_piece_did_not_load(self):
         self.assertEqual(self.body("What's the weather like?")[1], ["mock_no_match"])
         self.assertEqual(self.body("Any similar cases?", load=loader(similar=Loaded.failed("timeout")))[1], ["unknown"])
-        self.assertEqual(self.body("What warnings are there?", load=loader(warnings=Loaded.failed("timeout")))[1], ["mock_no_match"])
+
+    def test_warnings_or_action_items_that_did_not_load_are_unknown_never_none(self):
+        for question, piece in (("Any early warnings?", "warnings"), ("What are the action items?", "actions")):
+            answer, got = self.body(question, load=loader(**{piece: Loaded.failed("timeout")}))
+            self.assertEqual(got, ["unknown"], question)
+            self.assertIn("This is not the same as none", answer.parts[1].text)
+            self.assertEqual(self.body(question, load=loader(**{piece: Loaded.ok([])}))[1], ["not_found"], question)
+        # The list loaded, with nothing for the discipline asked about: that is a plain not found.
+        self.assertEqual(self.body("What are the geotech action items?")[1], ["not_found"])
 
     def test_a_replay_mock_stays_before_the_day(self):
         answer, got = self.body("What warnings are there?", as_of=JUNE_1)

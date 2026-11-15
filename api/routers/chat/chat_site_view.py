@@ -96,6 +96,7 @@ class SiteView:
         self.warnings: list[dict] = []
         self.actions: list[dict] = []
         self.layers: dict[str, str] = {}  # layer id -> name, when the layer list loaded
+        self.layer_hazards: dict[str, str] = {}  # layer id -> the hazard it shows
         # Numbers a statement may always use: the view's own dates and the site's lot.
         self.shared_evidence = " ".join(filter(None, [self.as_of, (context.pulled_at or "")[:10], context.bbl,
                                                       str(self.profile.get("address_matched") or "")]))
@@ -109,6 +110,8 @@ class SiteView:
         if context.layers.status == "ok":
             self.layers = {str(layer["layer_id"]): str(layer.get("name") or layer["layer_id"])
                            for layer in context.layers.value or [] if layer.get("layer_id")}
+            self.layer_hazards = {str(layer["layer_id"]): str(layer.get("hazard") or "")
+                                  for layer in context.layers.value or [] if layer.get("layer_id")}
 
     # ---- visibility ----
 
@@ -324,7 +327,7 @@ class SiteView:
             f"[action:{a['id']}] {a.get('discipline')} | {a.get('title')} | why: {a.get('why')} | code: {a.get('code_ref')} | proof "
             f"needed: {a.get('proof_needed')} | status: {a.get('status')} | life safety: {'yes' if a.get('life_safety') else 'no'}"
             for a in self.actions] or ["none in this view"]
-        out += ["", "MAP LAYERS the page can show or hide (layer id: name)"]
-        out += [f"{layer_id}: {name}" for layer_id, name in self.layers.items()] or [
+        out += ["", "MAP LAYERS the page can show or hide (layer id: name | hazard)"]
+        out += [f"{layer_id}: {name} | {self.layer_hazards.get(layer_id) or 'no hazard given'}" for layer_id, name in self.layers.items()] or [
             f"the layer list {self._not_loaded('layers') or 'is empty'}"]
         return "\n".join(out)

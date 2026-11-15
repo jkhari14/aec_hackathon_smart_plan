@@ -25,7 +25,8 @@ action:...), or the URL of a web search result you received in this conversation
 kind of source only: records and site facts, or past cases, or warnings, or action items, or web results. \
 The reader sees each kind under its own label, so split a sentence that draws on two.
 - dataset_check: a lot's BBL and a dataset key. The server writes the sentence: the count, "none found", \
-or "unknown" when the query failed.
+or "unknown" when the query failed. With the key early_warnings or action_items and no BBL, it does the \
+same for the site's early warnings or its action items.
 - record_search: search words (text) plus an optional lot (bbl), dataset key and dates. The server \
 searches the records and writes the result, with the newest matches attached.
 - case_search: optional search words (text), hazard and lowest severity. The server searches the past \
@@ -33,7 +34,8 @@ cases compared with this site and writes the result, with the closest attached.
 - gap: a short topic that neither the site data nor the web answered. The server words it as not found.
 - notice: one of the fixed lines, by code: """ + ", ".join(MODEL_NOTICES) + """.
 dataset_check, record_search and case_search are the only ways to give a count or to say something is \
-absent, because a failed query means nothing is known and must never read as zero or as none.
+absent, because a failed query means nothing is known and must never read as zero or as none. A gap is \
+never used for records, cases, warnings or action items.
 
 The server checks every statement and holds back one that fails, so it helps to know the checks. Every \
 number in a statement that cites the site data must appear in the items it cites: quote dates, ids and \

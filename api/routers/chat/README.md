@@ -33,7 +33,8 @@ part's first source in `source_name`, `source_url` and `record_id` (`chat_contra
 
 The model never chooses a kind: the server derives it from the ids a statement cites, and a
 statement citing two kinds of source is held back. Counts, search results, "none found" and
-"unknown" are written by the server. A statement is also held back for a number that is not in its
+"unknown" are written by the server, for a dataset and for the site's early warnings and action
+items alike: a list that did not load is unknown, never none. A statement is also held back for a number that is not in its
 source, a verdict, blame, a cause (except a past case's or a web result's, as reported), a
 prediction, or a company name. One correction round, then what still fails is dropped and said.
 
@@ -48,7 +49,10 @@ or the model's reading text; neither is text added later or today's status; web 
 
 **No key:** the chat runs in mock mode. A typed question is matched by keyword to a search, a count,
 the warnings, the action items or a page action, through the same checks, and is labeled as a mock.
-Saved example answers are not written yet (they need the demo sites).
+
+**No server:** the web chat panel shows answers saved ahead of time for the sample site
+(`chat_saved_answers_export.py` writes them into `web/src/features/chat/`, built from the site's data
+through the same checks and labeled as saved). They are redone for the demo sites once those are picked.
 
 ## What it needs from the rest of the app
 
@@ -73,14 +77,15 @@ chat_tools.py          the tools the model may call (search_records, search_simi
 chat_prompt.py         the instructions and the tool the model answers through
 chat_model_call.py     the model call with web search and our tools
 chat_mock_answers.py   mock mode
+chat_saved_answers_export.py  writes the web app's saved answers for the sample site
 chat_service.py        live or mock: one answer
 chat_contract_map.py   the chat's answer as the contract's ChatResponse; the contract's request as the chat's
 chat_fixture_context.py the sample site from contracts/fixtures/, until the site routes are real
 chat_router.py         POST /api/chat, GET /api/chat/setup, 12 live questions a minute
 ```
 
-Tests: `python -m unittest discover -s tests -t .` (`tests/test_chat_core.py`, `tests/test_chat_service.py`;
-offline, a scripted model, no key). Settings: `ANTHROPIC_API_KEY` (server only), `FORESITE_CHAT_LIVE=0`
+Tests: `python -m unittest discover -s tests -t .` (`tests/test_chat_core.py`, `tests/test_chat_service.py`,
+`tests/test_chat_saved_answers.py`; offline, a scripted model, no key). Settings: `ANTHROPIC_API_KEY` (server only), `FORESITE_CHAT_LIVE=0`
 to force mock mode, `FORESITE_CHAT_MODEL`, `FORESITE_CHAT_EFFORT`.
 
 ## Limits
@@ -91,4 +96,5 @@ to force mock mode, `FORESITE_CHAT_MODEL`, `FORESITE_CHAT_EFFORT`.
   links the first.
 - The word-list checks catch plain phrasings and miss others. A person's name cannot be detected in code.
 - The searches match words, not meaning.
-- The chat panel and project panel (web) are not built yet: they wait on the design system.
+- The web chat panel (`web/src/features/chat/`) is built on the placeholder tokens and is not mounted in
+  the app shell yet. The project panel is not built yet.

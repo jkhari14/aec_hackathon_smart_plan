@@ -190,6 +190,24 @@ class CountAndSearchTests(unittest.TestCase):
         self.assertEqual(build(nothing, item("gap", text="anything about the foundation")).parts[0].kind, "unknown")
 
 
+class ListCheckTests(unittest.TestCase):
+    """The site's early warnings and action items counted by the server, with the as-of view applied."""
+
+    def test_a_loaded_list_is_counted_under_its_own_kind_and_cut_at_the_as_of_day(self):
+        warnings = one(FULL, check("", "early_warnings"))
+        self.assertEqual((warnings.kind, warnings.text, len(warnings.sources)), ("warning", "2 early-warning rule results for this site.", 2))
+        actions = one(FULL, check("", "action_items"))
+        self.assertEqual((actions.kind, actions.text), ("action", "2 action items for this site."))
+        early = SiteView(example_context(as_of="2020-01-01"))
+        self.assertEqual(one(early, check("", "early_warnings")).kind, "not_found")
+        self.assertIn("dated before 2020-01-01", one(early, check("", "early_warnings")).text)
+
+    def test_a_list_that_did_not_load_is_unknown(self):
+        for key, piece in (("early_warnings", "warnings"), ("action_items", "actions")):
+            part = one(SiteView(example_context(**{piece: Loaded.failed("timeout")})), check("", key))
+            self.assertEqual((part.kind, "This is not the same as none" in part.text), ("unknown", True))
+
+
 class PageActionTests(unittest.TestCase):
     def test_a_layer_is_toggled_only_if_the_page_has_it(self):
         built = build(FULL, actions=[action("toggle_layer", layer_id="sandy_inundation", on=False)])

@@ -169,7 +169,29 @@ def _statement(view: SiteView, item: ProposedItem, web: dict[str, WebResult], bu
                        else _PART_FOR[kind](text=text, sources=sources[kind]))
 
 
+_LISTS = {"early_warnings": ("warnings", "warning", WarningPart, "early-warning rule result"),
+          "action_items": ("actions", "action", ActionPart, "action item")}
+
+
+def _list_check(view: SiteView, key: str, built: Built) -> None:
+    """The site's early warnings or action items as a count, none, or unknown when the list did not load."""
+    name, prefix, part_type, noun = _LISTS[key]
+    piece, loaded = PIECES[name], view.piece(name)
+    entries = view.warnings if name == "warnings" else view.actions
+    before = f" dated before {view.as_of}" if view.as_of and name == "warnings" else ""
+    if loaded.status != "ok":
+        built.parts.append(UnknownPart(text=f"Unknown: the {noun}s for this site could not be loaded, so nothing is known "
+                                            "about them. This is not the same as none.", queried=[piece]))
+    elif not entries:
+        built.parts.append(NotFoundPart(text=f"None found: no {noun} for this site{before}.", queried=[piece]))
+    else:
+        built.parts.append(part_type(text=f"{len(entries)} {noun}{'' if len(entries) == 1 else 's'} for this site{before}.",
+                                     sources=[view.items[f"{prefix}:{entry['id']}"].source for entry in entries[:8]]))
+
+
 def _dataset_check(view: SiteView, item: ProposedItem, built: Built, where: str) -> None:
+    if item.dataset_key.strip() in _LISTS:
+        return _list_check(view, item.dataset_key.strip(), built)
     dataset = view.datasets.get((item.bbl.strip(), item.dataset_key.strip()))
     if dataset is None:
         built.problems.append(f"{where}: this site has no dataset '{item.dataset_key}' for lot '{item.bbl}'.")
