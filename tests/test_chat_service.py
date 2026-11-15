@@ -151,6 +151,13 @@ class MockTests(unittest.TestCase):
         # The list loaded, with nothing for the discipline asked about: that is a plain not found.
         self.assertEqual(self.body("What are the geotech action items?")[1], ["not_found"])
 
+    def test_a_rule_that_could_not_run_is_said_with_the_warnings(self):
+        checks = Loaded.ok([{"rule_id": "r2", "title": "Heavy rain on an open excavation", "status": "error"}])
+        answer, got = self.body("What warnings are there?", load=loader(warning_checks=checks))
+        self.assertEqual(got, ["warning", "warning", "warning", "not_a_prediction"])
+        self.assertTrue(answer.parts[3].text.startswith("At least 2 "))
+        self.assertEqual(self.body("What warnings are there?", load=loader(warning_checks=checks, warnings=Loaded.ok([])))[1], ["unknown"])
+
     def test_a_replay_mock_stays_before_the_day(self):
         answer, got = self.body("What warnings are there?", as_of=JUNE_1)
         self.assertEqual(got, ["warning", "not_a_prediction"])

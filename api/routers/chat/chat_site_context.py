@@ -74,6 +74,9 @@ class SiteContext:
     datasets: list[DatasetStatus] = field(default_factory=list)
     similar: Loaded[list[dict]] = Loaded.not_available("similar cases are not loaded")  # each {"similar": .., "case": ..}
     warnings: Loaded[list[dict]] = Loaded.not_available("early warnings are not loaded")
+    # One entry per early-warning rule: {"rule_id", "title", "status": "ok" | "error" | "not_applicable", ..}.
+    # A rule with status "error" could not run, so the warnings list may be missing its result.
+    warning_checks: Loaded[list[dict]] = Loaded.not_available("the early-warning rule checks are not loaded")
     actions: Loaded[list[dict]] = Loaded.not_available("action items are not loaded")
     layers: Loaded[list[dict]] = Loaded.not_available("the layer list is not loaded")
     sample: bool = False  # some of this is the labelled sample data, not live data for the site

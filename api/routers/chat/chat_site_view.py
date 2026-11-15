@@ -94,6 +94,11 @@ class SiteView:
         self.datasets: dict[tuple[str, str], DatasetView] = {}
         self.cases: list[dict] = []  # {"similar": .., "case": ..} entries visible in this view, closest first
         self.warnings: list[dict] = []
+        # Titles of early-warning rules that could not run: the warnings above may then not be all of them.
+        self.rules_not_checked: list[str] = [
+            str(check.get("title") or check.get("rule_id") or "an unnamed rule")
+            for check in (context.warning_checks.value or []) if check.get("status") == "error"
+        ] if context.warning_checks.status == "ok" else []
         self.actions: list[dict] = []
         self.layers: dict[str, str] = {}  # layer id -> name, when the layer list loaded
         self.layer_hazards: dict[str, str] = {}  # layer id -> the hazard it shows
@@ -317,6 +322,9 @@ class SiteView:
             f"[warning:{w['id']}] rule {w.get('rule_id')} | hazard {w.get('hazard')} | severity {w.get('severity')} | first seen "
             f"{w.get('first_seen')} | {w.get('title')}: {w.get('explanation')} | rests on records: {_flat(w.get('evidence_record_ids') or [])}"
             for w in self.warnings] or ["none in this view"]
+        if self.rules_not_checked and not self._not_loaded("warnings"):
+            out.append(f"RULES THAT COULD NOT BE CHECKED: {'; '.join(self.rules_not_checked)}. The list above may be "
+                       "incomplete. To say how many warnings there are, use dataset_check with the key early_warnings.")
         out += ["", "SIMILAR PAST CASES, closest first (a cause only as publicly reported, or under investigation)"]
         out += [self._not_loaded("similar")] if self._not_loaded("similar") else (
             [self.case_line(entry) for entry in self.cases[:CASES_SHOWN]] or ["none in this view"])

@@ -208,6 +208,42 @@ class ListCheckTests(unittest.TestCase):
             self.assertEqual((part.kind, "This is not the same as none" in part.text), ("unknown", True))
 
 
+class RuleCheckTests(unittest.TestCase):
+    """An early-warning rule that could not run: the warnings shown may then not be all of them."""
+
+    CHECKS = Loaded.ok([{"rule_id": "r1", "title": "Stop-work order, then more work", "status": "ok"},
+                        {"rule_id": "r2", "title": "Heavy rain on an open excavation", "status": "error"},
+                        {"rule_id": "r3", "title": "A rule for towers", "status": "not_applicable"}])
+
+    def test_a_count_becomes_a_floor_and_none_becomes_unknown(self):
+        view = SiteView(example_context(warning_checks=self.CHECKS))
+        self.assertEqual(view.rules_not_checked, ["Heavy rain on an open excavation"])
+        counted = one(view, check("", "early_warnings"))
+        self.assertEqual(counted.kind, "warning")
+        self.assertTrue(counted.text.startswith("At least 2 early-warning rule results for this site."))
+        self.assertIn("1 early-warning rule was not checked (Heavy rain on an open excavation), so this is a floor", counted.text)
+        none = one(SiteView(example_context(warning_checks=self.CHECKS, warnings=Loaded.ok([]))), check("", "early_warnings"))
+        self.assertEqual((none.kind, "This is not the same as none" in none.text), ("unknown", True))
+        # Action items are not the rules' results: they are counted as before.
+        self.assertEqual(one(view, check("", "action_items")).text, "2 action items for this site.")
+
+    def test_checks_that_all_ran_or_did_not_load_change_nothing(self):
+        ran = Loaded.ok([{"rule_id": "r1", "title": "t", "status": "ok"}, {"rule_id": "r3", "title": "t", "status": "not_applicable"}])
+        for checks in (ran, Loaded.failed("timeout"), Loaded.not_available("not built")):
+            view = SiteView(example_context(warning_checks=checks))
+            self.assertEqual((view.rules_not_checked, one(view, check("", "early_warnings")).text),
+                             ([], "2 early-warning rule results for this site."))
+
+    def test_a_warning_cited_without_the_count_still_says_a_rule_was_not_checked(self):
+        view = SiteView(example_context(warning_checks=self.CHECKS))
+        cited = build(view, says("A rule found a pattern.", MARCH_WARNING))
+        self.assertEqual([p.code for p in cited.parts if p.kind == "notice"], ["not_a_prediction", "warning_rules_unchecked"])
+        both = build(view, says("A rule found a pattern.", MARCH_WARNING), check("", "early_warnings"))
+        self.assertEqual([p.code for p in both.parts if p.kind == "notice"], ["not_a_prediction"])
+        self.assertIn("RULES THAT COULD NOT BE CHECKED: Heavy rain on an open excavation", view.digest())
+        self.assertNotIn("RULES THAT COULD NOT BE CHECKED", FULL.digest())
+
+
 class PageActionTests(unittest.TestCase):
     def test_a_layer_is_toggled_only_if_the_page_has_it(self):
         built = build(FULL, actions=[action("toggle_layer", layer_id="sandy_inundation", on=False)])

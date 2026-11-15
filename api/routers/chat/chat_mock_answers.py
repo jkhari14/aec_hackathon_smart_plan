@@ -115,8 +115,10 @@ def propose(view: SiteView, question: str) -> Optional[dict]:
         return {"items": [_item("record_search", text=" ".join(words)[:60], dataset_key=dataset)], "actions": []}
     if _WARNING_CUE.search(question):
         items = [_says(f'Early warning "{w.get("title")}": "{w.get("explanation")}"', f"warning:{w['id']}") for w in view.warnings[:6]]
-        # With nothing to quote, the server says whether that is none or unknown (the list did not load).
-        return {"items": items or [_item("dataset_check", dataset_key="early_warnings")], "actions": []}
+        # With nothing to quote, or a rule that could not run, the server says what is known: none, unknown or a floor.
+        if not items or view.rules_not_checked:
+            items.append(_item("dataset_check", dataset_key="early_warnings"))
+        return {"items": items, "actions": []}
     if _ACTION_CUE.search(question):
         wanted = [d for d in _DISCIPLINES if d in question.lower()]
         chosen = [a for a in view.actions if not wanted or a.get("discipline") in wanted]

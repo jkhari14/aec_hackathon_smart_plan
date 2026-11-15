@@ -69,6 +69,11 @@ owner's module that lands is picked up by the chat with no change here.
   another site's. An answer resting on sample data carries the `X-ForeSite-Fixture` header.
 - A part that fails to load is a failure with its reason, never an empty list.
 - With no profile for the lot, the chat answers 404 rather than guess.
+- **Early-warning rule checks** (`SiteContext.warning_checks`): when a rule could not run, "no warnings"
+  is answered "unknown", a count of warnings is "at least", and warnings cited without a count carry a
+  line saying some rules were not checked. The chat is ready for this, but `app_context` does not fill
+  it yet: the rule-checks contract and route are in an open pull request, and no site function serves
+  them on this branch. Until it is wired, an empty warnings list reads "none found".
 
 Every piece that can fail to load is a `Loaded` with a status, because "could not load" must never
 reach the chat as an empty list.
