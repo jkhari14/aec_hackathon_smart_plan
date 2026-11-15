@@ -7,7 +7,7 @@ import { Eyebrow, PixelLabel, Reveal, Slide, useSpring } from "../ui";
 export function Cta({ duration }: { duration: number }) {
   const s = useSpring(10, 16);
   return (
-    <Slide section="Try it" duration={duration}>
+    <Slide section="Try it" duration={duration} holdEnd>
       <div style={{ position: "absolute", left: 160, top: 300, width: 900 }}>
         <Eyebrow delay={2}>Scan the code</Eyebrow>
         <Reveal delay={6}>

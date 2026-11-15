@@ -22,7 +22,7 @@ export function useSceneFade(duration: number, inFrames = 10, outFrames = 10) {
   const frame = useCurrentFrame();
   return Math.min(
     interpolate(frame, [0, inFrames], [0, 1], { extrapolateRight: "clamp" }),
-    interpolate(frame, [duration - outFrames, duration], [1, 0], { extrapolateLeft: "clamp" }),
+    outFrames > 0 ? interpolate(frame, [duration - outFrames, duration], [1, 0], { extrapolateLeft: "clamp" }) : 1,
   );
 }
 
@@ -32,14 +32,17 @@ export function Slide({
   index,
   children,
   duration,
+  holdEnd = false,
 }: {
   dark?: boolean;
   section: string;
   index?: number;
   children: ReactNode;
   duration: number;
+  /** The video's last slide stays at full brightness to the final frame. */
+  holdEnd?: boolean;
 }) {
-  const fade = useSceneFade(duration);
+  const fade = useSceneFade(duration, 10, holdEnd ? 0 : 10);
   const line = dark ? C.nightLine : C.paperLine;
   return (
     <AbsoluteFill

@@ -34,7 +34,7 @@ export const SCENES: Scene[] = [
   { name: "Limits", frames: 320, render: (d) => <Limits duration={d} /> },
   { name: "Process", frames: 590, render: (d) => <Process duration={d} /> },
   { name: "Outro", frames: 240, render: (d) => <Outro duration={d} /> },
-  { name: "Cta", frames: 150, render: (d) => <Cta duration={d} /> },
+  { name: "Cta", frames: 210, render: (d) => <Cta duration={d} /> },
 ];
 
 export const PITCH_FRAMES = SCENES.reduce((n, s) => n + s.frames, 0);

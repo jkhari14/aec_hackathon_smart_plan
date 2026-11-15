@@ -123,7 +123,7 @@ that the cause is under investigation. Nothing about what could have prevented i
 ## 4:36 Close (8 s)
 > 4site turns warnings into risk intelligence, before work starts. Build on hindsight, design with foresight.
 
-## 4:44 Try it (5 s)
+## 4:44 Try it (7 s, held to the end for scanning)
 *QR code.*
 > Try it for yourself: scan the code, or find us on GitHub. Thank you.
 

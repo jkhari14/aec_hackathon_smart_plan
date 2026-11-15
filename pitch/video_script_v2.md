@@ -33,4 +33,4 @@ direction is in [video_direction.md](video_direction.md). The source is `pitch/v
 | 4:17 | How we built it: Wispr Flow, Cursor and Claude, plans, concept videos, feedback | From a recorded brainstorm to a working product. |
 | 4:31 | BUILD.md, eight agent sessions, PRs merged in order | One source of truth, eight agents, merged in order. |
 | 4:36 | Logo, then the closing line | 4site turns warnings into risk intelligence, before work starts. |
-| 4:44 | "Try it 4 yourself": QR code and the GitHub link | Try it for yourself: scan the code, or find us on GitHub. Thank you. |
+| 4:44 | "Try it 4 yourself": QR code and the GitHub link, held at full brightness to the end (7 s) | Try it for yourself: scan the code, or find us on GitHub. Thank you. |
