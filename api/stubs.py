@@ -14,6 +14,8 @@ from typing import Optional
 
 from fastapi import APIRouter, HTTPException, Response
 
+from site_profile import router as site_profile_routes
+
 from api.contracts import (
     ActionItem,
     ActionItemUpdate,
@@ -76,12 +78,14 @@ def site_profile(
     stage: Optional[str] = None,
     as_of: Optional[str] = None,
 ):
-    return sample(response, "site_profile")
+    # Real (Rishabh, PR 6): built from the site's public-record pull, not a fixture.
+    return site_profile_routes.site_profile(bbl, response, job_type, stage, as_of)
 
 
 @router.get("/sites/{bbl}/similar", response_model=SimilarCases)
 def similar_cases(bbl: str, response: Response, hazard: Optional[str] = None, severity_min: Optional[int] = None):
-    return sample(response, "similar_cases")
+    # Real (Rishabh, PR 6): ranked over the case library, or the case fixture until PR 3 merges.
+    return site_profile_routes.similar_cases(bbl, response, hazard, severity_min)
 
 
 @router.get("/sites/{bbl}/warnings", response_model=list[EarlyWarning])
