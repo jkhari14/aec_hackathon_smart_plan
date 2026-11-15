@@ -15,5 +15,10 @@ itself sees the 304 as `ok: false`, so treat 304 as "unchanged", not as a failur
 owner. `PATCH /items` is all or nothing: an unknown id is a 404 and nothing changes. `owner_role` sent
 as `null` unassigns; left out, it stays. `done` is the team's claim, never a proof read from records.
 
+**Pins.** A pin holds a kind, a reference, a title and the role that pinned it. A pinned chat answer
+also holds a `body`: the answer as the reader saw it, each part led by its source label. It is kept
+exactly as sent and returned as it was, so a pinned answer never loses its labels. A store file made
+before the column existed gets it when the store opens.
+
 **Limits.** Over a cap is refused, never cut: 20 members, 500 items, 2000 notes, 500 pins per project;
-4000 characters a note; 200 KB a structural model. Project ids are 16 random hex characters.
+4000 characters a note; 8000 a pin's body; 200 KB a structural model. Project ids are 16 random hex characters.

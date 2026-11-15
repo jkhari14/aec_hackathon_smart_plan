@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from api.store.project_store_schema import (
-    DDL, DISCIPLINES, HAZARDS, ITEM_STATUSES, MAX_MODEL_BYTES, MAX_ROWS_PER_PROJECT, MAX_TEXT, PIN_KINDS, ROLES,
+    ADDED_COLUMNS, DDL, DISCIPLINES, HAZARDS, ITEM_STATUSES, MAX_MODEL_BYTES, MAX_ROWS_PER_PROJECT, MAX_TEXT, PIN_KINDS, ROLES,
     STAGES,
 )
 
@@ -82,6 +82,10 @@ class ProjectStore:
         with closing(sqlite3.connect(self.db_path)) as db:
             db.execute("PRAGMA journal_mode = WAL")  # one tab reading never blocks the other tab's write
             db.executescript(DDL)
+            for table, column, kind in ADDED_COLUMNS:  # names from our own schema file, never from input
+                if column not in {row[1] for row in db.execute(f"PRAGMA table_info({table})")}:
+                    db.execute(f"ALTER TABLE {table} ADD COLUMN {column} {kind}")
+            db.commit()
 
     @contextmanager
     def _db(self, write: bool = False):
@@ -189,15 +193,22 @@ class ProjectStore:
             self._touch(db, project_id)
         return self.get_project(project_id)
 
-    def add_pin(self, project_id, kind, ref_id, title, by_role) -> dict:
+    def add_pin(self, project_id, kind, ref_id, title, by_role, body=None) -> dict:
+        """`body` is the pinned text as the reader saw it (a chat answer with its source labels): kept exactly as sent."""
         kind, title = _choice(kind, "kind", PIN_KINDS), _text(title, "title", "title")
         ref_id = _text(ref_id, "ref_id", "ref")
+        if body is not None and not isinstance(body, str):
+            raise ProjectStoreError("body must be text")
+        if body is not None and len(body) > MAX_TEXT["pin_body"]:
+            raise ProjectStoreError(f"body is over {MAX_TEXT['pin_body']} characters")
+        body = body or None
         with self._db(write=True) as db:
             self._project(db, project_id)
             role = self._member_role(db, project_id, by_role, "by_role")
             self._room(db, project_id, "pins")
-            db.execute("INSERT INTO pins (id, project_id, kind, ref_id, title, by_role, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                       (secrets.token_hex(8), project_id, kind, ref_id, title, role, _now()))
+            db.execute("INSERT INTO pins (id, project_id, kind, ref_id, title, by_role, created_at, body)"
+                       " VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                       (secrets.token_hex(8), project_id, kind, ref_id, title, role, _now(), body))
             self._touch(db, project_id)
         return self.get_project(project_id)
 
@@ -234,7 +245,7 @@ class ProjectStore:
                 "members": rows("SELECT name, role FROM members WHERE project_id = ? ORDER BY position"),
                 "items": [{**item, "life_safety": bool(item["life_safety"])} for item in items],
                 "notes": rows("SELECT id, author_role, text, created_at FROM notes WHERE project_id = ? ORDER BY created_at, rowid"),
-                "pins": rows("SELECT id, kind, ref_id, title, by_role, created_at FROM pins WHERE project_id = ?"
+                "pins": rows("SELECT id, kind, ref_id, title, by_role, created_at, body FROM pins WHERE project_id = ?"
                              " ORDER BY created_at, rowid"),
                 "structural_model": json.loads(row["structural_model_json"]) if row["structural_model_json"] else None,
                 "created_at": row["created_at"],
