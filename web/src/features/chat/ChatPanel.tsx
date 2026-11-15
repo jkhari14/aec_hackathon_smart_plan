@@ -37,7 +37,8 @@ export function ChatPanel(props: ChatPanelProps) {
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
   const [draft, setDraft] = useState("");
   const [setup, setSetup] = useState<ChatSetup>(DEFAULT_CHAT_SETUP);
-  const [cases, setCases] = useState<Case[]>([]);
+  // The shared client hands back its sample cases when /api/cases fails for any reason, so the flag is kept.
+  const [cases, setCases] = useState<{ list: Case[]; sample: boolean }>({ list: [], sample: false });
   const [pins, setPins] = useState<Record<number, PinState>>({});
   const nextId = useRef(1);
   const inFlight = useRef<AbortController | null>(null);
@@ -48,7 +49,7 @@ export function ChatPanel(props: ChatPanelProps) {
   useEffect(() => {
     const stop = new AbortController();
     loadChatSetup(stop.signal).then((loaded) => loaded && setSetup(loaded));
-    api.cases().then((result) => setCases(result.data));
+    api.cases().then((result) => setCases({ list: result.data, sample: result.sample }));
     return () => stop.abort();
   }, []);
 
@@ -217,7 +218,13 @@ export function ChatPanel(props: ChatPanelProps) {
                   )}
                   {outcome.state === "answered" && bbl && (
                     <>
-                      <ChatAnswerParts parts={outcome.response.answer_parts} siteBbl={bbl} cases={cases} onFlyTo={onFlyTo} />
+                      {/* Sample cases describe only a sample answer: under a real one they would name another case's place. */}
+                      <ChatAnswerParts
+                        parts={outcome.response.answer_parts}
+                        siteBbl={bbl}
+                        cases={cases.sample && !outcome.sample ? [] : cases.list}
+                        onFlyTo={onFlyTo}
+                      />
                       {outcome.notDone.map((line) => (
                         <p key={line} className="text-xs text-amber-300">{line}</p>
                       ))}
