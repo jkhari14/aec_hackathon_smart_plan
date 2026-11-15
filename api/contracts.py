@@ -338,6 +338,8 @@ class ProjectPin(Contract):
     title: str
     by_role: Role
     created_at: str
+    # The pinned text as the reader saw it (a chat answer, each part led by its source label). Kept as sent.
+    body: Optional[str] = None
 
 
 class Project(Contract):
@@ -376,6 +378,7 @@ class PinCreate(Contract):
     ref_id: str
     title: str
     by_role: Role
+    body: Optional[str] = None
 
 
 # Chat

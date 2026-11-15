@@ -753,6 +753,8 @@ export interface components {
              * @enum {string}
              */
             by_role: "architect" | "structural_engineer";
+            /** Body */
+            body?: string | null;
         };
         /** Project */
         Project: {
@@ -837,6 +839,8 @@ export interface components {
             by_role: "architect" | "structural_engineer";
             /** Created At */
             created_at: string;
+            /** Body */
+            body?: string | null;
         };
         /** SearchResult */
         SearchResult: {

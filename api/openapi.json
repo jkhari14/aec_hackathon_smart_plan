@@ -2357,6 +2357,17 @@
               "structural_engineer"
             ],
             "title": "By Role"
+          },
+          "body": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Body"
           }
         },
         "additionalProperties": false,
@@ -2581,6 +2592,17 @@
           "created_at": {
             "type": "string",
             "title": "Created At"
+          },
+          "body": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Body"
           }
         },
         "additionalProperties": false,
