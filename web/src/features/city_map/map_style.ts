@@ -25,6 +25,8 @@ const PALETTE = {
     partyWall: "#4a6cf0",
     partyWallCore: "#1f3fb8",
     light: "#ffffff",
+    // Water (the basemap's rivers, bay and creeks): a pale cyan.
+    water: "#e1f0f2",
   },
   dark: {
     buildings: ["#18212c", "#243243", "#30425a"],
@@ -36,6 +38,8 @@ const PALETTE = {
     partyWall: "#ffb547",
     partyWallCore: "#fff4d6",
     light: "#dfe7f2",
+    // The dark basemap keeps its own water: a pale cyan would glare against it.
+    water: null,
   },
 } as const;
 const palette = (theme: MapTheme = themeNow()) => PALETTE[theme];
@@ -54,6 +58,10 @@ export function applyMapPalette(map: MapLibreMap, theme: MapTheme, layerIds: str
     if (map.getLayer(id)) map.setPaintProperty(id, prop as never, value as never);
   };
   map.setLight({ anchor: "map", position: [1.4, 210, 35], color: p.light, intensity: 0.35 });
+  if (p.water) {
+    set("water", "fill-color", p.water);
+    set("waterway", "line-color", p.water);
+  }
   set("buildings-3d", "fill-extrusion-color", buildingColor(theme));
   set("site-lots-fill", "fill-color", roleColor(theme));
   set("site-lots-edge", "line-color", roleColor(theme));

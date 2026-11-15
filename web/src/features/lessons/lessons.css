@@ -1,0 +1,144 @@
+/* What could go wrong here: one calm card per lesson, prevention first, incidents one click away. */
+.fs-lessons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fs-lessons__scopes .fs-chip {
+  font-size: var(--fs-text-xs);
+}
+.fs-lesson {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border: 1px solid var(--fs-line);
+  border-left: 3px solid var(--fs-hz, var(--fs-line));
+  border-radius: 0 var(--fs-radius) var(--fs-radius) 0;
+  background: var(--fs-raised);
+}
+.fs-lesson__title {
+  margin: 0;
+  font-size: var(--fs-text-md);
+  font-weight: 600;
+  line-height: 1.3;
+}
+.fs-lesson__meta {
+  margin: 0;
+  font-size: var(--fs-text-xs);
+  color: var(--fs-text-2);
+}
+.fs-lesson__here {
+  margin: 0;
+  padding: 3px 0 3px 8px;
+  border-left: 2px solid var(--fs-src-record);
+  font-size: var(--fs-text-xs);
+  color: var(--fs-text-2);
+  line-height: 1.45;
+}
+.fs-lesson__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fs-text-2);
+}
+.fs-lesson__prevent ul,
+.fs-lesson__cases {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--fs-text-sm);
+  line-height: 1.4;
+}
+.fs-lesson__cases {
+  padding-left: 0;
+  list-style: none;
+  gap: 6px;
+}
+.fs-lesson__cases li {
+  display: flex;
+  flex-direction: column;
+}
+.fs-lesson__toggle {
+  align-self: flex-start;
+  font-size: var(--fs-text-xs);
+}
+.fs-lessons__start {
+  position: sticky;
+  bottom: 0;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: var(--fs-radius);
+  background: var(--fs-btn-primary);
+  color: var(--fs-btn-primary-ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.fs-lesson__case {
+  padding: 0;
+  text-align: left;
+  font-size: var(--fs-text-sm);
+}
+
+/* "Watch out for": the top risks across the listed projects; click one to filter to it. */
+.fs-watch {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--fs-line);
+  border-radius: var(--fs-radius);
+  background: var(--fs-raised);
+}
+.fs-watch__title {
+  margin: 0;
+  font-size: var(--fs-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.fs-watch__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fs-watch__risk {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 1px;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-left: 3px solid var(--fs-hz, var(--fs-line));
+  border-radius: 0 var(--fs-radius-sm) var(--fs-radius-sm) 0;
+  background: var(--fs-hover);
+  color: var(--fs-text);
+  font: inherit;
+  font-size: var(--fs-text-sm);
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+.fs-watch__risk[aria-pressed="true"] {
+  border-color: var(--fs-accent);
+  border-left-color: var(--fs-hz, var(--fs-accent));
+  background: var(--fs-accent-soft);
+}
+.fs-watch__count {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--fs-text-2);
+}
+.fs-watch__items ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  font-size: var(--fs-text-sm);
+  line-height: 1.4;
+}

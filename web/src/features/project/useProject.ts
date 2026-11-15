@@ -6,7 +6,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "../../api/client";
 import type { Project, ProjectCreate } from "../../contracts";
 import type { ChatPinDraft } from "../chat/chat_page_actions";
-import { projectWrites, readProject, whyNotSaved, type ActionItemUpdate, type PinCreate, type ProjectWrite, type Role } from "./project_client";
+import {
+  projectWrites, readProject, whyNotSaved, type ActionItemUpdate, type DrawingConfirm, type GeotechConfirm, type PinCreate, type ProjectWrite, type Role,
+} from "./project_client";
 import { chatAnswerPin } from "./project_pins";
 
 const POLL_MS = 4000;
@@ -33,6 +35,10 @@ export type ProjectWorkspace = {
   /** Any pin, as this tab's role (the project screen pins document names). */
   addPin: (pin: Omit<PinCreate, "by_role">) => Promise<void>;
   create: (body: ProjectCreate) => Promise<string>;
+  /** Confirm a drawing reading as this tab's role: the model is kept and the checklist changes for everyone. */
+  confirmDrawing: (body: Omit<DrawingConfirm, "by_role">) => Promise<void>;
+  /** Confirm a geotechnical report reading as this tab's role. */
+  confirmGeotech: (body: Omit<GeotechConfirm, "by_role">) => Promise<void>;
 };
 
 export function useProject(projectId: string | null, initialRole: Role = "architect"): ProjectWorkspace {
@@ -104,6 +110,8 @@ export function useProject(projectId: string | null, initialRole: Role = "archit
     addNote: async (text) => saved(await projectWrites.addNote(open(), role, text)),
     pinChatAnswer: async (draft) => saved(await projectWrites.addPin(open(), chatAnswerPin(draft, role))),
     addPin: async (pin) => saved(await projectWrites.addPin(open(), { ...pin, by_role: role })),
+    confirmDrawing: async (body) => saved(await projectWrites.confirmDrawing(open(), { ...body, by_role: role })),
+    confirmGeotech: async (body) => saved(await projectWrites.confirmGeotech(open(), { ...body, by_role: role })),
     create: async (body) => {
       const result = await projectWrites.create(body);
       const why = whyNotSaved(result);

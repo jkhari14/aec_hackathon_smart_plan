@@ -35,9 +35,10 @@ def _run(action, *args):
     except ProjectStoreError as error:
         raise HTTPException(422, str(error)) from None
     except sqlite3.IntegrityError:
-        # Values the contract allows but an older store file's CHECK constraints do not (new roles, pin kinds).
-        raise HTTPException(422, "this project store file was made before the developer and contractor roles and "
-                                 "document pins; delete api/store/data/projects.sqlite (see api/store/README.md)") from None
+        # The store checks every value first, and rebuilds an older file when it opens, so this is a file
+        # changed under a running server. A restart rebuilds it; deleting it would lose every project.
+        raise HTTPException(422, "the project store file refused this value; restart the API so it updates the file "
+                                 "(see api/store/README.md)") from None
 
 
 def _etag(version: int) -> str:
@@ -55,7 +56,7 @@ def _answer(response: Response, store: ProjectStore, project_id: str) -> dict:
 def create_project(body: ProjectCreate, response: Response, store: ProjectStore = Depends(project_store)):
     members = [member.model_dump() for member in body.members]
     project = _run(store.create_project, body.name, body.site_bbl, body.stage, members, body.job_type,
-                   body.construction_type, list(body.work_types or []))
+                   body.construction_type, list(body.work_types or []), body.excavation_depth_ft, body.proposed_storeys)
     return _answer(response, store, project["id"])
 
 
@@ -80,7 +81,7 @@ def add_items(project_id: str, body: list[ActionItem], response: Response, store
 def update_items(project_id: str, body: list[ActionItemUpdate], response: Response,
                  store: ProjectStore = Depends(project_store)):
     # All or nothing. owner_role sent as null unassigns the item; left out, it stays as it is.
-    updates = [{"id": update.id, "status": update.status,
+    updates = [{"id": update.id, "status": update.status, "by_role": update.by_role,
                 "owner_role": update.owner_role if "owner_role" in update.model_fields_set else UNCHANGED}
                for update in body]
     _run(store.update_items, project_id, updates)

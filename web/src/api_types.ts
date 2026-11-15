@@ -41,6 +41,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/projects/{project_id}/model/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Confirm Drawing
+         * @description The uploader confirmed a reading: keep it as the project's model (and the site's, for the profile),
+         *     list the document, and add or flag the checklist items it calls for, each saying who and why.
+         */
+        post: operations["confirm_drawing_api_projects__project_id__model_confirm_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/projects/{project_id}/geotech/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Confirm Geotech
+         * @description The uploader confirmed a report reading: list the document and add or flag the checklist items it calls for.
+         */
+        post: operations["confirm_geotech_api_projects__project_id__geotech_confirm_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/layers": {
         parameters: {
             query?: never;
@@ -169,9 +210,30 @@ export interface paths {
         };
         /**
          * Actions
-         * @description `job_type` and `work_types` (comma-separated) are the project screen's setup choices.
+         * @description `job_type`, `work_types` (comma-separated), `excavation_depth_ft` and `proposed_storeys` are the
+         *     project screen's setup choices.
          */
         get: operations["actions_api_sites__bbl__actions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sites/{bbl}/outlook": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Outlook
+         * @description What could go wrong here, for every option: lessons from similar past projects, from this lot's profile.
+         */
+        get: operations["outlook_api_sites__bbl__outlook_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -354,6 +416,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/chat/first": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Chat First Answer
+         * @description A quick first answer from the site's data alone, to show while POST /api/chat is still at work.
+         *
+         *     No parts means there is none to show (no live model, switched off, over the limit, a failed call,
+         *     or nothing that passed the checks): the page keeps waiting. Why a question is refused is the full
+         *     route's to say, so this one never refuses.
+         */
+        post: operations["chat_first_answer_api_chat_first_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -391,6 +477,27 @@ export interface components {
             source_rule: string;
             /** Life Safety */
             life_safety: boolean;
+            /** Added By Role */
+            added_by_role?: ("architect" | "structural_engineer" | "developer" | "contractor") | null;
+            /** Added Reason */
+            added_reason?: string | null;
+            /** Added At */
+            added_at?: string | null;
+            /** Phase */
+            phase?: ("design" | "filing" | "notice" | "before_excavation" | "during_work") | null;
+            /** When */
+            when?: string | null;
+            /** Done By Role */
+            done_by_role?: ("architect" | "structural_engineer" | "developer" | "contractor") | null;
+            /** Done At */
+            done_at?: string | null;
+            /**
+             * Applies To
+             * @default []
+             */
+            applies_to: string[];
+            /** Evidence */
+            evidence?: string | null;
         };
         /** ActionItemUpdate */
         ActionItemUpdate: {
@@ -400,6 +507,8 @@ export interface components {
             status?: ("open" | "in_progress" | "done" | "not_applicable") | null;
             /** Owner Role */
             owner_role?: ("architect" | "structural_engineer" | "developer" | "contractor") | null;
+            /** By Role */
+            by_role?: ("architect" | "structural_engineer" | "developer" | "contractor") | null;
         };
         /** BearingWall */
         BearingWall: {
@@ -593,6 +702,28 @@ export interface components {
             /** Source Url */
             source_url?: string | null;
         };
+        /**
+         * DrawingConfirm
+         * @description A drawing reading the uploader checked and confirmed: it becomes the project's structural model and
+         *     turns into checklist items for the roles it concerns (each saying which document added it and who).
+         */
+        DrawingConfirm: {
+            model: components["schemas"]["StructuralModel"];
+            /**
+             * By Role
+             * @enum {string}
+             */
+            by_role: "architect" | "structural_engineer" | "developer" | "contractor";
+            /** Document */
+            document: string;
+            /**
+             * Slot
+             * @default structural
+             */
+            slot: string;
+            /** Evidence */
+            evidence?: string | null;
+        };
         /** EarlyWarning */
         EarlyWarning: {
             /** Id */
@@ -645,6 +776,47 @@ export interface components {
             type: "Point" | "LineString" | "Polygon" | "MultiPolygon";
             /** Coordinates */
             coordinates: unknown;
+        };
+        /**
+         * GeotechConfirm
+         * @description A geotechnical report reading the uploader checked and confirmed: it turns into checklist items.
+         */
+        GeotechConfirm: {
+            findings: components["schemas"]["GeotechFindings"];
+            /**
+             * By Role
+             * @enum {string}
+             */
+            by_role: "architect" | "structural_engineer" | "developer" | "contractor";
+            /** Document */
+            document: string;
+            /**
+             * Slot
+             * @default geotech
+             */
+            slot: string;
+            /** Evidence */
+            evidence?: string | null;
+        };
+        /**
+         * GeotechFindings
+         * @description What a geotechnical report states, as read by AI and confirmed by the uploader. Null: not stated.
+         */
+        GeotechFindings: {
+            /** Groundwater Depth Ft */
+            groundwater_depth_ft?: number | null;
+            /** Soil Description */
+            soil_description?: string | null;
+            /** Allowable Bearing Tsf */
+            allowable_bearing_tsf?: number | null;
+            /** Rock Depth Ft */
+            rock_depth_ft?: number | null;
+            /** Boring Count */
+            boring_count?: number | null;
+            /** Max Boring Depth Ft */
+            max_boring_depth_ft?: number | null;
+            /** Confidence */
+            confidence: number;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -731,6 +903,92 @@ export interface components {
             bbl?: string | null;
             /** Record Id */
             record_id?: string | null;
+        };
+        /**
+         * Lesson
+         * @description A failure mode seen on similar past projects: the incidents, what prevents it, and this lot's own records.
+         */
+        Lesson: {
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /**
+             * Hazard
+             * @enum {string}
+             */
+            hazard: "structural" | "geotech" | "fire" | "flood" | "contamination" | "facade" | "weather" | "construction_safety";
+            /** Options */
+            options: ("renovate" | "demolish_rebuild" | "new_build")[];
+            /** Scopes */
+            scopes: ("earth_work" | "excavation" | "foundation" | "support_of_excavation" | "underpinning" | "structural" | "facade" | "demolition" | "sprinkler" | "standpipe" | "plumbing" | "mechanical" | "sidewalk_shed" | "scaffold" | "construction_fence")[];
+            /** Cases */
+            cases: components["schemas"]["LessonCase"][];
+            /** Case Count */
+            case_count: number;
+            /**
+             * Tagged
+             * @default []
+             */
+            tagged: components["schemas"]["LessonTag"][];
+            /** Prevent With */
+            prevent_with: components["schemas"]["LessonItem"][];
+            /** Here */
+            here?: string | null;
+        };
+        /**
+         * LessonCase
+         * @description A past incident behind a lesson. `basis` says whether its failure mode comes from a reported cause or only
+         *     from what happened (no cause published).
+         */
+        LessonCase: {
+            /** Case Id */
+            case_id: string;
+            /** Title */
+            title: string;
+            /** Address */
+            address: string;
+            /** Date */
+            date: string;
+            /**
+             * Severity
+             * @enum {integer}
+             */
+            severity: 0 | 1 | 2 | 3;
+            /**
+             * Basis
+             * @enum {string}
+             */
+            basis: "reported_cause" | "event_only";
+            /** Source Name */
+            source_name: string;
+            /** Source Url */
+            source_url?: string | null;
+        };
+        /**
+         * LessonItem
+         * @description A checklist item that prevents the failure mode.
+         */
+        LessonItem: {
+            /** Source Rule */
+            source_rule: string;
+            /** Title */
+            title: string;
+            /** Code Ref */
+            code_ref?: string | null;
+        };
+        /**
+         * LessonTag
+         * @description One case tagged with this lesson's failure mode, and the basis of the tag.
+         */
+        LessonTag: {
+            /** Case Id */
+            case_id: string;
+            /**
+             * Basis
+             * @enum {string}
+             */
+            basis: "reported_cause" | "event_only";
         };
         /** LotFacts */
         LotFacts: {
@@ -867,6 +1125,10 @@ export interface components {
              * @default []
              */
             work_types: ("earth_work" | "excavation" | "foundation" | "support_of_excavation" | "underpinning" | "structural" | "facade" | "demolition" | "sprinkler" | "standpipe" | "plumbing" | "mechanical" | "sidewalk_shed" | "scaffold" | "construction_fence")[];
+            /** Excavation Depth Ft */
+            excavation_depth_ft?: number | null;
+            /** Proposed Storeys */
+            proposed_storeys?: number | null;
         };
         /** ProjectCreate */
         ProjectCreate: {
@@ -887,6 +1149,10 @@ export interface components {
             construction_type?: ("wood" | "masonry" | "steel" | "concrete" | "unknown") | null;
             /** Work Types */
             work_types?: ("earth_work" | "excavation" | "foundation" | "support_of_excavation" | "underpinning" | "structural" | "facade" | "demolition" | "sprinkler" | "standpipe" | "plumbing" | "mechanical" | "sidewalk_shed" | "scaffold" | "construction_fence")[] | null;
+            /** Excavation Depth Ft */
+            excavation_depth_ft?: number | null;
+            /** Proposed Storeys */
+            proposed_storeys?: number | null;
         };
         /** ProjectMember */
         ProjectMember: {
@@ -991,6 +1257,16 @@ export interface components {
             bbl: string;
             /** Results */
             results: components["schemas"]["SimilarCase"][];
+        };
+        /**
+         * SiteOutlook
+         * @description What could go wrong here, for every option: lessons from similar past projects, worst first.
+         */
+        SiteOutlook: {
+            /** Bbl */
+            bbl: string;
+            /** Lessons */
+            lessons: components["schemas"]["Lesson"][];
         };
         /** SiteProfile */
         SiteProfile: {
@@ -1150,6 +1426,76 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WarningRuleCheck"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    confirm_drawing_api_projects__project_id__model_confirm_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DrawingConfirm"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Project"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    confirm_geotech_api_projects__project_id__geotech_confirm_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GeotechConfirm"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Project"];
                 };
             };
             /** @description Validation Error */
@@ -1387,6 +1733,8 @@ export interface operations {
                 stage?: string | null;
                 job_type?: string | null;
                 work_types?: string | null;
+                excavation_depth_ft?: number | null;
+                proposed_storeys?: number | null;
             };
             header?: never;
             path: {
@@ -1403,6 +1751,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ActionItem"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    outlook_api_sites__bbl__outlook_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                bbl: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteOutlook"];
                 };
             };
             /** @description Validation Error */
@@ -1727,6 +2106,39 @@ export interface operations {
         };
     };
     chat_answer_api_chat_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    chat_first_answer_api_chat_first_post: {
         parameters: {
             query?: never;
             header?: never;

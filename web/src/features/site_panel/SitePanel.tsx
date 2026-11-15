@@ -1,24 +1,27 @@
-// The site panel body: overview (top signals, then lot facts tucked into sections), similar cases and
-// actions. Loads its three sources independently, so each tab shows a skeleton until its own data lands.
+// The site panel body: overview (top signals, then lot facts tucked into sections) and similar cases. The
+// checklist lives on the project screen, drawn for the job the user describes. Loads its two sources
+// independently, so each tab shows a skeleton until its own data lands.
 import "./site_panel.css";
 
 import { useEffect, useState, type ReactNode } from "react";
 
 import { api, type Loaded } from "../../api/client";
 import { copy } from "../../copy";
-import type { ActionItem, SimilarCases as SimilarCasesData, SiteProfile } from "../../contracts";
+import type { EarlyWarning, SimilarCases as SimilarCasesData, SiteProfile, WarningRuleCheck } from "../../contracts";
 import { Badge, formatDate, SkeletonCard, Tabs } from "../../design";
-import { ActionsList } from "../actions/ActionsList";
-import { SimilarCases, type StrandControls } from "../similar_cases/SimilarCases";
+import { SiteWarnings } from "../early_warnings/SiteWarnings";
+import { SimilarProjects } from "../lessons/SimilarProjects";
+import type { StrandControls } from "../similar_cases/SimilarCases";
 import { LotFacts, Neighbors, SourcesChecked, WorkAndGround } from "./LotFacts";
 import { Signals } from "./Signals";
 
-export type SiteTab = "overview" | "similar" | "actions";
+export type SiteTab = "similar" | "overview";
 
 type Data = {
   profile?: Loaded<SiteProfile>;
   similar?: Loaded<SimilarCasesData>;
-  actions?: Loaded<ActionItem[]>;
+  warnings?: Loaded<EarlyWarning[]>;
+  checks?: Loaded<WarningRuleCheck[]>;
 };
 
 export function useSiteData(bbl: string | null) {
@@ -30,7 +33,8 @@ export function useSiteData(bbl: string | null) {
     const put = <K extends keyof Data>(key: K) => (value: Data[K]) => live && setData((d) => ({ ...d, [key]: value }));
     api.siteProfile(bbl).then(put("profile"));
     api.similar(bbl).then(put("similar"));
-    api.actions(bbl).then(put("actions"));
+    api.warnings(bbl).then(put("warnings"));
+    api.warningChecks(bbl).then(put("checks"));
     return () => {
       live = false;
     };
@@ -38,9 +42,11 @@ export function useSiteData(bbl: string | null) {
   return data;
 }
 
-export function SitePanel({ data, tab, onTab, strands }: { data: Data; tab: SiteTab; onTab: (t: SiteTab) => void; strands?: StrandControls }) {
-  const { profile, similar, actions } = data;
-  const sample = [profile, similar, actions].some((x) => x?.sample);
+export function SitePanel({ bbl, data, tab, onTab, strands, onStart }: {
+  bbl: string; data: Data; tab: SiteTab; onTab: (t: SiteTab) => void; strands?: StrandControls; onStart?: () => void;
+}) {
+  const { profile, similar, warnings, checks } = data;
+  const sample = [profile, similar].some((x) => x?.sample);
   const count = (n?: number) => (n == null ? "" : ` ${n}`);
 
   return (
@@ -51,9 +57,8 @@ export function SitePanel({ data, tab, onTab, strands }: { data: Data; tab: Site
           value={tab}
           onChange={onTab}
           options={[
-            { value: "overview", label: "Overview" },
-            { value: "similar", label: <span className="fs-num">Similar{count(similar?.data.results.length)}</span> },
-            { value: "actions", label: <span className="fs-num">Actions{count(actions?.data.length)}</span> },
+            { value: "similar", label: <span className="fs-num">Similar projects{count(similar?.data.results.length)}</span> },
+            { value: "overview", label: "This lot" },
           ]}
         />
         <div className="fs-site__meta">
@@ -67,6 +72,9 @@ export function SitePanel({ data, tab, onTab, strands }: { data: Data; tab: Site
           <>
             <Section title={copy.sitePanel.topSignals} help={copy.sitePanel.topSignalsHelp}>
               <Signals signals={profile.data.signals} datasets={profile.data.datasets} />
+            </Section>
+            <Section title="Early warnings" help="Record sequences on this site and its touching lots that are worth a look.">
+              {warnings && checks ? <SiteWarnings warnings={warnings.data} checks={checks.data} /> : <SkeletonCard lines={2} />}
             </Section>
             <Section title="Work and ground" collapsible>
               <WorkAndGround profile={profile.data} />
@@ -87,8 +95,9 @@ export function SitePanel({ data, tab, onTab, strands }: { data: Data; tab: Site
           <Loading />
         ))}
 
-      {tab === "similar" && (similar ? <div className="fs-enter"><SimilarCases results={similar.data.results} strands={strands} /></div> : <Loading />)}
-      {tab === "actions" && (actions ? <div className="fs-enter"><ActionsList actions={actions.data} /></div> : <Loading />)}
+      {tab === "similar" && (similar
+        ? <div className="fs-enter"><SimilarProjects bbl={bbl} results={similar.data.results} strands={strands} onStart={onStart} /></div>
+        : <Loading />)}
     </>
   );
 }
