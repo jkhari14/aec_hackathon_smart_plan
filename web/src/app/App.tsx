@@ -5,7 +5,7 @@
 //   bottom right the chat button, which opens and closes the chat
 //   bottom left  "What 4site doesn't know", always visible
 // What is open lives in the URL (url_state.ts), so every view can be shared.
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { api } from "../api/client";
 import type { LayerCatalogEntry, SearchResult } from "../contracts";
@@ -24,6 +24,7 @@ import { ShortcutsHelp } from "./ShortcutsHelp";
 import { keyLabel, useShortcuts, type Shortcut } from "./shortcuts";
 import { ChatSlot, DataStatus, LayerSlot, SiteSlot } from "./slots";
 import { useViewState } from "./url_state";
+import { layersForWork, shouldApply } from "./work_layers";
 // After the design system's CSS (imported through ../design), so layout rules win over component defaults.
 import "./shell.css";
 
@@ -38,11 +39,31 @@ export function App() {
   const [site, setSite] = useState<SearchResult | null>(null);
   const [sample, setSample] = useState(false);
   const markSample = useCallback(() => setSample(true), []);
+  // One strand at a time: the focused similar case, or every strand when the switch is on.
+  const [focusCase, setFocusCase] = useState<string | null>(null);
+  const [allStrands, setAllStrands] = useState(false);
+  const toggleFocus = useCallback((caseId: string) => setFocusCase((current) => (current === caseId ? null : caseId)), []);
+  useEffect(() => setFocusCase(null), [view.site]);
   // The project screen's project: polled only while the screen is open (the chat dock has its own).
   const [projectId, openProject] = useProjectIdInUrl();
   const workspace = useProject(view.screen === "project" ? projectId : null);
   // A project belongs to the site it was made for: continuing from another site starts a new one.
   const openSiteBbl = workspace.state.status === "ok" ? workspace.state.project.site_bbl : null;
+  // Back on the map from a project, its work type switches on the layers that matter for it, once: a
+  // layer toggled by hand afterwards stays as it was set.
+  const projectJob = useRef<string | null>(null);
+  const appliedJob = useRef<string | null>(null);
+  if (workspace.state.status === "ok" && workspace.state.project.job_type) {
+    projectJob.current = `${workspace.state.project.id}:${workspace.state.project.job_type}`;
+  }
+  useEffect(() => {
+    const key = projectJob.current;
+    if (view.screen !== "map" || !layers || !shouldApply(appliedJob.current, key)) return;
+    appliedJob.current = key;
+    const job = key!.split(":")[1] as Parameters<typeof layersForWork>[0];
+    setEnabled(layersForWork(job, layers.filter((l) => l.status !== "error").map((l) => l.layer_id)));
+  }, [view.screen, layers]);
+
   // So does a link to a project the store doesn't have (another server, or a store file that was reset).
   const projectMissing = workspace.state.status === "not_found";
   useEffect(() => {
@@ -129,7 +150,19 @@ export function App() {
   return (
     <main className="fs-shell" data-site={Boolean(view.site)} data-chat={view.chat} data-layers={view.layers}>
       <div className="fs-shell__map" inert={behind}>
-        <CityMap site={site && site.bbl === view.site ? site : null} onPick={pickSite} enabled={enabled} onSample={markSample} />
+        <CityMap
+          site={site && site.bbl === view.site ? site : null}
+          onPick={pickSite}
+          enabled={enabled}
+          onSample={markSample}
+          theme={theme}
+          focusCaseId={focusCase}
+          showAllStrands={allStrands}
+          onFocusCase={(caseId) => {
+            toggleFocus(caseId);
+            setView({ tab: "similar" });
+          }}
+        />
       </div>
 
       <div className="fs-shell__left" inert={behind}>
@@ -143,8 +176,11 @@ export function App() {
             <Kbd>/</Kbd>
           </button>
           <div className="fs-topbar__tools">
-            <Button variant="ghost" size="icon" aria-label={`Layers (${keyLabel("l")})`} aria-pressed={view.layers} title="Layers (L)" onClick={() => setView({ layers: !view.layers })}>
+            <Button variant="ghost" className="fs-btn fs-layers-btn" aria-label={`Layers, ${enabled.size} on (${keyLabel("l")})`}
+              aria-pressed={view.layers} title="Layers (L)" onClick={() => setView({ layers: !view.layers })}>
               <LayersIcon />
+              <span>Layers</span>
+              <span className="fs-num fs-layers-btn__count">{enabled.size}</span>
             </Button>
             <Button variant="ghost" size="icon" aria-label={theme === "dark" ? "Light theme (T)" : "Dark theme (T)"} title="Theme (T)" onClick={toggleTheme}>
               {theme === "dark" ? <SunIcon /> : <MoonIcon />}
@@ -172,6 +208,10 @@ export function App() {
           tab={view.tab}
           onTab={(tab) => setView({ tab })}
           onContinue={() => setView({ screen: "project" })}
+          focusCase={focusCase}
+          onFocusCase={toggleFocus}
+          allStrands={allStrands}
+          onAllStrands={setAllStrands}
         />
         <ChatSlot
           open={view.chat}

@@ -4,7 +4,68 @@ import type { ExpressionSpecification, Map as MapLibreMap } from "maplibre-gl";
 
 import type { Hazard } from "../../contracts";
 
-export const BASEMAP = "https://tiles.openfreemap.org/styles/dark";
+export type MapTheme = "light" | "dark";
+
+/** The page's theme, as the shell sets it on <html>. Light is the default. */
+export const themeNow = (): MapTheme => (document.documentElement.dataset.theme === "dark" ? "dark" : "light");
+
+/** The basemap follows the theme: OpenFreeMap's Positron on paper, its dark style at night. */
+export const basemapFor = (theme: MapTheme) =>
+  `https://tiles.openfreemap.org/styles/${theme === "light" ? "positron" : "dark"}`;
+
+/** The map's own colours per theme. Light is the 4site paper palette: ink, card stock and one blue. */
+const PALETTE = {
+  light: {
+    buildings: ["#ebe9e3", "#dad7d0", "#c9c5bc"],
+    cluster: "#ffffff",
+    clusterText: "#141414",
+    ring: "#141414",
+    site: "#4a6cf0",
+    neighbor: "#3a3a3a",
+    partyWall: "#4a6cf0",
+    partyWallCore: "#1f3fb8",
+    light: "#ffffff",
+  },
+  dark: {
+    buildings: ["#18212c", "#243243", "#30425a"],
+    cluster: "#3a4a5f",
+    clusterText: "#e6edf3",
+    ring: "#f5f7fa",
+    site: "#f5f7fa",
+    neighbor: "#e8a33d",
+    partyWall: "#ffb547",
+    partyWallCore: "#fff4d6",
+    light: "#dfe7f2",
+  },
+} as const;
+const palette = (theme: MapTheme = themeNow()) => PALETTE[theme];
+
+const buildingColor = (theme?: MapTheme): ExpressionSpecification => {
+  const [low, mid, high] = palette(theme).buildings;
+  return ["interpolate", ["linear"], ["coalesce", ["get", "render_height"], 10], 0, low, 60, mid, 200, high];
+};
+const roleColor = (theme?: MapTheme): ExpressionSpecification =>
+  ["match", ["get", "role"], "site", palette(theme).site, palette(theme).neighbor];
+
+/** Repaint everything this file drew, for a theme switch. Layers that are not on the map are skipped. */
+export function applyMapPalette(map: MapLibreMap, theme: MapTheme, layerIds: string[]): void {
+  const p = palette(theme);
+  const set = (id: string, prop: string, value: unknown) => {
+    if (map.getLayer(id)) map.setPaintProperty(id, prop as never, value as never);
+  };
+  map.setLight({ anchor: "map", position: [1.4, 210, 35], color: p.light, intensity: 0.35 });
+  set("buildings-3d", "fill-extrusion-color", buildingColor(theme));
+  set("site-lots-fill", "fill-color", roleColor(theme));
+  set("site-lots-edge", "line-color", roleColor(theme));
+  set("party-walls-glow", "line-color", p.partyWall);
+  set("party-walls-core", "line-color", p.partyWallCore);
+  for (const layerId of layerIds) {
+    const [clusters, count, points] = pointLayerIds(layerId);
+    set(clusters, "circle-color", p.cluster);
+    set(count, "text-color", p.clusterText);
+    set(points, "circle-stroke-color", p.ring);
+  }
+}
 export const NYC_CENTER: [number, number] = [-73.95, 40.7];
 
 // shortcut: placeholder hazard colors until Camilo's design tokens (PR 1) land; swap to the tokens then.
@@ -19,9 +80,6 @@ export const HAZARD_COLORS: Record<Hazard, string> = {
   construction_safety: "#f2c94c",
 };
 
-const SITE = "#f5f7fa";
-const NEIGHBOR = "#e8a33d";
-const PARTY_WALL = "#ffb547";
 
 // Opacity that grows with zoom, so far-out views stay quiet.
 const fadeIn = (from: number, to: number, low: number, high: number): ExpressionSpecification =>
@@ -34,7 +92,7 @@ export const areaLayerIds = (layerId: string) => [`${layerId}-fill`, `${layerId}
 /** Soft extruded buildings from the basemap's own footprints (heights from OpenStreetMap). */
 export function addBuildings(map: MapLibreMap): void {
   // A low, warm key light so facades read as volumes instead of flat blocks.
-  map.setLight({ anchor: "map", position: [1.4, 210, 35], color: "#dfe7f2", intensity: 0.35 });
+  map.setLight({ anchor: "map", position: [1.4, 210, 35], color: palette().light, intensity: 0.35 });
   const firstLabel = map.getStyle().layers.find((l) => l.type === "symbol")?.id;
   map.addLayer(
     {
@@ -45,7 +103,7 @@ export function addBuildings(map: MapLibreMap): void {
       minzoom: 14,
       paint: {
         // Taller buildings catch a little more light, which reads as depth without adding color.
-        "fill-extrusion-color": ["interpolate", ["linear"], ["coalesce", ["get", "render_height"], 10], 0, "#18212c", 60, "#243243", 200, "#30425a"],
+        "fill-extrusion-color": buildingColor(),
         "fill-extrusion-height": ["coalesce", ["get", "render_height"], 10],
         "fill-extrusion-base": ["coalesce", ["get", "render_min_height"], 0],
         "fill-extrusion-opacity": fadeIn(14, 15.5, 0, 0.85),
@@ -68,7 +126,7 @@ export function addPointLayers(map: MapLibreMap, layerId: string, hazard: Hazard
     filter: ["has", "point_count"],
     layout: { visibility },
     paint: {
-      "circle-color": "#3a4a5f",
+      "circle-color": palette().cluster,
       "circle-radius": ["step", ["get", "point_count"], 12, 25, 16, 100, 22, 500, 28],
       "circle-opacity": fadeIn(9, 13, 0.45, 0.75),
       "circle-stroke-color": HAZARD_COLORS[hazard],
@@ -87,7 +145,7 @@ export function addPointLayers(map: MapLibreMap, layerId: string, hazard: Hazard
       "text-font": ["Noto Sans Regular"],
       "text-size": 11,
     },
-    paint: { "text-color": "#e6edf3" },
+    paint: { "text-color": palette().clusterText },
   });
   map.addLayer({
     id: points,
@@ -100,7 +158,7 @@ export function addPointLayers(map: MapLibreMap, layerId: string, hazard: Hazard
       "circle-radius": ["match", ["get", "severity"], 3, 9, 2, 7, 1, 5, 4],
       "circle-opacity": fadeIn(10, 14, 0.35, 0.9),
       // A light ring marks incidents and worse, so severity never relies on color alone.
-      "circle-stroke-color": "#f5f7fa",
+      "circle-stroke-color": palette().ring,
       "circle-stroke-width": ["case", [">=", ["get", "severity"], 2], 1.5, 0],
     },
   });
@@ -132,7 +190,7 @@ export function addSiteLayers(map: MapLibreMap): void {
       type: "fill",
       source: "site-lots",
       paint: {
-        "fill-color": ["match", ["get", "role"], "site", SITE, NEIGHBOR],
+        "fill-color": roleColor(),
         "fill-opacity": ["match", ["get", "role"], "site", 0.28, 0.16],
       },
     },
@@ -143,7 +201,7 @@ export function addSiteLayers(map: MapLibreMap): void {
     type: "line",
     source: "site-lots",
     paint: {
-      "line-color": ["match", ["get", "role"], "site", SITE, NEIGHBOR],
+      "line-color": roleColor(),
       "line-width": ["match", ["get", "role"], "site", 2.5, 1.5],
       "line-blur": 0.5,
     },
@@ -155,13 +213,13 @@ export function addSiteLayers(map: MapLibreMap): void {
     type: "line",
     source: "party-walls",
     layout: { "line-cap": "round" },
-    paint: { "line-color": PARTY_WALL, "line-width": 14, "line-blur": 10, "line-opacity": 0.55 },
+    paint: { "line-color": palette().partyWall, "line-width": 14, "line-blur": 10, "line-opacity": 0.55 },
   });
   map.addLayer({
     id: "party-walls-core",
     type: "line",
     source: "party-walls",
     layout: { "line-cap": "round" },
-    paint: { "line-color": "#fff4d6", "line-width": 2.5 },
+    paint: { "line-color": palette().partyWallCore, "line-width": 2.5 },
   });
 }

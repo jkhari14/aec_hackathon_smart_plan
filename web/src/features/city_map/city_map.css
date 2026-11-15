@@ -1,11 +1,12 @@
-/* Record cards on the dark map. shortcut: hard-coded colors until Camilo's tokens (PR 1) land. */
+/* Record cards on the map, in the design tokens so they follow the theme. */
 .maplibregl-popup-content {
-  background: #121821;
-  color: #e6edf3;
-  border: 1px solid #243041;
-  border-radius: 8px;
+  background: var(--fs-raised);
+  color: var(--fs-text);
+  border: 1px solid var(--fs-line);
+  border-radius: var(--fs-radius-sm);
+  box-shadow: var(--fs-shadow);
   padding: 10px 12px;
-  font: 13px/1.4 ui-sans-serif, system-ui, sans-serif;
+  font: 13px/1.4 var(--fs-font);
 }
 .maplibregl-popup-tip {
   display: none;
@@ -14,7 +15,7 @@
   margin: 4px 0 0;
 }
 .fs-popup-meta {
-  color: #8b98a8;
+  color: var(--fs-muted);
   font-size: 12px;
   font-variant-numeric: tabular-nums;
 }
@@ -36,4 +37,114 @@
   /* The shell themes the control stack, so the label follows its text color in both themes. */
   color: var(--fs-text, #121821);
   letter-spacing: 0.02em;
+}
+
+/* The building key and model scope, under the camera controls. */
+.fs-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 16rem;
+  padding: 8px 10px;
+  border: 1px solid var(--fs-line);
+  border-radius: var(--fs-radius-sm);
+  background: var(--fs-panel-glass);
+  box-shadow: var(--fs-shadow);
+  color: var(--fs-text);
+  font-size: 11px;
+}
+.fs-legend__keys,
+.fs-legend__opts {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.fs-legend__key {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.fs-legend__swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  border: 1px solid var(--fs-line-strong);
+}
+.fs-legend__muted {
+  color: var(--fs-muted);
+}
+.fs-legend__opt {
+  border: 0;
+  border-radius: 4px;
+  padding: 2px 8px;
+  background: transparent;
+  color: var(--fs-muted);
+  font: inherit;
+  cursor: pointer;
+}
+.fs-legend__opt[aria-pressed="true"] {
+  background: var(--fs-accent-soft);
+  color: var(--fs-text);
+}
+.fs-legend--row {
+  flex-direction: row;
+  align-items: center;
+  width: auto;
+  padding: 3px 4px 3px 8px;
+}
+
+/* Camera controls: one toolbar, the 2D/3D switch first. */
+.fs-cam {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid var(--fs-line);
+  border-radius: var(--fs-radius);
+  background: var(--fs-panel-glass);
+  box-shadow: var(--fs-shadow);
+  backdrop-filter: var(--fs-blur);
+}
+.fs-cam__btn {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: var(--fs-radius-sm);
+  background: transparent;
+  color: var(--fs-text-2);
+  cursor: pointer;
+}
+.fs-cam__btn:hover {
+  background: var(--fs-hover);
+  color: var(--fs-text);
+}
+.fs-cam__btn:active {
+  background: var(--fs-accent-soft);
+}
+.fs-cam__btn:focus-visible {
+  outline: 2px solid var(--fs-focus);
+  outline-offset: 1px;
+}
+.fs-cam__mode {
+  width: auto;
+  padding: 0 10px;
+  font: 600 12px/1 var(--fs-font);
+  letter-spacing: 0.02em;
+  color: var(--fs-text);
+  border: 1px solid var(--fs-line-strong);
+}
+.fs-cam__sep {
+  width: 1px;
+  height: 20px;
+  margin: 0 4px;
+  background: var(--fs-line);
+}
+.fs-cam__hint {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--fs-panel-glass);
+  color: var(--fs-muted);
 }

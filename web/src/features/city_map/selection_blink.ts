@@ -3,9 +3,8 @@
 import type { FeatureCollection, MultiPolygon, Polygon, Position } from "geojson";
 import type { IControl, Map as MapLibreMap } from "maplibre-gl";
 
-// Magenta: no hazard, neighbor or party-wall color is near it, and it reads on the dark basemap.
-// shortcut: hard-coded like the other map colors until the map takes the design tokens.
-export const SELECTION_COLOR = "#ff3fd2";
+// The accent blue of the 4site palette: the picked site is the one blue thing on the map.
+export const SELECTION_COLOR = "#4a6cf0";
 
 // NYC Building Footprints: outline and roof height (feet) for each building, keyed by lot.
 const FOOTPRINTS = "https://data.cityofnewyork.us/resource/5zhs-2jue.geojson";

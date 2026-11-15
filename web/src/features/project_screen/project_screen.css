@@ -7,7 +7,7 @@
   z-index: var(--fs-z-overlay);
   display: flex;
   flex-direction: column;
-  background: var(--fs-bg);
+  background: var(--fs-grid), var(--fs-bg);
   color: var(--fs-text);
   font-family: var(--fs-font);
   overflow: hidden;
@@ -38,9 +38,10 @@
   white-space: nowrap;
 }
 .fs-ps__eyebrow {
-  font-size: var(--fs-text-xs);
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-family: var(--fs-pixel);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--fs-accent);
 }
@@ -143,9 +144,9 @@
   font-size: var(--fs-text-xs);
 }
 .fs-ps__step[data-done="true"] .fs-ps__stepnum {
-  background: var(--fs-accent);
-  border-color: var(--fs-accent);
-  color: var(--fs-accent-ink);
+  background: var(--fs-btn-primary);
+  border-color: var(--fs-btn-primary);
+  color: var(--fs-btn-primary-ink);
 }
 
 .fs-ps__body {
@@ -382,9 +383,9 @@ button.fs-ps-card[aria-pressed="true"]:hover,
   color: var(--fs-text);
 }
 .fs-ps-status[data-status="done"] {
-  background: var(--fs-accent);
-  border-color: var(--fs-accent);
-  color: var(--fs-accent-ink);
+  background: var(--fs-btn-primary);
+  border-color: var(--fs-btn-primary);
+  color: var(--fs-btn-primary-ink);
 }
 .fs-ps-status[data-status="not_applicable"] {
   border-style: dashed;

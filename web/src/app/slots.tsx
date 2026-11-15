@@ -106,9 +106,13 @@ type SiteSlotProps = {
   onTab: (tab: SiteTab) => void;
   /** Opens the full-screen project view for this site. */
   onContinue: () => void;
+  focusCase: string | null;
+  onFocusCase: (caseId: string) => void;
+  allStrands: boolean;
+  onAllStrands: (on: boolean) => void;
 };
 
-export function SiteSlot({ bbl, site, onClose, tab, onTab, onContinue }: SiteSlotProps) {
+export function SiteSlot({ bbl, site, onClose, tab, onTab, onContinue, focusCase, onFocusCase, allStrands, onAllStrands }: SiteSlotProps) {
   const open = Boolean(bbl);
   const data = useSiteData(bbl);
   return (
@@ -133,7 +137,8 @@ export function SiteSlot({ bbl, site, onClose, tab, onTab, onContinue }: SiteSlo
           <Button variant="primary" className="fs-btn fs-site__continue" onClick={onContinue}>
             Continue to project →
           </Button>
-          <SitePanel data={data} tab={tab} onTab={onTab} />
+          <SitePanel data={data} tab={tab} onTab={onTab}
+            strands={{ focusedId: focusCase, onFocus: onFocusCase, all: allStrands, onAll: onAllStrands }} />
         </>
       )}
     </Panel>

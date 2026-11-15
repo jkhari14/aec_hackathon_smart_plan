@@ -26,7 +26,8 @@
 }
 .fs-shell__left {
   left: var(--fs-4);
-  width: 400px;
+  /* Room for the search field next to the labelled Layers button. */
+  width: 460px;
 }
 .fs-shell__right {
   right: var(--fs-4);
@@ -81,8 +82,8 @@
   height: var(--fs-fab);
   border-radius: 999px;
   border: 1px solid var(--fs-line-strong);
-  background: var(--fs-accent);
-  color: var(--fs-bg);
+  background: var(--fs-btn-primary);
+  color: var(--fs-btn-primary-ink);
   box-shadow: 0 6px 20px rgb(0 0 0 / 0.35);
   cursor: pointer;
   transition: transform var(--fs-fast) var(--fs-ease);
@@ -531,4 +532,20 @@
   width: 100%;
   justify-content: center;
   margin-bottom: var(--fs-3);
+}
+
+/* Layers, said in words with how many are on, so it never reads as a mystery icon. */
+.fs-layers-btn {
+  gap: 6px;
+  padding-inline: 10px;
+  font-weight: 500;
+}
+.fs-layers-btn__count {
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--fs-accent-soft);
+  color: var(--fs-text);
+  font-size: var(--fs-text-xs);
+  line-height: 18px;
 }
