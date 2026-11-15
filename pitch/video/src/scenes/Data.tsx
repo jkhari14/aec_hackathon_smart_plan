@@ -11,7 +11,7 @@ const GROUPS: { title: string; logos: string[]; lines: Line[] }[] = [
   { title: "Façades and vacates", logos: [], lines: [{ n: 7137, t: "façades filed unsafe or SWARMP" }, { n: 4864, t: "fire vacate orders" }, { n: 348, t: "FDNY vacate orders" }] },
   { title: "Ground, water, weather", logos: [], lines: [{ n: 602, t: "FEMA flood-zone areas" }, { n: 486, t: "Sandy inundation areas" }, { n: 15645, t: "311 flooding reports (12 mo)" }, { t: "USGS bedrock · USDA soil · Open-Meteo" }] },
   { title: "Environmental", logos: [], lines: [{ n: 9389, t: "E-designations" }, { n: 1410, t: "NYS DEC remediation sites" }] },
-  { title: "Knowledge", logos: ["revit.svg"], lines: [{ n: 42, t: "past NYC cases, 2007–2026, as publicly reported" }, { t: "NYC Building Code 2022 (BC 3304, 3309)" }, { t: "Revit structural model export" }] },
+  { title: "Knowledge", logos: ["building-code.svg", "revit.svg"], lines: [{ n: 42, t: "past NYC cases, 2007–2026, as publicly reported" }, { t: "NYC Building Code 2022 (BC 3304, 3309)" }, { t: "Revit structural model export" }] },
 ];
 
 export function Data({ duration }: { duration: number }) {
