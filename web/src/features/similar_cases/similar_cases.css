@@ -330,3 +330,13 @@
   text-transform: uppercase;
   color: var(--fs-text-2);
 }
+/* What went wrong on this case, from its lessons. */
+.fs-case__risk {
+  align-self: flex-start;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--fs-text-2);
+}

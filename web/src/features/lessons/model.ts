@@ -56,3 +56,14 @@ export function casesFor<R extends { case_id: string }>(results: R[], lessons: T
   const keep = new Set(filterLessons(lessons, option, scopes).flatMap((l) => (l.tagged ?? []).map((t) => t.case_id)));
   return results.filter((r) => keep.has(r.case_id));
 }
+
+/** "Watch out for": the lessons most of the listed projects share, most first (ties keep the worst-first order),
+    at most `n`. Counts are of the listed projects, so they match the list below. */
+export function topRisks<T extends Tagged>(lessons: T[], listed: { case_id: string }[], n = 3): { lesson: T; count: number }[] {
+  const ids = new Set(listed.map((r) => r.case_id));
+  return lessons
+    .map((lesson) => ({ lesson, count: (lesson.tagged ?? []).filter((t) => ids.has(t.case_id)).length }))
+    .filter((x) => x.count > 0)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, n);
+}

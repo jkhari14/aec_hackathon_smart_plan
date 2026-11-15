@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { casesFor, filterLessons, lessonsByCase, OPTIONS, scopeChoices, setupFor } from "../src/features/lessons/model.ts";
+import { casesFor, filterLessons, topRisks, lessonsByCase, OPTIONS, scopeChoices, setupFor } from "../src/features/lessons/model.ts";
 
 const lesson = (id: string, options: string[], scopes: string[]) => ({ id, options, scopes }) as never;
 const all = [
@@ -60,4 +60,17 @@ test("by project: every case for every option; narrowed, only cases in the lesso
   assert.deepEqual(casesFor(results, withCases, "all", []).map((r: { case_id: string }) => r.case_id), ["c1", "c2", "c3"]);
   assert.deepEqual(casesFor(results, withCases, "renovate", []).map((r: { case_id: string }) => r.case_id), ["c1", "c2"]);
   assert.deepEqual(casesFor(results, withCases, "new_build", ["structural"]).map((r: { case_id: string }) => r.case_id), ["c2"]);
+});
+
+test("watch out for: the risks most of the listed projects share, most first, at most three", () => {
+  const lessons = [
+    tagged("a", ["renovate"], ["excavation"], [["c1", "reported_cause"], ["c2", "reported_cause"], ["c9", "reported_cause"]]),
+    tagged("b", ["renovate"], ["structural"], [["c1", "reported_cause"], ["c2", "reported_cause"], ["c3", "event_only"]]),
+    tagged("c", ["renovate"], ["facade"], [["c3", "reported_cause"]]),
+    tagged("d", ["renovate"], ["scaffold"], [["c4", "reported_cause"]]),
+    tagged("e", ["renovate"], ["scaffold"], [["c8", "reported_cause"]]),
+  ];
+  const listed = [{ case_id: "c1" }, { case_id: "c2" }, { case_id: "c3" }, { case_id: "c4" }];
+  const top = topRisks(lessons, listed);
+  assert.deepEqual(top.map((t) => [t.lesson.id, t.count]), [["b", 3], ["a", 2], ["c", 1]]);
 });

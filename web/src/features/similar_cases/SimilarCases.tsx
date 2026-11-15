@@ -27,8 +27,10 @@ export type StrandControls = { focusedId: string | null; onFocus: (caseId: strin
 export type CaseLessons = Map<string, { lesson: Lesson; basis: "reported_cause" | "event_only" }[]>;
 
 /** `embedded`: inside the Similar projects tab, which has its own narrowing chips and owns the popup (`onOpen`). */
-export function SimilarCases({ results, strands, embedded = false, onOpen }: {
+export function SimilarCases({ results, strands, embedded = false, onOpen, riskTags }: {
   results: SimilarCase[]; strands?: StrandControls; embedded?: boolean; onOpen?: (caseId: string) => void;
+  /** What went wrong on each case (its lessons), shown as a tag on its card. */
+  riskTags?: Map<string, string[]>;
 }) {
   const [hazards, setHazards] = useState<Set<Hazard>>(new Set());
   const [severities, setSeverities] = useState<Set<Severity>>(new Set());
@@ -113,7 +115,7 @@ export function SimilarCases({ results, strands, embedded = false, onOpen }: {
       {shown.map((r) => (
         <CaseCard key={r.case_id} result={r} focused={strands?.focusedId === r.case_id}
           onFocus={strands ? () => strands.onFocus(r.case_id) : undefined}
-          onOpen={() => (onOpen ? onOpen(r.case_id) : setOpenId(r.case_id))} />
+          onOpen={() => (onOpen ? onOpen(r.case_id) : setOpenId(r.case_id))} risks={riskTags?.get(r.case_id)} />
       ))}
       {!onOpen && (() => {
         const open = results.find((r) => r.case_id === openId);
@@ -133,8 +135,8 @@ const where = (c: SimilarCase["case"]) => {
 /** A case in two lines: the ring, what it was, where and when, and how much it shares with this site.
     Clicking anywhere on a card shows that case joined to the site on the map (its title row again lets go);
     "N things in common" opens the details in a popup. */
-function CaseCard({ result, focused, onFocus, onOpen }: {
-  result: SimilarCase; focused: boolean; onFocus?: () => void; onOpen: () => void;
+function CaseCard({ result, focused, onFocus, onOpen, risks }: {
+  result: SimilarCase; focused: boolean; onFocus?: () => void; onOpen: () => void; risks?: string[];
 }) {
   const c = result.case;
   const common = result.matched_on.length;
@@ -157,6 +159,9 @@ function CaseCard({ result, focused, onFocus, onOpen }: {
         </span>
         <SeverityBadge level={c.severity} />
       </button>
+      {risks && risks.length > 0 && (
+        <span className="fs-case__risk" title={risks.join(" · ")}>{risks[0]}{risks.length > 1 ? ` +${risks.length - 1}` : ""}</span>
+      )}
       <button type="button" className="fs-case__open" onClick={onOpen} aria-haspopup="dialog">
         {plural(common, "thing", "things")} in common{differs > 0 && `, ${plural(differs, "difference", "differences")}`}
         <span aria-hidden="true"> · Details</span>
