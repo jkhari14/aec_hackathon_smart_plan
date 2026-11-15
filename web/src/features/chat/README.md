@@ -16,7 +16,7 @@ import { ChatPanel } from "../features/chat/ChatPanel";
   jobType={jobType} stage={stage}    // optional
   onFlyTo={(target) => ...}          // { ref?, label?, bbl?, lat?, lon? }: bbl, or lat and lon, is set
   onToggleLayer={(layerId, on) => ...}
-  onPin={(pin) => ...}               // { title, question, as_of, offline, answer_parts, text }
+  onPin={workspace.pinChatAnswer}    // from useProject (../project); gets { title, question, as_of, offline, answer_parts, text }
 />
 ```
 

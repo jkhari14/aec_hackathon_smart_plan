@@ -96,5 +96,5 @@ to force mock mode, `FORESITE_CHAT_MODEL`, `FORESITE_CHAT_EFFORT`.
   links the first.
 - The word-list checks catch plain phrasings and miss others. A person's name cannot be detected in code.
 - The searches match words, not meaning.
-- The web chat panel (`web/src/features/chat/`) is built on the placeholder tokens and is not mounted in
-  the app shell yet. The project panel is not built yet.
+- The web chat panel (`web/src/features/chat/`) and project panel (`web/src/features/project/`) are built on
+  the placeholder tokens and are not mounted in the app shell yet.
