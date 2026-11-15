@@ -28,6 +28,70 @@
         }
       }
     },
+    "/api/sites/{bbl}/warnings/checks": {
+      "get": {
+        "summary": "Site Warning Checks",
+        "description": "One entry per rule: checked, couldn't be checked, or not applicable to this site.",
+        "operationId": "site_warning_checks_api_sites__bbl__warnings_checks_get",
+        "parameters": [
+          {
+            "name": "bbl",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-5]\\d{9}$",
+              "description": "10-digit borough-block-lot",
+              "title": "Bbl"
+            },
+            "description": "10-digit borough-block-lot"
+          },
+          {
+            "name": "as_of",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "As Of"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WarningRuleCheck"
+                  },
+                  "title": "Response Site Warning Checks Api Sites  Bbl  Warnings Checks Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/layers": {
       "get": {
         "summary": "List Layers",
@@ -914,65 +978,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ChatResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/sites/{bbl}/warnings/checks": {
-      "get": {
-        "summary": "Warning Checks",
-        "operationId": "warning_checks_api_sites__bbl__warnings_checks_get",
-        "parameters": [
-          {
-            "name": "bbl",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Bbl"
-            }
-          },
-          {
-            "name": "as_of",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "As Of"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WarningRuleCheck"
-                  },
-                  "title": "Response Warning Checks Api Sites  Bbl  Warnings Checks Get"
                 }
               }
             }

@@ -21,6 +21,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/sites/{bbl}/warnings/checks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Site Warning Checks
+         * @description One entry per rule: checked, couldn't be checked, or not applicable to this site.
+         */
+        get: operations["site_warning_checks_api_sites__bbl__warnings_checks_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/layers": {
         parameters: {
             query?: never;
@@ -325,23 +345,6 @@ export interface paths {
          * @description A question about one site, answered in parts that each say where they came from.
          */
         post: operations["chat_answer_api_chat_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/sites/{bbl}/warnings/checks": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Warning Checks */
-        get: operations["warning_checks_api_sites__bbl__warnings_checks_get"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1108,6 +1111,40 @@ export interface operations {
             };
         };
     };
+    site_warning_checks_api_sites__bbl__warnings_checks_get: {
+        parameters: {
+            query?: {
+                as_of?: string | null;
+            };
+            header?: never;
+            path: {
+                /** @description 10-digit borough-block-lot */
+                bbl: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarningRuleCheck"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_layers_api_layers_get: {
         parameters: {
             query?: never;
@@ -1689,39 +1726,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ChatResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    warning_checks_api_sites__bbl__warnings_checks_get: {
-        parameters: {
-            query?: {
-                as_of?: string | null;
-            };
-            header?: never;
-            path: {
-                bbl: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WarningRuleCheck"][];
                 };
             };
             /** @description Validation Error */
