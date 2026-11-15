@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -11,6 +12,8 @@ from jsonschema import Draft202012Validator
 
 from api import contracts
 from api.main import app
+from api.routers.projects_router import project_store
+from api.store.project_store import ProjectStore
 from api.stubs import FIXTURE_HEADER
 from contracts.generate import schema_files
 
@@ -60,44 +63,29 @@ class FixturesMatchContracts(unittest.TestCase):
 
 
 class StubApiServesEveryRoute(unittest.TestCase):
+    """The routes still stubbed. The real routers (PR 4) have their own tests in tests/test_*_router.py."""
+
     @classmethod
     def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        store = ProjectStore(Path(cls.tmp.name) / "projects.sqlite")
+        app.dependency_overrides[project_store] = lambda: store  # no test writes the real project database
         cls.client = TestClient(app)
+
+    @classmethod
+    def tearDownClass(cls):
+        app.dependency_overrides.pop(project_store, None)
+        cls.tmp.cleanup()
 
     def assert_sample(self, response):
         self.assertEqual(response.status_code, 200, response.text)
         self.assertEqual(response.headers.get(FIXTURE_HEADER), "true")
-
-    def test_get_routes(self):
-        bbl = "3052110074"
-        for path in [
-            "/api/layers",
-            "/api/layers/construction_incidents",
-            "/api/search?q=2625%20Bedford",
-            f"/api/sites/{bbl}/warnings",
-            f"/api/sites/{bbl}/pattern",
-            f"/api/sites/{bbl}/actions",
-            "/api/cases",
-            "/api/cases/case-714-39th-2018",
-            "/api/projects/proj-sample",
-        ]:
-            with self.subTest(path=path):
-                self.assert_sample(self.client.get(path))
 
     def test_unknown_layer_and_case_are_404(self):
         self.assertEqual(self.client.get("/api/layers/nope").status_code, 404)
         self.assertEqual(self.client.get("/api/cases/nope").status_code, 404)
 
     def test_write_routes(self):
-        project = {"name": "Test", "site_bbl": "3052110074", "stage": "design", "members": [{"name": "A", "role": "architect"}]}
-        created = self.client.post("/api/projects", json=project)
-        self.assert_sample(created)
-        self.assertEqual(created.json()["name"], "Test")
-        pid = "proj-sample"
-        self.assert_sample(self.client.post(f"/api/projects/{pid}/notes", json={"author_role": "architect", "text": "hi"}))
-        self.assert_sample(self.client.post(f"/api/projects/{pid}/pins", json={"kind": "case", "ref_id": "c", "title": "t", "by_role": "architect"}))
-        self.assert_sample(self.client.patch(f"/api/projects/{pid}/items", json=[{"id": "act-bc-3309-4", "status": "done"}]))
-        self.assert_sample(self.client.post(f"/api/projects/{pid}/model", json=load(FIXTURES / "structural_model.json")))
         self.assert_sample(self.client.post("/api/chat", json={"question": "What should I check?", "bbl": "3052110074"}))
 
     def test_bad_input_is_rejected(self):

@@ -18,6 +18,7 @@ export type Signal = S["Signal"];
 export type SimilarCase = S["SimilarCase"];
 export type SimilarCases = S["SimilarCases"];
 export type EarlyWarning = S["EarlyWarning"];
+export type WarningRuleCheck = S["WarningRuleCheck"];
 export type PatternScore = S["PatternScore"];
 export type ActionItem = S["ActionItem"];
 export type Project = S["Project"];

@@ -152,6 +152,9 @@ update the fixture, and send it as its own small PR before the PR that needs it.
   `matched_on[]`, `differs_on[]`.
 - **`EarlyWarning`:** `id`, `rule_id`, `hazard`, `severity`, `title`, `explanation`,
   `evidence_record_ids[]`, `first_seen`, `as_of`.
+- **`WarningRuleCheck`:** `rule_id`, `title`, `status` (`ok`, `error`, `not_applicable`), `detail`,
+  `warnings` (how many it raised), `sources[]`, `as_of`. One per rule, so a rule that could not run is
+  shown as "couldn't check", never as "no warning".
 - **`PatternScore`:** `bbl`, `score`, `percentile_vs_similar`, `compared_with`, `top_factors[]`
   (`feature`, `value`, `contribution`), `model_version`, `calibration_note`.
 - **`ActionItem`:** `id`, `discipline` (`architect`, `structural`, `geotech`, `contractor`), `hazard`,
@@ -169,7 +172,7 @@ update the fixture, and send it as its own small PR before the PR that needs it.
 **API** (stubs serving fixtures in PR 0, made real by the owners):
 `GET /api/layers`, `GET /api/layers/{layer_id}?bbox=&as_of=`, `GET /api/search?q=`,
 `GET /api/sites/{bbl}/profile?job_type=&stage=&as_of=`, `GET /api/sites/{bbl}/similar?hazard=&severity_min=`,
-`GET /api/sites/{bbl}/warnings?as_of=`, `GET /api/sites/{bbl}/pattern`,
+`GET /api/sites/{bbl}/warnings?as_of=`, `GET /api/sites/{bbl}/warnings/checks?as_of=`, `GET /api/sites/{bbl}/pattern`,
 `GET /api/sites/{bbl}/actions?stage=`, `GET /api/cases`, `GET /api/cases/{id}`,
 `POST /api/projects`, `GET /api/projects/{id}`, `POST|PATCH /api/projects/{id}/items`,
 `POST /api/projects/{id}/notes`, `POST /api/projects/{id}/pins`, `POST /api/projects/{id}/model`,
@@ -206,7 +209,7 @@ planning/         plan and transcripts
 ## Jacob: lead, integrator, merge captain
 
 **Owns:** `contracts/`, `api/main.py`, `api/contracts.py`, `api/stubs.py`, `web/src/contracts.ts`, `early_warning/`,
-`web/src/features/early_warnings/`, `.github/`, `.claude/`, `tools/`, `.gitignore`, deploy config, `AGENTS.md`, `BUILD.md`.
+`web/src/features/early_warnings/`, `data/layers/watchlist.geojson`, `.github/`, `.claude/`, `tools/`, `.gitignore`, `deploy/`, `AGENTS.md`, `BUILD.md`.
 Also merges every PR in order and runs the end-to-end check after each wave.
 
 **References in `jahleel/`:** `api/brief/brief_models.py` (closed status sets), `api/preflight_api.py`

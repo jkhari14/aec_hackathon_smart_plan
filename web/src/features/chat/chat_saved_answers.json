@@ -1,0 +1,146 @@
+{
+  "site_bbl": "3052110074",
+  "answers": [
+    {
+      "id": "saved-1",
+      "question": "What early warnings are there for this site?",
+      "response": {
+        "answer_parts": [
+          {
+            "kind": "notice",
+            "text": "A saved example answer, written ahead of time and checked against this site's data. No model was called and no web search was run.",
+            "source_name": null,
+            "source_url": null,
+            "record_id": null
+          },
+          {
+            "kind": "warning",
+            "text": "Early warning \"Work continued after a stop-work order\": \"ECB violation 39553409Z (2026-04-23, on the site) cites work contrary to a stop-work order (28-207.2.2). Its own text refers to the earlier order; no separate stop-work record dated before it was found. This sequence calls for a check of what was done while the order stood.\"",
+            "source_name": "Early-warning rule: Work continued after a stop-work order",
+            "source_url": null,
+            "record_id": "stop_work_then_work_continued:ecb_violations:39553409Z"
+          },
+          {
+            "kind": "warning",
+            "text": "Early warning \"Nothing recorded for 21 days after an adjacent-protection violation\": \"ECB violation 39552071X (2026-03-20, on the site) concerns protection of adjacent property. No DOB record on that lot is dated in the 21 days after it; the next is dated 2026-04-23. The gap is a prompt to confirm the protection was put in place, not a finding that it was not.\"",
+            "source_name": "Early-warning rule: Nothing recorded for 21 days after an adjacent-protection violation",
+            "source_url": null,
+            "record_id": "adjacent_protection_no_follow_up:ecb_violations:39552071X"
+          },
+          {
+            "kind": "notice",
+            "text": "A warning or a similar past case is a pattern compared with similar sites. It is not a prediction that anything will happen at this site.",
+            "source_name": null,
+            "source_url": null,
+            "record_id": null
+          }
+        ],
+        "actions": [],
+        "offline": true
+      }
+    },
+    {
+      "id": "saved-2",
+      "question": "What should the structural engineer do first?",
+      "response": {
+        "answer_parts": [
+          {
+            "kind": "notice",
+            "text": "A saved example answer, written ahead of time and checked against this site's data. No model was called and no web search was run.",
+            "source_name": null,
+            "source_url": null,
+            "record_id": null
+          },
+          {
+            "kind": "action",
+            "text": "Action item (structural): \"Protect adjoining footings and foundations\". Proof needed: \"Protection design and the record of its installation\".",
+            "source_name": "BC 3309.4",
+            "source_url": null,
+            "record_id": "act-bc-3309-4"
+          }
+        ],
+        "actions": [],
+        "offline": true
+      }
+    },
+    {
+      "id": "saved-3",
+      "question": "Are there similar past cases?",
+      "response": {
+        "answer_parts": [
+          {
+            "kind": "notice",
+            "text": "A saved example answer, written ahead of time and checked against this site's data. No model was called and no web search was run.",
+            "source_name": null,
+            "source_url": null,
+            "record_id": null
+          },
+          {
+            "kind": "case",
+            "text": "3 past cases compared with this site are in the case library. A match is a likeness to a past case, not a prediction for this site.",
+            "source_name": "Partial collapse next to an excavation; Adjacent wall collapse during underpinning; Support-of-excavation wall collapse (as publicly reported: Patch, citing DOB)",
+            "source_url": "https://patch.com/new-york/brooklyn/what-went-wrong-brooklyns-deadly-building-collapse",
+            "record_id": "case-211-e-34th-2020"
+          },
+          {
+            "kind": "notice",
+            "text": "A warning or a similar past case is a pattern compared with similar sites. It is not a prediction that anything will happen at this site.",
+            "source_name": null,
+            "source_url": null,
+            "record_id": null
+          }
+        ],
+        "actions": [],
+        "offline": true
+      }
+    },
+    {
+      "id": "saved-4",
+      "question": "How many ECB violations are on file?",
+      "response": {
+        "answer_parts": [
+          {
+            "kind": "notice",
+            "text": "A saved example answer, written ahead of time and checked against this site's data. No model was called and no web search was run.",
+            "source_name": null,
+            "source_url": null,
+            "record_id": null
+          },
+          {
+            "kind": "public_record",
+            "text": "3 records in DOB ECB Violations for 2625 BEDFORD AVENUE, Brooklyn, NY, USA (lot 3052110074, the site).",
+            "source_name": "DOB ECB Violations",
+            "source_url": "https://data.cityofnewyork.us/d/6bgk-3dad",
+            "record_id": "dataset:3052110074:ecb_violations"
+          }
+        ],
+        "actions": [],
+        "offline": true
+      }
+    },
+    {
+      "id": "saved-5",
+      "question": "How many 311 requests are on file?",
+      "response": {
+        "answer_parts": [
+          {
+            "kind": "notice",
+            "text": "A saved example answer, written ahead of time and checked against this site's data. No model was called and no web search was run.",
+            "source_name": null,
+            "source_url": null,
+            "record_id": null
+          },
+          {
+            "kind": "unknown",
+            "text": "Unknown: 311 requests routed to DOB for 2625 BEDFORD AVENUE, Brooklyn, NY, USA (lot 3052110074, the site): the query failed, so nothing is known. This is not zero.",
+            "source_name": "311 requests routed to DOB",
+            "source_url": null,
+            "record_id": null
+          }
+        ],
+        "actions": [],
+        "offline": true
+      }
+    }
+  ]
+}
