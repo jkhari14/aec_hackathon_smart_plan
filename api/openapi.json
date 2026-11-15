@@ -1377,9 +1377,14 @@
             "enum": [
               "public_record",
               "case",
+              "warning",
+              "action",
               "ai_suggestion",
               "web",
-              "user_input"
+              "user_input",
+              "not_found",
+              "unknown",
+              "notice"
             ],
             "title": "Kind"
           },
@@ -1427,7 +1432,28 @@
           "kind",
           "text"
         ],
-        "title": "ChatAnswerPart"
+        "title": "ChatAnswerPart",
+        "description": "One part of an answer, labeled by where it came from.\n\n`warning` and `action` are results of the early-warning and action rules, not records. `not_found`\nmeans it was looked for and nothing was found; `unknown` means a query or a load failed, which is\nnever shown as zero or none. `notice` is a fixed line from the server (limitations, what was held back)."
+      },
+      "ChatExchange": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "title": "Question"
+          },
+          "answer": {
+            "type": "string",
+            "title": "Answer"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "question",
+          "answer"
+        ],
+        "title": "ChatExchange",
+        "description": "One earlier question and the answer text the reader saw, so a follow-up question has its context."
       },
       "ChatRequest": {
         "properties": {
@@ -1467,6 +1493,46 @@
               }
             ],
             "title": "As Of"
+          },
+          "job_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "new_building",
+                  "alteration",
+                  "demolition"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Type"
+          },
+          "stage": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "pre_acquisition",
+                  "design",
+                  "pre_filing",
+                  "construction"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stage"
+          },
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/ChatExchange"
+            },
+            "type": "array",
+            "title": "History"
           }
         },
         "additionalProperties": false,
