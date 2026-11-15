@@ -8,6 +8,7 @@ could not run is never shown as "no warning". A warning is a prompt to look, nev
 from __future__ import annotations
 
 import re
+from collections import Counter
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from typing import Callable
@@ -21,6 +22,7 @@ from early_warning.records import SOURCE_NAMES, SOURCE_URLS, VIOLATIONS, Event, 
 LOOKBACK = timedelta(days=365)
 FOLLOW_UP_WINDOW = timedelta(days=21)
 EARTH_WORK_WINDOW = timedelta(days=90)
+LISTED_LOTS = 4  # the chat quotes explanations: it refuses a statement over 700 characters or a typed count
 HEAVY_RAIN_MM = 25.0
 
 # Violation text about protecting the property next door: "ADJACENT PROPERTIES", "ADJ PROPTERY",
@@ -349,22 +351,27 @@ def structural_complaint_near_earth_work(ctx: Context) -> Outcome:
         for lot, e in hits:
             name = "On the site" if lot.role == "site" else (lot.address.title() if lot.address else f"Lot {lot.bbl}")
             by_lot.setdefault(name, {}).setdefault((e.text.strip(), e.when), []).append(_record_id(e))
-        listed = "; ".join(
-            f"{name}: " + ", ".join(f"{' and '.join(ids)} (code {code}, {when})" for (code, when), ids in groups.items())
-            for name, groups in by_lot.items())
-        acted = []
+        lots = [f"{name}: " + ", ".join(f"{' and '.join(ids)} (code {code}, {when})" for (code, when), ids in groups.items())
+                for name, groups in by_lot.items()]
+        listed = "; ".join(lots[:LISTED_LOTS]) + (
+            f"; and {len(lots) - LISTED_LOTS} more lots" if len(lots) > LISTED_LOTS else "")
+        acted: dict[str, tuple[str, date]] = {}
         for lot, e in hits:
             for d in lot.events:
                 if d.ref == e.ref and d.kind == "disposition" and d.text in VACATE_DISPOSITIONS and ctx.known(d):
-                    acted.append(f"{_record_id(e)} led to a {VACATE_DISPOSITIONS[d.text]} ({d.when})")
+                    acted[e.ref] = (VACATE_DISPOSITIONS[d.text], d.when)
         where = "the site" if job.lot.role == "site" else _where(job.lot).replace("on ", "", 1)
         nearby = (f"{len(by_lot)} touching lot{'s' if len(by_lot) > 1 else ''}" if job.lot.role == "site"
                   else "the site")
         explanation = (f"Earth-work {job.label()} is on {where}, filed {min(starts)}. Within 90 days of its filing "
-                       f"or first permit, {len(hits)} complaint{'s' if len(hits) > 1 else ''} in codes 30, 14, 16 "
+                       f"or first permit, {'complaints' if len(hits) > 1 else 'a complaint'} in codes 30, 14, 16 "
                        f"or 5C {'were' if len(hits) > 1 else 'was'} entered on {nearby}. {listed}.")
         if acted:
-            explanation += f" DOB's dispositions: {'; '.join(acted)}."
+            kinds = Counter(kind for kind, _ in acted.values())
+            dates = sorted({str(when) for _, when in acted.values()})
+            explanation += (f" DOB followed {len(acted)} of them with vacate orders ("
+                            + ", ".join(f"{n} {kind.split()[0]}" for kind, n in sorted(kinds.items()))
+                            + f"; {dates[0] if len(dates) == 1 else f'{dates[0]} to {dates[-1]}'}).")
         explanation += " Complaints are reports, not findings; this pattern calls for a look at the neighbors' condition."
         hazard = "structural" if any(e.text.strip() in ("30", "5C") for _, e in hits) else "geotech"
         warnings.append(_warning(

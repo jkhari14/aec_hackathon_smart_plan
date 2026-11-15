@@ -7,7 +7,6 @@ from unittest import mock
 from pydantic import ValidationError
 
 from api import contracts
-from api.stubs import fixture
 from api.routers.chat import chat_service, chat_tools
 from api.routers.chat.chat_contract_map import from_contract, to_contract
 from api.routers.chat.chat_model_call import AnthropicChatModel
@@ -267,7 +266,8 @@ class AppRouteTests(unittest.TestCase):
     def test_the_chat_route_is_ours_and_marks_fixture_data(self):
         reply = self.post("What warnings are there?")
         self.assertEqual((reply.status_code, reply.headers["X-ForeSite-Fixture"], reply.json()["offline"]), (200, "true", True))
-        self.assertEqual(self.kinds(reply), ["notice", *["warning"] * len(fixture("warnings")), "notice"])
+        served = self.client.get(f"/api/sites/{self.FIXTURE_BBL}/warnings").json()
+        self.assertEqual(self.kinds(reply), ["notice", *["warning"] * len(served), "notice"])
         self.assertFalse(self.client.get("/api/chat/setup").json()["live"])
 
     def test_similar_cases_actions_and_page_actions_come_from_the_fixtures(self):

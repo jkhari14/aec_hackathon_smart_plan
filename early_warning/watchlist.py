@@ -267,6 +267,11 @@ def main(argv: list[str] | None = None) -> int:
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(to_text(result))
     print(f"{result.layer.status}: {len(result.features)} sites -> {args.out}")
+    if args.out.parent == OUT.parent:
+        from city_layers.build_layers import LAYERS
+        from city_layers.layer_file import write_catalog
+
+        write_catalog(OUT.parent, first=tuple(LAYERS))  # the layers router serves catalog.json, not the folder
     for failure in failures:
         print(f"  failed: {failure}", file=sys.stderr)
     return 1 if result.layer.status == "error" else 0

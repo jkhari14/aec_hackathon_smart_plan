@@ -13,6 +13,8 @@ from fastapi.testclient import TestClient
 
 from api.contracts import LayerFeatureCollection
 from api.main import app
+from api.routers.chat.chat_answer_build import MAX_STATEMENT_CHARS
+from api.routers.chat.chat_wording_checks import typed_count
 from api.stubs import FIXTURE_HEADER
 from early_warning import geometry, watchlist
 from early_warning.records import from_pull
@@ -103,7 +105,7 @@ class LaterDates(unittest.TestCase):
         warnings, _ = run(raw("2625-bedford-ave-brooklyn"), date(2026, 11, 13), weather=lambda *a: Weather([], "u"))
         [warning] = by_rule(warnings, "structural_complaint_near_earth_work")
         self.assertEqual(warning.severity, 1)
-        self.assertIn("full vacate order", warning.explanation)
+        self.assertRegex(warning.explanation, r"with vacate orders \(\d+ full")
 
     def test_the_rule_also_runs_from_the_neighbor_side(self):
         warnings, _ = run(raw("1321-flatbush-ave-brooklyn"), date(2026, 11, 12), weather=lambda *a: Weather([], "u"))
@@ -195,6 +197,14 @@ class WarningsApi(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.client = TestClient(app)
+
+    def test_every_explanation_fits_a_chat_statement(self):
+        for bbl in (BEDFORD, "3052110073"):
+            for as_of in ("2026-06-01", None):
+                for warning in self.client.get(f"/api/sites/{bbl}/warnings" + (f"?as_of={as_of}" if as_of else "")).json():
+                    with self.subTest(bbl=bbl, as_of=as_of, rule=warning["rule_id"]):
+                        self.assertLessEqual(len(warning["explanation"]), MAX_STATEMENT_CHARS)
+                        self.assertIsNone(typed_count(warning["explanation"]))
 
     def test_real_route_serves_the_cached_site(self):
         response = self.client.get(f"/api/sites/{BEDFORD}/warnings?as_of=2026-06-01")
