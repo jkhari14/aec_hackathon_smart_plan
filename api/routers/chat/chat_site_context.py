@@ -76,6 +76,7 @@ class SiteContext:
     warnings: Loaded[list[dict]] = Loaded.not_available("early warnings are not loaded")
     actions: Loaded[list[dict]] = Loaded.not_available("action items are not loaded")
     layers: Loaded[list[dict]] = Loaded.not_available("the layer list is not loaded")
+    sample: bool = False  # some of this is the labelled sample data, not live data for the site
 
 
 class SiteContextUnavailable(Exception):

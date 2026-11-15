@@ -4,16 +4,17 @@
 from, plus **actions** for the page to carry out. Ported from the reference in `jahleel/api/chat/`
 (its README explains the design at length); this file covers what is different here.
 
-**State: wired in, on sample data.** `POST /api/chat` in `api/main.py` is this chat, replacing the
-stub, and it returns the shared contract's `ChatResponse`. Until the site routes are real (PR 4) it
-reads the one sample site in `contracts/fixtures/` and marks every answer with the fixture header,
-as the stubs do. The fixtures hold no list of the site's records, so a record search there answers
-"unknown", not "none found". No real model call has been made.
+**State: wired in.** `POST /api/chat` in `api/main.py` is this chat, replacing the stub, and it
+returns the shared contract's `ChatResponse`. It reads each site part through the function that
+part's route answers from (PR 4), so it shows real data as soon as an owner's module lands and the
+labelled sample until then. No contract carries a site's list of records, so a record search
+answers "unknown", not "none found". No real model call has been made.
 
 This PR sits on a small contract change (its own PR): `ChatAnswerPart.kind` gains `warning`,
-`action`, `not_found`, `unknown` and `notice`, and `ChatRequest` gains optional `job_type`, `stage`
-and `history`. The contract's `ai_suggestion` and `user_input` kinds are not produced: every part
-here rests on a source or is a fixed server line.
+`action`, `not_found`, `unknown` and `notice`; `ChatRequest` gains optional `job_type`, `stage` and
+`history`; and a project pin gains an optional `body`, the text of a pinned chat answer. The
+contract's `ai_suggestion` and `user_input` kinds are not produced: every part here rests on a
+source or is a fixed server line.
 
 ## What an answer holds
 
@@ -54,14 +55,23 @@ the warnings, the action items or a page action, through the same checks, and is
 (`chat_saved_answers_export.py` writes them into `web/src/features/chat/`, built from the site's data
 through the same checks and labeled as saved). They are redone for the demo sites once those are picked.
 
-## What it needs from the rest of the app
+## What it reads
 
 One function, `(bbl, job_type, stage, as_of) -> SiteContext` (`chat_site_context.py`), passed to
-`chat_router_for(...)` in `api/main.py`. Today that is `fixture_context`; the real one replaces it
-when the site routes land. A `SiteContext` holds the site profile, the
-site's and touching lots' records with each dataset's status, the similar cases, the warnings, the
-action items and the layer list. Every piece that can fail to load is a `Loaded` with a status,
-because "could not load" must never reach the chat as an empty list.
+`chat_router_for(...)` in `api/main.py`. That function is `app_context` (`chat_app_context.py`): it
+reads the profile, similar cases, warnings and action items through `load_site_part` in
+`sites_router.py`, the same function each site route answers from, and the layer list through
+`load_layer_catalog`. So the chat and the page cannot disagree about what is on record, and an
+owner's module that lands is picked up by the chat with no change here.
+
+- A part that is still the labelled sample describes the sample site only. For any other lot it is
+  "not available", and a question about it is answered "unknown": sample data is never shown as
+  another site's. An answer resting on sample data carries the `X-ForeSite-Fixture` header.
+- A part that fails to load is a failure with its reason, never an empty list.
+- With no profile for the lot, the chat answers 404 rather than guess.
+
+Every piece that can fail to load is a `Loaded` with a status, because "could not load" must never
+reach the chat as an empty list.
 
 ## Files
 
@@ -80,18 +90,19 @@ chat_mock_answers.py   mock mode
 chat_saved_answers_export.py  writes the web app's saved answers for the sample site
 chat_service.py        live or mock: one answer
 chat_contract_map.py   the chat's answer as the contract's ChatResponse; the contract's request as the chat's
-chat_fixture_context.py the sample site from contracts/fixtures/, until the site routes are real
+chat_app_context.py    the site as the app's own site functions serve it (what the app mounts)
+chat_fixture_context.py the sample site from contracts/fixtures/ (the saved answers are built from it)
 chat_router.py         POST /api/chat, GET /api/chat/setup, 12 live questions a minute
 ```
 
 Tests: `python -m unittest discover -s tests -t .` (`tests/test_chat_core.py`, `tests/test_chat_service.py`,
-`tests/test_chat_saved_answers.py`; offline, a scripted model, no key). Settings: `ANTHROPIC_API_KEY` (server only), `FORESITE_CHAT_LIVE=0`
+`tests/test_chat_saved_answers.py`, `tests/test_chat_app_context.py`; offline, a scripted model, no key). Settings: `ANTHROPIC_API_KEY` (server only), `FORESITE_CHAT_LIVE=0`
 to force mock mode, `FORESITE_CHAT_MODEL`, `FORESITE_CHAT_EFFORT`.
 
 ## Limits
 
-- Sample data only so far: one site, no record list. The record search and as-of counts need the real
-  site data.
+- No contract carries a site's list of records, so the record search and as-of counts answer "unknown"
+  until one does. Dataset counts are the site profile's own.
 - One source per part on the wire: a part resting on several records names them in `source_name` and
   links the first.
 - The word-list checks catch plain phrasings and miss others. A person's name cannot be detected in code.
