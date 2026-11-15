@@ -25,12 +25,14 @@ def _profile_for(bbl: str) -> tuple[Optional[dict], bool]:
     shown as sample data.
     """
     try:
-        from site_profile.router import site_profile  # type: ignore
+        import site_profile.router  # type: ignore  # noqa: F401
     except ModuleNotFoundError:
         pass
     else:
-        profile = site_profile(bbl)
-        return (profile if isinstance(profile, dict) else profile.model_dump()), False
+        from api.routers.sites_router import load_site_part
+
+        loaded = load_site_part("profile", bbl)
+        return loaded.data.model_dump(), loaded.sample
 
     if not _FIXTURE.exists():
         return None, False
