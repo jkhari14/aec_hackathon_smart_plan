@@ -2,7 +2,7 @@
 // fixtures now; the owners' PRs replace the bodies, not the frames:
 //   LayerSlot   -> Shandon's layer panel (PR 5)
 //   SiteSlot    -> Camilo's site, similar-case and action panels (PR 10, filled)
-//   ChatSlot    -> Jahleel's chat panel (PR 9)
+//   ChatSlot    -> Jahleel's chat panel (PR 9, filled)
 import type { CSSProperties } from "react";
 
 import type { LayerCatalogEntry, SearchResult } from "../contracts";
@@ -14,7 +14,6 @@ import {
   ErrorState,
   formatDate,
   HAZARD_LABELS,
-  Kbd,
   Panel,
   SampleBadge,
   Skeleton,
@@ -22,6 +21,7 @@ import {
   SourceLabel,
   Toggle,
 } from "../design";
+import { ChatPanel } from "../features/chat/ChatPanel";
 import { SitePanel, useSiteData, type SiteTab } from "../features/site_panel/SitePanel";
 import { titleCase } from "./CommandBar";
 
@@ -119,16 +119,25 @@ export function SiteSlot({ bbl, site, onClose, tab, onTab }: SiteSlotProps) {
 
 // ---- Chat ----------------------------------------------------------------------------------------
 
-export function ChatSlot({ open, onClose }: { open: boolean; onClose: () => void }) {
+type ChatSlotProps = {
+  open: boolean;
+  onClose: () => void;
+  bbl: string | null;
+  site: SearchResult | null;
+  onPickBbl: (bbl: string) => void;
+  onToggleLayer: (id: string, on: boolean) => void;
+};
+
+export function ChatSlot({ open, onClose, bbl, site, onPickBbl, onToggleLayer }: ChatSlotProps) {
   return (
     <Panel title={copy.chat.title} open={open} edge="bottom" onClose={onClose} className="fs-shell__chat" label="Chat">
-      <EmptyState title="Chat arrives in PR 9">
-        Answers come back as cards with source chips. Click a chip to fly to the record; pin any answer to the project.
-      </EmptyState>
-      <div className="fs-chat__input" aria-disabled="true">
-        <span>{copy.chat.placeholder}</span>
-        <Kbd>Enter</Kbd>
-      </div>
+      <ChatPanel
+        bbl={bbl}
+        siteLabel={site ? titleCase(site.label).split(",")[0] : undefined}
+        className=""
+        onFlyTo={(target) => target.bbl && onPickBbl(target.bbl)}
+        onToggleLayer={onToggleLayer}
+      />
     </Panel>
   );
 }

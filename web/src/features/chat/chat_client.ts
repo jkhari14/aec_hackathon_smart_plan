@@ -2,6 +2,7 @@
 // the API is down, which suits a panel of data but not a chat: a fixed answer shown under a question it
 // was not written for would read as the answer. So this tells "the server answered" apart from "the
 // server refused, and said why" and "no server".
+import { API_BASE, STATIC } from "../../api/client";
 import type { ChatRequest, ChatResponse } from "../../contracts";
 
 export type ChatSetup = {
@@ -36,8 +37,9 @@ function reasonFrom(detail: unknown): string | null {
 }
 
 export async function askChat(body: ChatRequest, signal?: AbortSignal): Promise<ChatResult> {
+  if (STATIC) return { status: "unreachable" };
   try {
-    const response = await fetch("/api/chat", {
+    const response = await fetch(`${API_BASE}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -59,8 +61,9 @@ export async function askChat(body: ChatRequest, signal?: AbortSignal): Promise<
 }
 
 export async function loadChatSetup(signal?: AbortSignal): Promise<ChatSetup | null> {
+  if (STATIC) return null;
   try {
-    const response = await fetch("/api/chat/setup", { signal });
+    const response = await fetch(`${API_BASE}/api/chat/setup`, { signal });
     if (!response.ok) return null;
     const setup = (await response.json()) as Partial<ChatSetup>;
     return typeof setup.live === "boolean" ? { ...DEFAULT_CHAT_SETUP, ...setup } : null;

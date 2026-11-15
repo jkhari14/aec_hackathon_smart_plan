@@ -58,6 +58,14 @@ export function App() {
 
   const visible = useMemo(() => (enabled.has("construction_incidents") ? features : []), [enabled, features]);
 
+  const toggleLayer = (id: string, on: boolean) =>
+    setEnabled((prev) => {
+      const next = new Set(prev);
+      if (on) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+
   const pickSite = (result: SearchResult) => {
     setSite(result);
     setView({ site: result.bbl, tab: "overview" });
@@ -133,14 +141,7 @@ export function App() {
           onClose={() => setView({ layers: false })}
           layers={layers}
           enabled={enabled}
-          onToggle={(id, on) =>
-            setEnabled((prev) => {
-              const next = new Set(prev);
-              if (on) next.add(id);
-              else next.delete(id);
-              return next;
-            })
-          }
+          onToggle={toggleLayer}
         />
       </div>
 
@@ -152,7 +153,14 @@ export function App() {
           tab={view.tab}
           onTab={(tab) => setView({ tab })}
         />
-        <ChatSlot open={view.chat} onClose={() => setView({ chat: false })} />
+        <ChatSlot
+          open={view.chat}
+          onClose={() => setView({ chat: false })}
+          bbl={view.site}
+          site={site}
+          onPickBbl={(bbl) => setView({ site: bbl, tab: "overview" })}
+          onToggleLayer={toggleLayer}
+        />
       </div>
 
       <div className="fs-shell__bottom">

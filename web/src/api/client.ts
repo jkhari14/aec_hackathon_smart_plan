@@ -35,8 +35,8 @@ export type Loaded<T> = { data: T; sample: boolean; savedAt?: string };
 
 const FIXTURE_HEADER = "X-ForeSite-Fixture";
 // VITE_API_BASE points a deployed web app at the deployed API; VITE_STATIC=1 skips the API entirely.
-const API_BASE = (import.meta.env.VITE_API_BASE ?? "").replace(/\/$/, "");
-const STATIC = import.meta.env.VITE_STATIC === "1";
+export const API_BASE = (import.meta.env.VITE_API_BASE ?? "").replace(/\/$/, "");
+export const STATIC = import.meta.env.VITE_STATIC === "1";
 const SNAPSHOT = `${import.meta.env.BASE_URL}snapshot/`;
 
 type Manifest = { saved_at: string; routes: Record<string, { sample: boolean }> };
