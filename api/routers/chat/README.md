@@ -56,9 +56,25 @@ through the same checks and labeled as saved). They are redone for the demo site
 ## Live and mock
 
 **State.** The integrator reported on 2026-11-14 that a key is set on the demo host and the chat
-answered live there (the closing note on pull request #28). What that call checked is not recorded
-here, and the items under "Not yet covered" below still stand. Without a key the chat answers in mock
+answered live there (the closing note on pull request #28). Without a key the chat answers in mock
 mode; with no server the web panel offers saved answers. Each says so on the answer.
+
+**What a live run has checked.** On 2026-11-14, six questions were asked on screen for the sample site
+(lot 3052110074), in the web app against a local server with a key, no as-of day:
+
+| Question | Seconds | What came back |
+|---|---|---|
+| What early warnings are there for this site? | 28 | The server's count (4) and the four rule results in the model's words, each on its rule |
+| What happened next door? | 34 | Past case as publicly reported (cause "under investigation"), quoted records, one warning, and a fly-to for the touching lot |
+| Summarize the main risks at this site | 44 | Record, warning, past-case and action-item parts, with the not-advice notice |
+| How many ECB violations are on file? | 15 | The server's count (4), the three violations the profile names, and a gap for the full list |
+| Who owns this building? | 6 | The names-withheld notice and the lot's facts; no name |
+
+No call failed, and no answer carried the mock notice. Not seen in that run: a web result, an as-of
+view, a failed call, a pin, the rate limit. One fault it found is fixed in the web panel: the fly-to
+for the touching lot opened that lot as the page's site, which started a new conversation and
+discarded the answer (that question was asked twice: the first answer was the one lost). The items
+under "Not yet covered" below still stand.
 
 **Which mode is running.** `GET /api/chat/setup` returns `"live": true` only when all three hold:
 `FORESITE_CHAT_LIVE` is not `0`, a key is in the server's environment (`ANTHROPIC_API_KEY`), and the

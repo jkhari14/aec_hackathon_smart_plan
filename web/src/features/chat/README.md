@@ -9,7 +9,10 @@ The shell's chat slot (`web/src/app/slots.tsx`, `ChatSlot`) draws the frame and 
 inside it: two tabs, "Ask" (the chat) and "Project" (the workspace in `../project`). Both stay mounted,
 so switching tabs keeps the conversation. `ChatDock` passes the picked site, the open project, `onPin`
 from `useProject`, and the shell's two handlers: a fly-to that names a lot opens that lot as the site,
-and a layer switch changes the shell's layer set. A fly-to with only coordinates (a past case with no
+and a layer switch changes the shell's layer set. An answer's own fly-to is carried out only for the
+open site: for another lot the panel says the map stayed put, because a new site starts a new
+conversation and the answer would be lost. The reader can still open that lot from a source button,
+which says it starts a new conversation. A fly-to with only coordinates (a past case with no
 lot) does nothing yet.
 
 `ChatPanel` with `embedded` renders only the conversation and the question box, for a frame someone

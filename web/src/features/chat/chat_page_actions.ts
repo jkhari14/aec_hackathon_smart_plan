@@ -54,9 +54,13 @@ function flyTargetFrom(payload: ChatAction["payload"]): FlyTarget | null {
 /**
  * Carries out an answer's actions in order. `pinTarget` says which answer a pin action means:
  * "this" one, or the "previous" one the reader saw. Returns a line for each action not carried out.
+ *
+ * An answer never moves the page to another lot by itself: the page opens a lot as its site, and a
+ * new site starts a new conversation, which would discard the answer that asked for the move.
  */
 export function carryOutActions(
   actions: ChatAction[],
+  siteBbl: string,
   handlers: ChatPageHandlers,
   pinTarget: (target: "this" | "previous") => ChatPinDraft | null,
   pinFailed: (reason: string) => void,
@@ -72,7 +76,9 @@ export function carryOutActions(
       }
     } else if (action.type === "fly_to") {
       const target = flyTargetFrom(action.payload);
-      if (target && handlers.onFlyTo) handlers.onFlyTo(target);
+      if (target?.bbl && target.bbl !== siteBbl) {
+        notDone.push(`The map stayed on this site: ${target.label ?? `lot ${target.bbl}`} is another lot, and opening it starts a new conversation.`);
+      } else if (target && handlers.onFlyTo) handlers.onFlyTo(target);
       else notDone.push("This page could not move the map.");
     } else {
       const draft = pinTarget(action.payload.target === "previous" ? "previous" : "this");
@@ -99,12 +105,12 @@ export function flyTargetForPart(part: ChatPart, siteBbl: string, cases: Case[])
   if (part.kind === "case") {
     const found = cases.find((item) => item.id === id);
     return found
-      ? { target: { ref: `case:${id}`, label: found.title, bbl: found.bbl ?? undefined, lat: found.lat, lon: found.lon }, label: "Show the case on the map" }
+      ? { target: { ref: `case:${id}`, label: found.title, bbl: found.bbl ?? undefined, lat: found.lat, lon: found.lon }, label: found.bbl && found.bbl !== siteBbl ? "Open the case's lot (new conversation)" : "Show the case on the map" }
       : null;
   }
   if (part.kind === "public_record") {
     const lot = /^(?:site|neighbor|dataset):(\d{10})(?::|$)/.exec(id);
-    if (lot) return { target: { ref: id, bbl: lot[1] }, label: lot[1] === siteBbl ? "Show the site on the map" : "Show this lot on the map" };
+    if (lot) return { target: { ref: id, bbl: lot[1] }, label: lot[1] === siteBbl ? "Show the site on the map" : "Open this lot (new conversation)" };
     return { target: { ref: id, bbl: siteBbl }, label: "Show the site on the map" };
   }
   if (part.kind === "warning") return { target: { ref: `warning:${id}`, bbl: siteBbl }, label: "Show the site on the map" };

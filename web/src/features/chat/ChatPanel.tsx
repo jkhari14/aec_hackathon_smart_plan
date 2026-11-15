@@ -91,6 +91,7 @@ export function ChatPanel(props: ChatPanelProps) {
     const previous = earlier.filter(isAnswered).at(-1);
     const notDone = carryOutActions(
       response.actions,
+      bbl ?? "",
       { onFlyTo, onToggleLayer: props.onToggleLayer, onPin: projectId ? onPin : undefined },
       (target) =>
         target === "this"
