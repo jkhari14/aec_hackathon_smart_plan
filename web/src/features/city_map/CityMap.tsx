@@ -1,5 +1,5 @@
 // The map home: a full-bleed dark city map with every layer from /api/layers (clustered, fading in by
-// zoom), extruded buildings, address search or click to pick a site, a cinematic fly-to, and the site
+// zoom), extruded buildings, click to pick a site, a cinematic fly-to, and the site
 // with its touching lots highlighted, the shared party wall glowing, and similar cases arcing in from
 // across the city. Google Photorealistic 3D Tiles replace the extrusions when a key is set.
 import type { Layer } from "@deck.gl/core";
@@ -13,16 +13,21 @@ import "./city_map.css";
 import { api } from "../../api/client";
 import type { LayerFeature } from "../../contracts";
 import { SEVERITY_LABELS } from "../../contracts";
-import { LayerPanel, type LayerState } from "../layer_panel/LayerPanel";
+import type { LayerState } from "../layer_panel/LayerPanel";
 import {
   addAreaLayers, addBuildings, addPointLayers, addSiteLayers, areaLayerIds, BASEMAP, NYC_CENTER, pointLayerIds, sourceId,
 } from "./map_style";
 import { loadSiteLots, type Picked, siteAt } from "./site_lots";
 import { GOOGLE_KEY, googleTiles, similarCaseLayers, similarCaseTooltip } from "./story_layers";
-import { SiteSearch } from "./SiteSearch";
 
-// `features` is unused: kept so the PR 0 placeholder App still compiles until Camilo's shell replaces it.
-type Props = { features?: LayerFeature[] };
+// The shell owns the picked site, the layer toggles and the search; the map draws them and reports clicks.
+// Without `enabled`, every layer keeps its catalog default.
+type Props = {
+  site?: Picked | null;
+  onPick?: (site: Picked) => void;
+  enabled?: Set<string>;
+  onSample?: () => void;
+};
 
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -46,12 +51,11 @@ function recordCard(p: Record<string, unknown>): HTMLElement {
   return el;
 }
 
-export function CityMap(_props: Props) {
+export function CityMap({ site: picked = null, onPick, enabled, onSample }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const [ready, setReady] = useState(false);
   const [layers, setLayers] = useState<LayerState[]>([]);
-  const [picked, setPicked] = useState<Picked | null>(null);
   const [siteStatus, setSiteStatus] = useState<string | null>(null);
   const [sample, setSample] = useState(false);
   const [credits, setCredits] = useState<string | null>(null);
@@ -125,8 +129,22 @@ export function CityMap(_props: Props) {
     };
   }, [ready]);
 
+  useEffect(() => {
+    if (sample) onSample?.();
+  }, [sample, onSample]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!ready || !map || !enabled) return;
+    for (const { entry } of layers) {
+      for (const id of [...pointLayerIds(entry.layer_id), ...areaLayerIds(entry.layer_id)]) {
+        if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", enabled.has(entry.layer_id) ? "visible" : "none");
+      }
+    }
+  }, [ready, layers, enabled]);
+
   // Clicks: a cluster zooms in, a record explains itself, anywhere else picks the site under the cursor.
-  const pickSite = useCallback((site: Picked) => setPicked(site), []);
+  const pickSite = useCallback((site: Picked) => onPick?.(site), [onPick]);
   useEffect(() => {
     const map = mapRef.current;
     if (!ready || !map) return;
@@ -156,17 +174,19 @@ export function CityMap(_props: Props) {
   // Picking a site: fly in, then highlight it and its touching lots.
   useEffect(() => {
     const map = mapRef.current;
-    if (!ready || !map || !picked) return;
-    let cancelled = false;
-    const camera = { center: [picked.lon, picked.lat] as [number, number], zoom: 17.4, pitch: 60, bearing: -28 };
-    if (reducedMotion()) map.jumpTo(camera);
-    else map.flyTo({ ...camera, duration: 3200, curve: 1.6, essential: false });
-    setSiteStatus("Loading the site and its touching lots…");
+    if (!ready || !map) return;
     const empty: FeatureCollection = { type: "FeatureCollection", features: [] };
     (map.getSource("site-lots") as GeoJSONSource).setData(empty);
     (map.getSource("party-walls") as GeoJSONSource).setData(empty);
     deckLayers.current.arcs = [];
     drawDeck();
+    setSiteStatus(null);
+    if (!picked) return;
+    let cancelled = false;
+    const camera = { center: [picked.lon, picked.lat] as [number, number], zoom: 17.4, pitch: 60, bearing: -28 };
+    if (reducedMotion()) map.jumpTo(camera);
+    else map.flyTo({ ...camera, duration: 3200, curve: 1.6, essential: false });
+    setSiteStatus("Loading the site and its touching lots…");
     let frame = 0;
     loadSiteLots(picked).then(({ lots, walls, profile, sample: s, note }) => {
       if (cancelled) return;
@@ -197,36 +217,15 @@ export function CityMap(_props: Props) {
     };
   }, [ready, picked]);
 
-  // Keep the site in view when the layer panel opens over the map's right side.
-  const onPanelOpen = useCallback((open: boolean) => {
-    mapRef.current?.easeTo({ padding: { right: open ? 352 : 0, top: 72, left: 0, bottom: 0 }, duration: reducedMotion() ? 0 : 250 });
-  }, []);
-
-  const toggle = (layerId: string) => {
-    const map = mapRef.current;
-    setLayers((ls) => ls.map((l) => {
-      if (l.entry.layer_id !== layerId) return l;
-      const on = !l.on;
-      for (const id of [...pointLayerIds(layerId), ...areaLayerIds(layerId)]) {
-        if (map?.getLayer(id)) map.setLayoutProperty(id, "visibility", on ? "visible" : "none");
-      }
-      return { ...l, on };
-    }));
-  };
-
   // maplibre-gl.css sets the map element to position: relative, so it sizes to this wrapper instead.
   return (
     <div className="absolute inset-0">
       <div ref={container} className="h-full w-full" />
-      <SiteSearch picked={picked} status={siteStatus} onPick={pickSite} />
-      <LayerPanel layers={layers} onToggle={toggle} onOpenChange={onPanelOpen} />
+      {picked && siteStatus && (
+        <div className="fs-hint" role="status">{siteStatus}</div>
+      )}
       {credits && (
         <span className="absolute bottom-10 right-4 max-w-md rounded bg-panel/80 px-2 py-0.5 text-[11px] text-muted">{credits}</span>
-      )}
-      {sample && (
-        <span className="absolute bottom-4 left-4 rounded bg-sample/15 px-2 py-0.5 text-xs font-medium text-sample">
-          Sample data
-        </span>
       )}
     </div>
   );

@@ -121,24 +121,24 @@ export function SiteSlot({ bbl, site, onClose, tab, onTab }: SiteSlotProps) {
 
 type ChatSlotProps = {
   open: boolean;
-  onClose: () => void;
   bbl: string | null;
   site: SearchResult | null;
   onPickBbl: (bbl: string) => void;
   onToggleLayer: (id: string, on: boolean) => void;
 };
 
-export function ChatSlot({ open, onClose, bbl, site, onPickBbl, onToggleLayer }: ChatSlotProps) {
+// The chat frames itself; it stays mounted while closed so the conversation survives the chat button.
+export function ChatSlot({ open, bbl, site, onPickBbl, onToggleLayer }: ChatSlotProps) {
   return (
-    <Panel title={copy.chat.title} open={open} edge="bottom" onClose={onClose} className="fs-shell__chat" label="Chat">
+    <div className="fs-shell__chat" data-open={open}>
       <ChatPanel
         bbl={bbl}
         siteLabel={site ? titleCase(site.label).split(",")[0] : undefined}
-        className=""
+        className="min-h-0 max-h-full"
         onFlyTo={(target) => target.bbl && onPickBbl(target.bbl)}
         onToggleLayer={onToggleLayer}
       />
-    </Panel>
+    </div>
   );
 }
 
