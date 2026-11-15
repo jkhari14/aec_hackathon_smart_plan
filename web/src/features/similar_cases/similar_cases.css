@@ -80,17 +80,17 @@
 }
 .fs-case__chips li {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 4px;
   max-width: 100%;
   padding: 2px 8px;
-  border-radius: 999px;
+  /* Reasons are the point of a match, so long ones wrap instead of being cut off. */
+  border-radius: 10px;
   border: 1px solid var(--fs-line);
   font-size: var(--fs-text-xs);
+  line-height: 1.35;
   color: var(--fs-text-2);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
 }
 .fs-case__chips li::before {
   font-weight: 700;

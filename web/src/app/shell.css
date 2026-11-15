@@ -26,8 +26,8 @@
 }
 .fs-shell__left {
   left: var(--fs-4);
-  /* Room for the search field next to the labelled Layers button. */
-  width: 460px;
+  /* Room for the search field next to the logo and the labelled Layers button. */
+  width: 520px;
 }
 .fs-shell__right {
   right: var(--fs-4);
@@ -65,6 +65,15 @@
 }
 .fs-shell__chat[data-open="false"] {
   display: none;
+}
+/* With a site and the chat both open, the conversation gets the larger share; the site panel scrolls. */
+.fs-shell[data-site="true"][data-chat="true"] .fs-shell__site {
+  flex: 1 1 38%;
+  min-height: 0;
+}
+.fs-shell[data-site="true"][data-chat="true"] .fs-shell__chat {
+  flex: 1 1 62%;
+  max-height: none;
 }
 .fs-shell[data-site="false"] .fs-shell__chat {
   margin-top: auto;

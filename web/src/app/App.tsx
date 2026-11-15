@@ -10,7 +10,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "../api/client";
 import type { LayerCatalogEntry, SearchResult } from "../contracts";
 import { copy } from "../copy";
-import logo from "../design/brand/4site-logo.png";
+import logo from "../design/brand/4site-logo-flat.png";
 import { Button, ChatIcon, CloseIcon, Kbd, KeyboardIcon, LayersIcon, MoonIcon, SearchIcon, SunIcon } from "../design";
 import { CityMap } from "../features/city_map/CityMap";
 import type { Picked } from "../features/city_map/site_lots";
