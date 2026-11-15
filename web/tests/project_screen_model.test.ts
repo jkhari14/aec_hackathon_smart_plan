@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import {
-  appliesSummary, asksDepth, currentMilestone, itemNumbers, milestoneSummary, MILESTONES, phaseOf, CONSTRUCTION_CARDS, DEPTH_BANDS, DOC_SLOTS, defaultScope, STAGE_OPTIONS, groupByOwner, ownerFor, ROLES, scopeValues, SCOPE_OPTIONS, withOwners,
+  appliesSummary, asksDepth, trailKind, currentMilestone, itemNumbers, milestoneSummary, MILESTONES, phaseOf, CONSTRUCTION_CARDS, DEPTH_BANDS, DOC_SLOTS, defaultScope, STAGE_OPTIONS, groupByOwner, ownerFor, ROLES, scopeValues, SCOPE_OPTIONS, withOwners,
   WORK_TYPE_CARDS,
 } from "../src/features/project_screen/model.ts";
 
@@ -156,4 +156,10 @@ test("a row about the neighbors shows the first three by name and counts the res
   assert.deepEqual(appliesSummary(all), { shown: all.slice(0, 3), more: 2 });
   assert.deepEqual(appliesSummary(all.slice(0, 2)), { shown: all.slice(0, 2), more: 0 });
   assert.deepEqual(appliesSummary(undefined), { shown: [], more: 0 });
+});
+
+test("a document's trail on an item reads as Added or Flagged", () => {
+  assert.equal(trailKind("Added because the architect uploaded S-101 and confirmed its reading: x."), "Added");
+  assert.equal(trailKind("Flagged because the architect uploaded S-101 and confirmed its reading: x."), "Flagged");
+  assert.equal(trailKind(null), null);
 });
