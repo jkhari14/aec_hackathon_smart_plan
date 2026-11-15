@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import {
-  asksDepth, CONSTRUCTION_CARDS, DEPTH_BANDS, DOC_SLOTS, defaultScope, STAGE_OPTIONS, groupByOwner, ownerFor, ROLES, scopeValues, SCOPE_OPTIONS, withOwners,
+  asksDepth, currentMilestone, itemNumbers, milestoneSummary, MILESTONES, phaseOf, CONSTRUCTION_CARDS, DEPTH_BANDS, DOC_SLOTS, defaultScope, STAGE_OPTIONS, groupByOwner, ownerFor, ROLES, scopeValues, SCOPE_OPTIONS, withOwners,
   WORK_TYPE_CARDS,
 } from "../src/features/project_screen/model.ts";
 
@@ -109,4 +109,42 @@ test("the depth question shows for any job that digs, underpinning-only included
   assert.equal(asksDepth("alteration", ["underpinning"]), true);
   assert.equal(asksDepth("new_building", ["support_of_excavation"]), true);
   assert.equal(asksDepth("alteration", ["structural", "facade"]), false);
+});
+
+test("items are numbered by owner group: A for architect, S for structural engineer", () => {
+  const groups = [
+    { role: "architect" as const, items: [item("a1", "architect"), item("a2", "architect")] },
+    { role: "structural_engineer" as const, items: [item("s1", "structural")] },
+    { role: null, items: [item("u1", "contractor")] },
+  ];
+  const n = itemNumbers(groups as never);
+  assert.deepEqual([n.get("a1"), n.get("a2"), n.get("s1"), n.get("u1")], ["A1", "A2", "S1", "U1"]);
+});
+
+test("an item saved before phases existed is placed in Design", () => {
+  assert.equal(phaseOf(item("x", "architect") as never), "design");
+  assert.equal(phaseOf(item("y", "architect", { phase: "notice" }) as never), "notice");
+});
+
+test("milestones run in project order", () => {
+  assert.deepEqual(MILESTONES.map((m) => m.phase), ["design", "filing", "notice", "before_excavation", "during_work"]);
+});
+
+test("each milestone counts its items, how many are done, and whether any is life safety", () => {
+  const items = [
+    item("a", "architect", { phase: "notice", status: "done", life_safety: false }),
+    item("b", "architect", { phase: "notice", status: "open", life_safety: true }),
+    item("c", "architect", { status: "open", life_safety: false }),
+  ];
+  const byPhase = Object.fromEntries(milestoneSummary(items as never).map((m) => [m.phase, m]));
+  assert.deepEqual(byPhase.notice, { phase: "notice", total: 2, done: 1, lifeSafety: true });
+  assert.deepEqual(byPhase.design, { phase: "design", total: 1, done: 0, lifeSafety: false });
+  assert.deepEqual(byPhase.filing, { phase: "filing", total: 0, done: 0, lifeSafety: false });
+});
+
+test("the project's stage marks where it is on the timeline", () => {
+  assert.equal(currentMilestone("design"), "design");
+  assert.equal(currentMilestone("pre_filing"), "filing");
+  assert.equal(currentMilestone("construction"), "during_work");
+  assert.equal(currentMilestone("pre_acquisition"), "design");
 });

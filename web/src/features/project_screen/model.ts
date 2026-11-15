@@ -183,3 +183,50 @@ export function addedLine(item: Pick<ActionItem, "added_by_role" | "added_at">, 
     : at.toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
   return `${roleLabels[item.added_by_role]} · ${when}`;
 }
+
+// ---- The register and its timeline ------------------------------------------------------------------
+
+export type Phase = NonNullable<ActionItem["phase"]>;
+
+/** The project's checkpoints, in order. The "when" under each comes from the code's own timing. */
+export const MILESTONES: { phase: Phase; label: string; sub: string }[] = [
+  { phase: "design", label: "Design", sub: "During design" },
+  { phase: "filing", label: "DOB filing", sub: "Before filing" },
+  { phase: "notice", label: "Neighbors notified", sub: "60 days before work" },
+  { phase: "before_excavation", label: "Survey done", sub: "Before excavation" },
+  { phase: "during_work", label: "Excavation", sub: "During work" },
+];
+
+/** An item saved before phases existed has none: it sits in Design. */
+export const phaseOf = (item: Pick<ActionItem, "phase">): Phase => item.phase ?? "design";
+
+const isFinished = (s: ActionItem["status"]) => s === "done" || s === "not_applicable";
+
+export function milestoneSummary(items: ActionItem[]): { phase: Phase; total: number; done: number; lifeSafety: boolean }[] {
+  return MILESTONES.map(({ phase }) => {
+    const here = items.filter((i) => phaseOf(i) === phase);
+    return {
+      phase,
+      total: here.length,
+      done: here.filter((i) => isFinished(i.status)).length,
+      lifeSafety: here.some((i) => i.life_safety),
+    };
+  });
+}
+
+/** Where the project is on the timeline, from its stage. */
+export function currentMilestone(stage: Stage): Phase {
+  return ({ pre_acquisition: "design", design: "design", pre_filing: "filing", construction: "during_work" } as const)[stage];
+}
+
+const GROUP_LETTER: Record<Role, string> = { architect: "A", structural_engineer: "S", developer: "D", contractor: "C" };
+
+/** "A1", "S3"… by owner group, from the full list, so numbers stay put while filters are on. */
+export function itemNumbers(groups: { role: Role | null; items: ActionItem[] }[]): Map<string, string> {
+  const out = new Map<string, string>();
+  for (const group of groups) {
+    const letter = group.role ? GROUP_LETTER[group.role] : "U";
+    group.items.forEach((item, i) => out.set(item.id, `${letter}${i + 1}`));
+  }
+  return out;
+}
