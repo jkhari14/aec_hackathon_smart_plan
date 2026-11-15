@@ -4,10 +4,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const SEEN = "foresite.intro.seen";
-// The whole opening is 4 s: the 1.6 s build, a hold on the finished logo, then a 0.8 s fade-and-zoom
-// into the map. A click or key skips it at any point; a video error skips it at once.
-const HOLD_MS = 3200;
+// The whole opening is 3 s: the 1.6 s video played at 0.8x (a 2 s build), a short hold on the finished
+// logo, then a 0.8 s fade-and-zoom into the map. A click or key skips it at any point; a video error
+// skips it at once.
+const PLAYBACK_RATE = 0.8;
+const HOLD_MS = 2200;
 const FADE_MS = 800;
+
+/** Slows the build; set as soon as the element exists, so the first frame already plays at this speed. */
+const slowDown = (video: HTMLVideoElement | null) => {
+  if (!video) return;
+  video.defaultPlaybackRate = PLAYBACK_RATE;
+  video.playbackRate = PLAYBACK_RATE;
+};
 
 function alreadySeen(): boolean {
   try {
@@ -61,6 +70,7 @@ export function Intro({ onDone }: { onDone: () => void }) {
   return (
     <div className="fs-intro" data-state={state} onClick={finish} role="presentation">
       <video
+        ref={slowDown}
         className="fs-intro__video"
         src={`${import.meta.env.BASE_URL}4site-intro.mp4`}
         poster={`${import.meta.env.BASE_URL}4site-intro-poster.png`}
