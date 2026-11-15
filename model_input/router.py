@@ -21,11 +21,11 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 
-from actions.from_model import model_actions
-from api.contracts import DrawingConfirm, Project, StructuralModel
+from actions.from_model import geotech_actions, model_actions
+from api.contracts import DrawingConfirm, GeotechConfirm, Project, StructuralModel
 from api.routers.projects_router import project_store
 from api.store.project_store import NotFound, ProjectStore, ProjectStoreError
-from model_input import drawing, store
+from model_input import drawing, geotech, store
 from model_input.revit import ModelInputError, read_revit
 
 FIXTURE_HEADER = "X-ForeSite-Fixture"
@@ -105,6 +105,55 @@ def confirm_drawing(project_id: str, body: DrawingConfirm, response: Response,
 
 def _pin_body(body: DrawingConfirm, items: list[dict]) -> str:
     lines = [f"AI reading of {body.document}, checked and confirmed on the project. Not a DOB determination."]
+    if body.evidence:
+        lines.append(f"Reader's note: {body.evidence}")
+    lines.append(f"Checklist items added or flagged: {len(items)}.")
+    return "\n".join(lines)[:8000]
+
+
+@router.post("/projects/{project_id}/geotech", include_in_schema=False)
+async def read_geotech_report(project_id: str, request: Request):
+    """Read a geotechnical report and return the findings as a suggestion. Nothing is saved until confirmed."""
+    pdf = await request.body()
+    try:
+        findings, evidence = geotech.read_geotech(pdf)
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from error
+    except drawing.DrawingUnavailable as error:
+        raise HTTPException(503, f"Couldn't read the report. {error}") from error
+    return {"findings": findings, "evidence": evidence,
+            "note": "Read from the report by AI: a suggestion to check and confirm. Nothing is saved until you confirm."}
+
+
+@router.post("/projects/{project_id}/geotech/confirm", response_model=Project)
+def confirm_geotech(project_id: str, body: GeotechConfirm, response: Response,
+                    projects: ProjectStore = Depends(project_store)):
+    """The uploader confirmed a report reading: list the document and add or flag the checklist items it calls for."""
+    findings = body.findings.model_dump()
+    try:
+        items = geotech_actions(findings, body.document, body.by_role)
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from error
+    try:
+        projects.get_project(project_id)
+        projects.record_items(project_id, items, body.by_role)
+        projects.add_pin(project_id, "document", body.slot, body.document, body.by_role,
+                         _geotech_pin_body(body, findings, items))
+    except NotFound as error:
+        raise HTTPException(404, str(error)) from None
+    except ProjectStoreError as error:
+        raise HTTPException(422, str(error)) from None
+    snapshot, version = projects.snapshot(project_id)
+    response.headers["ETag"] = f'"v{version}"'
+    return snapshot
+
+
+def _geotech_pin_body(body: GeotechConfirm, findings: dict, items: list[dict]) -> str:
+    def value(key, unit=""):
+        return "not stated" if findings.get(key) is None else f"{findings[key]:g}{unit}" if isinstance(findings[key], float) else f"{findings[key]}{unit}"
+    lines = [f"AI reading of {body.document}, checked and confirmed on the project. Not engineering advice.",
+             f"Groundwater: {value('groundwater_depth_ft', ' ft')}. Soil: {value('soil_description')}. "
+             f"Allowable bearing: {value('allowable_bearing_tsf', ' tsf')}. Rock: {value('rock_depth_ft', ' ft')}."]
     if body.evidence:
         lines.append(f"Reader's note: {body.evidence}")
     lines.append(f"Checklist items added or flagged: {len(items)}.")

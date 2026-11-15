@@ -169,7 +169,7 @@ function ConfirmForm({ reading, workspace, file, slot, onDiscard, onConfirmed }:
 }
 
 /** What the confirmation added or flagged, by owner: the same items every other tab now shows. */
-function Changes({ project, role, since, onDone }: { project: Project; role: Role; since: string; onDone: () => void }) {
+export function Changes({ project, role, since, onDone }: { project: Project; role: Role; since: string; onDone: () => void }) {
   const changed = useMemo(() => {
     const after = Date.parse(since) - 5000; // the server's clock may run a little behind this tab's
     return project.items.filter((i) => i.added_by_role === role && i.added_at && Date.parse(i.added_at) >= after);

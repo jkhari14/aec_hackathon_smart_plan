@@ -1,4 +1,5 @@
-"""Turn a confirmed structural model into checklist items for the roles it concerns.
+"""Turn a confirmed document reading (a structural model, a geotechnical report) into checklist items for the
+roles it concerns.
 
 A team member uploads a drawing, checks the AI's reading and confirms it; the project's checklist then
 changes for everyone it concerns. Each rule in `rules.json` ("model_rules") has a condition on the
@@ -21,9 +22,9 @@ ROLE_WORDS = {"architect": "architect", "structural_engineer": "structural engin
               "developer": "developer", "contractor": "contractor"}
 
 
-def _rules() -> list[dict]:
+def _rules(key: str = "model_rules") -> list[dict]:
     with RULES_PATH.open(encoding="utf-8") as fh:
-        return json.load(fh)["model_rules"]
+        return json.load(fh)[key]
 
 
 def _wall(wall: dict) -> str:
@@ -70,16 +71,48 @@ def model_actions(model: dict, document: str, by_role: str) -> list[dict]:
     An item with the id of a checklist row (`item_id`) flags that row when the project already has it;
     the store decides, since only it knows what the project holds.
     """
+    return _items(_rules("model_rules"), lambda condition: evaluate(condition, model), document, by_role, "model")
+
+
+def _ft(value: float) -> str:
+    return f"{value:g} ft"
+
+
+def evaluate_geotech(condition: str, findings: dict) -> Optional[str]:
+    """The finding that makes a geotech rule apply, in a few words, or None. A null finding never applies."""
+    water, bearing, rock = findings.get("groundwater_depth_ft"), findings.get("allowable_bearing_tsf"), findings.get("rock_depth_ft")
+    soil = str(findings.get("soil_description") or "")
+    if condition == "report_received":
+        return f"soil: {soil}" if soil.strip() else "a site-specific report is now on the project"
+    if condition == "groundwater_within_15ft":
+        return f"groundwater at {_ft(water)} below grade" if water is not None and water <= 15 else None
+    if condition == "bearing_below_3tsf":
+        return f"allowable bearing {bearing:g} tsf" if bearing is not None and bearing < 3 else None
+    if condition == "fill_or_soft_soil":
+        words = ("fill", "organic", "peat", "soft", "loose")
+        return f"soil: {soil}" if any(w in soil.lower() for w in words) else None
+    if condition == "rock_within_20ft":
+        return f"rock at {_ft(rock)} below grade" if rock is not None and rock <= 20 else None
+    raise ValueError(f"unknown geotech condition: {condition}")
+
+
+def geotech_actions(findings: dict, document: str, by_role: str) -> list[dict]:
+    """ActionItem dicts for a geotechnical report `by_role` confirmed from `document` (same shape as model_actions)."""
+    return _items(_rules("geotech_rules"), lambda condition: evaluate_geotech(condition, findings), document, by_role,
+                  "geotech")
+
+
+def _items(rules: list[dict], finding_for, document: str, by_role: str, kind: str) -> list[dict]:
     if by_role not in ROLE_WORDS:
         raise ValueError(f"unknown role: {by_role}")
     who, doc = ROLE_WORDS[by_role], document_label(document)
     items = []
-    for rule in _rules():
-        finding = evaluate(rule["condition"], model)
+    for rule in rules:
+        finding = finding_for(rule["condition"])
         if finding is None:
             continue
         items.append({
-            "id": rule["item_id"] or f"action-model-{rule['id']}",
+            "id": rule["item_id"] or f"action-{kind}-{rule['id']}",
             "discipline": rule["discipline"],
             "hazard": rule["hazard"],
             "title": rule["title"],
@@ -88,7 +121,7 @@ def model_actions(model: dict, document: str, by_role: str) -> list[dict]:
             "proof_needed": rule["proof_needed"],
             "status": "open",
             "owner_role": rule["owner_role"],
-            "source_rule": f"actions:model:{rule['id']}",
+            "source_rule": f"actions:{kind}:{rule['id']}",
             "life_safety": rule["life_safety"],
             "added_reason": f"Added because the {who} uploaded {doc} and confirmed its reading: {finding}.",
             # Used instead when the project already has this item: it was there, the document flags it.

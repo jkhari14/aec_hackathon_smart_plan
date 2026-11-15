@@ -62,6 +62,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/projects/{project_id}/geotech/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Confirm Geotech
+         * @description The uploader confirmed a report reading: list the document and add or flag the checklist items it calls for.
+         */
+        post: operations["confirm_geotech_api_projects__project_id__geotech_confirm_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/layers": {
         parameters: {
             query?: never;
@@ -695,6 +715,47 @@ export interface components {
             /** Coordinates */
             coordinates: unknown;
         };
+        /**
+         * GeotechConfirm
+         * @description A geotechnical report reading the uploader checked and confirmed: it turns into checklist items.
+         */
+        GeotechConfirm: {
+            findings: components["schemas"]["GeotechFindings"];
+            /**
+             * By Role
+             * @enum {string}
+             */
+            by_role: "architect" | "structural_engineer" | "developer" | "contractor";
+            /** Document */
+            document: string;
+            /**
+             * Slot
+             * @default geotech
+             */
+            slot: string;
+            /** Evidence */
+            evidence?: string | null;
+        };
+        /**
+         * GeotechFindings
+         * @description What a geotechnical report states, as read by AI and confirmed by the uploader. Null: not stated.
+         */
+        GeotechFindings: {
+            /** Groundwater Depth Ft */
+            groundwater_depth_ft?: number | null;
+            /** Soil Description */
+            soil_description?: string | null;
+            /** Allowable Bearing Tsf */
+            allowable_bearing_tsf?: number | null;
+            /** Rock Depth Ft */
+            rock_depth_ft?: number | null;
+            /** Boring Count */
+            boring_count?: number | null;
+            /** Max Boring Depth Ft */
+            max_boring_depth_ft?: number | null;
+            /** Confidence */
+            confidence: number;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -1224,6 +1285,41 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["DrawingConfirm"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Project"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    confirm_geotech_api_projects__project_id__geotech_confirm_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GeotechConfirm"];
             };
         };
         responses: {

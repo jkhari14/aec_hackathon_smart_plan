@@ -401,6 +401,28 @@ class DrawingConfirm(Contract):
     evidence: Optional[str] = Field(default=None, max_length=2000)  # the reader's note on the sheets it used
 
 
+class GeotechFindings(Contract):
+    """What a geotechnical report states, as read by AI and confirmed by the uploader. Null: not stated."""
+
+    groundwater_depth_ft: Optional[float] = Field(default=None, ge=0)
+    soil_description: Optional[str] = Field(default=None, max_length=300)
+    allowable_bearing_tsf: Optional[float] = Field(default=None, ge=0)
+    rock_depth_ft: Optional[float] = Field(default=None, ge=0)
+    boring_count: Optional[int] = Field(default=None, ge=0)
+    max_boring_depth_ft: Optional[float] = Field(default=None, ge=0)
+    confidence: float = Field(ge=0, le=1)
+
+
+class GeotechConfirm(Contract):
+    """A geotechnical report reading the uploader checked and confirmed: it turns into checklist items."""
+
+    findings: GeotechFindings
+    by_role: Role
+    document: str = Field(min_length=1, max_length=200)
+    slot: str = Field(default="geotech", min_length=1, max_length=60)
+    evidence: Optional[str] = Field(default=None, max_length=2000)
+
+
 class ActionItemUpdate(Contract):
     id: str
     status: Optional[Literal["open", "in_progress", "done", "not_applicable"]] = None

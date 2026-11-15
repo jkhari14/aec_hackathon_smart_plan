@@ -10,10 +10,11 @@ import { Button, formatDate } from "../../design";
 import { ROLE_LABELS } from "../project/project_client";
 import type { ProjectWorkspace } from "../project/useProject";
 import { DrawingReader } from "./DrawingReader";
+import { GeotechReader } from "./GeotechReader";
 import { DOC_SLOTS, type DocSlot, type SiteFacts } from "./model";
 
-/** Slots whose PDFs go to the drawing reader. */
-const READ_SLOTS = new Set(["structural"]);
+/** Slots whose PDFs are read by AI: structural drawings and the geotechnical report. */
+const READ_SLOTS = new Set(["structural", "geotech"]);
 const isPdf = (file: File) => file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
 
 export function DocumentsStep({ project, workspace }: { project: Project; workspace: ProjectWorkspace }) {
@@ -34,16 +35,23 @@ export function DocumentsStep({ project, workspace }: { project: Project; worksp
   if (reading) {
     return (
       <div className="fs-ps-docs fs-enter">
-        <DrawingReader key={`${reading.file.name}-${reading.file.lastModified}`} project={project} workspace={workspace}
-          file={reading.file} slot={reading.slot} onDone={() => setReading(null)}
-          onNameOnly={() => workspace.addPin({ kind: "document", ref_id: reading.slot, title: reading.file.name.slice(0, 200) })} />
+        {(() => {
+          const key = `${reading.slot}-${reading.file.name}-${reading.file.lastModified}`;
+          const props = {
+            project, workspace,
+            file: reading.file, slot: reading.slot, onDone: () => setReading(null),
+            onNameOnly: () => workspace.addPin({ kind: "document", ref_id: reading.slot, title: reading.file.name.slice(0, 200) }),
+          };
+          return reading.slot === "geotech" ? <GeotechReader key={key} {...props} /> : <DrawingReader key={key} {...props} />;
+        })()}
       </div>
     );
   }
   return (
     <div className="fs-ps-docs fs-enter">
       <p className="fs-quiet">
-        A structural drawing PDF is read by AI and, once you confirm the reading, updates everyone's checklist.
+        A structural drawing or geotechnical report PDF is read by AI and, once you confirm the reading, updates
+        everyone's checklist.
         Other files stay on your computer: only the name is shared with the team.
       </p>
       <div className="fs-ps-cards fs-ps-cards--2">

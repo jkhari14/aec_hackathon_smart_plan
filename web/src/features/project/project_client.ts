@@ -11,6 +11,14 @@ export type ProjectPin = S["ProjectPin"];
 export type ActionItemUpdate = S["ActionItemUpdate"];
 export type DrawingConfirm = S["DrawingConfirm"];
 export type StructuralModel = S["StructuralModel"];
+export type GeotechConfirm = S["GeotechConfirm"];
+export type GeotechFindings = S["GeotechFindings"];
+
+/** A geotechnical report reading: the AI's suggestion, saved nowhere until the uploader confirms it. */
+export type GeotechReading =
+  | { status: "ok"; findings: GeotechFindings; evidence: string; note: string }
+  | { status: "refused"; reason: string }
+  | { status: "unreachable" };
 
 /** A drawing reading: the AI's suggestion, saved nowhere until the uploader confirms it. */
 export type DrawingReading =
@@ -91,6 +99,7 @@ export const projectWrites = {
   addNote: (projectId: string, role: Role, text: string) => write(url(projectId, "/notes"), "POST", { author_role: role, text }),
   addPin: (projectId: string, pin: PinCreate) => write(url(projectId, "/pins"), "POST", pin),
   confirmDrawing: (projectId: string, body: DrawingConfirm) => write(url(projectId, "/model/confirm"), "POST", body),
+  confirmGeotech: (projectId: string, body: GeotechConfirm) => write(url(projectId, "/geotech/confirm"), "POST", body),
 };
 
 /** Send a PDF to the drawing reader (10 to 30 s). 422: not a readable PDF; 503: no reader on this server. */
@@ -119,4 +128,23 @@ export function whyNotSaved(result: ProjectWrite): string | null {
   if (result.status === "sample") return "This is the sample project: changes are not saved.";
   if (result.status === "refused") return result.reason;
   return "The project could not be reached, so this was not saved.";
+}
+
+/** Send a geotechnical report PDF to the reader (10 to 30 s). Same answers as `readDrawing`. */
+export async function readGeotech(projectId: string, file: Blob): Promise<GeotechReading> {
+  if (STATIC) return { status: "unreachable" };
+  try {
+    const response = await fetch(url(projectId, "/geotech"), {
+      method: "POST", headers: { "Content-Type": "application/pdf" }, body: file,
+    });
+    const payload = (await response.json().catch(() => null)) as
+      | { findings?: GeotechFindings; evidence?: string; note?: string; detail?: unknown } | null;
+    if (response.ok && payload?.findings && typeof payload.findings.confidence === "number") {
+      return { status: "ok", findings: payload.findings, evidence: payload.evidence ?? "", note: payload.note ?? "" };
+    }
+    const reason = reasonFrom(payload?.detail);
+    return reason ? { status: "refused", reason } : { status: "unreachable" };
+  } catch {
+    return { status: "unreachable" };
+  }
 }

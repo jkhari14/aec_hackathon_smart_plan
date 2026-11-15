@@ -359,5 +359,99 @@
       "proof_needed": "Test pits, probes or record drawings showing the foundation",
       "life_safety": false
     }
+  ],
+  "geotech_rules_note": "Rules that turn a confirmed geotechnical report reading into checklist items: actions/from_model.py (geotech_actions). Thresholds (15 ft groundwater, 3 tsf bearing, 20 ft rock) are a first draft for the domain lead to confirm.",
+  "geotech_rules": [
+    {
+      "id": "support-basis",
+      "condition": "report_received",
+      "item_id": "action-code-support_basis",
+      "owner_role": "structural_engineer",
+      "discipline": "geotech",
+      "hazard": "geotech",
+      "title": "Geotechnical basis for the support design",
+      "why": "The support drawings rest on site-specific testing, and incorporate the geotechnical report, the evaluation analysis and the preconstruction survey. The confirmed report is that basis.",
+      "code_ref": "2022 NYC BC 3304.4.1.2",
+      "proof_needed": "The geotechnical report, cross-referenced in the drawings",
+      "life_safety": true
+    },
+    {
+      "id": "dewatering",
+      "condition": "groundwater_within_15ft",
+      "item_id": null,
+      "owner_role": "contractor",
+      "discipline": "contractor",
+      "hazard": "geotech",
+      "title": "Plan dewatering for the excavation",
+      "why": "The confirmed report found groundwater within 15 ft of grade, near or above the cellar excavation. Pumping it down can settle the neighbours' footings, so the dewatering plan needs the engineer's review before digging.",
+      "code_ref": null,
+      "proof_needed": "Dewatering plan reviewed by the engineer",
+      "life_safety": true
+    },
+    {
+      "id": "monitoring",
+      "condition": "groundwater_within_15ft",
+      "item_id": "action-code-monitoring",
+      "owner_role": "contractor",
+      "discipline": "geotech",
+      "hazard": "geotech",
+      "title": "Monitor nearby buildings",
+      "why": "Monitor adjoining buildings for movement during excavation and dewatering. The confirmed report found groundwater within 15 ft of grade.",
+      "code_ref": "2022 NYC BC 3309.4.4",
+      "proof_needed": "Monitoring readings with dates and thresholds",
+      "life_safety": true
+    },
+    {
+      "id": "waterproofing",
+      "condition": "groundwater_within_15ft",
+      "item_id": null,
+      "owner_role": "architect",
+      "discipline": "architect",
+      "hazard": "flood",
+      "title": "Waterproof the cellar below the water table",
+      "why": "The confirmed report found groundwater within 15 ft of grade, so the new cellar may sit at or below it. Detail waterproofing for water pressure, not only damp-proofing.",
+      "code_ref": null,
+      "proof_needed": "Waterproofing details on the architectural drawings",
+      "life_safety": false
+    },
+    {
+      "id": "bearing",
+      "condition": "bearing_below_3tsf",
+      "item_id": null,
+      "owner_role": "structural_engineer",
+      "discipline": "structural",
+      "hazard": "geotech",
+      "title": "Check the footings against the reported bearing capacity",
+      "why": "The confirmed report recommends an allowable bearing pressure below 3 tsf. Check existing and new footings, and the underpinning, against it.",
+      "code_ref": null,
+      "proof_needed": "Footing calculations using the reported bearing pressure",
+      "life_safety": true
+    },
+    {
+      "id": "fill",
+      "condition": "fill_or_soft_soil",
+      "item_id": null,
+      "owner_role": "structural_engineer",
+      "discipline": "geotech",
+      "hazard": "geotech",
+      "title": "Account for fill or soft soil in the support design",
+      "why": "The confirmed report found fill or soft soil near the surface. It moves more under load and when dug beside; the support of excavation and underpinning design should account for it.",
+      "code_ref": null,
+      "proof_needed": "Support design calculations citing the soil profile",
+      "life_safety": true
+    },
+    {
+      "id": "rock",
+      "condition": "rock_within_20ft",
+      "item_id": null,
+      "owner_role": "contractor",
+      "discipline": "contractor",
+      "hazard": "construction_safety",
+      "title": "Plan rock removal with vibration limits",
+      "why": "The confirmed report found bedrock within 20 ft of grade. Removing it shakes the adjoining buildings; set vibration limits and monitoring before work.",
+      "code_ref": null,
+      "proof_needed": "Rock removal plan with vibration limits",
+      "life_safety": true
+    }
   ]
 }

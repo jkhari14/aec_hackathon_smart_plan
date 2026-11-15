@@ -142,6 +142,56 @@
         }
       }
     },
+    "/api/projects/{project_id}/geotech/confirm": {
+      "post": {
+        "summary": "Confirm Geotech",
+        "description": "The uploader confirmed a report reading: list the document and add or flag the checklist items it calls for.",
+        "operationId": "confirm_geotech_api_projects__project_id__geotech_confirm_post",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeotechConfirm"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/layers": {
       "get": {
         "summary": "List Layers",
@@ -2088,6 +2138,146 @@
           "coordinates"
         ],
         "title": "Geometry"
+      },
+      "GeotechConfirm": {
+        "properties": {
+          "findings": {
+            "$ref": "#/components/schemas/GeotechFindings"
+          },
+          "by_role": {
+            "type": "string",
+            "enum": [
+              "architect",
+              "structural_engineer",
+              "developer",
+              "contractor"
+            ],
+            "title": "By Role"
+          },
+          "document": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Document"
+          },
+          "slot": {
+            "type": "string",
+            "maxLength": 60,
+            "minLength": 1,
+            "title": "Slot",
+            "default": "geotech"
+          },
+          "evidence": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "findings",
+          "by_role",
+          "document"
+        ],
+        "title": "GeotechConfirm",
+        "description": "A geotechnical report reading the uploader checked and confirmed: it turns into checklist items."
+      },
+      "GeotechFindings": {
+        "properties": {
+          "groundwater_depth_ft": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Groundwater Depth Ft"
+          },
+          "soil_description": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Soil Description"
+          },
+          "allowable_bearing_tsf": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allowable Bearing Tsf"
+          },
+          "rock_depth_ft": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rock Depth Ft"
+          },
+          "boring_count": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Boring Count"
+          },
+          "max_boring_depth_ft": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Boring Depth Ft"
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "confidence"
+        ],
+        "title": "GeotechFindings",
+        "description": "What a geotechnical report states, as read by AI and confirmed by the uploader. Null: not stated."
       },
       "HTTPValidationError": {
         "properties": {
