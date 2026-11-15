@@ -5,8 +5,10 @@ import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 import { C, PIXEL } from "../theme";
 import { Counter, Eyebrow, HardCard, Headline, PixelLabel, Reveal, Slide, useSpring } from "../ui";
 
-const B = 280;
-const CC = 470;
+// Beats: the Brooklyn collapse, records on the wrong building, silos, the scale, the cost today.
+export const PROBLEM_BEATS = { open: 0, rec: 330, slice: 600, facts: 830, cost: 1070 };
+const { open: OP, rec: R0, slice: B, facts: CC, cost: CO } = PROBLEM_BEATS;
+export const PROBLEM_FRAMES = 1330;
 
 function Beat({ from, to, children }: { from: number; to: number; children: React.ReactNode }) {
   const frame = useCurrentFrame();
@@ -19,16 +21,16 @@ function Beat({ from, to, children }: { from: number; to: number; children: Reac
 }
 
 function Records() {
-  const frame = useCurrentFrame();
+  const frame = useCurrentFrame() - R0;
   const items = ["Adjacent property not protected", "Work continued after a stop-work order", "Excavation and SOE permits open"];
-  const x = useSpring(150, 14);
+  const x = useSpring(R0 + 150, 14);
   const months = interpolate(frame, [120, 160], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
     <div style={{ position: "absolute", left: 120, top: 400, right: 120, display: "flex", alignItems: "center", gap: 50 }}>
-      <HardCard delay={40} style={{ width: 700 }}>
+      <HardCard delay={R0 + 40} style={{ width: 700 }}>
         <PixelLabel>Construction site · record</PixelLabel>
         {items.map((t, i) => (
-          <Reveal key={t} delay={62 + i * 14} x={-16} y={0}>
+          <Reveal key={t} delay={R0 + 62 + i * 14} x={-16} y={0}>
             <div style={{ fontSize: 32, marginTop: 16, display: "flex", gap: 16 }}>
               <span style={{ color: C.red, fontWeight: 700 }}>!</span>
               {t}
@@ -41,12 +43,12 @@ function Records() {
         <div style={{ fontSize: 120, lineHeight: 1, color: C.red, fontWeight: 700, transform: `scale(${x})`, margin: "10px 0" }}>×</div>
         <PixelLabel color={C.red} size={20} style={{ opacity: x }}>Never linked</PixelLabel>
       </div>
-      <HardCard delay={80} style={{ width: 700 }}>
+      <HardCard delay={R0 + 80} style={{ width: 700 }}>
         <PixelLabel>Old neighbor next door · record</PixelLabel>
-        <Reveal delay={100}>
+        <Reveal delay={R0 + 100}>
           <div style={{ fontSize: 32, marginTop: 16, color: C.muted, fontStyle: "italic" }}>Clean file. No alerts.</div>
         </Reveal>
-        <Reveal delay={116}>
+        <Reveal delay={R0 + 116}>
           <div style={{ fontSize: 32, marginTop: 16 }}>The risk is next door, in someone else’s record.</div>
         </Reveal>
       </HardCard>
@@ -70,8 +72,13 @@ function Slices() {
             Filings, complaints, violations and past cases live in separate datasets, on separate lots, read by different people at different times.
           </p>
         </Reveal>
+        <Reveal delay={B + 90}>
+          <p style={{ fontSize: 34, lineHeight: 1.4, marginTop: 26, fontWeight: 600 }}>
+            What’s missing: <span style={{ color: C.blue }}>one live checklist the whole team shares.</span>
+          </p>
+        </Reveal>
       </div>
-      <svg width={760} height={760} viewBox="-380 -380 760 760" style={{ position: "absolute", right: 110, top: 150 }}>
+      <svg width={760} height={760} viewBox="-380 -380 760 760" style={{ position: "absolute", right: 110, top: 150, overflow: "visible" }}>
         {ROLES.map((r, i) => {
           const a0 = (i / ROLES.length) * Math.PI * 2 - Math.PI / 2;
           const a1 = ((i + 1) / ROLES.length) * Math.PI * 2 - Math.PI / 2;
@@ -125,13 +132,75 @@ function Facts() {
   );
 }
 
+function Opener() {
+  return (
+    <AbsoluteFill>
+      <div style={{ position: "absolute", left: 120, top: 150, width: 1100 }}>
+        <Eyebrow color={C.red} delay={OP + 4}>Brooklyn · November 11, 2026</Eyebrow>
+        <Headline delay={OP + 10} size={80} style={{ marginTop: 18 }}
+          lines={[["A", "building", "collapsed", "next", "to"], ["an", "excavation", "on", "Flatbush", "Avenue."]]} />
+        <Reveal delay={OP + 60}>
+          <p style={{ fontSize: 36, lineHeight: 1.4, color: C.ink2, marginTop: 36, width: 980 }}>
+            Publicly reported: the site next door held excavation and foundation permits, and had been cited in April
+            for continuing work after a stop-work order.
+          </p>
+        </Reveal>
+        <Reveal delay={OP + 120}>
+          <p style={{ fontSize: 36, lineHeight: 1.4, marginTop: 24, fontWeight: 600 }}>
+            The signs were in public records. No one saw them together.
+          </p>
+        </Reveal>
+      </div>
+      <HardCard delay={OP + 40} style={{ position: "absolute", right: 120, top: 260, width: 520 }}>
+        <PixelLabel>1321 Flatbush Ave · Brooklyn</PixelLabel>
+        <div style={{ fontSize: 34, fontWeight: 700, marginTop: 18 }}>Cause</div>
+        <div style={{ fontSize: 40, color: C.red, fontWeight: 700, marginTop: 6 }}>Under investigation</div>
+        <PixelLabel size={14} style={{ marginTop: 26, lineHeight: 1.6 }}>Associated Press · Nov 12, 2026</PixelLabel>
+      </HardCard>
+    </AbsoluteFill>
+  );
+}
+
+function Cost() {
+  const cards = [
+    { big: "$1,000s", small: "for the research and records review on one site" },
+    { big: "1–3 weeks", small: "of lead time before the team can plan around it" },
+  ];
+  return (
+    <AbsoluteFill>
+      <div style={{ position: "absolute", left: 120, top: 120 }}>
+        <Eyebrow color={C.red} delay={CO}>The cost today</Eyebrow>
+        <Headline delay={CO + 4} size={76} style={{ marginTop: 16 }} lines={[["Pulling", "it", "together", "takes", "weeks."]]} />
+      </div>
+      <div style={{ position: "absolute", left: 120, top: 380, display: "flex", gap: 40 }}>
+        {cards.map((c, i) => (
+          <HardCard key={c.big} delay={CO + 24 + i * 14} style={{ width: 520, minHeight: 300 }}>
+            <div style={{ fontSize: 96, fontWeight: 700, letterSpacing: "-0.04em" }}>{c.big}</div>
+            <div style={{ fontSize: 32, lineHeight: 1.3, marginTop: 16 }}>{c.small}</div>
+          </HardCard>
+        ))}
+        <HardCard delay={CO + 64} style={{ width: 520, minHeight: 300, borderColor: C.blue }}>
+          <div style={{ fontSize: 96, fontWeight: 700, letterSpacing: "-0.04em", color: C.blue }}>Minutes</div>
+          <div style={{ fontSize: 32, lineHeight: 1.3, marginTop: 16 }}>with 4site, before you sign or file</div>
+        </HardCard>
+      </div>
+      <Reveal delay={CO + 80} style={{ position: "absolute", left: 120, top: 800 }}>
+        <PixelLabel size={16}>Typical today, per our team’s experience in practice · not a published figure</PixelLabel>
+      </Reveal>
+    </AbsoluteFill>
+  );
+}
+
 export function Problem({ duration }: { duration: number }) {
   return (
     <Slide section="Problem" index={2} duration={duration}>
-      <Beat from={0} to={B}>
+      <Beat from={OP} to={R0}>
+        <Opener />
+      </Beat>
+      <Beat from={R0} to={B}>
         <div style={{ position: "absolute", left: 120, top: 110 }}>
-          <Eyebrow color={C.red}>The problem</Eyebrow>
-          <Headline delay={6} size={80} style={{ marginTop: 16 }}
+          <Eyebrow color={C.red} delay={R0}>The problem</Eyebrow>
+          <Headline delay={R0 + 6} size={80} style={{ marginTop: 16 }}
             lines={[["The", "warnings", "are", "public."], ["They’re", "filed", "on", "the", { t: "wrong", color: C.red }, { t: "building.", color: C.red }]]} />
         </div>
         <Records />
@@ -139,8 +208,11 @@ export function Problem({ duration }: { duration: number }) {
       <Beat from={B} to={CC}>
         <Slices />
       </Beat>
-      <Beat from={CC} to={duration + 20}>
+      <Beat from={CC} to={CO}>
         <Facts />
+      </Beat>
+      <Beat from={CO} to={duration + 20}>
+        <Cost />
       </Beat>
     </Slide>
   );

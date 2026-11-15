@@ -13,7 +13,7 @@ const LIMITS = [
 ];
 
 const NEXT = [
-  { t: "DOB objection check", d: "flag the plan-exam objections a filing is likely to get, learned from past DOB objections, before you file" },
+  { t: "DOB objection reasons", d: "today 4site flags scopes where similar filings sit at objections; next, what the objections were about, once DOB publishes it" },
   { t: "Forensics ledger", d: "after an event: index the documents into a dated evidence ledger the engineer confirms (from our forensic advisor)" },
   { t: "Daily pulls + alerts", d: "re-run the early-warning rules every day across the 1,187-site watchlist" },
   { t: "Read drawings and models", d: "structural system from Revit and drawing sets, not only the public record" },

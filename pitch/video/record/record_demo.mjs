@@ -130,199 +130,154 @@ const panel = page.locator(".fs-shell__right .fs-site, .fs-shell__right [class*=
 const tab = (name) => page.getByRole("tab", { name }).or(page.locator(".fs-site__bar button", { hasText: name })).first();
 
 // ---- The flow ----------------------------------------------------------------------------------------
+const right = page.locator(".fs-shell__right");
+async function maybe(locator, opts) {
+  if (await locator.count()) await click(locator.first(), opts);
+  else console.log("  missing:", String(locator));
+}
 await page.goto(BASE);
 await page.waitForSelector(".fs-topbar", { state: "visible" });
-await wait(6000); // city layers and tiles settle before the take starts
+await wait(6000);
 if (cdp) await cdp.send("Page.startScreencast", { format: "jpeg", quality: 90, maxWidth: 1920, maxHeight: 1080, everyNthFrame: 1 });
 t0 = now();
 await moveTo(820, 520, 10);
 await wait(1500);
 await mark("city");
 
-// Inputs: every public source is a layer
-await click(page.locator(".fs-layers-btn"), { after: 1200 });
-await mark("layers");
-for (const name of [/Unsafe facades/i, /Sandy/i]) {
-  const toggle = page.locator(".fs-shell__left").getByRole("switch", { name }).first();
-  if (await toggle.count()) await click(toggle, { after: 1600, dx: 0.1 });
-}
-await mark("layers_toggled");
-await moveTo(900, 560, 900);
-await wait(2200);
-for (const name of [/Unsafe facades/i, /Sandy/i]) {
-  const toggle = page.locator(".fs-shell__left").getByRole("switch", { name }).first();
-  if (await toggle.count()) await click(toggle, { after: 500, dx: 0.1, ms: 400 });
-}
-await click(page.locator(".fs-layers-btn"), { after: 900 });
-
-// Search: the command bar
+// Search
 await click(page.locator(".fs-search"), { after: 500 });
 await mark("search_open");
 await page.keyboard.type("861 Park Ave Brooklyn", { delay: 75 });
 const result = page.locator(".fs-cmd__item", { hasText: /861 Park Ave.*Brooklyn/i }).first();
 await result.waitFor({ timeout: 30000 });
 await wait(800);
-await mark("search_results");
 await click(result, { after: 200 });
 await mark("fly_to");
-await page.locator(".fs-shell__right").getByText("What stands out", { exact: false }).first().waitFor({ timeout: 60000 });
-await wait(5500);
-await mark("site_overview");
-await moveTo(1300, 470, 900);
-await wait(1500);
-
-// Overview: top signals, then why
-const firstSignal = page.locator(".fs-shell__right .fs-signals .fs-card").first();
-await point(firstSignal, { ms: 600 });
-await wait(800);
-await click(firstSignal.locator(".fs-explain summary"), { after: 1500 });
-await mark("signal_why");
-await wait(2000);
-await click(firstSignal.locator(".fs-explain summary"), { after: 500 });
-
-// Touching lots
-const fold = (re) => page.locator(".fs-shell__right details.fs-site__fold summary", { hasText: re }).first();
-await click(fold(/Touching lots/i), { after: 900 });
-await mark("touching_lots");
-await scrollIn(fold(/Touching lots/i), 380);
-await wait(3000);
-await click(fold(/Touching lots/i), { after: 500 });
-
-// Similar cases
-await click(tab(/Similar/), { after: 1200 });
+await right.getByText("Watch out for", { exact: false }).first().waitFor({ timeout: 60000 });
+await wait(5000);
 await mark("similar");
-await wait(2200);
-const heroCase = page.locator(".fs-shell__right .fs-case", { hasText: /211 E 34th/i }).first();
-const firstCase = heroCase.locator(".fs-case__main").first();
-await point(heroCase, { ms: 700 });
+
+// Watch out for: the risk most similar projects share, and its checklist items
+const risk = right.locator(".fs-watch__risk").first();
+await point(risk, { ms: 700 });
 await wait(900);
-await click(firstCase, { after: 600 });
+await click(risk, { after: 1200 });
+await mark("watch_items");
+await moveTo(1400, 560, 800);
+await wait(4500);
+await click(risk, { after: 600 });
+
+// The past case: strand on the map, then its lessons
+const hero = right.locator(".fs-case", { hasText: /211 E 34th/i }).first();
+await point(hero, { ms: 700 });
+await wait(700);
+await click(hero, { after: 600, dy: 0.3 });
 await mark("case_strand");
 await wait(4500);
-const happened = heroCase.getByText(/What happened/i).first();
-if (await happened.count()) {
-  await click(happened, { after: 1200 });
-  await mark("case_what_happened");
-  await scrollIn(happened, 260);
-  await wait(4500);
-}
-await click(firstCase, { after: 3500 });
-await mark("case_unfocused");
-
-// Actions by discipline
-await click(tab(/Actions/), { after: 1200 });
-await mark("actions");
-await wait(1500);
-const firstAction = page.locator(".fs-shell__right .fs-card").first();
-await click(firstAction.locator(".fs-explain summary").first(), { after: 1500 });
-await mark("action_why");
+await click(hero.locator(".fs-case__open"), { after: 1500 });
+await mark("case_dialog");
 await wait(2500);
+const dialog = page.locator(".fs-case-dialog");
+await scrollIn(dialog, 420, 8);
+await wait(3500);
+await scrollIn(dialog, 420, 8);
+await wait(3500);
+await mark("case_dialog_end");
+await click(page.locator(".fs-case-dialog__close"), { after: 1800 });
 
-// Project: shared checklist for the team
-await click(page.getByRole("button", { name: /Continue to project/i }), { after: 1500 });
+// This lot: top signals and early warnings
+await click(tab(/This lot/), { after: 1500 });
+await mark("this_lot");
+await wait(2500);
+const warnings = right.locator(".fs-site__section", { hasText: "Early warnings" }).first();
+await warnings.scrollIntoViewIfNeeded().catch(() => undefined);
+await wait(800);
+await point(warnings, { ms: 600, dy: 0.15 });
+await mark("early_warnings");
+await wait(2500);
+const warnCard = warnings.locator(".fs-card").first();
+if (await warnCard.count()) {
+  await maybe(warnCard.locator(".fs-explain summary"), { after: 1200 });
+  await mark("warning_why");
+  await wait(3500);
+}
+
+// Start a project from what you'd do here
+await click(tab(/Similar projects/), { after: 1200 });
+const lessons = right.locator(".fs-lessons");
+await maybe(lessons.getByRole("button", { name: /^New build$/ }), { after: 1000 });
+await maybe(lessons.locator(".fs-lessons__scopes").getByRole("button", { name: /Excavation/i }), { after: 1200 });
+await mark("option_picked");
+await wait(1500);
+const start = right.locator(".fs-lessons__start");
+await start.scrollIntoViewIfNeeded().catch(() => undefined);
+await click(start, { after: 2500 });
 await mark("project_setup");
-await click(page.locator(".fs-ps-card", { hasText: "New construction" }), { after: 800 });
-await click(page.locator(".fs-ps-card", { hasText: "Masonry" }), { after: 800 });
-const scopeChips = page.locator(".fs-ps-chips[aria-label='Scope'] .fs-chip");
-if (await scopeChips.count()) {
-  await point(scopeChips.first(), { ms: 500 });
-  await wait(600);
-  await point(scopeChips.nth(2), { ms: 500 });
-  await wait(900);
-}
-const seRole = page.locator(".fs-ps-card", { hasText: "Structural engineer" }).first();
-if (await seRole.count()) {
-  await point(seRole, { ms: 600 });
-  await wait(900);
-}
+await wait(2500);
+const known = page.locator(".fs-ps-known");
+if (await known.count()) { await point(known, { ms: 700 }); await wait(3500); await mark("known_facts"); }
+await maybe(page.locator(".fs-ps-card", { hasText: "Masonry" }), { after: 800 });
+const deep = page.locator(".fs-ps-chips[aria-label='How deep will you dig?'] .fs-chip");
+if (await deep.count()) await click(deep.nth(Math.min(1, (await deep.count()) - 1)), { after: 700 });
+const storeys = page.locator(".fs-ps-input").first();
+if (await storeys.count()) { await click(storeys, { after: 200 }); await page.keyboard.type("6", { delay: 120 }); await wait(600); }
 await mark("project_filled");
+await wait(1200);
 await click(page.getByRole("button", { name: /Draft checklist/i }), { after: 2500 });
-await page.locator(".fs-ps-item__title").first().waitFor({ timeout: 30000 }).catch(() => console.log("  no checklist items"));
+await page.locator(".fs-ps-row").first().waitFor({ timeout: 40000 }).catch(() => console.log("  no checklist rows"));
+await wait(1500);
+await maybe(page.locator(".fs-ps-notice .fs-linkbtn", { hasText: /Got it|Dismiss/ }), { after: 600 });
 await mark("checklist");
-await wait(2000);
-const lifeSafety = page.locator(".fs-ps-chips .fs-chip", { hasText: "Life safety" }).first();
-if (await lifeSafety.count()) {
-  await click(lifeSafety, { after: 1500 });
-  await mark("checklist_life_safety");
-}
-const seItem = page.locator(".fs-ps-item", { hasText: "Examine the adjoining building" }).first();
-const item = (await seItem.count()) ? seItem.locator(".fs-ps-item__title") : page.locator(".fs-ps-item__title").first();
-if (await item.count()) {
-  await click(item, { after: 1800 });
-  await mark("checklist_item");
-  const status = (await seItem.count()) ? seItem.locator(".fs-ps-status") : page.locator(".fs-ps-status").first();
-  if (await status.count()) {
-    await click(status, { after: 1500 });
-    await mark("checklist_status");
-  }
-}
-const docs = page.locator(".fs-ps__step", { hasText: /Documents/i }).first();
-if (await docs.count()) {
-  await click(docs, { after: 1800 });
-  await mark("documents");
-  await wait(2200);
-}
+await wait(3000);
+const tl = page.locator(".fs-ps-tl");
+if (await tl.count()) { await point(tl, { ms: 700 }); await wait(2500); await mark("timeline"); }
+const row = page.locator(".fs-ps-row", { hasText: /adjoining/i }).first();
+const pick = (await row.count()) ? row : page.locator(".fs-ps-row").first();
+await point(pick, { ms: 700 });
+await wait(1500);
+await mark("checklist_row");
+const trail = pick.locator(".fs-ps-trail .fs-linkbtn");
+if (await trail.count()) { await click(trail.first(), { after: 2500 }); await mark("trail"); }
+await click(pick.locator(".fs-ps-check"), { after: 1800 });
+await mark("checklist_status");
+const objection = page.locator(".fs-ps-row", { hasText: /objection/i }).first();
+if (await objection.count()) {
+  await objection.scrollIntoViewIfNeeded();
+  await wait(600);
+  await point(objection, { ms: 700 });
+  await wait(4000);
+  await mark("objection_row");
+} else console.log("  no objection row");
+await scrollIn(page.locator(".fs-ps__body"), 700, 10);
+await wait(2500);
+await mark("checklist_scrolled");
 await click(page.getByRole("button", { name: /← Map/ }), { after: 2500 });
 await mark("back_to_map");
 
-// Early warnings, later in the job
-await click(tab(/Overview/), { after: 900 });
-const warnings = page.locator(".fs-shell__right .fs-site__section", { hasText: "Early warnings" }).first();
-await warnings.scrollIntoViewIfNeeded();
-await wait(800);
-await point(warnings, { ms: 600, dy: 0.2 });
-await mark("early_warnings");
-await wait(2000);
-const rainCard = warnings.locator(".fs-card", { hasText: /rain/i }).first();
-const warnCard = (await rainCard.count()) ? rainCard : warnings.locator(".fs-card").first();
-await click(warnCard.locator(".fs-explain summary"), { after: 1200 });
-await mark("warning_why");
-await scrollIn(warnCard, 200);
-await wait(4000);
-await click(warnCard.locator(".fs-explain summary"), { after: 500 });
-
-// Chat: ask in plain English, answer with sources, pin to the project
-await click(page.locator(".fs-chat-fab"), { after: 1400 });
+// Chat
+const input = page.locator(".fs-shell__chat textarea").first();
+await click(input, { after: 400 });
 await mark("chat_open");
-const input = page.getByPlaceholder(/Ask in plain English/i).first();
-await click(input, { after: 300 });
-await page.keyboard.type("What should the structural engineer check before excavation continues?", { delay: 40 });
+await page.keyboard.type("What should the structural engineer check before excavation continues?", { delay: 38 });
 await wait(600);
-await mark("chat_typed");
 await page.keyboard.press("Enter");
-await wait(800);
-await mark("chat_waiting");
+await mark("chat_sent");
 await page.waitForFunction(() => {
   const l = document.querySelector("[role='log'][aria-label='Questions and answers']");
   return l && l.querySelector("article") && !/Looking this up/.test(l.textContent ?? "");
 }, null, { timeout: 180000 }).catch(() => console.log("  chat: still waiting"));
 await mark("chat_answer");
+await wait(6000);
+await mark("chat_full");
 const log = page.locator("[role='log'][aria-label='Questions and answers']");
-await log.evaluate((el) => {
-  const q = el.querySelector("article");
-  el.scrollTo({ top: q ? q.offsetTop - el.offsetTop - 8 : 0, behavior: "instant" });
-});
-await wait(2500);
-await mark("chat_answer_top");
-for (let i = 0; i < 6; i++) {
-  await scrollIn(log, 160, 8);
-  await wait(1300);
+for (let i = 0; i < 5; i++) {
+  await scrollIn(log, 170, 8);
+  await wait(1400);
 }
-await mark("chat_answer_scrolled");
-const pinBtn = log.getByRole("button", { name: /pin/i }).last();
-if (await pinBtn.count()) {
-  await click(pinBtn, { after: 1800 });
-  await mark("chat_pinned");
-  const projectTab = page.locator(".fs-shell__right [role='tab'], .fs-shell__right button", { hasText: /^Project$/ }).first();
-  if (await projectTab.count()) {
-    await click(projectTab, { after: 2500 });
-    await mark("chat_project_tab");
-    await wait(2000);
-  }
-}
+await mark("chat_scrolled");
 
 // Limitations, always visible
-await click(page.locator(".fs-limits__head"), { after: 1500 });
+await maybe(page.locator(".fs-limits__head"), { after: 1500 });
 await mark("limitations");
 await wait(3500);
 await mark("end");

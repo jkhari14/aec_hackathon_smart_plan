@@ -18,13 +18,13 @@ function Beat({ from, to, children }: { from: number; to: number; children: Reac
 }
 
 const WEIGHTS = [
-  { g: "The neighbor building", k: "era", w: 18 },
+  { g: "The neighbor building", k: "era", w: 20 },
   { g: "", k: "wall system", w: 18 },
-  { g: "", k: "height", w: 10 },
+  { g: "", k: "height", w: 12 },
   { g: "", k: "attached", w: 10 },
   { g: "The work and the ground", k: "earth work", w: 20 },
   { g: "", k: "other work types", w: 8 },
-  { g: "", k: "record hazards", w: 8 },
+  { g: "", k: "record hazards", w: 4 },
   { g: "", k: "soil", w: 4 },
   { g: "", k: "flood zone", w: 4 },
 ];
@@ -33,9 +33,9 @@ const ROWS: { k: string; mark: "✓" | "—" | "0"; pts: number; t: string }[] =
   { k: "wall system", mark: "✓", pts: 18, t: "masonry bearing wall next door" },
   { k: "attached", mark: "✓", pts: 10, t: "attached, like the case’s building" },
   { k: "earth work", mark: "✓", pts: 20, t: "excavation on both sites" },
-  { k: "record hazards", mark: "✓", pts: 8, t: "geotech and structural records here" },
+  { k: "record hazards", mark: "✓", pts: 4, t: "geotech enforcement records here" },
   { k: "other work types", mark: "0", pts: 0, t: "no overlap" },
-  { k: "era", mark: "—", pts: 0, t: "not reported for the case: no match, not a difference" },
+  { k: "era", mark: "—", pts: 0, t: "not reported for the case: no match, not a difference (near misses earn half)" },
   { k: "soil", mark: "—", pts: 0, t: "not on record here" },
 ];
 
@@ -78,7 +78,8 @@ function Similarity() {
           <svg width={130} height={130} viewBox="0 0 130 130">
             <circle cx={65} cy={65} r={54} fill="none" stroke={C.paperLine} strokeWidth={12} />
             <circle cx={65} cy={65} r={54} fill="none" stroke={C.blue} strokeWidth={12} pathLength={1} strokeDasharray={`${ring} 1`} transform="rotate(-90 65 65)" />
-            <text x={65} y={78} textAnchor="middle" fontSize={40} fontWeight={700} fill={C.ink}>{score}</text>
+            <text x={65} y={70} textAnchor="middle" fontSize={40} fontWeight={700} fill={C.ink}>{score}</text>
+            <text x={65} y={96} textAnchor="middle" fontFamily={PIXEL} fontSize={14} letterSpacing="1" fill={score >= 50 ? C.blue : C.muted}>{score >= 50 ? "STRONG" : score >= 35 ? "SOME" : "WEAK"}</text>
           </svg>
         </div>
         <div style={{ marginTop: 14 }}>
@@ -147,14 +148,16 @@ function Warnings() {
 }
 
 const LANES = [
-  { role: "Structural engineer", n: 12, color: "#d9822b" },
-  { role: "Architect", n: 6, color: C.blue },
-  { role: "Contractor", n: 3, color: C.green },
+  { role: "Design", n: 6, color: C.blue },
+  { role: "DOB filing", n: 6, color: "#d9822b" },
+  { role: "Neighbors notified", n: 2, color: C.green },
+  { role: "Survey done", n: 1, color: C.red },
+  { role: "Excavation", n: 6, color: C.ink },
 ];
 
 const MORE = [
   { t: "Excavation-support drawings", code: "BC 3304.4.1", proof: "Stamped SOE drawings" },
-  { t: "Rain and freeze-thaw hold point", code: "from this site’s weather", proof: "Written hold-point criteria" },
+  { t: "Check the foundation drawings against objections on similar filings", code: "35 of 154 similar DOB NOW filings held", proof: "A review noted on the project" },
 ];
 
 function Checklist() {
@@ -167,7 +170,7 @@ function Checklist() {
     <AbsoluteFill>
       <div style={{ position: "absolute", left: 120, top: 90 }}>
         <Eyebrow delay={HOW_BEATS.list}>How the checklist works</Eyebrow>
-        <Headline delay={HOW_BEATS.list + 4} size={60} style={{ marginTop: 14 }} lines={[["One", "checklist,", "by", "role,", "with", "the", { t: "proof", color: C.blue }, { t: "each", color: C.blue }, { t: "item", color: C.blue }, { t: "needs", color: C.blue }]]} />
+        <Headline delay={HOW_BEATS.list + 4} size={60} style={{ marginTop: 14 }} lines={[["One", "live", "checklist,", "by", "milestone,", "with", "the", { t: "proof", color: C.blue }, { t: "each", color: C.blue }, { t: "item", color: C.blue }, { t: "needs", color: C.blue }]]} />
       </div>
       <div style={{ position: "absolute", left: 120, top: 270, width: 520 }}>
         <PixelLabel size={17} style={{ opacity: at(6) }}>The project</PixelLabel>
@@ -177,12 +180,12 @@ function Checklist() {
         <div style={{ height: 50, width: 3, background: C.ink, margin: "0 auto", transform: `scaleY(${at(40, 56)})`, transformOrigin: "top" }} />
         <div style={{ display: "flex", gap: 14, opacity: at(54) }}>
           <div style={{ flex: 1, padding: "16px 18px", background: C.ink, color: "#fff", border: `3px solid ${C.ink}` }}>
-            <div style={{ fontSize: 40, fontWeight: 700 }}>12</div>
-            <div style={{ fontSize: 20, marginTop: 4, color: "rgba(255,255,255,0.8)" }}>code duties · 2022 NYC BC 3304, 3309</div>
+            <div style={{ fontSize: 40, fontWeight: 700 }}>21</div>
+            <div style={{ fontSize: 20, marginTop: 4, color: "rgba(255,255,255,0.8)" }}>items for this project, each with an owner</div>
           </div>
           <div style={{ flex: 1, padding: "16px 18px", background: "#e6ebff", border: `3px solid ${C.ink}` }}>
-            <div style={{ fontSize: 40, fontWeight: 700 }}>9</div>
-            <div style={{ fontSize: 20, marginTop: 4, color: C.ink2 }}>hazard rules · weather, flood, façade, contamination, fire</div>
+            <div style={{ fontSize: 40, fontWeight: 700 }}>4</div>
+            <div style={{ fontSize: 20, marginTop: 4, color: C.ink2 }}>sources · code duties, hazard rules, lessons from similar projects, DOB NOW objections</div>
           </div>
         </div>
       </div>
@@ -190,7 +193,7 @@ function Checklist() {
         <div style={{ display: "flex", gap: 22, opacity: at(70) }}>
           {LANES.map((l, i) => (
             <div key={l.role} style={{ flex: l.n + 6, borderTop: `8px solid ${l.color}`, paddingTop: 10, transform: `scaleX(${at(70 + i * 6, 90 + i * 6)})`, transformOrigin: "left" }}>
-              <div style={{ fontSize: 24, fontWeight: 700 }}>{l.role}</div>
+              <div style={{ fontSize: 21, fontWeight: 700, lineHeight: 1.2 }}>{l.role}</div>
               <div style={{ fontFamily: PIXEL, fontSize: 18, color: C.ink2, marginTop: 4 }}>{l.n} items</div>
             </div>
           ))}

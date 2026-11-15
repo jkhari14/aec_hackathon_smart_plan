@@ -9,7 +9,7 @@ import { Impact } from "./scenes/Impact";
 import { Intro } from "./scenes/Intro";
 import { Limits } from "./scenes/Limits";
 import { Outro } from "./scenes/Outro";
-import { Problem } from "./scenes/Problem";
+import { Problem, PROBLEM_FRAMES } from "./scenes/Problem";
 import { Process } from "./scenes/Process";
 import { Solution } from "./scenes/Solution";
 import { Stack } from "./scenes/Stack";
@@ -20,18 +20,18 @@ type Scene = { name: string; frames: number; render: (duration: number) => React
 
 export const SCENES: Scene[] = [
   { name: "Intro", frames: 240, render: (d) => <Intro duration={d} /> },
-  { name: "Team", frames: 450, render: (d) => <Team duration={d} /> },
-  { name: "Problem", frames: 750, render: (d) => <Problem duration={d} /> },
-  { name: "Users", frames: 270, render: (d) => <Users duration={d} /> },
-  { name: "Solution", frames: 300, render: (d) => <Solution duration={d} /> },
+  { name: "Team", frames: 380, render: (d) => <Team duration={d} /> },
+  { name: "Problem", frames: PROBLEM_FRAMES, render: (d) => <Problem duration={d} /> },
+  { name: "Users", frames: 240, render: (d) => <Users duration={d} /> },
+  { name: "Solution", frames: 270, render: (d) => <Solution duration={d} /> },
   { name: "Demo", frames: DEMO_FRAMES, render: () => <Demo /> },
-  { name: "Flow", frames: 450, render: (d) => <Flow duration={d} /> },
-  { name: "HowItWorks", frames: 1270, render: (d) => <HowItWorks duration={d} /> },
-  { name: "Data", frames: 300, render: (d) => <Data duration={d} /> },
+  { name: "Flow", frames: 390, render: (d) => <Flow duration={d} /> },
+  { name: "HowItWorks", frames: 1030, render: (d) => <HowItWorks duration={d} /> },
+  { name: "Data", frames: 280, render: (d) => <Data duration={d} /> },
   { name: "Stack", frames: 285, render: (d) => <Stack duration={d} /> },
-  { name: "Impact", frames: 315, render: (d) => <Impact duration={d} /> },
-  { name: "Limits", frames: 360, render: (d) => <Limits duration={d} /> },
-  { name: "Process", frames: 740, render: (d) => <Process duration={d} /> },
+  { name: "Impact", frames: 285, render: (d) => <Impact duration={d} /> },
+  { name: "Limits", frames: 340, render: (d) => <Limits duration={d} /> },
+  { name: "Process", frames: 640, render: (d) => <Process duration={d} /> },
   { name: "Outro", frames: 300, render: (d) => <Outro duration={d} /> },
 ];
 

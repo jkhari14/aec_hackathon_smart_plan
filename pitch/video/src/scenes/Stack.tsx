@@ -5,7 +5,7 @@ import { C } from "../theme";
 import { Eyebrow, Headline, Logo, PixelLabel, Slide } from "../ui";
 
 const LAYERS: { name: string; items: { logo: string; t: string }[] }[] = [
-  { name: "Interface", items: [{ logo: "react.svg", t: "React 19" }, { logo: "typescript.svg", t: "TypeScript" }, { logo: "vite.svg", t: "Vite" }, { logo: "tailwind.svg", t: "Tailwind" }, { logo: "maplibre.svg", t: "MapLibre" }, { logo: "deckgl.png", t: "deck.gl" }] },
+  { name: "Interface", items: [{ logo: "react.svg", t: "React 19" }, { logo: "typescript.svg", t: "TypeScript" }, { logo: "vite.svg", t: "Vite" }, { logo: "tailwind.svg", t: "Tailwind" }, { logo: "maplibre.svg", t: "MapLibre" }, { logo: "deckgl.png", t: "deck.gl" }, { logo: "vercel.svg", t: "Vercel" }] },
   { name: "Intelligence", items: [{ logo: "claude.svg", t: "Claude" }, { logo: "anthropic.svg", t: "Anthropic API" }] },
   { name: "Engine", items: [{ logo: "python.svg", t: "Python" }, { logo: "fastapi.svg", t: "FastAPI" }, { logo: "sqlite.svg", t: "SQLite" }] },
   { name: "Data", items: [{ logo: "nycopendata.svg", t: "NYC Open Data" }, { logo: "openstreetmap.svg", t: "OpenStreetMap" }, { logo: "revit.svg", t: "Revit" }] },
@@ -27,9 +27,9 @@ export function Stack({ duration }: { duration: number }) {
           return (
             <div key={l.name} style={{ display: "flex", alignItems: "center", height: 150, marginBottom: 18, border: `3px solid ${C.ink}`, background: i === 1 ? "#e6ebff" : C.card, boxShadow: `${8 * p}px ${8 * p}px 0 ${C.ink}`, opacity: p, transform: `translateY(${(1 - p) * 60}px)` }}>
               <PixelLabel color={C.ink} size={19} style={{ width: 230, paddingLeft: 28 }}>{l.name}</PixelLabel>
-              <div style={{ display: "flex", gap: 30 }}>
+              <div style={{ display: "flex", gap: 18 }}>
                 {l.items.map((it) => (
-                  <div key={it.t} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, width: it.logo === "nycopendata.svg" ? 230 : 110 }}>
+                  <div key={it.t} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, width: it.logo === "nycopendata.svg" ? 230 : 100 }}>
                     <Logo name={it.logo} size={58} style={it.logo === "nycopendata.svg" ? { width: 220 } : undefined} />
                     <div style={{ fontSize: 18, color: C.ink2, textAlign: "center" }}>{it.t}</div>
                   </div>

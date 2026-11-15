@@ -1,142 +1,118 @@
 [
   {
     "name": "city",
-    "t": 1.63
-  },
-  {
-    "name": "layers",
-    "t": 3.893
-  },
-  {
-    "name": "layers_toggled",
-    "t": 9.227
+    "t": 1.65
   },
   {
     "name": "search_open",
-    "t": 18.598
-  },
-  {
-    "name": "search_results",
-    "t": 21.805
+    "t": 3.239
   },
   {
     "name": "fly_to",
-    "t": 23.056
-  },
-  {
-    "name": "site_overview",
-    "t": 28.559
-  },
-  {
-    "name": "signal_why",
-    "t": 35.011
-  },
-  {
-    "name": "touching_lots",
-    "t": 40.49
+    "t": 7.265
   },
   {
     "name": "similar",
-    "t": 48.276
+    "t": 12.571
+  },
+  {
+    "name": "watch_items",
+    "t": 16.513
   },
   {
     "name": "case_strand",
-    "t": 53.803
+    "t": 26.716
   },
   {
-    "name": "case_what_happened",
-    "t": 60.589
+    "name": "case_dialog",
+    "t": 33.775
   },
   {
-    "name": "case_unfocused",
-    "t": 70.628
+    "name": "case_dialog_end",
+    "t": 45.61
   },
   {
-    "name": "actions",
-    "t": 72.903
-  },
-  {
-    "name": "action_why",
-    "t": 76.969
-  },
-  {
-    "name": "project_setup",
-    "t": 82.038
-  },
-  {
-    "name": "project_filled",
-    "t": 89.91
-  },
-  {
-    "name": "checklist",
-    "t": 93.459
-  },
-  {
-    "name": "checklist_life_safety",
-    "t": 98.005
-  },
-  {
-    "name": "checklist_item",
-    "t": 100.851
-  },
-  {
-    "name": "checklist_status",
-    "t": 103.385
-  },
-  {
-    "name": "documents",
-    "t": 106.219
-  },
-  {
-    "name": "back_to_map",
-    "t": 111.992
+    "name": "this_lot",
+    "t": 51.04
   },
   {
     "name": "early_warnings",
-    "t": 115.456
+    "t": 55.047
   },
   {
     "name": "warning_why",
-    "t": 119.742
+    "t": 59.799
+  },
+  {
+    "name": "option_picked",
+    "t": 69.897
+  },
+  {
+    "name": "project_setup",
+    "t": 75.729
+  },
+  {
+    "name": "known_facts",
+    "t": 82.493
+  },
+  {
+    "name": "project_filled",
+    "t": 88.068
+  },
+  {
+    "name": "checklist",
+    "t": 94.336
+  },
+  {
+    "name": "timeline",
+    "t": 100.608
+  },
+  {
+    "name": "checklist_row",
+    "t": 102.872
+  },
+  {
+    "name": "checklist_status",
+    "t": 105.721
+  },
+  {
+    "name": "objection_row",
+    "t": 111.124
+  },
+  {
+    "name": "checklist_scrolled",
+    "t": 114.918
+  },
+  {
+    "name": "back_to_map",
+    "t": 118.505
   },
   {
     "name": "chat_open",
-    "t": 128.824
+    "t": 119.963
   },
   {
-    "name": "chat_typed",
-    "t": 133.715
-  },
-  {
-    "name": "chat_waiting",
-    "t": 134.523
+    "name": "chat_sent",
+    "t": 123.464
   },
   {
     "name": "chat_answer",
-    "t": 175.458
+    "t": 127.575
   },
   {
-    "name": "chat_answer_top",
-    "t": 177.974
+    "name": "chat_full",
+    "t": 133.575
   },
   {
-    "name": "chat_answer_scrolled",
-    "t": 192.6
-  },
-  {
-    "name": "chat_pinned",
-    "t": 195.449
-  },
-  {
-    "name": "chat_project_tab",
-    "t": 199.013
+    "name": "chat_scrolled",
+    "t": 146.52
   },
   {
     "name": "limitations",
-    "t": 203.564
+    "t": 149.067
   },
   {
     "name": "end",
-    "t": 207.064
+    "t": 152.569
   }
 ]
