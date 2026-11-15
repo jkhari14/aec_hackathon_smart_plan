@@ -436,7 +436,7 @@ button.fs-ps-card[aria-pressed="true"]:hover,
 }
 .fs-ps-doc__empty {
   font-size: var(--fs-text-sm);
-  color: var(--fs-faint);
+  color: var(--fs-muted);
 }
 
 @media (max-width: 640px) {

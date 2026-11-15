@@ -70,6 +70,8 @@ export function similarCaseLayers(
       radiusMinPixels: 8,
       radiusMaxPixels: 14,
       getRadius: 90,
+      // Pickable so a click on it is the pin's, not a pick of whatever lot lies under it.
+      pickable: true,
     }),
   ];
 }

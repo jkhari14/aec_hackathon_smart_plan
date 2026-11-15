@@ -107,6 +107,8 @@ export function App() {
     });
 
   const pickSite = useCallback((result: SearchResult | Picked) => {
+    // A new site lets go of the old site's case at once, before the map can frame or draw it.
+    setFocusCase(null);
     setSite(result);
     setView({ site: result.bbl, tab: "overview" });
   }, [setView]);
@@ -197,6 +199,7 @@ export function App() {
           layers={layers}
           enabled={enabled}
           onToggle={toggleLayer}
+          hiddenForCase={focusCase !== null}
         />
       </div>
 
@@ -204,7 +207,10 @@ export function App() {
         <SiteSlot
           bbl={view.site}
           site={site}
-          onClose={() => setView({ site: null, tab: "overview" })}
+          onClose={() => {
+            setFocusCase(null);
+            setView({ site: null, tab: "overview" });
+          }}
           tab={view.tab}
           onTab={(tab) => setView({ tab })}
           onContinue={() => setView({ screen: "project" })}

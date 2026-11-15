@@ -119,10 +119,11 @@
   --fs-muted: #6e6c66;
   --fs-faint: #a7a49c;
 
-  --fs-accent: #4a6cf0;
+  /* #3a5be0: the deck's blue, a step deeper so it reads as text on paper (AA, 4.8:1 on --fs-hover). */
+  --fs-accent: #3a5be0;
   --fs-accent-ink: #ffffff;
-  --fs-accent-soft: rgb(74 108 240 / 0.12);
-  --fs-focus: #4a6cf0;
+  --fs-accent-soft: rgb(58 91 224 / 0.12);
+  --fs-focus: #3a5be0;
   --fs-btn-primary: #141414;
   --fs-btn-primary-ink: #ffffff;
   --fs-btn-primary-hover: #333333;

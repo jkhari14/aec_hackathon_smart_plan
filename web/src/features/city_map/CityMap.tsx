@@ -17,7 +17,7 @@ import { SEVERITY_LABELS } from "../../contracts";
 import type { LayerState } from "../layer_panel/LayerPanel";
 import {
   addAreaLayers, addBuildings, addPointLayers, addSiteLayers, applyMapPalette, areaLayerIds, basemapFor, type MapTheme,
-  NYC_CENTER, pointLayerIds, sourceId, themeNow,
+  NYC_CENTER, pointLayerIds, sourceId,
 } from "./map_style";
 import { loadSiteLots, type Picked, siteAt } from "./site_lots";
 import {
@@ -27,7 +27,7 @@ import {
   ADJACENT_M, GOOGLE_KEY, googleTiles, KIND_COLORS, loadMeshLayers, loadSiteModel, type ModelScope, similarCaseLayers,
   similarCaseTooltip, type SiteModel, siteModelLayer,
 } from "./story_layers";
-import { boundsFor, visibleStrands } from "./strands";
+import { boundsFor, fitPadding, resultsFor, visibleStrands } from "./strands";
 import type { SimilarCase } from "../../contracts";
 import { CameraControls } from "./CameraControls";
 
@@ -191,7 +191,11 @@ export function CityMap({
   const stopBlink = useRef<() => void>(() => {});
   const selected = useRef(false);
   // The similar cases for the picked site; which of them get a strand is decided by focus and the switch.
-  const [similar, setSimilar] = useState<SimilarCase[]>([]);
+  // Kept with the site they were loaded for, so a newly picked site never uses the last site's cases.
+  const [similarLoaded, setSimilar] = useState<{ bbl: string; results: SimilarCase[] } | null>(null);
+  const similar = resultsFor(similarLoaded, picked?.bbl ?? null);
+  const themeRef = useRef(theme);
+  themeRef.current = theme;
   const onFocusRef = useRef(onFocusCase);
   onFocusRef.current = onFocusCase;
   // The basemap's own sources and layers, so a theme switch keeps everything else that was added.
@@ -200,7 +204,7 @@ export function CityMap({
 
   useEffect(() => {
     if (!container.current) return;
-    const map = new MapLibreMap({ container: container.current, style: basemapFor(themeNow()), ...CITY_VIEW, maxPitch: 75 });
+    const map = new MapLibreMap({ container: container.current, style: basemapFor(themeRef.current), ...CITY_VIEW, maxPitch: 75 });
     // Zoom, orbit, tilt and the 2D/3D switch live in CameraControls, bottom left.
     // Switching between 2D and 3D (the button, or tilting by hand) blinks the picked lot and building.
     let mode = viewMode(map.getPitch());
@@ -293,6 +297,9 @@ export function CityMap({
     const map = mapRef.current;
     if (!ready || !map) return;
     const onClick = async (e: { point: [number, number] | { x: number; y: number }; lngLat: { lng: number; lat: number } }) => {
+      // A click on a strand's pin belongs to deck (it focuses that case); never pick the lot under it too.
+      const at = Array.isArray(e.point) ? { x: e.point[0], y: e.point[1] } : e.point;
+      if (overlayRef.current?.pickObject({ ...at, radius: 8, layerIds: ["similar-case-origins", "strand-site"] })) return;
       const pointIds = layers.flatMap((l) => pointLayerIds(l.entry.layer_id)).filter((id) => map.getLayer(id));
       const hits: MapGeoJSONFeature[] = pointIds.length ? map.queryRenderedFeatures(e.point as never, { layers: pointIds }) : [];
       const hit = hits[0];
@@ -327,7 +334,7 @@ export function CityMap({
     clearSelection(map);
     setSiteBuildings(map, empty);
     deckLayers.current.arcs = [];
-    setSimilar([]);
+    setSimilar(null);
     setCaseBuilding(map, null);
     setCityweft(null);
     drawDeck();
@@ -406,7 +413,7 @@ export function CityMap({
       // The offline fixture is for one demo lot; never join its cases to a different site.
       if (cancelled || data.bbl !== picked.bbl) return;
       setSample((was) => was || s);
-      setSimilar(data.results);
+      setSimilar({ bbl: picked.bbl, results: data.results });
     });
     return () => {
       cancelled = true;
@@ -430,7 +437,7 @@ export function CityMap({
     };
     frame = requestAnimationFrame(step);
     return () => cancelAnimationFrame(frame);
-  }, [ready, picked, similar, focusCaseId, showAllStrands]);
+  }, [ready, picked, similarLoaded, focusCaseId, showAllStrands]);
 
   // Focusing a case pulls the camera out to frame the site and that case, then highlights the case's building.
   useEffect(() => {
@@ -448,20 +455,21 @@ export function CityMap({
       const hit = map.getLayer("buildings-3d") ? map.queryRenderedFeatures(point, { layers: ["buildings-3d"] })[0] : undefined;
       setCaseBuilding(map, hit ? { type: "Feature", geometry: hit.geometry, properties: hit.properties ?? {} } : null);
     };
+    // Listen first: with no animation the move ends inside fitBounds. "idle" waits for the new tiles to draw.
+    map.once("idle", highlight);
+    const { clientWidth, clientHeight } = map.getContainer();
     map.fitBounds(bounds, {
-      // Clear of the camera controls (left), the site panel (right) and the bottom bar.
-      padding: { top: 110, bottom: 200, left: 340, right: 470 },
+      padding: fitPadding(clientWidth, clientHeight),
       pitch: 45,
       bearing: map.getBearing(),
       maxZoom: 17,
       duration: reducedMotion() ? 0 : 1600,
     });
-    map.once("moveend", highlight);
     return () => {
       live = false;
-      map.off("moveend", highlight);
+      map.off("idle", highlight);
     };
-  }, [ready, picked, similar, focusCaseId]);
+  }, [ready, picked, similarLoaded, focusCaseId]);
 
   // The basemap follows the theme. The swap keeps every source and layer added on top of the basemap.
   const appliedTheme = useRef<MapTheme | null>(null);
@@ -469,8 +477,9 @@ export function CityMap({
     const map = mapRef.current;
     if (!ready || !map) return;
     if (appliedTheme.current === null) {
+      // The map was made with this theme's basemap; repaint in case layers were added before <html> had it.
       appliedTheme.current = theme;
-      if (theme !== themeNow()) applyMapPalette(map, theme, layers.map((l) => l.entry.layer_id));
+      applyMapPalette(map, theme, layers.map((l) => l.entry.layer_id));
       return;
     }
     if (appliedTheme.current === theme) return;
@@ -481,10 +490,11 @@ export function CityMap({
         if (!previous || !base) return next;
         baseStyle.current = { sources: new Set(Object.keys(next.sources)), layers: new Set(next.layers.map((l) => l.id)) };
         const keptSources = Object.fromEntries(Object.entries(previous.sources).filter(([id]) => !base.sources.has(id)));
-        const kept = previous.layers.filter((l) => !base.layers.has(l.id));
-        // Buildings and the lot fill sit under the labels, as when they were first added; the rest on top.
-        const under = kept.filter((l) => l.id === "buildings-3d" || l.id === "site-lots-fill" || l.id === "case-building");
-        const over = kept.filter((l) => !under.includes(l));
+        // Custom layers that sat under the old labels go under the new ones, in their order; the rest on top.
+        const oldFirstLabel = previous.layers.findIndex((l) => l.type === "symbol");
+        const isUnder = (i: number) => oldFirstLabel >= 0 && i < oldFirstLabel;
+        const under = previous.layers.filter((l, i) => !base.layers.has(l.id) && isUnder(i));
+        const over = previous.layers.filter((l, i) => !base.layers.has(l.id) && !isUnder(i));
         const firstLabel = next.layers.findIndex((l) => l.type === "symbol");
         const at = firstLabel < 0 ? next.layers.length : firstLabel;
         return {

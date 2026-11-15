@@ -34,9 +34,11 @@ type LayerSlotProps = {
   layers: LayerCatalogEntry[] | null;
   enabled: Set<string>;
   onToggle: (id: string, on: boolean) => void;
+  /** A similar case is shown on the map, so the record layers are hidden until it is let go. */
+  hiddenForCase?: boolean;
 };
 
-export function LayerSlot({ open, onClose, layers, enabled, onToggle }: LayerSlotProps) {
+export function LayerSlot({ open, onClose, layers, enabled, onToggle, hiddenForCase }: LayerSlotProps) {
   const usable = layers?.filter((l) => l.status !== "error") ?? [];
   const allOn = usable.length > 0 && usable.every((l) => enabled.has(l.layer_id));
   const onCount = usable.filter((l) => enabled.has(l.layer_id)).length;
@@ -56,6 +58,9 @@ export function LayerSlot({ open, onClose, layers, enabled, onToggle }: LayerSlo
           <SkeletonCard lines={1} />
           <SkeletonCard lines={1} />
         </>
+      )}
+      {hiddenForCase && (
+        <p className="fs-quiet" role="status">Layers are hidden while a similar case is shown. Click the case again to bring them back.</p>
       )}
       {layers?.length === 0 && <EmptyState title="No layers yet">The layer catalog came back empty.</EmptyState>}
       {usable.length > 1 && (

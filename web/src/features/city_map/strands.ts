@@ -19,3 +19,21 @@ export function boundsFor(site: Point, other: Point): [[number, number], [number
     [Math.max(site.lon, other.lon), Math.max(site.lat, other.lat)],
   ];
 }
+
+export type Padding = { top: number; bottom: number; left: number; right: number };
+
+// Clear of the camera controls (left), the site panel (right), the search bar and the bottom bar.
+const FULL: Padding = { top: 110, bottom: 200, left: 340, right: 470 };
+
+/** Fly-out padding for a map this size: the full margins when they fit, shrunk evenly when they don't, so
+    the two places always land on screen (padding wider than the map makes MapLibre refuse to move). */
+export function fitPadding(width: number, height: number): Padding {
+  const scale = Math.min(1, (0.6 * width) / (FULL.left + FULL.right), (0.6 * height) / (FULL.top + FULL.bottom));
+  const k = Math.max(0, scale);
+  return { top: FULL.top * k, bottom: FULL.bottom * k, left: FULL.left * k, right: FULL.right * k };
+}
+
+/** Similar results are kept with the site they were loaded for; a different site gets none of them. */
+export function resultsFor<T>(loaded: { bbl: string; results: T[] } | null, bbl: string | null): T[] {
+  return loaded && bbl && loaded.bbl === bbl ? loaded.results : [];
+}
