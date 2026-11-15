@@ -10,8 +10,10 @@ from functools import lru_cache
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from pydantic import ValidationError
 
 from api.contracts import ActionItem, ActionItemUpdate, NoteCreate, PinCreate, Project, ProjectCreate, StructuralModel
+from api.routers.router_data import DataUnavailable, owner_function
 from api.store.project_store import UNCHANGED, NotFound, ProjectStore, ProjectStoreError
 
 _DEFAULT_DB = Path(__file__).resolve().parents[1] / "store" / "data" / "projects.sqlite"  # gitignored
@@ -94,6 +96,37 @@ def add_pin(project_id: str, body: PinCreate, response: Response, store: Project
 @projects_router.post("/{project_id}/model", response_model=Project)
 def add_structural_model(project_id: str, body: StructuralModel, response: Response,
                          store: ProjectStore = Depends(project_store)):
-    # The Revit reader's model, checked against the StructuralModel contract, kept on the project.
-    _run(store.set_structural_model, project_id, body.model_dump())
+    # The Revit reader's model, checked against the StructuralModel contract, kept on the project. With PR 13
+    # (model_input) in, its reader cleans a Revit export first, and its store gets a copy for the site profile.
+    project = _run(store.get_project, project_id)
+    read, refused, save = _model_input()
+    model = body.model_dump()
+    if read is not None and model["source"] == "revit":
+        model = _read_revit(read, refused, model)
+    _run(store.set_structural_model, project_id, model)
+    if save is not None:
+        try:
+            save(project_id, project["site_bbl"], model)
+        except Exception as error:
+            raise HTTPException(500, "the model is kept on the project, but model_input.store.save failed "
+                                     f"({type(error).__name__}), so the site profile does not have it") from error
     return _answer(response, store, project_id)
+
+
+def _model_input():
+    """PR 13's reader, its refusal and its store, each None until it lands. A broken module refuses the write."""
+    try:
+        return (owner_function("model_input.revit", "read_revit"),
+                owner_function("model_input.revit", "ModelInputError") or (),
+                owner_function("model_input.store", "save"))
+    except DataUnavailable as error:
+        raise HTTPException(error.status_code, str(error)) from None
+
+
+def _read_revit(read, refused, model: dict) -> dict:
+    try:
+        return StructuralModel.model_validate(read(model)).model_dump()
+    except refused as error:
+        raise HTTPException(422, str(error)) from None
+    except ValidationError:
+        raise HTTPException(500, "model_input.revit.read_revit answered off the StructuralModel contract") from None

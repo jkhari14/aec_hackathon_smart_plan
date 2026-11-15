@@ -1,9 +1,12 @@
 """The projects routes in the real app: two tabs as two roles, ETag polling, contract bodies, 404 and 422."""
 
 import json
+import sys
 import tempfile
+import types
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from fastapi.testclient import TestClient
 
@@ -21,7 +24,7 @@ def fixture(name: str):
     return json.loads((FIXTURES / f"{name}.json").read_text())
 
 
-class ProjectsRouterTests(unittest.TestCase):
+class ProjectsRouterTestCase(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         store = ProjectStore(Path(self.tmp.name) / "projects.sqlite")
@@ -37,6 +40,8 @@ class ProjectsRouterTests(unittest.TestCase):
         app.dependency_overrides.pop(project_store, None)
         self.tmp.cleanup()
 
+
+class ProjectsRouterTests(ProjectsRouterTestCase):
     def test_two_tabs_as_two_roles_on_one_project(self):
         seen = self.engineer_tab.get(self.path)
         self.assertEqual(self.engineer_tab.get(self.path, headers={"If-None-Match": seen.headers["ETag"]}).status_code, 304)
@@ -90,6 +95,53 @@ class ProjectsRouterTests(unittest.TestCase):
             self.architect_tab.patch(f"{self.path}/items", json=[{"id": "act-bc-3309-4", "status": "verified"}]),
         ):
             self.assertEqual(response.status_code, 422, response.text)
+
+
+
+class ModelInputHookTests(ProjectsRouterTestCase):
+    """Once PR 13's model_input is in: its reader cleans a Revit export, its store gets the site's copy."""
+
+    def setUp(self):
+        super().setUp()
+        self.saved = []
+        revit = types.ModuleType("model_input.revit")
+
+        class ModelInputError(ValueError):
+            pass
+
+        def read_revit(payload):
+            if payload["levels"] == 99:
+                raise ModelInputError("levels out of range")
+            return {**payload, "material": payload["material"].strip()}
+
+        revit.ModelInputError, revit.read_revit = ModelInputError, read_revit
+        model_store = types.ModuleType("model_input.store")
+        model_store.save = lambda project_id, bbl, model: self.saved.append((project_id, bbl, model))
+        self.modules = {"model_input": types.ModuleType("model_input"), "model_input.revit": revit,
+                        "model_input.store": model_store}
+        self.model = {**fixture("structural_model"), "source": "revit", "material": "  steel  "}
+
+    def post(self, model):
+        with mock.patch.dict(sys.modules, self.modules):
+            return self.architect_tab.post(f"{self.path}/model", json=model)
+
+    def test_a_revit_export_is_cleaned_kept_and_handed_to_the_site_profile(self):
+        kept = self.post(self.model).json()["structural_model"]
+        self.assertEqual(kept["material"], "steel")
+        self.assertEqual(self.saved, [(self.project_id, "3052110074", kept)])
+
+    def test_a_refused_export_is_422_and_kept_nowhere(self):
+        self.assertEqual(self.post({**self.model, "levels": 99}).status_code, 422)
+        self.assertIsNone(self.engineer_tab.get(self.path).json()["structural_model"])
+        self.assertEqual(self.saved, [])
+
+    def test_a_broken_model_input_refuses_rather_than_skipping_it(self):
+        def broken_import(name, *args, **kwargs):
+            raise ImportError("half-installed")
+        with mock.patch("api.routers.router_data.importlib.import_module", broken_import):
+            answer = TestClient(app).post(f"{self.path}/model", json=self.model)
+        self.assertEqual(answer.status_code, 500, answer.text)
+        self.assertIsNone(self.engineer_tab.get(self.path).json()["structural_model"])
 
 
 if __name__ == "__main__":
