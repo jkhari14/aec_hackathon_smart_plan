@@ -10,6 +10,7 @@ import { Intro } from "./scenes/Intro";
 import { Limits } from "./scenes/Limits";
 import { Outro } from "./scenes/Outro";
 import { Problem, PROBLEM_FRAMES } from "./scenes/Problem";
+import { Cta } from "./scenes/Cta";
 import { Process } from "./scenes/Process";
 import { Solution } from "./scenes/Solution";
 import { Stack } from "./scenes/Stack";
@@ -29,10 +30,11 @@ export const SCENES: Scene[] = [
   { name: "HowItWorks", frames: 1030, render: (d) => <HowItWorks duration={d} /> },
   { name: "Data", frames: 280, render: (d) => <Data duration={d} /> },
   { name: "Stack", frames: 285, render: (d) => <Stack duration={d} /> },
-  { name: "Impact", frames: 285, render: (d) => <Impact duration={d} /> },
-  { name: "Limits", frames: 340, render: (d) => <Limits duration={d} /> },
-  { name: "Process", frames: 640, render: (d) => <Process duration={d} /> },
-  { name: "Outro", frames: 300, render: (d) => <Outro duration={d} /> },
+  { name: "Impact", frames: 265, render: (d) => <Impact duration={d} /> },
+  { name: "Limits", frames: 320, render: (d) => <Limits duration={d} /> },
+  { name: "Process", frames: 590, render: (d) => <Process duration={d} /> },
+  { name: "Outro", frames: 240, render: (d) => <Outro duration={d} /> },
+  { name: "Cta", frames: 150, render: (d) => <Cta duration={d} /> },
 ];
 
 export const PITCH_FRAMES = SCENES.reduce((n, s) => n + s.frames, 0);

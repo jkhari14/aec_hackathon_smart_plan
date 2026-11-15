@@ -109,25 +109,29 @@ that the cause is under investigation. Nothing about what could have prevented i
 > React, MapLibre and deck.gl on Vercel, Claude for the chat, Python and FastAPI underneath, and Cityweft
 > for the 3D city.
 
-## 4:08 Impact (9.5 s)
+## 4:08 Impact (9 s)
 > The neighbor's risk shows up on your site, hindsight becomes a checklist, and the whole team works from
 > one picture.
 
-## 4:17 Limits and next steps (11 s)
+## 4:17 Limits and next steps (10.5 s)
 > Public records only, not engineering advice, never a prediction. Next: the reasons behind DOB objections,
 > a forensics ledger, daily alerts, and more cities.
 
-## 4:29 How we built it (21 s)
-**4:29 The process.**
+## 4:27 How we built it (20 s)
+**4:27 The process.**
 > We recorded our brainstorms with Wispr Flow, synthesized them with Cursor and Claude, iterated on the
 > plan, made concept videos, and took feedback, including from a Thornton Tomasetti forensic expert.
 
-**4:43 The build.**
+**4:42 The build.**
 > BUILD.md was our single source of truth. Each of us ran an agent from it, and the pull requests merged in
 > order.
 
-## 4:50 Close (10 s)
+## 4:47 Close (8 s)
 > The warnings were always public. 4site turns them into risk intelligence, before work starts.
+
+## 4:55 Try it (5 s)
+*QR code.*
+> Scan the code to see it for yourself. Thank you.
 
 ---
 
