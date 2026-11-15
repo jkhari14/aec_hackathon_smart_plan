@@ -76,6 +76,9 @@ export function defaultScope(job: JobType): ScopeOption[] {
 }
 
 /** The work types sent to the checklist: the job's other work, plus what was ticked. */
+/** Whether setup should ask how deep the dig goes: any earth work in the scope, the same test the checklist uses. */
+export const asksDepth = (job: JobType, picked: ScopeOption[]) => scopeValues(job, picked).includes("earth_work");
+
 export function scopeValues(job: JobType, picked: ScopeOption[]): WorkType[] {
   const out = new Set<WorkType>(JOB_DEFAULTS[job].filter((w) => !DECIDED_BY_SCOPE.has(w)));
   for (const option of picked) {

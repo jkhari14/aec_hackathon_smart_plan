@@ -8,7 +8,7 @@ import { ROLE_LABELS } from "../project/project_client";
 import type { DraftInput } from "./draft";
 import { KnownFacts } from "./KnownFacts";
 import {
-  CONSTRUCTION_CARDS, defaultScope, DEPTH_BANDS, type DepthBand, ROLES, SCOPE_OPTIONS, type ScopeOption, STAGE_OPTIONS, WORK_TYPE_CARDS,
+  asksDepth, CONSTRUCTION_CARDS, defaultScope, DEPTH_BANDS, type DepthBand, ROLES, SCOPE_OPTIONS, type ScopeOption, STAGE_OPTIONS, WORK_TYPE_CARDS,
 } from "./model";
 
 type Props = {
@@ -37,7 +37,7 @@ export function SetupStep({ bbl, siteLabel, busy, problem, onDraft }: Props) {
     setScope((s) => (s.includes(value) ? s.filter((x) => x !== value) : [...s, value]));
   const ready = job !== null && construction !== null && !busy;
   // Depth matters only when the job digs; the new building's height only for new construction.
-  const digs = scope.includes("excavation") || scope.includes("foundation");
+  const digs = job !== null && asksDepth(job, scope);
   const building = job === "new_building";
   const storeysValue = building && storeys.trim() !== "" && Number(storeys) > 0 ? Number(storeys) : null;
 

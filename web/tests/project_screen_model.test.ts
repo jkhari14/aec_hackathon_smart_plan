@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import {
-  CONSTRUCTION_CARDS, DEPTH_BANDS, DOC_SLOTS, defaultScope, STAGE_OPTIONS, groupByOwner, ownerFor, ROLES, scopeValues, SCOPE_OPTIONS, withOwners,
+  asksDepth, CONSTRUCTION_CARDS, DEPTH_BANDS, DOC_SLOTS, defaultScope, STAGE_OPTIONS, groupByOwner, ownerFor, ROLES, scopeValues, SCOPE_OPTIONS, withOwners,
   WORK_TYPE_CARDS,
 } from "../src/features/project_screen/model.ts";
 
@@ -103,4 +103,10 @@ test("dig depth bands send their deepest depth, and 'not sure' sends nothing", (
 test("stage options are design, filing and construction", () => {
   assert.deepEqual(STAGE_OPTIONS.map((s) => s.value), ["design", "pre_filing", "construction"]);
   assert.deepEqual(STAGE_OPTIONS.map((s) => s.label), ["Design", "Filing", "Construction"]);
+});
+
+test("the depth question shows for any job that digs, underpinning-only included", () => {
+  assert.equal(asksDepth("alteration", ["underpinning"]), true);
+  assert.equal(asksDepth("new_building", ["support_of_excavation"]), true);
+  assert.equal(asksDepth("alteration", ["structural", "facade"]), false);
 });

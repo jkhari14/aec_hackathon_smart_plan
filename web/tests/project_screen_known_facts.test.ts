@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { knownFacts } from "../src/features/project_screen/known_facts.ts";
+import { factsFor, knownFacts } from "../src/features/project_screen/known_facts.ts";
 
 const neighbor = (bbl: string, year: number, floors: number, attached = true) =>
   ({ bbl, bins: [], attached, year_built: year, floors }) as never;
@@ -53,4 +53,10 @@ test("a fact the profile doesn't check says 'not checked', not 'couldn't load'",
   assert.equal(flood?.value, null);
   assert.equal(flood?.missing, "not checked for this lot");
   assert.equal(knownFacts(null).find((f) => f.label === "Flood zone")?.missing, undefined);
+});
+
+test("sample data (the API is down) is never shown as this lot's facts", () => {
+  const lines = factsFor({ data: profile, sample: true });
+  assert.ok(lines.every((f) => f.value === null && f.missing === undefined));
+  assert.equal(factsFor({ data: profile, sample: false }).find((f) => f.label === "Lot size")?.value, "8,000 sq ft");
 });

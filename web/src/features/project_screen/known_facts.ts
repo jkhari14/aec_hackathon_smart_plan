@@ -25,6 +25,12 @@ function neighbors(profile: SiteProfile): string | null {
   return [`${attached.length} attached`, years && `built ${years}`, floors].filter(Boolean).join(", ");
 }
 
+/** The lines for an API answer. Sample data (the API is down, so the fixture lot came back) is never shown as
+    this lot's facts: every line reads "couldn't load" instead. */
+export function factsFor(result: { data: SiteProfile; sample: boolean } | null): KnownFact[] {
+  return knownFacts(result && !result.sample ? result.data : null);
+}
+
 export function knownFacts(profile: SiteProfile | null): KnownFact[] {
   const unchecked = (value: string | null) => (profile && value === null ? { missing: NOT_CHECKED } : {});
   const lotSize = profile?.lot.lot_area_sqft ? `${profile.lot.lot_area_sqft.toLocaleString("en-US")} sq ft` : null;

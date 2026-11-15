@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 
 import { api } from "../../api/client";
 import type { SiteProfile } from "../../contracts";
-import { formatDate, SampleBadge } from "../../design";
-import { knownFacts } from "./known_facts";
+import { formatDate } from "../../design";
+import { factsFor } from "./known_facts";
 
 export function KnownFacts({ bbl }: { bbl: string }) {
   const [state, setState] = useState<{ profile: SiteProfile | null; sample: boolean; done: boolean }>(
@@ -22,14 +22,14 @@ export function KnownFacts({ bbl }: { bbl: string }) {
   }, [bbl]);
 
   const { profile, sample, done } = state;
+  const real = profile && !sample ? profile : null;
   return (
     <section className="fs-ps-known" aria-label="What we already know about this lot">
       <header className="fs-ps-known__head">
         <h3 className="fs-label">What we already know about this lot</h3>
-        {sample && <SampleBadge />}
       </header>
       <dl className="fs-ps-known__list">
-        {knownFacts(done ? profile : null).map((f) => (
+        {factsFor(done && profile ? { data: profile, sample } : null).map((f) => (
           <div key={f.label} className="fs-ps-known__row">
             <dt>{f.label}</dt>
             <dd>
@@ -40,8 +40,10 @@ export function KnownFacts({ bbl }: { bbl: string }) {
         ))}
       </dl>
       <p className="fs-quiet fs-num">
-        From public records{profile?.as_of ? `, as of ${formatDate(profile.as_of)}` : " (latest pulled for this lot)"}. Only the
-        questions below are things the records can't tell us.
+        {done && !real
+          ? "Public records for this lot couldn't load, so nothing is shown. Setup still works."
+          : <>From public records{real?.as_of ? `, as of ${formatDate(real.as_of)}` : " (latest pulled for this lot)"}. Only the
+            questions below are things the records can't tell us.</>}
       </p>
     </section>
   );
