@@ -98,22 +98,24 @@ def to_model(answer: dict) -> tuple[dict, str]:
     return StructuralModel.model_validate(model).model_dump(), str(answer.get("evidence") or "")
 
 
-def read_drawing(pdf: bytes, client=None) -> tuple[dict, str]:
-    """Classify the structural system in a PDF. Returns (StructuralModel dict, evidence)."""
+def ask_pdf(pdf: bytes, prompt: str, schema: dict, client=None) -> dict:
+    """Send a PDF and a prompt to Claude with a JSON-schema answer format; return the parsed answer.
+
+    Shared by the drawing reader and the geotechnical report reader (`model_input/geotech.py`)."""
     if not pdf.startswith(b"%PDF"):
         raise ValueError("the upload is not a PDF")
     if len(pdf) > MAX_PDF_BYTES:
-        raise ValueError("the PDF is larger than 30 MB; upload the structural sheets only")
+        raise ValueError("the PDF is larger than 30 MB; upload the relevant sheets or pages only")
     anthropic, default_client = _client() if client is None else (None, client)
     client = client or default_client
     request = dict(
         model=MODEL,
         max_tokens=16000,
-        output_config={"effort": "medium", "format": {"type": "json_schema", "schema": SCHEMA}},
+        output_config={"effort": "medium", "format": {"type": "json_schema", "schema": schema}},
         messages=[{"role": "user", "content": [
             {"type": "document", "source": {"type": "base64", "media_type": "application/pdf",
                                             "data": base64.standard_b64encode(pdf).decode("ascii")}},
-            {"type": "text", "text": PROMPT},
+            {"type": "text", "text": prompt},
         ]}],
     )
     # AnthropicError covers API errors and missing credentials found at request time.
@@ -127,12 +129,17 @@ def read_drawing(pdf: bytes, client=None) -> tuple[dict, str]:
             # Server-side fallback is a beta: if the API rejects it, ask once more without it.
             response = client.beta.messages.create(**request)
     except errors as error:
-        raise DrawingUnavailable(f"the drawing could not be read ({type(error).__name__})") from error
+        raise DrawingUnavailable(f"the document could not be read ({type(error).__name__})") from error
     if response.stop_reason == "refusal":
-        raise DrawingUnavailable("the model declined to read this drawing")
+        raise DrawingUnavailable("the model declined to read this document")
     if response.stop_reason == "max_tokens":
-        raise DrawingUnavailable("the answer was cut off; upload fewer sheets")
+        raise DrawingUnavailable("the answer was cut off; upload fewer pages")
     text: Optional[str] = next((b.text for b in response.content if b.type == "text"), None)
     if not text:
         raise DrawingUnavailable("the model returned no answer")
-    return to_model(json.loads(text))
+    return json.loads(text)
+
+
+def read_drawing(pdf: bytes, client=None) -> tuple[dict, str]:
+    """Classify the structural system in a PDF. Returns (StructuralModel dict, evidence)."""
+    return to_model(ask_pdf(pdf, PROMPT, SCHEMA, client))

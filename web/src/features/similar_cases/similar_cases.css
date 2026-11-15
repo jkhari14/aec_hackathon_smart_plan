@@ -70,41 +70,170 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.fs-case__chips {
-  list-style: none;
-  margin: 0;
+.fs-case[data-pickable="true"] {
+  cursor: pointer;
+}
+.fs-case[data-pickable="true"]:hover {
+  border-color: var(--fs-accent);
+}
+/* "3 things in common · Details": opens the popup. */
+.fs-case__open {
+  align-self: flex-start;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-.fs-case__chips li {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 4px;
-  max-width: 100%;
-  padding: 2px 8px;
-  /* Reasons are the point of a match, so long ones wrap instead of being cut off. */
-  border-radius: 10px;
-  border: 1px solid var(--fs-line);
+  border: 0;
+  background: none;
+  font: inherit;
   font-size: var(--fs-text-xs);
-  line-height: 1.35;
   color: var(--fs-text-2);
-  white-space: normal;
+  cursor: pointer;
 }
-.fs-case__chips li::before {
-  font-weight: 700;
-}
-.fs-case__chips li[data-kind="match"]::before {
-  content: "✓";
+.fs-case__open span {
   color: var(--fs-accent);
 }
-.fs-case__chips li[data-kind="differ"] {
-  border-style: dashed;
-  color: var(--fs-muted);
+.fs-case__open:hover span {
+  text-decoration: underline;
 }
-.fs-case__chips li[data-kind="differ"]::before {
-  content: "≠";
+.fs-case__open:focus-visible {
+  outline: 2px solid var(--fs-focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* The case popup: centred, scrolls inside, a light backdrop so the map's strand still shows through. */
+.fs-case-dialog {
+  /* The app's reset zeroes margins, which undoes the browser's own centring of a modal dialog. */
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  height: fit-content;
+  width: min(560px, calc(100vw - 32px));
+  max-height: min(80vh, 720px);
+  padding: 0;
+  border: 1px solid var(--fs-line);
+  border-top: 4px solid var(--fs-hz, var(--fs-accent));
+  border-radius: 12px;
+  background: var(--fs-raised);
+  color: var(--fs-text);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+  overflow: auto;
+}
+/* The grow-in and shrink-out are driven from SimilarCases.tsx (they start and end on the card). Here: the
+   backdrop fades, and the contents arrive a beat after the box so text never stretches with it. */
+.fs-case-dialog {
+  transform-origin: center;
+}
+.fs-case-dialog::backdrop {
+  background: rgba(20, 20, 20, 0.28);
+  animation: fs-case-fade 300ms ease-out;
+}
+.fs-case-dialog[data-state="closing"]::backdrop {
+  opacity: 0;
+  transition: opacity 260ms ease-in;
+}
+.fs-case-dialog[open] > * {
+  animation: fs-case-rise 360ms 140ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.fs-case-dialog[open] .fs-case__body > section {
+  animation: fs-case-rise 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.fs-case-dialog[open] .fs-case__body > section:nth-child(1) { animation-delay: 200ms; }
+.fs-case-dialog[open] .fs-case__body > section:nth-child(2) { animation-delay: 250ms; }
+.fs-case-dialog[open] .fs-case__body > section:nth-child(3) { animation-delay: 300ms; }
+.fs-case-dialog[open] .fs-case__body > section:nth-child(4) { animation-delay: 350ms; }
+.fs-case-dialog[data-state="closing"] > * {
+  opacity: 0;
+  transition: opacity 120ms ease-in;
+}
+@keyframes fs-case-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fs-case-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.fs-case-dialog__head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 16px 12px 20px;
+  background: var(--fs-raised);
+  border-bottom: 1px solid var(--fs-line);
+}
+.fs-case-dialog__head h3 {
+  margin: 0;
+}
+.fs-case-dialog__close {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--fs-text-2);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.fs-case-dialog__close:hover {
+  background: var(--fs-line);
+  color: var(--fs-text);
+}
+.fs-case-dialog .fs-case__body {
+  margin: 0;
+  padding: 16px 20px 20px;
+  border-top: 0;
+}
+.fs-case-dialog .fs-case__meta {
+  white-space: normal;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fs-case-dialog::backdrop,
+  .fs-case-dialog[open] > *,
+  .fs-case-dialog[open] .fs-case__body > section {
+    animation: none;
+  }
+}
+.fs-case__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--fs-line);
+  font-size: var(--fs-text-sm);
+  line-height: 1.5;
+  color: var(--fs-text);
+}
+.fs-case__body section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.fs-case__body h4 {
+  margin: 0;
+  font-size: var(--fs-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fs-text-2);
+}
+.fs-case__body ul {
+  margin: 0;
+  padding-left: 18px;
+  list-style: disc;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.fs-case__body p {
+  margin: 0;
 }
 .fs-case__sources {
   display: flex;
@@ -139,4 +268,75 @@
   font-size: 12px;
   font-weight: 700;
   color: var(--fs-text);
+}
+
+/* Resemblance: three rising bars and a word, in place of a number. */
+.fs-match {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 44px;
+}
+.fs-match__bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 18px;
+}
+.fs-match__bars i {
+  width: 6px;
+  border-radius: 2px;
+  background: var(--fs-line);
+}
+.fs-match__bars i:nth-child(1) { height: 8px; }
+.fs-match__bars i:nth-child(2) { height: 13px; }
+.fs-match__bars i:nth-child(3) { height: 18px; }
+.fs-match__bars i[data-on="true"] {
+  background: var(--fs-accent);
+}
+.fs-match[data-level="weak"] .fs-match__bars i[data-on="true"] {
+  background: var(--fs-muted);
+}
+.fs-match__word {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fs-text-2);
+}
+
+/* "Lessons from this case" in the case popup: the risk it shows and the checklist items for it. */
+.fs-case__lessons {
+  padding: 12px 14px;
+  border: 1px solid var(--fs-line);
+  border-left: 3px solid var(--fs-hz, var(--fs-accent));
+  border-radius: 0 var(--fs-radius) var(--fs-radius) 0;
+  background: var(--fs-hover);
+}
+.fs-case__lesson + .fs-case__lesson {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--fs-line);
+}
+.fs-case__lesson-title {
+  font-weight: 600;
+}
+.fs-case__lesson-label {
+  margin-top: 6px !important;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fs-text-2);
+}
+/* What went wrong on this case, from its lessons. */
+.fs-case__risk {
+  align-self: flex-start;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--fs-text-2);
 }

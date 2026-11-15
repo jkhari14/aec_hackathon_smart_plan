@@ -1,6 +1,7 @@
 // Every screen reads data through here. Each call tries the API, then the deploy's saved snapshot, then
 // the matching fixture in contracts/fixtures/; stub and fixture answers come back with `sample: true` so
-// the UI can label them as sample data.
+// the UI can label them as sample data. Only an API that is not there falls back: when the API answers
+// with its own error, the call rejects with an ApiError, so a failed query is never shown as sample data.
 import type {
   ActionItem,
   Case,
@@ -14,7 +15,9 @@ import type {
   Project,
   SearchResult,
   SimilarCases,
+  SiteOutlook,
   SiteProfile,
+  Stage,
   WarningRuleCheck,
   WorkType,
 } from "../contracts";
@@ -72,19 +75,40 @@ async function fromSnapshot<T>(path: string): Promise<Loaded<T> | null> {
   }
 }
 
+/** The API answered this call with an error (its status and its reason): show "couldn't load", never data. */
+export class ApiError extends Error {
+  constructor(readonly status: number, readonly detail: string, readonly path: string) {
+    super(`Couldn't load (${status}): ${detail}`);
+    this.name = "ApiError";
+  }
+}
+
+// FastAPI sends its own errors as JSON. A non-JSON error is something in front of it, such as the dev
+// server's proxy (an empty 502 while the API is not running) or a host's error page: the API is not there.
+async function apiError(response: Response, path: string): Promise<ApiError | null> {
+  if (!response.headers.get("Content-Type")?.includes("application/json")) return null;
+  const body = (await response.json().catch(() => null)) as { detail?: unknown } | null;
+  const detail = typeof body?.detail === "string" ? body.detail : JSON.stringify(body?.detail ?? body);
+  return new ApiError(response.status, detail, path);
+}
+
 async function request<T>(path: string, fallback: unknown, init?: RequestInit): Promise<Loaded<T>> {
   const read = !init?.method || init.method === "GET";
   if (!STATIC) {
+    let failed: ApiError | null = null;
     try {
       const response = await fetch(`${API_BASE}${path}`, {
         ...init,
         headers: { "Content-Type": "application/json", ...init?.headers },
       });
-      if (!response.ok) throw new Error(`${response.status} ${path}`);
-      return { data: (await response.json()) as T, sample: response.headers.get(FIXTURE_HEADER) === "true" };
+      if (response.ok) {
+        return { data: (await response.json()) as T, sample: response.headers.get(FIXTURE_HEADER) === "true" };
+      }
+      failed = await apiError(response, path);
     } catch {
-      // fall through to the snapshot, then the fixture
+      // not reachable: fall through to the snapshot, then the fixture
     }
+    if (failed) throw failed;
   }
   const saved = read ? await fromSnapshot<T>(path) : null;
   return saved ?? { data: fallback as T, sample: true };
@@ -99,16 +123,21 @@ export const api = {
   search: (q: string) => request<SearchResult[]>(`/api/search?q=${encodeURIComponent(q)}`, searchFixture),
   siteProfile: (bbl: string) => request<SiteProfile>(`${site(bbl)}/profile`, siteProfileFixture),
   similar: (bbl: string) => request<SimilarCases>(`${site(bbl)}/similar`, similarFixture),
+  /** What could go wrong here, for every option. No fixture: offline it comes back empty and marked sample. */
+  outlook: (bbl: string) => request<SiteOutlook>(`${site(bbl)}/outlook`, { bbl, lessons: [] }),
   warnings: (bbl: string, asOf?: string) =>
     request<EarlyWarning[]>(`${site(bbl)}/warnings${asOf ? `?as_of=${encodeURIComponent(asOf)}` : ""}`, warningsFixture),
   warningChecks: (bbl: string, asOf?: string) =>
     request<WarningRuleCheck[]>(`${site(bbl)}/warnings/checks${asOf ? `?as_of=${encodeURIComponent(asOf)}` : ""}`, warningChecksFixture),
   pattern: (bbl: string) => request<PatternScore>(`${site(bbl)}/pattern`, patternFixture),
   /** With the project screen's setup choices, the checklist follows the job type and scope picked there. */
-  actions: (bbl: string, opts: { jobType?: JobType; workTypes?: WorkType[] } = {}) => {
+  actions: (bbl: string, opts: { jobType?: JobType; workTypes?: WorkType[]; depthFt?: number; proposedStoreys?: number; stage?: Stage } = {}) => {
     const q = new URLSearchParams();
     if (opts.jobType) q.set("job_type", opts.jobType);
     if (opts.workTypes?.length) q.set("work_types", opts.workTypes.join(","));
+    if (opts.depthFt != null) q.set("excavation_depth_ft", String(opts.depthFt));
+    if (opts.proposedStoreys != null) q.set("proposed_storeys", String(opts.proposedStoreys));
+    if (opts.stage) q.set("stage", opts.stage);
     const query = q.toString();
     return request<ActionItem[]>(`${site(bbl)}/actions${query ? `?${query}` : ""}`, actionsFixture);
   },

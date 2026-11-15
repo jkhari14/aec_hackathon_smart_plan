@@ -45,7 +45,8 @@ def _profile_for(bbl: str, job_type: Optional[str] = None) -> tuple[Optional[dic
 
 
 def actions_for(bbl: str, stage: Optional[str] = None, job_type: Optional[str] = None,
-                work_types: Optional[list[str]] = None, response=None) -> list[dict]:
+                work_types: Optional[list[str]] = None, excavation_depth_ft: Optional[float] = None,
+                proposed_storeys: Optional[float] = None, response=None) -> list[dict]:
     """Action items for a site, grouped by discipline and life-safety first.
 
     Called by sites_router with the BBL, the checked `stage` and a Response. Until PR 6 lands the
@@ -63,4 +64,6 @@ def actions_for(bbl: str, stage: Optional[str] = None, job_type: Optional[str] =
         response.headers[FIXTURE_HEADER] = "true"
     if work_types is not None:
         profile = {**profile, "work_types": list(work_types), "work_types_inferred": False}
+    # Setup's answers: how deep the dig goes and how tall the new building is (None when not given).
+    profile = {**profile, "excavation_depth_ft": excavation_depth_ft, "proposed_storeys": proposed_storeys}
     return build_actions(profile, stage)
