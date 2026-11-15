@@ -1,0 +1,111 @@
+{
+  "updated": "2026-11-14",
+  "status": "candidates: Hongyu and the team pick the hero site; nothing here is final",
+  "rules": [
+    "Do not open the pitch with Nov 11 or 1321 Flatbush Avenue.",
+    "Present records as what the public record shows, dated, with the source link. No owner, applicant or contractor names.",
+    "No blame and no 'would have prevented'. A site is a demo of what was knowable, not an accusation.",
+    "311 requests and DOB complaints are counted apart, never added: the same report can be in both.",
+    "Counts below are from live queries on 2026-11-14 and will change. Re-run the source query before the demo."
+  ],
+  "sites": [
+    {
+      "id": "861-park-ave-brooklyn",
+      "rank": 1,
+      "label": "861 Park Avenue, Brooklyn (Bedford-Stuyvesant)",
+      "address": "861 PARK AVENUE, Brooklyn, NY",
+      "pluto_address": "294 ELLERY STREET",
+      "bbl": "3015790010",
+      "lat": 40.6989792,
+      "lon": -73.9406459,
+      "stage": "construction",
+      "job_type": "new_building",
+      "work_types": ["excavation", "foundation", "support_of_excavation", "scaffold", "sidewalk_shed"],
+      "why_it_works": [
+        "An active new building (50 dwelling units filed) on a vacant corner lot, wrapped by attached rowhouses built 1910 to 1931: the exact excavation-next-to-old-masonry profile ForeSite is built for.",
+        "The neighbors' own words are in the record: 7 'Excavation Undermining Adjacent Building' and 5 'Adjacent Buildings Not Protected' 311 requests between Feb and Sep 2026, plus 1 'Inadequate Support Shoring' in Jan 2026.",
+        "It shows a sequence, not a single event: shoring concern (Jan), undermining reports (Feb onward), 'Working Contrary To Stop Work Order' (May), more undermining reports (Aug). Good for the early-warning rules.",
+        "Neighbor-protection filings are on record (temporary needle-beam scaffolds and roof protection, Jul to Aug 2026), so the actions panel has real proof-needed items to point at.",
+        "No collapse or injury is publicly reported here, so the demo stays forward-looking and calm."
+      ],
+      "touching_lots": [
+        { "bbl": "3015790005", "address": "23 MARCUS GARVEY BLVD", "year_built": 1910, "floors": 2 },
+        { "bbl": "3015790006", "address": "21 MARCUS GARVEY BLVD", "year_built": 1931, "floors": 2 },
+        { "bbl": "3015790007", "address": "19 MARCUS GARVEY BLVD", "year_built": 1931, "floors": 3 },
+        { "bbl": "3015790008", "address": "17 MARCUS GARVEY BLVD", "year_built": 1931, "floors": 3 },
+        { "bbl": "3015790012", "address": "296 ELLERY STREET", "year_built": 1931, "floors": 3 }
+      ],
+      "sources": [
+        { "name": "311 Service Requests routed to DOB", "url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?agency=DOB&bbl=3015790010", "date": "2026-11-14" },
+        { "name": "DOB NOW: Build - Job Application Filings", "url": "https://data.cityofnewyork.us/resource/w9ak-ipjd.json?bbl=3015790010", "date": "2026-11-14" },
+        { "name": "PLUTO (touching lots, year built)", "url": "https://data.cityofnewyork.us/d/64uk-42ks", "date": "2026-11-14" }
+      ],
+      "cautions": [
+        "The lot's PLUTO address is 294 Ellery Street; the filings and 311 requests use 861 Park Avenue. Show both so the match is clear.",
+        "It is an active site with real neighbors: keep it to dated records and never imply fault.",
+        "The touching lots' attachment (PLUTO proxcode) is blank; confirm attached walls from the footprints before drawing party walls."
+      ]
+    },
+    {
+      "id": "3728-bronx-blvd",
+      "rank": 2,
+      "label": "3728 Bronx Boulevard, Bronx (Williamsbridge)",
+      "address": "3728 BRONX BOULEVARD, Bronx, NY",
+      "bbl": "2046490013",
+      "lat": 40.8829513,
+      "lon": -73.8664182,
+      "stage": "construction",
+      "job_type": "new_building",
+      "work_types": ["earth_work", "foundation", "support_of_excavation", "structural"],
+      "why_it_works": [
+        "A new 6-story, 28-unit building on a vacant lot, with separate foundation (Jun 2026), support-of-excavation (Sep 2026) and neighbor-overhead-protection (Sep 2026) filings: the work types map cleanly onto the actions by discipline.",
+        "9 'Adjacent Buildings Not Protected' 311 requests (Nov 2025 to Sep 2026) and 2 'Excavation Undermining Adjacent Building' (Nov 2025, Apr 2026).",
+        "2 'Working Contrary To Stop Work Order' requests in Jul 2026, a clean example of the stop-work-then-work-continued warning rule.",
+        "Touching lots mix older homes (built 1925 and 1928) with 2005 to 2006 rowhouses, which lets the similarity panel show both 'matches on' and 'differs on'.",
+        "A Bronx site keeps the demo from being only about Brooklyn."
+      ],
+      "touching_lots": [
+        { "bbl": "2046490071", "address": "3721 OLINVILLE AVENUE", "year_built": 1925, "floors": 2.5, "proximity": "detached" },
+        { "bbl": "2046490066", "address": "3731 OLINVILLE AVENUE", "year_built": 1928, "floors": 2 },
+        { "bbl": "2046490069", "address": "3727 OLINVILLE AVENUE", "year_built": 2005, "floors": 3, "proximity": "attached" },
+        { "bbl": "2046490011", "address": "3722 BRONX BOULEVARD", "year_built": 2006, "floors": 3, "proximity": "semi-attached" }
+      ],
+      "sources": [
+        { "name": "311 Service Requests routed to DOB", "url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?agency=DOB&bbl=2046490013", "date": "2026-11-14" },
+        { "name": "DOB NOW: Build - Job Application Filings", "url": "https://data.cityofnewyork.us/resource/w9ak-ipjd.json?bbl=2046490013", "date": "2026-11-14" },
+        { "name": "PLUTO (touching lots, year built, proximity)", "url": "https://data.cityofnewyork.us/d/64uk-42ks", "date": "2026-11-14" }
+      ],
+      "cautions": [
+        "The new building's main filing was still in plan examiner review on 2026-10-29; say 'filed', not 'approved', for that one.",
+        "The pre-1940 neighbors are not attached to the site per PLUTO, so the party-wall glow is weaker here than at 861 Park Avenue."
+      ]
+    },
+    {
+      "id": "2625-bedford-ave-brooklyn",
+      "rank": 3,
+      "label": "2625 Bedford Avenue, Brooklyn (backup: cached real records)",
+      "address": "2625 BEDFORD AVENUE, Brooklyn, NY",
+      "bbl": "3052110074",
+      "lat": 40.63915,
+      "lon": -73.95381,
+      "stage": "construction",
+      "job_type": "new_building",
+      "work_types": ["excavation", "foundation", "support_of_excavation"],
+      "why_it_works": [
+        "Every contract fixture and the cached brief already use it, so it works with the API down.",
+        "The as-of replay is the strongest proof of 'what was knowable when': a March 2026 ECB violation says protection for adjacent properties was not installed, months before Nov 11."
+      ],
+      "touching_lots": [
+        { "bbl": "3052110073", "address": "1321 FLATBUSH AVENUE", "year_built": 1930, "floors": 3 }
+      ],
+      "sources": [
+        { "name": "Contract fixture: site profile", "url": "contracts/fixtures/site_profile.json", "date": "2026-11-14" },
+        { "name": "Cached brief", "url": "data/cache/2625-bedford-ave-brooklyn.json", "date": "2026-11-14" }
+      ],
+      "cautions": [
+        "It is the excavation next to 1321 Flatbush Avenue, where a collapse on 2026-11-11 is under investigation. Do not open with it, and do not use it as the hero.",
+        "If shown, use it only as the as-of replay example, stated neutrally: the records, their dates, and 'cause under investigation'."
+      ]
+    }
+  ]
+}
