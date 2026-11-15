@@ -227,3 +227,45 @@ class TestPhases(unittest.TestCase):
         for a in build_actions(_profile()):
             self.assertIn(a.get("phase"), phases, a["id"])
             self.assertTrue(a.get("when"), a["id"])
+
+
+class TestSiteContext(unittest.TestCase):
+    """Rows about the neighbors name them; rows the records speak to say what the records show."""
+
+    def setUp(self):
+        n = lambda addr, year, floors, attached=True: {"bbl": addr, "bins": [], "address": addr, "attached": attached,  # noqa: E731
+                                                       "year_built": year, "floors": floors}
+        sig = lambda title, date: {"id": title + date, "hazard": "structural", "severity": 0, "title": title,  # noqa: E731
+                                   "explanation": "", "record_ids": [], "source_name": "DOB Complaints Received",
+                                   "date": date}
+        self.p = dict(_profile(), work_types=["excavation", "foundation"], excavation_depth_ft=10,
+                      neighbors=[n("19 MARCUS GARVEY BLVD", 1931, 3.0), n("296 ELLERY STREET", 1931, 3.0),
+                                 n(None, 0, None)],
+                      signals=[sig("Excavation undermining an adjacent building", "2026-02-11"),
+                               sig("Excavation undermining an adjacent building (touching lot 17 MARCUS GARVEY BLVD)", "2026-08-21"),
+                               sig("Adjacent building not protected", "2026-05-15"),
+                               sig("Scaffold or material handling cited", "2026-10-08")])
+
+    def rows(self):
+        return {a["id"]: a for a in build_actions(self.p)}
+
+    def test_neighbor_rows_name_the_buildings(self):
+        applies = self.rows()["action-code-survey"]["applies_to"]
+        self.assertEqual(applies[0], "19 Marcus Garvey Blvd (built 1931, 3 storeys, attached)")
+        self.assertIn("296 Ellery Street (built 1931, 3 storeys, attached)", applies)
+        self.assertIn("an unnamed lot (attached)", applies)
+
+    def test_rows_not_about_neighbors_name_none(self):
+        self.assertEqual(self.rows()["action-code-support_drawings"].get("applies_to"), [])
+
+    def test_matching_records_are_counted_with_their_dates(self):
+        ev = self.rows()["action-code-monitoring"]["evidence"]
+        self.assertIn("2 'Excavation undermining an adjacent building'", ev)
+        self.assertIn("1 'Adjacent building not protected'", ev)
+        self.assertIn("Feb 2026–Aug 2026", ev)
+        self.assertIn("reports, not findings", ev)
+        self.assertNotIn("Scaffold", ev)
+
+    def test_no_matching_records_means_no_evidence(self):
+        self.p["signals"] = []
+        self.assertIsNone(self.rows()["action-code-monitoring"]["evidence"])

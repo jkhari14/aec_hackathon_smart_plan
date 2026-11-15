@@ -106,6 +106,14 @@ class ProjectsRouterTests(ProjectsRouterTestCase):
         self.assertIsNone(row["done_by_role"])
         self.assertTrue(row["done_at"])
 
+    def test_items_keep_their_neighbors_and_record_line(self):
+        item = {**fixture("actions")[0], "applies_to": ["19 Marcus Garvey Blvd (built 1931, attached)"],
+                "evidence": "On record here: 2 complaints."}
+        self.architect_tab.post(f"{self.path}/items", json=[item])
+        got = {i["id"]: i for i in self.architect_tab.get(self.path).json()["items"]}[item["id"]]
+        self.assertEqual(got["applies_to"], item["applies_to"])
+        self.assertEqual(got["evidence"], item["evidence"])
+
     def test_unknown_projects_and_items_are_404(self):
         for response in (
             self.architect_tab.get("/api/projects/0123456789abcdef"),

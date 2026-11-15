@@ -202,6 +202,26 @@
         ],
         "default": null,
         "title": "Done At"
+      },
+      "applies_to": {
+        "default": [],
+        "items": {
+          "type": "string"
+        },
+        "title": "Applies To",
+        "type": "array"
+      },
+      "evidence": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Evidence"
       }
     },
     "required": [

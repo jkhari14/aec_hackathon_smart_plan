@@ -340,6 +340,10 @@ class ActionItem(Contract):
     when: Optional[str] = None
     done_by_role: Optional[Role] = None
     done_at: Optional[str] = None
+    # What makes the row about this lot: the neighbouring buildings it concerns, and what the public record
+    # already shows that bears on it (actions/site_context.py).
+    applies_to: list[str] = []
+    evidence: Optional[str] = None
 
 
 # Projects

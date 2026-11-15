@@ -18,6 +18,7 @@ from typing import Any, Iterable, Optional
 
 from checklist.checklist_rules import RULES as CODE_RULES
 from actions.phases import phase_for
+from actions.site_context import applies_to, evidence
 from checklist.applicability import _monitoring, _survey
 
 RULES_PATH = pathlib.Path(__file__).with_name("rules.json")
@@ -204,6 +205,8 @@ def code_actions(profile: dict, cfg: dict) -> list[dict]:
             "source_rule": f"checklist:{rule.id}",
             "life_safety": rule.life_safety,
             **dict(zip(("phase", "when"), phase_for(f"checklist:{rule.id}"))),
+            "applies_to": applies_to(rule.id, profile),
+            "evidence": evidence(rule.id, profile),
         })
     return out
 

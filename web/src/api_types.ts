@@ -447,6 +447,13 @@ export interface components {
             done_by_role?: ("architect" | "structural_engineer" | "developer" | "contractor") | null;
             /** Done At */
             done_at?: string | null;
+            /**
+             * Applies To
+             * @default []
+             */
+            applies_to: string[];
+            /** Evidence */
+            evidence?: string | null;
         };
         /** ActionItemUpdate */
         ActionItemUpdate: {

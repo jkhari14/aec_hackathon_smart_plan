@@ -21,7 +21,7 @@ _BBL = re.compile(r"[1-5][0-9]{9}", re.ASCII)  # fullmatch: no trailing newline 
 _PROJECT_ID = re.compile(r"[0-9a-f]{16}", re.ASCII)
 UNCHANGED = object()  # update_items: leave the field as it is
 _ITEM_FIELDS = ("id", "discipline", "hazard", "title", "why", "code_ref", "proof_needed", "status", "owner_role",
-                "source_rule", "life_safety", "phase", "due_when")
+                "source_rule", "life_safety", "phase", "due_when", "applies_to_json", "evidence")
 _PROVENANCE = ("added_by_role", "added_reason", "added_at")
 # When the item is due (the column is due_when: WHEN is an SQL keyword) and who marked it done, and when.
 _TIMING = ("phase", "due_when")
@@ -79,6 +79,8 @@ def _item_row(item: dict) -> dict:
         "life_safety": int(item["life_safety"]),
         "phase": _choice(item.get("phase"), "phase", PHASES, nullable=True),
         "due_when": _text(item.get("when"), "when", "ref", required=False),
+        "applies_to_json": json.dumps([_text(a, "applies_to", "ref") for a in (item.get("applies_to") or [])][:40]),
+        "evidence": _text(item.get("evidence"), "evidence", "item_text", required=False),
     }
 
 
@@ -317,6 +319,8 @@ class ProjectStore:
             items = rows(f"SELECT {', '.join(_ITEM_FIELDS + _PROVENANCE + _SIGN_OFF)} FROM items WHERE project_id = ? ORDER BY position")
             for item in items:
                 item["when"] = item.pop("due_when")
+                raw = item.pop("applies_to_json")
+                item["applies_to"] = json.loads(raw) if raw else []
             project = {
                 "id": row["id"], "name": row["name"], "site_bbl": row["site_bbl"], "stage": row["stage"],
                 "members": rows("SELECT name, role FROM members WHERE project_id = ? ORDER BY position"),

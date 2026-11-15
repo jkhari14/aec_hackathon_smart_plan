@@ -93,4 +93,5 @@ ADDED_COLUMNS = (("pins", "body", "TEXT"), ("projects", "job_type", "TEXT"), ("p
                  ("items", "added_reason", "TEXT"), ("items", "added_at", "TEXT"),
                  ("projects", "excavation_depth_ft", "REAL"), ("projects", "proposed_storeys", "REAL"),
                  ("items", "phase", "TEXT"), ("items", "due_when", "TEXT"), ("items", "done_by_role", "TEXT"),
-                 ("items", "done_at", "TEXT"))
+                 ("items", "done_at", "TEXT"),
+                 ("items", "applies_to_json", "TEXT"), ("items", "evidence", "TEXT"))
