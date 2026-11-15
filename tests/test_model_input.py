@@ -4,6 +4,7 @@ site profile and similar cases. Offline: no key and no network."""
 from __future__ import annotations
 
 import json
+import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
@@ -12,6 +13,8 @@ from fastapi.testclient import TestClient
 
 from api.contracts import StructuralModel
 from api.main import app
+from api.routers.projects_router import project_store
+from api.store.project_store import ProjectStore
 from model_input import drawing, store
 from model_input.revit import ModelInputError, read_revit
 
@@ -81,14 +84,26 @@ class Drawing(unittest.TestCase):
 class Routes(unittest.TestCase):
     def setUp(self):
         store.clear()
+        self.tmp = tempfile.TemporaryDirectory()
+        projects = ProjectStore(Path(self.tmp.name) / "projects.sqlite")
+        app.dependency_overrides[project_store] = lambda: projects  # no test writes the real project database
         self.client = TestClient(app)
 
     def tearDown(self):
         store.clear()
+        app.dependency_overrides.pop(project_store, None)
+        self.tmp.cleanup()
+
+    def new_project(self) -> str:
+        body = {"name": "Model upload test", "site_bbl": "3052110074", "stage": "pre_filing",
+                "members": [{"name": "Structural engineer", "role": "structural_engineer"}]}
+        response = self.client.post("/api/projects", json=body)
+        self.assertEqual(response.status_code, 200, response.text)
+        return response.json()["id"]
 
     def test_revit_upload_feeds_profile_and_similarity(self):
         before = self.client.get("/api/sites/3052110074/similar").json()
-        response = self.client.post("/api/projects/proj-sample/model", json=FIXTURE)
+        response = self.client.post(f"/api/projects/{self.new_project()}/model", json=FIXTURE)
         self.assertEqual(response.status_code, 200, response.text)
         self.assertEqual(response.json()["structural_model"]["material"], "unreinforced brick masonry")
         profile = self.client.get("/api/sites/3052110074/profile").json()
