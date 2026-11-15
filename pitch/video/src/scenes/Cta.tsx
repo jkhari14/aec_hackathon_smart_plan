@@ -9,14 +9,20 @@ export function Cta({ duration }: { duration: number }) {
   return (
     <Slide section="Try it" duration={duration}>
       <div style={{ position: "absolute", left: 160, top: 300, width: 900 }}>
-        <Eyebrow delay={2}>Try it</Eyebrow>
+        <Eyebrow delay={2}>Scan the code</Eyebrow>
         <Reveal delay={6}>
           <div style={{ fontSize: 96, fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.05, marginTop: 18 }}>
-            See <span style={{ color: C.blue }}>4</span>site<br />for yourself.
+            Try it <span style={{ color: C.blue }}>4</span><br />yourself.
           </div>
         </Reveal>
         <Reveal delay={24}>
           <p style={{ fontSize: 40, color: C.ink2, marginTop: 30 }}>Scan to explore 4site.</p>
+        </Reveal>
+        <Reveal delay={30}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 22 }}>
+            <Img src={staticFile("logos/github.svg")} style={{ width: 40, height: 40 }} />
+            <span style={{ fontSize: 30, fontFamily: "monospace", color: C.ink }}>github.com/jkhari14/aec_hackathon_smart_plan</span>
+          </div>
         </Reveal>
         <Reveal delay={34}>
           <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: 50 }}>

@@ -125,7 +125,7 @@ that the cause is under investigation. Nothing about what could have prevented i
 
 ## 4:44 Try it (5 s)
 *QR code.*
-> Scan the code to see it for yourself. Thank you.
+> Try it for yourself: scan the code, or find us on GitHub. Thank you.
 
 ---
 
