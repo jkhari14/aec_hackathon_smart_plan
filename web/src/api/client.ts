@@ -14,6 +14,7 @@ import type {
   SearchResult,
   SimilarCases,
   SiteProfile,
+  WarningRuleCheck,
 } from "../contracts";
 
 import actionsFixture from "../../../contracts/fixtures/actions.json";
@@ -26,6 +27,7 @@ import projectFixture from "../../../contracts/fixtures/project.json";
 import searchFixture from "../../../contracts/fixtures/search_results.json";
 import similarFixture from "../../../contracts/fixtures/similar_cases.json";
 import siteProfileFixture from "../../../contracts/fixtures/site_profile.json";
+import warningChecksFixture from "../../../contracts/fixtures/warning_checks.json";
 import warningsFixture from "../../../contracts/fixtures/warnings.json";
 
 export type Loaded<T> = { data: T; sample: boolean };
@@ -54,7 +56,10 @@ export const api = {
   search: (q: string) => request<SearchResult[]>(`/api/search?q=${encodeURIComponent(q)}`, searchFixture),
   siteProfile: (bbl: string) => request<SiteProfile>(`${site(bbl)}/profile`, siteProfileFixture),
   similar: (bbl: string) => request<SimilarCases>(`${site(bbl)}/similar`, similarFixture),
-  warnings: (bbl: string) => request<EarlyWarning[]>(`${site(bbl)}/warnings`, warningsFixture),
+  warnings: (bbl: string, asOf?: string) =>
+    request<EarlyWarning[]>(`${site(bbl)}/warnings${asOf ? `?as_of=${encodeURIComponent(asOf)}` : ""}`, warningsFixture),
+  warningChecks: (bbl: string, asOf?: string) =>
+    request<WarningRuleCheck[]>(`${site(bbl)}/warnings/checks${asOf ? `?as_of=${encodeURIComponent(asOf)}` : ""}`, warningChecksFixture),
   pattern: (bbl: string) => request<PatternScore>(`${site(bbl)}/pattern`, patternFixture),
   actions: (bbl: string) => request<ActionItem[]>(`${site(bbl)}/actions`, actionsFixture),
   cases: () => request<Case[]>("/api/cases", casesFixture),

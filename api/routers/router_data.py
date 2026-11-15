@@ -1,6 +1,7 @@
 """Shared by the routers: where data/ is, a cached and contract-checked read, the input checks, and the
 LoadedData / DataUnavailable pair that Python callers (the chat) get instead of an HTTP answer."""
 
+import importlib
 import json
 import os
 import re
@@ -79,6 +80,21 @@ def valid_choice(value: Optional[str], allowed: tuple, name: str) -> Optional[st
         raise HTTPException(422, f"{name} must be one of: {', '.join(allowed)}")
     return value
 
+
+
+def owner_function(module_name: str, function_name: str):
+    """A teammate's function by its real name, or None while their module or function has not landed. Their
+    module failing to import is DataUnavailable: code that is there but broken never falls back to the sample."""
+    where = f"{module_name}.{function_name}"
+    try:
+        module = importlib.import_module(module_name)
+    except ModuleNotFoundError as error:
+        if error.name == module_name or module_name.startswith(f"{error.name}."):
+            return None
+        raise DataUnavailable(f"{where} could not be imported ({error.name} is missing)") from error
+    except Exception as error:
+        raise DataUnavailable(f"{where} could not be imported ({type(error).__name__})") from error
+    return getattr(module, function_name, None)
 
 @lru_cache(maxsize=64)
 def _read(path: str, mtime_ns: int, size: int, adapter: TypeAdapter):

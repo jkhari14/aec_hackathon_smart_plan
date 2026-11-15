@@ -1,0 +1,24 @@
+/* Record cards on the dark map. shortcut: hard-coded colors until Camilo's tokens (PR 1) land. */
+.maplibregl-popup-content {
+  background: #121821;
+  color: #e6edf3;
+  border: 1px solid #243041;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: 13px/1.4 ui-sans-serif, system-ui, sans-serif;
+}
+.maplibregl-popup-tip {
+  display: none;
+}
+.fs-popup p {
+  margin: 4px 0 0;
+}
+.fs-popup-meta {
+  color: #8b98a8;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.fs-popup-meta a {
+  color: inherit;
+  text-decoration: underline;
+}

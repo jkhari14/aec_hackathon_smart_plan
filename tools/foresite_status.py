@@ -30,6 +30,10 @@ SHARED_PATHS = [
     "api/requirements.txt",
     "api/main.py",
     "api/stubs.py",
+    "web/src/api/client.ts",
+    # Generated from the app and the contracts: regenerate, never edit by hand.
+    "api/openapi.json",
+    "web/src/api_types.ts",
 ]
 # Never committed by anyone: the unredacted root transcripts and PDFs, secrets, build output.
 FORBIDDEN = re.compile(r"^[^/]+\.(pdf|txt)$|^AECtech_Hackathon_Brainstorm_Transcript|(^|/)\.env|/dist/|node_modules/")

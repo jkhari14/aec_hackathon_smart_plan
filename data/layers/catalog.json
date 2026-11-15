@@ -118,5 +118,17 @@
     "feature_count": 1410,
     "status": "ok",
     "default_on": false
+  },
+  {
+    "layer_id": "watchlist",
+    "name": "Excavation watchlist",
+    "description": "Active DOB NOW earth-work, foundation or SOE permits from the 12 months before 2026-11-14, on lots next to a building from before 1940 that reaches the shared lot line. Year built is PLUTO's, which is often an estimate. A prompt to look, not a finding.",
+    "hazard": "geotech",
+    "source_name": "DOB NOW job filings (w9ak-ipjd), tax lots (i38t-6if2), PLUTO (64uk-42ks), footprints (5zhs-2jue)",
+    "source_url": "https://data.cityofnewyork.us/d/w9ak-ipjd",
+    "updated_at": "2026-11-15T00:33:51+00:00",
+    "feature_count": 1187,
+    "status": "ok",
+    "default_on": true
   }
 ]
