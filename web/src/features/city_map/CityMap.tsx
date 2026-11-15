@@ -1,61 +1,182 @@
-// Placeholder citywide map so every screen has something to sit on. Shandon's PR 5 replaces it with the
-// real map home: all layers, site pick, 3D tiles and the extruded-footprint fallback.
-import { MapboxOverlay } from "@deck.gl/mapbox";
-import { ScatterplotLayer } from "@deck.gl/layers";
-import { Map as MapLibreMap, NavigationControl } from "maplibre-gl";
-import { useEffect, useRef } from "react";
+// The map home: a full-bleed dark city map with every layer from /api/layers (clustered, fading in by
+// zoom), extruded buildings, address search or click to pick a site, a cinematic fly-to, and the site
+// with its touching lots highlighted. The layer panel and search float over it.
+import type { FeatureCollection, Point } from "geojson";
+import { type GeoJSONSource, Map as MapLibreMap, type MapGeoJSONFeature, NavigationControl, Popup } from "maplibre-gl";
+import { useCallback, useEffect, useRef, useState } from "react";
 
+import "./city_map.css";
+
+import { api } from "../../api/client";
 import type { LayerFeature } from "../../contracts";
+import { SEVERITY_LABELS } from "../../contracts";
+import { LayerPanel, type LayerState } from "../layer_panel/LayerPanel";
+import {
+  addAreaLayers, addBuildings, addPointLayers, addSiteLayers, areaLayerIds, BASEMAP, NYC_CENTER, pointLayerIds, sourceId,
+} from "./map_style";
+import { loadSiteLots, type Picked, siteAt } from "./site_lots";
+import { SiteSearch } from "./SiteSearch";
 
-const BASEMAP = "https://tiles.openfreemap.org/styles/dark";
-const NYC: [number, number] = [-73.95, 40.7];
+// `features` is unused: kept so the PR 0 placeholder App still compiles until Camilo's shell replaces it.
+type Props = { features?: LayerFeature[] };
 
-const SEVERITY_COLORS: Record<number, [number, number, number]> = {
-  0: [148, 163, 184],
-  1: [250, 204, 21],
-  2: [249, 115, 22],
-  3: [239, 68, 68],
-};
+const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-type Props = { features: LayerFeature[] };
+/** "Why am I seeing this?": what the record is, its severity, source and date. Built as DOM, never HTML. */
+function recordCard(p: Record<string, unknown>): HTMLElement {
+  const el = document.createElement("div");
+  el.className = "fs-popup";
+  const title = el.appendChild(document.createElement("strong"));
+  title.textContent = String(p.title ?? "Record");
+  const summary = el.appendChild(document.createElement("p"));
+  summary.textContent = String(p.summary ?? "");
+  const meta = el.appendChild(document.createElement("p"));
+  meta.className = "fs-popup-meta";
+  const severity = SEVERITY_LABELS[Number(p.severity) as keyof typeof SEVERITY_LABELS] ?? "";
+  meta.textContent = `${severity} · ${p.date ?? "undated"} · `;
+  const link = meta.appendChild(document.createElement("a"));
+  link.href = String(p.source_url ?? "#");
+  link.target = "_blank";
+  link.rel = "noreferrer";
+  link.textContent = String(p.source_name ?? "source");
+  return el;
+}
 
-export function CityMap({ features }: Props) {
+export function CityMap(_props: Props) {
   const container = useRef<HTMLDivElement>(null);
-  const overlay = useRef<MapboxOverlay | null>(null);
+  const mapRef = useRef<MapLibreMap | null>(null);
+  const [ready, setReady] = useState(false);
+  const [layers, setLayers] = useState<LayerState[]>([]);
+  const [picked, setPicked] = useState<Picked | null>(null);
+  const [siteStatus, setSiteStatus] = useState<string | null>(null);
+  const [sample, setSample] = useState(false);
 
   useEffect(() => {
     if (!container.current) return;
-    const map = new MapLibreMap({ container: container.current, style: BASEMAP, center: NYC, zoom: 10.5, pitch: 30 });
-    map.addControl(new NavigationControl(), "bottom-right");
-    const deck = new MapboxOverlay({ layers: [] });
-    map.addControl(deck);
-    overlay.current = deck;
+    const map = new MapLibreMap({ container: container.current, style: BASEMAP, center: NYC_CENTER, zoom: 10.4, pitch: 30 });
+    map.addControl(new NavigationControl({ visualizePitch: true }), "bottom-right");
+    map.on("load", () => {
+      addBuildings(map);
+      addSiteLayers(map);
+      setReady(true);
+    });
+    mapRef.current = map;
     return () => {
-      overlay.current = null;
+      mapRef.current = null;
+      setReady(false);
       map.remove();
     };
   }, []);
 
+  // Load the catalog, then each layer's features into its own clustered source.
   useEffect(() => {
-    overlay.current?.setProps({
-      layers: [
-        new ScatterplotLayer<LayerFeature>({
-          id: "sample-points",
-          data: features.filter((f) => f.geometry.type === "Point"),
-          getPosition: (f) => f.geometry.coordinates as [number, number],
-          getFillColor: (f) => SEVERITY_COLORS[f.properties.severity],
-          getRadius: 120,
-          radiusMinPixels: 5,
-          pickable: true,
-        }),
-      ],
+    const map = mapRef.current;
+    if (!ready || !map) return;
+    let cancelled = false;
+    api.layers().then(({ data, sample: s }) => {
+      if (cancelled) return;
+      setSample((was) => was || s);
+      setLayers(data.map((entry) => ({ entry, on: entry.default_on, loaded: null, sample: s })));
+      data.filter((e) => e.status !== "error").forEach((entry) => {
+        api.layerFeatures(entry.layer_id).then(({ data: collection, sample: fs }) => {
+          if (cancelled || !mapRef.current || map.getSource(sourceId(entry.layer_id))) return;
+          setSample((was) => was || fs);
+          // The offline fixture holds one layer's records; never show them under another layer's name.
+          const features = collection.features.filter((f) => f.properties.layer_id === entry.layer_id);
+          const points = features.filter((f) => f.geometry.type === "Point");
+          const areas = features.filter((f) => f.geometry.type !== "Point");
+          const asCollection = (fs2: LayerFeature[]) => ({ type: "FeatureCollection", features: fs2 }) as FeatureCollection;
+          if (areas.length > 0) {
+            map.addSource(sourceId(entry.layer_id), { type: "geojson", data: asCollection(areas) });
+            addAreaLayers(map, entry.layer_id, entry.hazard, entry.default_on);
+          } else {
+            map.addSource(sourceId(entry.layer_id), {
+              type: "geojson", data: asCollection(points), cluster: true, clusterRadius: 48, clusterMaxZoom: 14,
+            });
+            addPointLayers(map, entry.layer_id, entry.hazard, entry.default_on);
+          }
+          setLayers((ls) => ls.map((l) => (l.entry.layer_id === entry.layer_id ? { ...l, loaded: features.length, sample: fs } : l)));
+        });
+      });
     });
-  }, [features]);
+    return () => {
+      cancelled = true;
+    };
+  }, [ready]);
+
+  // Clicks: a cluster zooms in, a record explains itself, anywhere else picks the site under the cursor.
+  const pickSite = useCallback((site: Picked) => setPicked(site), []);
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!ready || !map) return;
+    const onClick = async (e: { point: [number, number] | { x: number; y: number }; lngLat: { lng: number; lat: number } }) => {
+      const pointIds = layers.flatMap((l) => pointLayerIds(l.entry.layer_id)).filter((id) => map.getLayer(id));
+      const hits: MapGeoJSONFeature[] = pointIds.length ? map.queryRenderedFeatures(e.point as never, { layers: pointIds }) : [];
+      const hit = hits[0];
+      if (hit?.properties.cluster_id != null) {
+        const source = map.getSource(hit.source) as GeoJSONSource;
+        const zoom = await source.getClusterExpansionZoom(hit.properties.cluster_id);
+        map.easeTo({ center: (hit.geometry as Point).coordinates as [number, number], zoom, duration: reducedMotion() ? 0 : 400 });
+        return;
+      }
+      if (hit) {
+        new Popup({ closeButton: false, maxWidth: "280px" }).setLngLat(e.lngLat).setDOMContent(recordCard(hit.properties)).addTo(map);
+        return;
+      }
+      const site = await siteAt(e.lngLat.lng, e.lngLat.lat);
+      if (site) pickSite(site);
+    };
+    map.on("click", onClick);
+    return () => {
+      map.off("click", onClick);
+    };
+  }, [ready, layers, pickSite]);
+
+  // Picking a site: fly in, then highlight it and its touching lots.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!ready || !map || !picked) return;
+    let cancelled = false;
+    const camera = { center: [picked.lon, picked.lat] as [number, number], zoom: 17.4, pitch: 60, bearing: -28 };
+    if (reducedMotion()) map.jumpTo(camera);
+    else map.flyTo({ ...camera, duration: 3200, curve: 1.6, essential: false });
+    setSiteStatus("Loading the site and its touching lots…");
+    (map.getSource("site-lots") as GeoJSONSource).setData({ type: "FeatureCollection", features: [] });
+    loadSiteLots(picked).then(({ lots, profile, sample: s, note }) => {
+      if (cancelled) return;
+      setSample((was) => was || s);
+      (map.getSource("site-lots") as GeoJSONSource).setData(lots);
+      const touching = profile?.neighbors.length;
+      setSiteStatus(note ?? `site and ${touching} touching lot${touching === 1 ? "" : "s"} highlighted`);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [ready, picked]);
+
+  const toggle = (layerId: string) => {
+    const map = mapRef.current;
+    setLayers((ls) => ls.map((l) => {
+      if (l.entry.layer_id !== layerId) return l;
+      const on = !l.on;
+      for (const id of [...pointLayerIds(layerId), ...areaLayerIds(layerId)]) {
+        if (map?.getLayer(id)) map.setLayoutProperty(id, "visibility", on ? "visible" : "none");
+      }
+      return { ...l, on };
+    }));
+  };
 
   // maplibre-gl.css sets the map element to position: relative, so it sizes to this wrapper instead.
   return (
     <div className="absolute inset-0">
       <div ref={container} className="h-full w-full" />
+      <SiteSearch picked={picked} status={siteStatus} onPick={pickSite} />
+      <LayerPanel layers={layers} onToggle={toggle} />
+      {sample && (
+        <span className="absolute bottom-4 left-4 rounded bg-sample/15 px-2 py-0.5 text-xs font-medium text-sample">
+          Sample data
+        </span>
+      )}
     </div>
   );
 }
