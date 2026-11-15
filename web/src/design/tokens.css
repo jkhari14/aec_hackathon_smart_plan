@@ -1,0 +1,158 @@
+/* ForeSite design tokens. Dark first; light is the same names under [data-theme="light"].
+   Every color pair used for text meets WCAG AA (4.5:1) on --fs-panel in both themes.
+   The --color-* names at the end keep the PR 0 Tailwind utilities (bg-panel, text-muted...) on these
+   tokens, so screens built on the placeholder theme follow the design system without edits. */
+
+:root {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --fs-bg: #0a0d12;
+  --fs-panel: #11161e;
+  --fs-panel-glass: rgb(17 22 30 / 0.86);
+  --fs-raised: #18202b;
+  --fs-hover: #1f2935;
+  --fs-line: #253142;
+  --fs-line-strong: #34445a;
+
+  /* Text */
+  --fs-text: #e8edf3;
+  --fs-text-2: #a9b5c3;
+  --fs-muted: #8593a4;
+  --fs-faint: #5c6b7d;        /* decoration only (rules, inactive marks): below AA, never for text */
+
+  /* Accent: the one interactive color. Hazard colors never stand in for it. */
+  --fs-accent: #7cb4ff;
+  --fs-accent-ink: #0a1526;
+  --fs-accent-soft: rgb(124 180 255 / 0.14);
+  --fs-focus: #9cc6ff;
+
+  /* Source labels: who says so. Part of the visual language, not a footnote. */
+  --fs-src-record: #8fd3b0;   /* public record */
+  --fs-src-ai: #c6a8ff;       /* AI suggestion */
+  --fs-src-user: #f2c66d;     /* user input */
+  --fs-sample: #f5a524;       /* sample (fixture) data */
+  --fs-error: #ff8a7a;        /* couldn't load: never shown as zero */
+
+  /* Hazards: used only where the hazard is the point (marker, chip edge, legend). */
+  --fs-hz-structural: #ff9f43;
+  --fs-hz-geotech: #c9a27a;
+  --fs-hz-fire: #ff6b5a;
+  --fs-hz-flood: #4fa9ff;
+  --fs-hz-contamination: #b48cff;
+  --fs-hz-facade: #d9cbb0;
+  --fs-hz-weather: #74c9dc;
+  --fs-hz-construction_safety: #ffd24a;
+
+  /* Severity: carried by size and rings first, color second. */
+  --fs-sev-0: #8593a4;
+  --fs-sev-1: #e8c65e;
+  --fs-sev-2: #f39250;
+  --fs-sev-3: #ff6464;
+
+  /* Type: one family, tabular numbers for dates and counts. */
+  --fs-font: "Inter", "Segoe UI Variable Text", "Segoe UI", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --fs-mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+  --fs-text-xs: 11px;
+  --fs-text-sm: 12.5px;
+  --fs-text-md: 14px;
+  --fs-text-lg: 16px;
+  --fs-text-xl: 20px;
+  --fs-text-2xl: 28px;
+
+  /* 8-point grid (4 is the half step for tight inner gaps). */
+  --fs-1: 4px;
+  --fs-2: 8px;
+  --fs-3: 12px;
+  --fs-4: 16px;
+  --fs-5: 24px;
+  --fs-6: 32px;
+  --fs-7: 40px;
+  --fs-8: 48px;
+
+  --fs-radius-sm: 6px;
+  --fs-radius: 10px;
+  --fs-radius-lg: 14px;
+  --fs-shadow: 0 12px 32px rgb(0 0 0 / 0.36), 0 2px 6px rgb(0 0 0 / 0.24);
+  --fs-blur: blur(14px) saturate(1.2);
+
+  /* Motion: purposeful and fast, 150 to 300 ms. */
+  --fs-fast: 150ms;
+  --fs-base: 220ms;
+  --fs-slow: 300ms;
+  --fs-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --fs-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --fs-panel-w: 380px;
+  --fs-z-map: 0;
+  --fs-z-panel: 10;
+  --fs-z-bar: 20;
+  --fs-z-overlay: 40;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --fs-bg: #eef1f5;
+  --fs-panel: #ffffff;
+  --fs-panel-glass: rgb(255 255 255 / 0.9);
+  --fs-raised: #f5f7fa;
+  --fs-hover: #eaeef3;
+  --fs-line: #d8dee6;
+  --fs-line-strong: #b9c3cf;
+
+  --fs-text: #111821;
+  --fs-text-2: #3c4a5a;
+  --fs-muted: #556373;
+  --fs-faint: #8391a1;
+
+  --fs-accent: #1f63d6;
+  --fs-accent-ink: #ffffff;
+  --fs-accent-soft: rgb(31 99 214 / 0.1);
+  --fs-focus: #1f63d6;
+
+  --fs-src-record: #1d7a52;
+  --fs-src-ai: #6e44c9;
+  --fs-src-user: #8a5a00;
+  --fs-sample: #a35f00;
+  --fs-error: #b42318;
+
+  --fs-hz-structural: #c25a00;
+  --fs-hz-geotech: #8a6239;
+  --fs-hz-fire: #c8321f;
+  --fs-hz-flood: #1b6fd1;
+  --fs-hz-contamination: #7444d4;
+  --fs-hz-facade: #786a4f;
+  --fs-hz-weather: #217f93;
+  --fs-hz-construction_safety: #8f6c00;
+
+  --fs-sev-0: #6b7889;
+  --fs-sev-1: #9a7400;
+  --fs-sev-2: #c35a12;
+  --fs-sev-3: #c8222a;
+
+  --fs-shadow: 0 12px 32px rgb(17 24 33 / 0.12), 0 2px 6px rgb(17 24 33 / 0.08);
+}
+
+/* Bridge to the PR 0 placeholder theme in app.css. */
+:root {
+  --color-night: var(--fs-bg);
+  --color-panel: var(--fs-panel);
+  --color-line: var(--fs-line);
+  --color-text: var(--fs-text);
+  --color-muted: var(--fs-muted);
+  --color-sample: var(--fs-sample);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --fs-fast: 0ms;
+    --fs-base: 0ms;
+    --fs-slow: 0ms;
+  }
+}
+:root[data-motion="reduce"] {
+  --fs-fast: 0ms;
+  --fs-base: 0ms;
+  --fs-slow: 0ms;
+}
