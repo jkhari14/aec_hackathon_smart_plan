@@ -142,7 +142,7 @@ export function SourceLabel({ kind = "record", name, url, date }: SourceLabelPro
 
 // ---- Badge and severity --------------------------------------------------------------------------
 
-type BadgeProps = { children: ReactNode; tone?: "neutral" | "sample" | "error" | "accent"; title?: string };
+type BadgeProps = { children: ReactNode; tone?: "neutral" | "sample" | "error" | "accent" | "safety"; title?: string };
 
 export function Badge({ children, tone = "neutral", title }: BadgeProps) {
   return (
@@ -282,6 +282,21 @@ export function Tabs<T extends string>({ value, onChange, options, label }: Tabs
 export function Kbd({ children }: { children: ReactNode }) {
   return <kbd className="fs-kbd">{children}</kbd>;
 }
+
+// ---- Explain -------------------------------------------------------------------------------------
+
+/** "Why am I seeing this?" A quiet disclosure every item carries, so no element goes unexplained. */
+export function Explain({ children, label = "Why am I seeing this?" }: { children: ReactNode; label?: string }) {
+  return (
+    <details className="fs-explain" onClick={(e) => e.stopPropagation()}>
+      <summary>{label}</summary>
+      <div className="fs-explain__body">{children}</div>
+    </details>
+  );
+}
+
+/** "support_of_excavation" -> "support of excavation" */
+export const humanize = (key: string) => key.replace(/_/g, " ");
 
 // ---- Format --------------------------------------------------------------------------------------
 

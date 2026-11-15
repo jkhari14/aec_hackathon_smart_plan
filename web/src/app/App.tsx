@@ -60,7 +60,7 @@ export function App() {
 
   const pickSite = (result: SearchResult) => {
     setSite(result);
-    setView({ site: result.bbl });
+    setView({ site: result.bbl, tab: "overview" });
   };
 
   const shortcuts: Shortcut[] = [
@@ -145,7 +145,13 @@ export function App() {
       </div>
 
       <div className="fs-shell__right">
-        <SiteSlot bbl={view.site} site={site} onClose={() => setView({ site: null })} />
+        <SiteSlot
+          bbl={view.site}
+          site={site}
+          onClose={() => setView({ site: null, tab: "overview" })}
+          tab={view.tab}
+          onTab={(tab) => setView({ tab })}
+        />
         <ChatSlot open={view.chat} onClose={() => setView({ chat: false })} />
       </div>
 

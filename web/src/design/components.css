@@ -236,6 +236,15 @@ body {
   border-style: dashed;
   background: transparent;
 }
+.fs-badge[data-tone="safety"] {
+  color: var(--fs-sev-3);
+  border-color: color-mix(in srgb, var(--fs-sev-3) 50%, transparent);
+  background: color-mix(in srgb, var(--fs-sev-3) 8%, transparent);
+}
+.fs-badge[data-tone="safety"]::before {
+  content: "!";
+  font-weight: 800;
+}
 .fs-badge[data-tone="accent"] {
   color: var(--fs-accent);
   border-color: color-mix(in srgb, var(--fs-accent) 45%, transparent);
@@ -258,13 +267,13 @@ body {
 .fs-sev[data-level="1"] {
   width: 8px;
   height: 8px;
-  margin: 2px;
+  margin: 2px 4px;
   box-shadow: 0 0 0 2px var(--fs-panel), 0 0 0 3px var(--fs-sev);
 }
 .fs-sev[data-level="2"] {
   width: 10px;
   height: 10px;
-  margin: 1px;
+  margin: 1px 4px;
   box-shadow: 0 0 0 2px var(--fs-panel), 0 0 0 3.5px var(--fs-sev);
 }
 .fs-sev[data-level="3"] {
@@ -275,7 +284,7 @@ body {
     0 0 0 3.5px var(--fs-sev),
     0 0 0 5.5px var(--fs-panel),
     0 0 0 7px var(--fs-sev);
-  margin: 0 3px;
+  margin: 0 6px 0 7px;
 }
 
 /* Skeleton: every loading state is a shape, never a blank panel. */
@@ -489,6 +498,65 @@ body {
   text-transform: uppercase;
   color: var(--fs-muted);
   margin: 0;
+}
+
+/* Explain disclosure */
+.fs-explain {
+  font-size: var(--fs-text-sm);
+  color: var(--fs-text-2);
+}
+.fs-explain summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  list-style: none;
+  font-size: var(--fs-text-xs);
+  color: var(--fs-accent);
+  border-radius: 4px;
+}
+.fs-explain summary::-webkit-details-marker {
+  display: none;
+}
+.fs-explain summary::before {
+  content: "›";
+  display: inline-block;
+  transition: transform var(--fs-fast) var(--fs-ease);
+}
+.fs-explain[open] summary::before {
+  transform: rotate(90deg);
+}
+.fs-explain__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+  padding: var(--fs-2) var(--fs-3);
+  border-left: 2px solid var(--fs-line-strong);
+}
+.fs-explain__body p {
+  margin: 0;
+}
+
+/* Definition rows: label left, value right, tabular numbers. */
+.fs-facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px var(--fs-4);
+  margin: 0;
+  font-size: var(--fs-text-sm);
+}
+.fs-facts dt {
+  color: var(--fs-muted);
+}
+.fs-facts dd {
+  margin: 0;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.fs-facts dd[data-missing="true"] {
+  color: var(--fs-muted);
+  font-style: italic;
 }
 
 .fs-divider {
