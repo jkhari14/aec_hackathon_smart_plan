@@ -4,9 +4,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const SEEN = "foresite.intro.seen";
-// The video is 10.8 s; past this something went wrong (stalled network), so get out of the way.
-const GIVE_UP_MS = 13000;
-const FADE_MS = 700;
+// The whole opening is at most 2 s: a 1.6 s build and a 0.4 s fade. If the video hasn't finished by
+// then (slow network, autoplay blocked), it gets out of the way anyway.
+const GIVE_UP_MS = 1600;
+const FADE_MS = 400;
 
 function alreadySeen(): boolean {
   try {

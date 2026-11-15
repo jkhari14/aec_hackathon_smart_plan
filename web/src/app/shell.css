@@ -560,7 +560,7 @@
   /* The video's own paper and vignette, so its edges disappear into the page. */
   background: radial-gradient(ellipse at center, #ede8dd 35%, #ded9cf 100%);
   cursor: pointer;
-  transition: opacity 700ms var(--fs-ease-out);
+  transition: opacity 400ms var(--fs-ease-out);
 }
 .fs-intro[data-state="leaving"] {
   opacity: 0;

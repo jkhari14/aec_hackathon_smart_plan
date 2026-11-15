@@ -64,7 +64,7 @@ Design: [`docs/superpowers/specs/2026-11-14-ui-refresh-design.md`](superpowers/s
 - **The 2D button** moves into the camera controls, and **the Layers button** gets a label.
 - **Layers switch on by work type.**
 - **Black primary buttons** on paper; blue is kept for highlights.
-- **Opening:** the 8-bit logo builds itself once per visit (`web/public/4site-intro.mp4`, made from the
+- **Opening (2 s max):** the 8-bit logo builds itself once per visit (`web/public/4site-intro.mp4`, made from the
   GIF; click or any key skips), then the home page materialises. The top bar uses the flat 4site logo.
 
 A fresh reviewer checked this too: one critical issue (clicking a case dot on the map picked that lot
