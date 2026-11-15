@@ -29,7 +29,7 @@
    {
     "name": "Patch, citing DOB",
     "url": "https://patch.com/new-york/brooklyn/what-went-wrong-brooklyns-deadly-building-collapse",
-    "date": null
+    "date": "2026-11-12"
    },
    {
     "name": "amNY, partial collapse raises questions about neighbouring properties",
@@ -98,7 +98,7 @@
    {
     "name": "DOB enforcement bulletin",
     "url": "https://www.nyc.gov/site/buildings/dob/pr-enforcement-bulletin-1118.page",
-    "date": null
+    "date": "2018-12-31"
    }
   ]
  },
@@ -130,7 +130,7 @@
    {
     "name": "DOB investigation report",
     "url": "https://www.nyc.gov/site/buildings/dob/pr-investigation-bx-building.page",
-    "date": null
+    "date": "2024-11-25"
    }
   ]
  },
@@ -502,7 +502,7 @@
     "date": "2026-11-13"
    }
   ],
-  "cause_as_reported": "The cause has not officially been determined and DOB is investigating; officials have not established whether the neighbouring construction activity contributed. Engineers quoted in reporting raised shoring that may not have been stiff enough and groundwater seepage shifting soil under the building as possibilities, and a lawsuit alleges no physical inspection was made before excavation and that the walls were not properly supported."
+  "cause_as_reported": null
  },
  {
   "id": "case-303-e-51-2008",
@@ -662,7 +662,7 @@
    "construction": "steel frame"
   },
   "summary": "Workers converting a former office tower to residential use found a buckled steel column on the 21st floor early in the morning. FDNY, called at about 8am, found a number of sagging floors, cracks and a second buckled column. The construction site and at least nine neighbouring buildings were evacuated as a precaution. After overnight shoring, officials described the building as safe and stable. No injuries were reported.",
-  "cause_as_reported": "The developer attributed the failure to load added by new floors rather than to digging, saying the additional load caused the two columns to fail. A 311 complaint alleged excavation contrary to the approved construction documents, and DOB violations at the site included cellar excavation that did not conform to the construction documents. The investigation into the cause remains open.",
+  "cause_as_reported": null,
   "cause_status": "under_investigation",
   "sources": [
    {
@@ -704,7 +704,7 @@
    "construction": "two-storey"
   },
   "summary": "The first floor of a two-storey building folded into its cellar while three people were working below, pinning and killing one worker. DOB had tried to gain access in December after complaints about the construction, and on returning in January saw excavation under way and issued a stop-work order.",
-  "cause_as_reported": "DOB said the site had no approved construction plans and that work had continued in violation of a stop-work order. What caused the floor to fail was not established in public reporting at the time.",
+  "cause_as_reported": null,
   "cause_status": "under_investigation",
   "sources": [
    {
@@ -745,7 +745,7 @@
    "attached": true
   },
   "summary": "A crack in the foundation put this building under a full DOB vacate order, displacing more than a dozen residents; residents of the attached building next door were allowed to return. DOB issued five violations to the construction company working two doors away. About a month later the full vacate order was still in force, eight families had not been allowed back, and they were not aware of repair work under way.",
-  "cause_as_reported": "Residents attributed the crack to excavation at the nearby construction site. DOB had not officially determined what caused it.",
+  "cause_as_reported": null,
   "cause_status": "unknown",
   "sources": [
    {
@@ -1029,7 +1029,7 @@
   ],
   "conditions": {},
   "summary": "FDNY was called at about 7:25am to a fire in the engine compartment of a tower crane 45 storeys up, attached to a residential tower under construction. The boom broke loose and fell in an arc onto 10th Avenue with the load it was carrying, striking a neighbouring building that houses a school. Reported injury counts range from six to twelve, including firefighters; none were fatal.",
-  "cause_as_reported": "A preliminary cause reported in the press, citing a source, was hydraulic fluid leaking onto a heated metal plate. FDNY said the flames weakened a cable on the crane, which led to the collapse. The Buildings Commissioner said an investigation was under way.",
+  "cause_as_reported": null,
   "cause_status": "under_investigation",
   "sources": [
    {
