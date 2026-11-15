@@ -1,0 +1,482 @@
+/* App shell layout: full-bleed map, floating columns over it. */
+
+.fs-shell {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: var(--fs-bg);
+}
+.fs-shell__map {
+  position: absolute;
+  inset: 0;
+  z-index: var(--fs-z-map);
+}
+
+.fs-shell__left,
+.fs-shell__right {
+  position: absolute;
+  top: var(--fs-4);
+  bottom: 72px;
+  z-index: var(--fs-z-panel);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-2);
+  pointer-events: none;
+}
+.fs-shell__left {
+  left: var(--fs-4);
+  width: 400px;
+}
+.fs-shell__right {
+  right: var(--fs-4);
+  bottom: var(--fs-4);
+  width: var(--fs-panel-w);
+}
+.fs-shell__left > *,
+.fs-shell__right > * {
+  pointer-events: auto;
+}
+.fs-shell__left > .fs-slide[data-open="false"],
+.fs-shell__right > .fs-slide[data-open="false"] {
+  pointer-events: none;
+}
+
+.fs-shell__layers {
+  flex: 0 1 auto;
+  max-height: 100%;
+}
+.fs-shell__site {
+  flex: 1 1 auto;
+}
+.fs-shell__site[data-open="false"] {
+  flex: 0 0 0;
+  min-height: 0;
+  border-width: 0;
+}
+.fs-shell__chat {
+  flex: 0 0 auto;
+  max-height: 46%;
+}
+.fs-shell__chat[data-open="false"] {
+  display: none;
+}
+.fs-shell[data-site="false"] .fs-shell__chat {
+  margin-top: auto;
+}
+
+/* Keep the map's own controls clear of the right column. */
+.fs-shell .maplibregl-ctrl-bottom-right {
+  transition: right var(--fs-base) var(--fs-ease-out);
+}
+.fs-shell[data-site="true"] .maplibregl-ctrl-bottom-right,
+.fs-shell[data-chat="true"] .maplibregl-ctrl-bottom-right {
+  right: calc(var(--fs-panel-w) + var(--fs-5));
+}
+.fs-shell .maplibregl-ctrl-group {
+  background: var(--fs-panel-glass);
+  border: 1px solid var(--fs-line);
+  box-shadow: none;
+}
+.fs-shell .maplibregl-ctrl-attrib {
+  background: transparent;
+  color: var(--fs-muted);
+  font-size: 10px;
+}
+.fs-shell .maplibregl-ctrl-attrib a {
+  color: var(--fs-muted);
+}
+
+/* Top bar */
+.fs-topbar {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fs-2);
+  padding: 6px 6px 6px var(--fs-3);
+}
+.fs-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fs-2);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  font-size: var(--fs-text-lg);
+  white-space: nowrap;
+}
+.fs-brand__mark {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background: conic-gradient(from 210deg, var(--fs-accent), var(--fs-hz-flood), var(--fs-accent));
+  box-shadow: 0 0 0 3px var(--fs-accent-soft);
+}
+.fs-search {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--fs-2);
+  height: 32px;
+  padding: 0 6px 0 var(--fs-2);
+  border-radius: var(--fs-radius-sm);
+  border: 1px solid var(--fs-line);
+  background: var(--fs-raised);
+  color: var(--fs-muted);
+  font: inherit;
+  font-size: var(--fs-text-sm);
+  cursor: text;
+  transition: border-color var(--fs-fast) var(--fs-ease);
+}
+.fs-search:hover {
+  border-color: var(--fs-line-strong);
+}
+.fs-search span:not(.fs-kbd) {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fs-topbar__tools {
+  display: flex;
+}
+.fs-topbar__tools .fs-btn[aria-pressed="true"] {
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent);
+}
+
+/* Layer rows */
+.fs-layer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: var(--fs-3);
+  border-bottom: 1px solid var(--fs-line);
+}
+.fs-layer:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.fs-layer__name {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fs-2);
+  font-weight: 500;
+}
+.fs-layer .fs-src {
+  padding-left: 42px;
+  flex-wrap: wrap;
+  white-space: normal;
+  row-gap: 2px;
+}
+
+/* Bottom: limitations and data status */
+.fs-shell__bottom {
+  position: absolute;
+  left: var(--fs-4);
+  bottom: var(--fs-4);
+  z-index: var(--fs-z-bar);
+  display: flex;
+  align-items: flex-end;
+  gap: var(--fs-2);
+  max-width: calc(100% - var(--fs-panel-w) - var(--fs-7));
+}
+.fs-limits {
+  max-width: 520px;
+}
+.fs-limits__head {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-2);
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--fs-3);
+  background: none;
+  border: 0;
+  color: var(--fs-text);
+  font: inherit;
+  font-size: var(--fs-text-sm);
+  cursor: pointer;
+  text-align: left;
+}
+.fs-limits__head svg:first-child {
+  color: var(--fs-accent);
+  flex: none;
+}
+.fs-limits__title {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.fs-limits__short {
+  color: var(--fs-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fs-limits__chev {
+  margin-left: auto;
+  flex: none;
+  color: var(--fs-muted);
+  transform: rotate(-90deg);
+  transition: transform var(--fs-fast) var(--fs-ease);
+}
+.fs-limits[data-open="true"] .fs-limits__chev {
+  transform: rotate(90deg);
+}
+.fs-limits__body {
+  padding: 0 var(--fs-4) var(--fs-3);
+  border-top: 1px solid var(--fs-line);
+}
+.fs-limits__body ul {
+  margin: var(--fs-3) 0 0;
+  padding-left: var(--fs-4);
+  display: grid;
+  gap: 6px;
+  font-size: var(--fs-text-sm);
+  color: var(--fs-text-2);
+}
+
+.fs-status {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-2);
+  height: 40px;
+  padding: 0 var(--fs-3);
+  border-radius: var(--fs-radius-lg);
+  background: var(--fs-panel-glass);
+  backdrop-filter: var(--fs-blur);
+  border: 1px solid var(--fs-line);
+  font-size: var(--fs-text-xs);
+  color: var(--fs-muted);
+  white-space: nowrap;
+}
+
+/* First-run hint */
+.fs-hint {
+  position: absolute;
+  left: 50%;
+  top: var(--fs-4);
+  transform: translateX(-50%);
+  z-index: var(--fs-z-panel);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px var(--fs-3);
+  border-radius: 999px;
+  background: var(--fs-panel-glass);
+  backdrop-filter: var(--fs-blur);
+  border: 1px solid var(--fs-line);
+  color: var(--fs-text-2);
+  font-size: var(--fs-text-sm);
+  pointer-events: none;
+  animation: fs-rise var(--fs-slow) var(--fs-ease-out) both;
+}
+@keyframes fs-rise {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -6px);
+  }
+}
+
+/* Chat slot */
+.fs-chat__input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 36px;
+  padding: 0 6px 0 var(--fs-3);
+  border-radius: var(--fs-radius-sm);
+  border: 1px solid var(--fs-line);
+  color: var(--fs-muted);
+  font-size: var(--fs-text-sm);
+}
+
+/* Command bar and help overlay */
+.fs-cmd-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--fs-z-overlay);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 12vh var(--fs-4) var(--fs-4);
+  background: rgb(4 7 11 / 0.45);
+  animation: fs-fade var(--fs-fast) var(--fs-ease) both;
+}
+:root[data-theme="light"] .fs-cmd-scrim {
+  background: rgb(17 24 33 / 0.18);
+}
+@keyframes fs-fade {
+  from {
+    opacity: 0;
+  }
+}
+.fs-cmd {
+  width: min(640px, 100%);
+  max-height: 70vh;
+  animation: fs-pop var(--fs-base) var(--fs-ease-out) both;
+}
+@keyframes fs-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+}
+.fs-cmd__field {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-3);
+  padding: 0 var(--fs-4);
+  height: 56px;
+  border-bottom: 1px solid var(--fs-line);
+  color: var(--fs-muted);
+}
+.fs-cmd__field input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--fs-text);
+  font: inherit;
+  font-size: var(--fs-text-lg);
+}
+.fs-cmd__field input::placeholder {
+  color: var(--fs-muted);
+}
+.fs-cmd__list {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  overflow: auto;
+}
+.fs-cmd__item {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-3);
+  min-height: 44px;
+  padding: 6px var(--fs-3);
+  border-radius: var(--fs-radius-sm);
+  cursor: pointer;
+  color: var(--fs-text-2);
+}
+.fs-cmd__item svg,
+.fs-cmd__icon {
+  color: var(--fs-muted);
+  flex: none;
+  width: 16px;
+  text-align: center;
+}
+.fs-cmd__item[aria-selected="true"] {
+  background: var(--fs-hover);
+  color: var(--fs-text);
+}
+.fs-cmd__item[aria-selected="true"] svg {
+  color: var(--fs-accent);
+}
+.fs-cmd__label {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.fs-cmd__hint {
+  font-size: var(--fs-text-xs);
+  color: var(--fs-muted);
+}
+.fs-cmd__go {
+  font-size: var(--fs-text-xs);
+  color: var(--fs-accent);
+  opacity: 0;
+}
+.fs-cmd__item[aria-selected="true"] .fs-cmd__go {
+  opacity: 1;
+}
+.fs-cmd__loading {
+  display: grid;
+  gap: 6px;
+  padding: var(--fs-3);
+}
+.fs-cmd__empty {
+  padding: var(--fs-3);
+  color: var(--fs-muted);
+  font-size: var(--fs-text-sm);
+}
+
+.fs-help {
+  width: min(440px, 100%);
+  animation: fs-pop var(--fs-base) var(--fs-ease-out) both;
+}
+.fs-help__list {
+  margin: 0;
+  display: grid;
+  gap: var(--fs-2);
+}
+.fs-help__list > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fs-3);
+}
+.fs-help__list dt {
+  color: var(--fs-text-2);
+  font-size: var(--fs-text-sm);
+}
+.fs-help__list dd {
+  margin: 0;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.fs-help__list dd > span {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+}
+.fs-help__or {
+  margin: 0 4px;
+  font-size: var(--fs-text-xs);
+  color: var(--fs-muted);
+}
+
+/* Narrow screens (both columns no longer fit side by side): panels become sheets, one at a time, and
+   the limitations bar stays on top of them. While layers are open they take the screen. */
+@media (max-width: 860px) {
+  .fs-shell[data-layers="true"] .fs-shell__right {
+    display: none;
+  }
+  .fs-shell__left {
+    left: var(--fs-2);
+    right: var(--fs-2);
+    top: var(--fs-2);
+    width: auto;
+    bottom: 56px;
+  }
+  .fs-shell__right {
+    left: var(--fs-2);
+    right: var(--fs-2);
+    top: auto;
+    bottom: 56px;
+    width: auto;
+    max-height: 58%;
+  }
+  .fs-shell__bottom {
+    left: var(--fs-2);
+    right: var(--fs-2);
+    bottom: var(--fs-2);
+    max-width: none;
+  }
+  .fs-limits {
+    flex: 1;
+    min-width: 0;
+  }
+  .fs-limits__short,
+  .fs-status,
+  .fs-hint {
+    display: none;
+  }
+  .fs-shell[data-site="true"] .maplibregl-ctrl-bottom-right,
+  .fs-shell[data-chat="true"] .maplibregl-ctrl-bottom-right {
+    right: 0;
+  }
+}
