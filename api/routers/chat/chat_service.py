@@ -34,7 +34,7 @@ def answer(request: ChatRequest, load_context: ContextLoader, model=None) -> Cha
     LookupError for a saved example (none are written yet).
     """
     as_of = request.as_of.isoformat() if request.as_of else None
-    view = SiteView(load_context(request.bbl, request.job_type, request.stage, as_of))
+    view = SiteView(load_context(request.bbl, request.job_type, request.stage, as_of, request.project_id))
     if request.example_id:
         raise LookupError(f"no saved example {request.example_id!r} for lot {request.bbl}")
     if model is None:
