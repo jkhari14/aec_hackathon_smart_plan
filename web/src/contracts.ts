@@ -29,6 +29,11 @@ export type ChatResponse = S["ChatResponse"];
 export type Hazard = LayerCatalogEntry["hazard"];
 export type Severity = LayerFeature["properties"]["severity"];
 export type Stage = ProjectCreate["stage"];
+export type JobType = NonNullable<Project["job_type"]>;
+export type ConstructionType = NonNullable<Project["construction_type"]>;
+export type WorkType = Project["work_types"][number];
+export type Discipline = ActionItem["discipline"];
+export type Role = S["ProjectMember"]["role"];
 
 export const HAZARDS: Hazard[] = [
   "structural",

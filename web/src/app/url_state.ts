@@ -3,6 +3,7 @@
 //   &layers=1        the layer panel is open
 //   &chat=1          the chat dock is open
 //   &tab=similar     the site panel's tab (overview is the default and is left out)
+//   &screen=project  the full-screen project view (the map is the default and is left out)
 // Changes replace the current history entry (no back-button spam); the back button still works across
 // page loads because the URL is read on load and on popstate.
 import { useCallback, useEffect, useState } from "react";
@@ -10,7 +11,10 @@ import { useCallback, useEffect, useState } from "react";
 export type SiteTabKey = "overview" | "similar" | "actions";
 const TABS: SiteTabKey[] = ["overview", "similar", "actions"];
 
+export type Screen = "map" | "project";
+
 export type ViewState = {
+  screen: Screen;
   site: string | null;
   layers: boolean;
   chat: boolean;
@@ -21,6 +25,7 @@ function read(): ViewState {
   const q = new URLSearchParams(window.location.search);
   const tab = q.get("tab") as SiteTabKey | null;
   return {
+    screen: q.get("screen") === "project" ? "project" : "map",
     site: q.get("site"),
     layers: q.get("layers") === "1",
     chat: q.get("chat") === "1",
@@ -31,6 +36,7 @@ function read(): ViewState {
 function write(state: ViewState, push: boolean) {
   const q = new URLSearchParams(window.location.search);
   const set = (key: string, value: string | null) => (value ? q.set(key, value) : q.delete(key));
+  set("screen", state.screen === "project" ? "project" : null);
   set("site", state.site);
   set("layers", state.layers ? "1" : null);
   set("chat", state.chat ? "1" : null);
