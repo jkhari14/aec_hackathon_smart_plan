@@ -14,6 +14,7 @@ import type {
   Project,
   SearchResult,
   SimilarCases,
+  SiteOutlook,
   SiteProfile,
   Stage,
   WarningRuleCheck,
@@ -100,6 +101,8 @@ export const api = {
   search: (q: string) => request<SearchResult[]>(`/api/search?q=${encodeURIComponent(q)}`, searchFixture),
   siteProfile: (bbl: string) => request<SiteProfile>(`${site(bbl)}/profile`, siteProfileFixture),
   similar: (bbl: string) => request<SimilarCases>(`${site(bbl)}/similar`, similarFixture),
+  /** What could go wrong here, for every option. No fixture: offline it comes back empty and marked sample. */
+  outlook: (bbl: string) => request<SiteOutlook>(`${site(bbl)}/outlook`, { bbl, lessons: [] }),
   warnings: (bbl: string, asOf?: string) =>
     request<EarlyWarning[]>(`${site(bbl)}/warnings${asOf ? `?as_of=${encodeURIComponent(asOf)}` : ""}`, warningsFixture),
   warningChecks: (bbl: string, asOf?: string) =>

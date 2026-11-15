@@ -77,7 +77,11 @@ def _month(iso: str) -> Optional[date]:
 
 def evidence(rule_id: str, profile: dict) -> Optional[str]:
     """'3 related records here (Feb 2026–Aug 2026), most often 'X'. <sources>. Complaints are ...' or None."""
-    titles = EVIDENCE.get(rule_id)
+    return records_line(EVIDENCE.get(rule_id) or (), profile)
+
+
+def records_line(titles, profile: dict) -> Optional[str]:
+    """The same line for any set of signal titles (a checklist row's, or a lesson's)."""
     if not titles:
         return None
     matched = []

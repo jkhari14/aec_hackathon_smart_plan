@@ -30,7 +30,7 @@ test("construction cards carry the five construction types", () => {
 test("default scope follows the job type and only offers scope options", () => {
   assert.deepEqual(defaultScope("new_building"), ["excavation", "foundation", "support_of_excavation", "structural", "scaffold"]);
   assert.deepEqual(defaultScope("alteration"), ["structural", "scaffold"]);
-  assert.deepEqual(defaultScope("demolition"), ["scaffold"]);
+  assert.deepEqual(defaultScope("demolition"), ["demolition", "scaffold"]);
   const offered = new Set(SCOPE_OPTIONS.map((o) => o.value));
   for (const job of ["new_building", "alteration", "demolition"] as const) {
     for (const w of defaultScope(job)) assert.ok(offered.has(w), w);
@@ -44,7 +44,9 @@ test("scopeValues keeps the job's other work, swaps in the picked scope, and tie
   assert.deepEqual(scopeValues("alteration", ["excavation"]), ["earth_work", "excavation", "sprinkler", "plumbing", "mechanical"]);
   assert.deepEqual(scopeValues("new_building", ["excavation"]),
     ["earth_work", "excavation", "sprinkler", "standpipe", "plumbing", "mechanical", "construction_fence"]);
-  assert.deepEqual(scopeValues("demolition", []), ["demolition", "construction_fence"]);
+  // Demolition is a scope choice: picked, it is in; unpicked, it is not.
+  assert.deepEqual(scopeValues("demolition", ["demolition"]), ["demolition", "construction_fence"]);
+  assert.deepEqual(scopeValues("demolition", []), ["construction_fence"]);
 });
 
 test("roles are in the screen's order", () => {

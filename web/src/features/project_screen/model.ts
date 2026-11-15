@@ -36,9 +36,11 @@ export const CONSTRUCTION_CARDS: { value: ConstructionType; label: string }[] = 
 ];
 
 /** The scope a user can tick. "scaffold" stands for scaffolding and the sidewalk shed together. */
-export type ScopeOption = "excavation" | "foundation" | "support_of_excavation" | "underpinning" | "structural" | "facade" | "scaffold";
+export type ScopeOption = "excavation" | "foundation" | "support_of_excavation" | "underpinning" | "structural" | "facade" | "scaffold"
+  | "demolition";
 
 export const SCOPE_OPTIONS: { value: ScopeOption; label: string }[] = [
+  { value: "demolition", label: "Demolition" },
   { value: "excavation", label: "Excavation" },
   { value: "foundation", label: "Foundation" },
   { value: "support_of_excavation", label: "Support of excavation" },
@@ -61,7 +63,7 @@ const JOB_DEFAULTS: Record<JobType, WorkType[]> = {
 };
 const EARTH: WorkType[] = ["excavation", "foundation", "support_of_excavation", "underpinning"];
 // Work types the scope cards decide; every other default of the job is kept as it is.
-const DECIDED_BY_SCOPE = new Set<WorkType>(["earth_work", ...EARTH, "structural", "facade", "scaffold", "sidewalk_shed"]);
+const DECIDED_BY_SCOPE = new Set<WorkType>(["earth_work", ...EARTH, "structural", "facade", "scaffold", "sidewalk_shed", "demolition"]);
 
 const ordered = (types: Iterable<WorkType>): WorkType[] => {
   const wanted = new Set(types);

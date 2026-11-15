@@ -222,6 +222,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/sites/{bbl}/outlook": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Outlook
+         * @description What could go wrong here, for every option: lessons from similar past projects, from this lot's profile.
+         */
+        get: operations["outlook_api_sites__bbl__outlook_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/cases": {
         parameters: {
             query?: never;
@@ -860,6 +880,92 @@ export interface components {
             /** Record Id */
             record_id?: string | null;
         };
+        /**
+         * Lesson
+         * @description A failure mode seen on similar past projects: the incidents, what prevents it, and this lot's own records.
+         */
+        Lesson: {
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /**
+             * Hazard
+             * @enum {string}
+             */
+            hazard: "structural" | "geotech" | "fire" | "flood" | "contamination" | "facade" | "weather" | "construction_safety";
+            /** Options */
+            options: ("renovate" | "demolish_rebuild" | "new_build")[];
+            /** Scopes */
+            scopes: ("earth_work" | "excavation" | "foundation" | "support_of_excavation" | "underpinning" | "structural" | "facade" | "demolition" | "sprinkler" | "standpipe" | "plumbing" | "mechanical" | "sidewalk_shed" | "scaffold" | "construction_fence")[];
+            /** Cases */
+            cases: components["schemas"]["LessonCase"][];
+            /** Case Count */
+            case_count: number;
+            /**
+             * Tagged
+             * @default []
+             */
+            tagged: components["schemas"]["LessonTag"][];
+            /** Prevent With */
+            prevent_with: components["schemas"]["LessonItem"][];
+            /** Here */
+            here?: string | null;
+        };
+        /**
+         * LessonCase
+         * @description A past incident behind a lesson. `basis` says whether its failure mode comes from a reported cause or only
+         *     from what happened (no cause published).
+         */
+        LessonCase: {
+            /** Case Id */
+            case_id: string;
+            /** Title */
+            title: string;
+            /** Address */
+            address: string;
+            /** Date */
+            date: string;
+            /**
+             * Severity
+             * @enum {integer}
+             */
+            severity: 0 | 1 | 2 | 3;
+            /**
+             * Basis
+             * @enum {string}
+             */
+            basis: "reported_cause" | "event_only";
+            /** Source Name */
+            source_name: string;
+            /** Source Url */
+            source_url?: string | null;
+        };
+        /**
+         * LessonItem
+         * @description A checklist item that prevents the failure mode.
+         */
+        LessonItem: {
+            /** Source Rule */
+            source_rule: string;
+            /** Title */
+            title: string;
+            /** Code Ref */
+            code_ref?: string | null;
+        };
+        /**
+         * LessonTag
+         * @description One case tagged with this lesson's failure mode, and the basis of the tag.
+         */
+        LessonTag: {
+            /** Case Id */
+            case_id: string;
+            /**
+             * Basis
+             * @enum {string}
+             */
+            basis: "reported_cause" | "event_only";
+        };
         /** LotFacts */
         LotFacts: {
             /** Address */
@@ -1127,6 +1233,16 @@ export interface components {
             bbl: string;
             /** Results */
             results: components["schemas"]["SimilarCase"][];
+        };
+        /**
+         * SiteOutlook
+         * @description What could go wrong here, for every option: lessons from similar past projects, worst first.
+         */
+        SiteOutlook: {
+            /** Bbl */
+            bbl: string;
+            /** Lessons */
+            lessons: components["schemas"]["Lesson"][];
         };
         /** SiteProfile */
         SiteProfile: {
@@ -1611,6 +1727,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ActionItem"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    outlook_api_sites__bbl__outlook_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                bbl: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteOutlook"];
                 };
             };
             /** @description Validation Error */

@@ -305,3 +305,38 @@
   text-transform: uppercase;
   color: var(--fs-text-2);
 }
+
+/* "Lessons from this case" in the case popup: the risk it shows and the checklist items for it. */
+.fs-case__lessons {
+  padding: 12px 14px;
+  border: 1px solid var(--fs-line);
+  border-left: 3px solid var(--fs-hz, var(--fs-accent));
+  border-radius: 0 var(--fs-radius) var(--fs-radius) 0;
+  background: var(--fs-hover);
+}
+.fs-case__lesson + .fs-case__lesson {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--fs-line);
+}
+.fs-case__lesson-title {
+  font-weight: 600;
+}
+.fs-case__lesson-label {
+  margin-top: 6px !important;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fs-text-2);
+}
+/* What went wrong on this case, from its lessons. */
+.fs-case__risk {
+  align-self: flex-start;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--fs-text-2);
+}
