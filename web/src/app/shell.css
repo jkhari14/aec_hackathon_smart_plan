@@ -188,6 +188,9 @@
   padding-bottom: var(--fs-3);
   border-bottom: 1px solid var(--fs-line);
 }
+.fs-layer--all {
+  border-bottom-color: var(--fs-line-strong);
+}
 .fs-layer:last-child {
   border-bottom: 0;
   padding-bottom: 0;

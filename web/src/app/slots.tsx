@@ -36,6 +36,9 @@ type LayerSlotProps = {
 };
 
 export function LayerSlot({ open, onClose, layers, enabled, onToggle }: LayerSlotProps) {
+  const usable = layers?.filter((l) => l.status !== "error") ?? [];
+  const allOn = usable.length > 0 && usable.every((l) => enabled.has(l.layer_id));
+  const onCount = usable.filter((l) => enabled.has(l.layer_id)).length;
   return (
     <Panel
       title="Layers"
@@ -54,6 +57,16 @@ export function LayerSlot({ open, onClose, layers, enabled, onToggle }: LayerSlo
         </>
       )}
       {layers?.length === 0 && <EmptyState title="No layers yet">The layer catalog came back empty.</EmptyState>}
+      {usable.length > 1 && (
+        <div className="fs-layer fs-layer--all">
+          <Toggle
+            checked={allOn}
+            onChange={(on) => usable.forEach((l) => onToggle(l.layer_id, on))}
+            label={<span className="fs-layer__name">All layers</span>}
+            hint={`${onCount} of ${usable.length} on`}
+          />
+        </div>
+      )}
       {layers?.map((layer) => (
         <div key={layer.layer_id} className="fs-layer" style={{ "--fs-hz": `var(--fs-hz-${layer.hazard})` } as CSSProperties}>
           {layer.status === "error" ? (
