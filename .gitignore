@@ -14,3 +14,5 @@ data/manual_imports/**/raw/
 .env
 .env.*
 .claude/settings.local.json
+# Cityweft 3D site models: licensed data fetched per site, kept local.
+data/cache/cityweft/

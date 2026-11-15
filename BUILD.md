@@ -108,7 +108,7 @@ on" column have merged. Jacob merges, in this order, and posts each merge in Sla
 - **UX bar** (plan section "UX and UI: the differentiator"): dark-first, calm, nothing cluttered, blank
   or unexplained; every element answers "why am I seeing this?". Fewer features done beautifully beat
   more features done roughly.
-- **Secrets** stay in the environment (`ANTHROPIC_API_KEY`, `VITE_GOOGLE_MAPS_KEY`,
+- **Secrets** stay in the environment (`ANTHROPIC_API_KEY`, `CITYWEFT_API_KEY`,
   `SOCRATA_APP_TOKEN`), never in code or commits.
 - **Do not commit** the unredacted transcripts or PDFs in the repo root; the redacted transcripts are
   in `planning/transcripts/`.
@@ -300,8 +300,8 @@ Tiles API (photorealistic 3D tiles) if the team has one.
 pick a site, a cinematic fly-to, the site and touching neighbors highlighted, extruded footprints, the
 layer panel (every source with toggle, status, count, source link, updated date).
 
-**PR 14 (wave 3): 3D and storytelling.** Google Photorealistic 3D Tiles when `VITE_GOOGLE_MAPS_KEY` is
-set, styled extrusions with soft lighting otherwise; the shared party wall as a glowing edge; similar
+**PR 14 (wave 3): 3D and storytelling.** Styled extrusions with soft lighting citywide, and a Cityweft 3D
+model of the blocks around a picked site when the API has `CITYWEFT_API_KEY` (Google 3D Tiles were dropped); the shared party wall as a glowing edge; similar
 cases arcing in from across the city; camera keeps the site in view as panels open.
 
 **Role prompt:**

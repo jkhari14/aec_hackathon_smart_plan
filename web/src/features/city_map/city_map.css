@@ -22,7 +22,15 @@
   color: inherit;
   text-decoration: underline;
 }
-/* The 2D/3D switch sits in the control stack, under the zoom buttons. */
+
+/* deck.gl's canvas sits in MapLibre's top-left control slot (z-index 2), which drew the site model and
+   the arcs over the search box and layer panel. Without the z-index it stays above the map canvas
+   (it comes later in the page) and under the panels. */
+.maplibregl-ctrl-top-left:has(.deck-widget-container) {
+  z-index: auto;
+}
+
+/* The 2D/3D switch sits in the control stack (bottom right). */
 .fs-view-mode button {
   font: 600 11px/29px ui-sans-serif, system-ui, sans-serif;
   /* The shell themes the control stack, so the label follows its text color in both themes. */
