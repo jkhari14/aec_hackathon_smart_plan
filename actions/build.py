@@ -242,6 +242,33 @@ def hazard_actions(profile: dict, cfg: dict, stage: Optional[str]) -> list[dict]
     return out
 
 
+# --- the lesson rows --------------------------------------------------------
+
+def lesson_actions(profile: dict, cfg: dict) -> list[dict]:
+    """Prevention that lessons from past incidents point to and the code rows don't cover, when the scope fits."""
+    owner_roles = cfg["owner_role"]
+    work = set(profile.get("work_types") or [])
+    out = []
+    for r in cfg.get("lesson_rules", []):
+        if not work & set(r["scopes"]):
+            continue
+        out.append({
+            "id": f"action-lesson-{r['id']}",
+            "discipline": r["discipline"],
+            "hazard": r["hazard"],
+            "title": r["title"],
+            "why": r["why"],
+            "code_ref": r["code_ref"],
+            "proof_needed": r["proof_needed"],
+            "status": "open",
+            "owner_role": owner_roles.get(r["discipline"]),
+            "source_rule": f"lesson:{r['id']}",
+            "life_safety": r["life_safety"],
+            **dict(zip(("phase", "when"), phase_for(f"lesson:{r['id']}", r["stages"]))),
+        })
+    return out
+
+
 # --- entry point ------------------------------------------------------------
 
 DISCIPLINE_ORDER = ("structural", "geotech", "architect", "contractor")
@@ -252,7 +279,7 @@ def build_actions(profile: dict, stage: Optional[str] = None) -> list[dict]:
     if stage is not None and stage not in STAGES:
         raise ValueError(f"unknown stage: {stage}")
     cfg = _load()
-    items = code_actions(profile, cfg) + hazard_actions(profile, cfg, stage)
+    items = code_actions(profile, cfg) + hazard_actions(profile, cfg, stage) + lesson_actions(profile, cfg)
     items.sort(key=lambda a: (DISCIPLINE_ORDER.index(a["discipline"]),
                               not a["life_safety"],
                               a["title"]))

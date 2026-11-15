@@ -88,3 +88,23 @@ class Outlook(unittest.TestCase):
         r = TestClient(app).get("/api/sites/3015790010/outlook")
         self.assertEqual(r.status_code, 200, r.text)
         self.assertTrue(r.json()["lessons"])
+
+
+class LessonItemsInTheChecklist(unittest.TestCase):
+    """The prevention that lessons point to and the code rows don't cover joins the checklist when the scope fits."""
+
+    def rows(self, work_types):
+        from actions.build import build_actions
+        from tests.test_actions import _profile
+        return {a["id"]: a for a in build_actions(dict(_profile(), work_types=work_types))}
+
+    def test_structural_work_gets_shoring_and_condition_items(self):
+        rows = self.rows(["structural"])
+        self.assertIn("action-lesson-temporary-shoring", rows)
+        self.assertIn("action-lesson-existing-condition", rows)
+        self.assertEqual(rows["action-lesson-temporary-shoring"]["source_rule"], "lesson:temporary-shoring")
+        self.assertIn(rows["action-lesson-temporary-shoring"]["phase"], {"design", "filing", "during_work"})
+
+    def test_scope_that_doesnt_fit_leaves_them_out(self):
+        rows = self.rows(["plumbing"])
+        self.assertFalse([r for r in rows if r.startswith("action-lesson-")])
