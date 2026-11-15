@@ -142,7 +142,7 @@ log line above were added after it and have not been run live.
 
 ## What it reads
 
-One function, `(bbl, job_type, stage, as_of) -> SiteContext` (`chat_site_context.py`), passed to
+One function, `(bbl, job_type, stage, as_of, project_id) -> SiteContext` (`chat_site_context.py`), passed to
 `chat_router_for(...)` in `api/main.py`. That function is `app_context` (`chat_app_context.py`): it
 reads the profile, similar cases, warnings and action items through `load_site_part` in
 `sites_router.py`, the same function each site route answers from, and the layer list through
@@ -162,6 +162,15 @@ owner's module that lands is picked up by the chat with no change here.
   fails, or answers off its contract, the checks are a failure with a reason: the chat then says it
   cannot tell whether every rule ran, with the same "unknown" and "at least" wording, and never
   assumes they all did. The rules run once for the warnings and once more for the checks.
+- **The open project's checklist** (`SiteContext.project`, `chat_project_checklist.py`): when the request
+  names a project and the project store holds it for this lot, the action items are that project's own
+  items, read through the store: the list the project screen shows, with the owner and status its team
+  set and any item a confirmed document added. The site facts are then read for the project's job type
+  and stage, and the count sentence says "on the open project's checklist". Members' names are not
+  read. With no project open, or one on another lot, or a view as of an earlier day, the items are the
+  lot's general list and the chat is told it is not a project's checklist. A project that is open and
+  cannot be read is a failure with its reason: the general list is shown with a line saying it is not
+  the project's checklist.
 
 Every piece that can fail to load is a `Loaded` with a status, because "could not load" must never
 reach the chat as an empty list.
@@ -184,12 +193,14 @@ chat_saved_answers_export.py  writes the web app's saved answers for the sample 
 chat_service.py        live or mock: one answer
 chat_contract_map.py   the chat's answer as the contract's ChatResponse; the contract's request as the chat's
 chat_app_context.py    the site as the app's own site functions serve it (what the app mounts)
+chat_project_checklist.py the open project's setup and checklist, read from the project store
 chat_fixture_context.py the sample site from contracts/fixtures/ (the saved answers are built from it)
 chat_router.py         POST /api/chat, GET /api/chat/setup, 12 live questions a minute
 ```
 
 Tests: `python -m unittest discover -s tests -t .` (`tests/test_chat_core.py`, `tests/test_chat_service.py`,
-`tests/test_chat_saved_answers.py`, `tests/test_chat_app_context.py`; offline, a scripted model, no key).
+`tests/test_chat_saved_answers.py`, `tests/test_chat_app_context.py`, `tests/test_chat_project_checklist.py`;
+offline, a scripted model, no key).
 
 Settings, all read from the server's environment: `ANTHROPIC_API_KEY` (the server only; never in the
 repo or the web build), `FORESITE_CHAT_LIVE=0` to keep mock mode even with a key, `FORESITE_CHAT_MODEL`
@@ -203,5 +214,7 @@ repo or the web build), `FORESITE_CHAT_LIVE=0` to keep mock mode even with a key
   links the first.
 - The word-list checks catch plain phrasings and miss others. A person's name cannot be detected in code.
 - The searches match words, not meaning.
+- The chat reads the open project's checklist and setup, and nothing else of the project: not its notes,
+  pins, documents or members. It changes nothing on the project except by pinning an answer.
 - The web chat panel (`web/src/features/chat/`) and project panel (`web/src/features/project/`) sit in the
   app shell's chat slot, as two tabs.

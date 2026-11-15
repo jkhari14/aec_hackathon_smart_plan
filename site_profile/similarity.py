@@ -28,19 +28,17 @@ LAYERS_DIR = REPO_ROOT / "data" / "layers"
 INCIDENT_LAYERS = ("construction_incidents",)
 
 WEIGHTS = {
-    "building_era": 0.18,
+    "building_era": 0.20,
     "building_wall_system": 0.18,
-    "building_height": 0.10,
+    "building_height": 0.12,
     "building_attached": 0.10,
     "earth_work": 0.20,
     "work_types": 0.08,
-    "signal_hazards": 0.08,
+    "signal_hazards": 0.04,  # weak evidence: any busy site has enforcement records
     "soil": 0.04,
     "flood": 0.04,
 }
 __doc__ += "\n".join(f"    {k}: {v}" for k, v in WEIGHTS.items())
-
-BOROUGHS = {"1": "Manhattan", "2": "Bronx", "3": "Brooklyn", "4": "Queens", "5": "Staten Island"}
 
 # Construction-incident type text (bf97-mjsy) -> work types, for open-data incidents with no case write-up.
 INCIDENT_WORK_TYPES = {
@@ -122,9 +120,25 @@ def load_incidents(layers_dir: Path = LAYERS_DIR) -> list[dict]:
 # Profile features
 
 
+# Near misses earn half the weight instead of counting as a difference: a 1931 rowhouse and a 1925 one are
+# alike even though a code-era line falls between them, and so are a 3-storey and a 4-storey building.
+NEAR_YEARS = 15
+NEAR_FLOORS = 2
+
+
+def _near(key: str, here: dict, there: dict) -> bool:
+    if key == "era":
+        a, b = here.get("year_built"), there.get("year_built")
+        return bool(a and b) and abs(a - b) <= NEAR_YEARS
+    if key == "floors_band":
+        a, b = here.get("floors"), there.get("floors")
+        return a is not None and b is not None and abs(a - b) <= NEAR_FLOORS
+    return False
+
+
 def compare_buildings(here: dict, there: dict) -> dict:
-    """{score, matched, differs} for one site building against the case's building, on the four facts."""
-    score, matched, differs = 0.0, [], []
+    """{score, matched, near, differs} for one site building against the case's building, on the four facts."""
+    score, matched, near, differs = 0.0, [], [], []
     for key, weight in (("era", "building_era"), ("wall_system", "building_wall_system"),
                         ("floors_band", "building_height"), ("attached", "building_attached")):
         a, b = here.get(key), there.get(key)
@@ -133,9 +147,12 @@ def compare_buildings(here: dict, there: dict) -> dict:
         if a == b:
             score += WEIGHTS[weight]
             matched.append(key)
+        elif _near(key, here, there):
+            score += WEIGHTS[weight] / 2
+            near.append(key)
         else:
             differs.append(key)
-    return {"score": score, "matched": matched, "differs": differs}
+    return {"score": score, "matched": matched, "near": near, "differs": differs}
 
 
 def _best_building(profile: dict, case: dict) -> Optional[tuple[dict, dict]]:
@@ -157,7 +174,7 @@ def _best_building(profile: dict, case: dict) -> Optional[tuple[dict, dict]]:
     best = None
     for here in candidates:
         found = compare_buildings(here, there)
-        if not (found["matched"] or found["differs"]):
+        if not (found["matched"] or found["near"] or found["differs"]):
             continue
         key = (found["score"], here.get("wall_basis") == "stated", here is candidates[0] and here["label"].startswith("the site"),
                -(here.get("year_built") or 9999))
@@ -176,16 +193,19 @@ def _building_sentences(here: dict, there: dict, found: dict) -> tuple[list[str]
         shown = {k: here.get(k) for k in ("year_built", "wall_basis")}
         shown.update({k: here[k] for k in found["matched"]})
         matched.append(f"{here['label']} is like the building in this case: {describe(shown)}")
+    for key in found["near"]:
+        if key == "era":
+            matched.append(f"close in age: {here['label']} was built {here['year_built']}, "
+                           f"the case's building {there['year_built']}")
+        else:
+            matched.append(f"close in height: {here['label']} has {here['floors']:g} storeys, "
+                           f"the case's building {there['floors']:g}")
     for key in found["differs"]:
         a, b = here[key], there[key]
         if key == "attached":
             a, b = ("attached" if a else "freestanding"), ("attached" if b else "freestanding")
         differs.append(f"{_FACT_WORDS[key]}: {here['label']} is {a}, the case's building was {b}")
     return matched, differs
-
-
-def _borough(bbl: Optional[str]) -> Optional[str]:
-    return BOROUGHS.get(str(bbl or "")[:1])
 
 
 def _jaccard(a: Iterable[str], b: Iterable[str]) -> float:
@@ -253,10 +273,6 @@ def compare(profile: dict, case: dict) -> dict:
             matched.append(f"flood zone {conditions['flood_zone']}")
         else:
             differs.append(f"flood zone: here {site_zone}, there {conditions['flood_zone']}")
-
-    here_boro, there_boro = _borough(profile.get("bbl")), _borough(case.get("bbl"))
-    if here_boro and there_boro and here_boro != there_boro:
-        differs.append(f"{there_boro}, not {here_boro}")
 
     return {"score": round(min(score, 1.0), 3), "matched_on": matched, "differs_on": differs}
 

@@ -150,7 +150,7 @@ export function SiteSlot({ bbl, site, onClose, tab, onTab, onContinue, focusCase
           <Button variant="primary" className="fs-btn fs-site__continue" onClick={onContinue}>
             Continue to project →
           </Button>
-          <SitePanel data={data} tab={tab} onTab={onTab}
+          <SitePanel bbl={bbl ?? ""} data={data} tab={tab} onTab={onTab} onStart={onContinue}
             strands={{ focusedId: focusCase, onFocus: onFocusCase, all: allStrands, onAll: onAllStrands }} />
         </>
       )}

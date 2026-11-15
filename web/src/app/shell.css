@@ -25,7 +25,8 @@
 .fs-shell__right {
   position: absolute;
   top: var(--fs-4);
-  bottom: 72px;
+  /* Both columns end above the chat's dock, which runs under them on all but the widest screens. */
+  bottom: calc(var(--fs-dock-bottom) + var(--fs-dock-h) + var(--fs-2));
   /* No z-index here: each panel carries its own, so a moved panel can come in front of either column. */
   display: flex;
   flex-direction: column;
@@ -38,8 +39,6 @@
 }
 .fs-shell__right {
   right: var(--fs-4);
-  /* Ends above the chat's dock, which runs under it on all but the widest screens. */
-  bottom: calc(var(--fs-dock-bottom) + var(--fs-dock-h) + var(--fs-2));
   width: var(--fs-panel-w);
 }
 .fs-shell__left > *,
@@ -633,16 +632,33 @@
   z-index: calc(var(--fs-z-overlay) + 10);
   display: grid;
   place-items: center;
-  /* The video's own paper and vignette, so its edges disappear into the page. */
-  background: radial-gradient(ellipse at center, #ede8dd 35%, #ded9cf 100%);
+  /* Plain white; the video's paper is lifted to white too (below), so its edges disappear into it. */
+  background: #ffffff;
   cursor: pointer;
-  transition: opacity 400ms var(--fs-ease-out);
+  transition: opacity 800ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .fs-intro[data-state="leaving"] {
   opacity: 0;
   pointer-events: none;
 }
+/* On the way out the logo drifts toward you and softens, so it reads as flying into the map. */
 .fs-intro__video {
+  transition:
+    transform 800ms cubic-bezier(0.4, 0, 0.2, 1),
+    filter 800ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fs-intro[data-state="leaving"] .fs-intro__video {
+  transform: scale(1.12);
+  filter: brightness(var(--fs-intro-lift)) blur(6px);
+}
+.fs-intro[data-state="leaving"] .fs-intro__skip {
+  opacity: 0;
+}
+.fs-intro__video {
+  /* The video is drawn on warm paper (#ede8dd, darkening to #ded9cf at the edges); this lifts all of it
+     to white. Black stays black. */
+  --fs-intro-lift: 1.24;
+  filter: brightness(var(--fs-intro-lift));
   width: min(92vw, 1100px);
   height: auto;
   image-rendering: pixelated;
@@ -665,11 +681,12 @@
 .fs-shell__bottom,
 .fs-shell .fs-shell__chat {
   transition:
-    opacity 700ms var(--fs-ease-out),
-    transform 700ms var(--fs-ease-out);
+    opacity 900ms var(--fs-ease-out),
+    transform 900ms var(--fs-ease-out);
 }
 .fs-shell[data-entered="false"] .fs-shell__map {
   opacity: 0;
+  transform: scale(1.04);
 }
 .fs-shell[data-entered="false"] .fs-shell__left,
 .fs-shell[data-entered="false"] .fs-shell__right,
@@ -695,7 +712,8 @@
   .fs-shell__right,
   .fs-shell__bottom,
   .fs-shell .fs-shell__chat,
-  .fs-intro {
+  .fs-intro,
+  .fs-intro__video {
     transition: none;
   }
 }

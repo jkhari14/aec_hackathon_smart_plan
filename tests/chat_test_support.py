@@ -118,7 +118,7 @@ def example_context(as_of=None, **overrides) -> SiteContext:
 
 def loader(**overrides):
     """A context loader for chat_service.answer, over the made-up site."""
-    return lambda bbl, job_type, stage, as_of: example_context(as_of=as_of, **overrides)
+    return lambda bbl, job_type, stage, as_of, project_id=None: example_context(as_of=as_of, **overrides)
 
 
 def item(kind, **fields):

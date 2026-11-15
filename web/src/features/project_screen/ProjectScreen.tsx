@@ -3,7 +3,7 @@
 // Live state is the project store's: useProject polls it every 4 s, so another role's change shows up here.
 import "./project_screen.css";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { api } from "../../api/client";
 import type { Role } from "../../contracts";
@@ -13,7 +13,8 @@ import type { ProjectWorkspace } from "../project/useProject";
 import { ChecklistStep } from "./ChecklistStep";
 import { DocumentsStep } from "./DocumentsStep";
 import { draftProject, type DraftInput } from "./draft";
-import { ROLES } from "./model";
+import { newForRole, ROLES } from "./model";
+import { useLastSeen } from "./seen";
 import { SetupStep } from "./SetupStep";
 
 type Step = "setup" | "checklist" | "documents";
@@ -49,6 +50,17 @@ export function ProjectScreen({ bbl, siteLabel, workspace, onProjectCreated, onB
 
   const project = state.status === "ok" ? state.project : null;
   const siteBbl = project?.site_bbl ?? bbl;
+
+  // "New for you": items another role's document added to this role's list since this tab last looked.
+  // Looking means leaving the checklist (or "Got it"), so rows that arrive while it is open stay marked.
+  const { since, markSeen } = useLastSeen(projectId, workspace.role, project?.created_at ?? null);
+  const newForMe = useMemo(() => (project ? newForRole(project.items, workspace.role, since) : []),
+    [project, workspace.role, since]);
+  const lastStep = useRef(step);
+  useEffect(() => {
+    if (lastStep.current === "checklist" && step !== "checklist") markSeen();
+    lastStep.current = step;
+  }, [step, markSeen]);
 
   async function draft(input: DraftInput, me: Role) {
     setBusy(true);
@@ -122,6 +134,11 @@ export function ProjectScreen({ bbl, siteLabel, workspace, onProjectCreated, onB
               onClick={() => setStep(s.value)}>
               <span className="fs-ps__stepnum">{done ? "✓" : i + 1}</span>
               {s.label}
+              {s.value === "checklist" && newForMe.length > 0 && (
+                <span className="fs-ps__newcount" title="Added to your list by another role's document since you last looked">
+                  {newForMe.length} new
+                </span>
+              )}
             </button>
           );
         })}
@@ -137,7 +154,8 @@ export function ProjectScreen({ bbl, siteLabel, workspace, onProjectCreated, onB
         {step === "setup" && project && <SetupSummary project={project} />}
         {step !== "setup" && projectId && !project && <Unavailable workspace={workspace} />}
         {step === "checklist" && project && (
-          <ChecklistStep project={project} workspace={workspace} notice={notice} onDismissNotice={() => setNotice(null)} />
+          <ChecklistStep project={project} workspace={workspace} notice={notice} onDismissNotice={() => setNotice(null)}
+            newForMe={newForMe} onSeen={markSeen} />
         )}
         {step === "documents" && project && <DocumentsStep project={project} workspace={workspace} />}
       </div>
