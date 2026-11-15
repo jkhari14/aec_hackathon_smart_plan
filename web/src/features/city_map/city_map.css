@@ -22,3 +22,10 @@
   color: inherit;
   text-decoration: underline;
 }
+
+/* deck.gl's canvas sits in MapLibre's top-left control slot (z-index 2), which drew the site model and
+   the arcs over the search box and layer panel. Without the z-index it stays above the map canvas
+   (it comes later in the page) and under the panels. */
+.maplibregl-ctrl-top-left:has(.deck-widget-container) {
+  z-index: auto;
+}

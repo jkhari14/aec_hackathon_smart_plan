@@ -15,6 +15,7 @@ from api import stubs
 from api.routers.cases_router import cases_router
 from api.routers.chat.chat_app_context import app_context
 from api.routers.chat.chat_router import chat_router_for
+from api.routers.context3d_router import context3d_router
 from api.routers.layers_router import layers_router
 from api.routers.projects_router import projects_router
 from api.routers.search_router import search_router
@@ -44,7 +45,7 @@ def health() -> dict[str, str]:
 # Owners' routers go here, above the stubs.
 app.include_router(early_warning_api.router)
 
-for owner_router in (layers_router, search_router, sites_router, cases_router, projects_router):
+for owner_router in (layers_router, search_router, sites_router, cases_router, projects_router, context3d_router):
     app.include_router(owner_router)
 # The chat reads each site part through the same function its route uses.
 app.include_router(chat_router_for(app_context))
