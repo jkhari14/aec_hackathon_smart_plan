@@ -1,6 +1,8 @@
 import json
 import pathlib
+import sys
 import unittest
+from unittest import mock
 
 from actions.build import (DISCIPLINE_ORDER, build_actions, evaluate_condition,
                            group_by_discipline)
@@ -90,7 +92,8 @@ class TestActions(unittest.TestCase):
         from api.main import app
         from api.stubs import FIXTURE_HEADER
 
-        r = TestClient(app).get("/api/sites/3052110073/actions")
+        with mock.patch.dict(sys.modules, {"site_profile.router": None}):  # PR 6 not landed
+            r = TestClient(app).get("/api/sites/3052110073/actions")
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.headers.get(FIXTURE_HEADER), "true")
 
