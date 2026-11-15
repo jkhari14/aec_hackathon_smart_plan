@@ -18,6 +18,9 @@ import {
   addAreaLayers, addBuildings, addPointLayers, addSiteLayers, areaLayerIds, BASEMAP, NYC_CENTER, pointLayerIds, sourceId,
 } from "./map_style";
 import { loadSiteLots, type Picked, siteAt } from "./site_lots";
+import {
+  addSelectionLayers, blinkSelection, clearSelection, loadSiteBuildings, setSiteBuildings, viewMode, ViewModeControl,
+} from "./selection_blink";
 import { GOOGLE_KEY, googleTiles, similarCaseLayers, similarCaseTooltip } from "./story_layers";
 
 // The shell owns the picked site, the layer toggles and the search; the map draws them and reports clicks.
@@ -61,12 +64,28 @@ export function CityMap({ site: picked = null, onPick, enabled, onSample }: Prop
   const [credits, setCredits] = useState<string | null>(null);
   const overlayRef = useRef<MapboxOverlay | null>(null);
   const deckLayers = useRef<{ tiles: Layer[]; arcs: Layer[] }>({ tiles: [], arcs: [] });
+  // Stops the current blink, if any. `selected` is true once the picked lot has drawn.
+  const stopBlink = useRef<() => void>(() => {});
+  const selected = useRef(false);
   const drawDeck = () => overlayRef.current?.setProps({ layers: [...deckLayers.current.tiles, ...deckLayers.current.arcs] });
 
   useEffect(() => {
     if (!container.current) return;
     const map = new MapLibreMap({ container: container.current, style: BASEMAP, center: NYC_CENTER, zoom: 10.4, pitch: 30 });
+    const viewControl = new ViewModeControl(reducedMotion);
+    map.addControl(viewControl, "bottom-right");
     map.addControl(new NavigationControl({ visualizePitch: true }), "bottom-right");
+    // Switching between 2D and 3D (the button, or tilting by hand) blinks the picked lot and building.
+    let mode = viewMode(map.getPitch());
+    map.on("pitchend", () => {
+      const next = viewMode(map.getPitch());
+      if (next === mode) return;
+      mode = next;
+      viewControl.show(next);
+      if (!selected.current) return;
+      stopBlink.current();
+      stopBlink.current = blinkSelection(map, reducedMotion());
+    });
     // Not interleaved: with MapLibre 6 the shared-context mode drew nothing; its own canvas works.
     const overlay = new MapboxOverlay({ interleaved: false, layers: [], getTooltip: similarCaseTooltip as never });
     map.addControl(overlay);
@@ -74,6 +93,7 @@ export function CityMap({ site: picked = null, onPick, enabled, onSample }: Prop
     map.on("load", () => {
       addBuildings(map);
       addSiteLayers(map);
+      addSelectionLayers(map);
       setReady(true);
       if (GOOGLE_KEY) {
         googleTiles(GOOGLE_KEY, setCredits).then((tiles) => {
@@ -86,6 +106,7 @@ export function CityMap({ site: picked = null, onPick, enabled, onSample }: Prop
     });
     mapRef.current = map;
     return () => {
+      stopBlink.current();
       overlayRef.current = null;
       mapRef.current = null;
       setReady(false);
@@ -178,6 +199,10 @@ export function CityMap({ site: picked = null, onPick, enabled, onSample }: Prop
     const empty: FeatureCollection = { type: "FeatureCollection", features: [] };
     (map.getSource("site-lots") as GeoJSONSource).setData(empty);
     (map.getSource("party-walls") as GeoJSONSource).setData(empty);
+    stopBlink.current();
+    selected.current = false;
+    clearSelection(map);
+    setSiteBuildings(map, empty);
     deckLayers.current.arcs = [];
     drawDeck();
     setSiteStatus(null);
@@ -188,11 +213,21 @@ export function CityMap({ site: picked = null, onPick, enabled, onSample }: Prop
     else map.flyTo({ ...camera, duration: 3200, curve: 1.6, essential: false });
     setSiteStatus("Loading the site and its touching lots…");
     let frame = 0;
-    loadSiteLots(picked).then(({ lots, walls, profile, sample: s, note }) => {
+    Promise.all([loadSiteLots(picked), loadSiteBuildings(picked.bbl)]).then(([{ lots, walls, profile, sample: s, note }, buildings]) => {
       if (cancelled) return;
       setSample((was) => was || s);
       (map.getSource("site-lots") as GeoJSONSource).setData(lots);
       (map.getSource("party-walls") as GeoJSONSource).setData(walls);
+      setSiteBuildings(map, buildings);
+      selected.current = true;
+      // Blink once the camera has landed, so the eye is on the site when it happens.
+      const blink = () => {
+        if (cancelled) return;
+        stopBlink.current();
+        stopBlink.current = blinkSelection(map, reducedMotion());
+      };
+      if (map.isMoving()) map.once("moveend", blink);
+      else blink();
       const touching = profile?.neighbors.length;
       setSiteStatus(note ?? `site and ${touching} touching lot${touching === 1 ? "" : "s"} highlighted`);
     });
