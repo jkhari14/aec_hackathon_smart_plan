@@ -15,7 +15,10 @@ import { Button, ChatIcon, CloseIcon, Kbd, KeyboardIcon, LayersIcon, MoonIcon, S
 import { CityMap } from "../features/city_map/CityMap";
 import type { Picked } from "../features/city_map/site_lots";
 import { LimitationsPanel } from "../features/limitations/LimitationsPanel";
-import { CommandBar, type Command } from "./CommandBar";
+import { useProjectIdInUrl } from "../features/project/project_url";
+import { useProject } from "../features/project/useProject";
+import { ProjectScreen } from "../features/project_screen/ProjectScreen";
+import { CommandBar, titleCase, type Command } from "./CommandBar";
 import { useTheme } from "./preferences";
 import { ShortcutsHelp } from "./ShortcutsHelp";
 import { keyLabel, useShortcuts, type Shortcut } from "./shortcuts";
@@ -35,6 +38,14 @@ export function App() {
   const [site, setSite] = useState<SearchResult | null>(null);
   const [sample, setSample] = useState(false);
   const markSample = useCallback(() => setSample(true), []);
+  // The project screen's project: polled only while the screen is open (the chat dock has its own).
+  const [projectId, openProject] = useProjectIdInUrl();
+  const workspace = useProject(view.screen === "project" ? projectId : null);
+  // A project belongs to the site it was made for: continuing from another site starts a new one.
+  const openSiteBbl = workspace.state.status === "ok" ? workspace.state.project.site_bbl : null;
+  useEffect(() => {
+    if (view.screen === "project" && view.site && openSiteBbl && openSiteBbl !== view.site) openProject(null);
+  }, [view.screen, view.site, openSiteBbl, openProject]);
 
   useEffect(() => {
     api.layers().then((r) => {
@@ -87,6 +98,7 @@ export function App() {
       label: "Close the top panel",
       run: () => {
         if (helpOpen) setHelpOpen(false);
+        else if (view.screen === "project") setView({ screen: "map" });
         else if (view.chat) setView({ chat: false });
         else if (view.site) setView({ site: null });
         else if (view.layers) setView({ layers: false });
@@ -108,13 +120,16 @@ export function App() {
     { id: "help", label: "Keyboard shortcuts", keys: "?", run: () => setHelpOpen(true) },
   ];
 
+  // Behind the project screen, the explorer stays mounted (going back is instant) but out of reach.
+  const behind = view.screen === "project";
+
   return (
     <main className="fs-shell" data-site={Boolean(view.site)} data-chat={view.chat} data-layers={view.layers}>
-      <div className="fs-shell__map">
+      <div className="fs-shell__map" inert={behind}>
         <CityMap site={site && site.bbl === view.site ? site : null} onPick={pickSite} enabled={enabled} onSample={markSample} />
       </div>
 
-      <div className="fs-shell__left">
+      <div className="fs-shell__left" inert={behind}>
         <header className="fs-topbar fs-panel">
           <span className="fs-brand">
             <img className="fs-brand__logo" src={logo} alt={copy.app.name} />
@@ -146,13 +161,14 @@ export function App() {
         />
       </div>
 
-      <div className="fs-shell__right">
+      <div className="fs-shell__right" inert={behind}>
         <SiteSlot
           bbl={view.site}
           site={site}
           onClose={() => setView({ site: null, tab: "overview" })}
           tab={view.tab}
           onTab={(tab) => setView({ tab })}
+          onContinue={() => setView({ screen: "project" })}
         />
         <ChatSlot
           open={view.chat}
@@ -163,12 +179,12 @@ export function App() {
         />
       </div>
 
-      <div className="fs-shell__bottom">
+      <div className="fs-shell__bottom" inert={behind}>
         <LimitationsPanel />
         <DataStatus layers={layers} sample={sample} />
       </div>
 
-      <button type="button" className="fs-chat-fab" aria-label={view.chat ? "Close the chat (C)" : "Ask about this site (C)"}
+      <button type="button" className="fs-chat-fab" inert={behind} aria-label={view.chat ? "Close the chat (C)" : "Ask about this site (C)"}
         aria-pressed={view.chat} title="Chat (C)" onClick={() => setView({ chat: !view.chat })}>
         {view.chat ? <CloseIcon /> : <ChatIcon />}
       </button>
@@ -177,6 +193,16 @@ export function App() {
         <div className="fs-hint" role="note">
           Press <Kbd>/</Kbd> to find a site, or pick one on the map
         </div>
+      )}
+
+      {view.screen === "project" && (
+        <ProjectScreen
+          bbl={view.site}
+          siteLabel={site && site.bbl === view.site ? titleCase(site.label).split(",")[0] : undefined}
+          workspace={workspace}
+          onProjectCreated={openProject}
+          onBack={() => setView({ screen: "map" })}
+        />
       )}
 
       <CommandBar open={commandOpen} onClose={() => setCommandOpen(false)} onPickSite={pickSite} commands={commands} />

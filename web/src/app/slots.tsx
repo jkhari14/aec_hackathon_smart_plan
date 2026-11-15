@@ -9,6 +9,7 @@ import type { LayerCatalogEntry, SearchResult } from "../contracts";
 import { copy } from "../copy";
 import {
   Badge,
+  Button,
   Count,
   EmptyState,
   ErrorState,
@@ -103,9 +104,11 @@ type SiteSlotProps = {
   onClose: () => void;
   tab: SiteTab;
   onTab: (tab: SiteTab) => void;
+  /** Opens the full-screen project view for this site. */
+  onContinue: () => void;
 };
 
-export function SiteSlot({ bbl, site, onClose, tab, onTab }: SiteSlotProps) {
+export function SiteSlot({ bbl, site, onClose, tab, onTab, onContinue }: SiteSlotProps) {
   const open = Boolean(bbl);
   const data = useSiteData(bbl);
   return (
@@ -125,7 +128,14 @@ export function SiteSlot({ bbl, site, onClose, tab, onTab }: SiteSlotProps) {
       className="fs-shell__site"
       label="Site"
     >
-      {open && <SitePanel data={data} tab={tab} onTab={onTab} />}
+      {open && (
+        <>
+          <Button variant="primary" className="fs-btn fs-site__continue" onClick={onContinue}>
+            Continue to project →
+          </Button>
+          <SitePanel data={data} tab={tab} onTab={onTab} />
+        </>
+      )}
     </Panel>
   );
 }

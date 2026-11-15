@@ -525,3 +525,10 @@
     right: 0;
   }
 }
+
+/* The way from exploring a site into working on it: the project screen. */
+.fs-site__continue {
+  width: 100%;
+  justify-content: center;
+  margin-bottom: var(--fs-3);
+}

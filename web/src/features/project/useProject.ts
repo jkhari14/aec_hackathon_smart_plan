@@ -21,6 +21,8 @@ export type ProjectState =
 export type ProjectWorkspace = {
   projectId: string | null;
   state: ProjectState;
+  /** False while the last poll could not reach the store (the last good copy is still shown). */
+  reachable: boolean;
   role: Role;
   setRole: (role: Role) => void;
   /** Each write rejects with an Error whose message says why nothing was saved. */
@@ -36,6 +38,7 @@ export type ProjectWorkspace = {
 export function useProject(projectId: string | null, initialRole: Role = "architect"): ProjectWorkspace {
   const [state, setState] = useState<ProjectState>(projectId ? { status: "loading" } : { status: "none" });
   const [role, setRole] = useState<Role>(initialRole);
+  const [reachable, setReachable] = useState(true);
   const etag = useRef<string | null>(null);
 
   useEffect(() => {
@@ -50,6 +53,7 @@ export function useProject(projectId: string | null, initialRole: Role = "archit
       if (document.hidden) return;
       try {
         const read = await readProject(projectId!, etag.current, stop.signal);
+        setReachable(read.status !== "unreachable");
         if (read.status === "unchanged") return;
         if (read.status === "ok") {
           etag.current = read.etag;
@@ -87,6 +91,7 @@ export function useProject(projectId: string | null, initialRole: Role = "archit
   return {
     projectId,
     state,
+    reachable,
     role,
     setRole,
     updateItem: async (update) => saved(await projectWrites.updateItems(open(), [update])),

@@ -41,8 +41,10 @@ export function ProjectScreen({ bbl, siteLabel, workspace, onProjectCreated, onB
   const [copied, setCopied] = useState(false);
 
   // A shared link opens straight on the checklist.
+  // Without one (a new site), it starts at setup.
   useEffect(() => {
     if (projectId) setStep((s) => (s === "setup" ? "checklist" : s));
+    else setStep("setup");
   }, [projectId]);
 
   const project = state.status === "ok" ? state.project : null;
@@ -146,12 +148,12 @@ export function ProjectScreen({ bbl, siteLabel, workspace, onProjectCreated, onB
 function LiveDot({ workspace }: { workspace: ProjectWorkspace }) {
   const { state } = workspace;
   if (state.status === "ok" && state.sample) return <Badge tone="sample">Sample: changes not saved</Badge>;
-  const live = state.status === "ok";
+  const live = state.status === "ok" && workspace.reachable;
   return (
     <span className="fs-ps__live" data-live={live} role="status"
       title={live ? "Changes from everyone on the project show here within a few seconds" : undefined}>
       <span className="fs-ps__livedot" aria-hidden="true" />
-      {live ? "Live" : state.status === "loading" ? "Connecting…" : "Offline"}
+      {live ? "Live" : state.status === "loading" ? "Connecting…" : state.status === "ok" ? "Offline: showing the last copy" : "Offline"}
     </span>
   );
 }

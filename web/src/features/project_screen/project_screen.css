@@ -95,8 +95,8 @@
   color: var(--fs-text);
 }
 .fs-ps__live[data-live="true"] .fs-ps__livedot {
-  background: var(--fs-sev-0);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--fs-sev-0) 25%, transparent);
+  background: var(--fs-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--fs-accent) 25%, transparent);
 }
 
 .fs-ps__steps {
@@ -210,6 +210,7 @@ button.fs-ps-card:focus-visible {
   outline-offset: 2px;
 }
 .fs-ps-card[aria-pressed="true"],
+button.fs-ps-card[aria-pressed="true"]:hover,
 .fs-ps-card[data-me="true"] {
   border-color: var(--fs-accent);
   background: var(--fs-accent-soft);
@@ -253,6 +254,10 @@ button.fs-ps-card:focus-visible {
 }
 .fs-ps-submit .fs-ps-problem {
   flex-basis: 100%;
+}
+.fs-ps .fs-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 .fs-ps-problem {
   margin: 0;
