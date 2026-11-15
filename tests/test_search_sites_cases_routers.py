@@ -23,7 +23,7 @@ from api.routers.search_router import MAX_RESULTS, geosearch_fetcher
 from api.stubs import FIXTURE_HEADER, fixture
 
 BBL = "3052110074"
-NO_OWNERS = mock.patch("api.routers.sites_router._owner_function", return_value=None)  # as if no owner had landed
+NO_OWNERS = mock.patch("api.routers.sites_router.owner_function", return_value=None)  # as if no owner had landed
 
 
 # Real GeoSearch values (contracts/fixtures/search_results.json); 2625 Bedford's BIN really is the 3000000 placeholder.
@@ -222,7 +222,7 @@ class OwnerRouteFunctionTests(unittest.TestCase):
         def broken_import(name):
             raise ModuleNotFoundError("No module named 'shapely'", name="shapely")
 
-        with mock.patch("api.routers.sites_router.importlib.import_module", broken_import):
+        with mock.patch("api.routers.router_data.importlib.import_module", broken_import):
             response = self.client.get(f"/api/sites/{BBL}/profile")
             with self.assertRaises(DataUnavailable):
                 load_site_part("profile", BBL)
