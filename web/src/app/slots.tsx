@@ -21,7 +21,7 @@ import {
   SourceLabel,
   Toggle,
 } from "../design";
-import { ChatPanel } from "../features/chat/ChatPanel";
+import { ChatDock } from "../features/chat/ChatDock";
 import { SitePanel, useSiteData, type SiteTab } from "../features/site_panel/SitePanel";
 import { titleCase } from "./CommandBar";
 
@@ -131,10 +131,9 @@ type ChatSlotProps = {
 export function ChatSlot({ open, onClose, bbl, site, onPickBbl, onToggleLayer }: ChatSlotProps) {
   return (
     <Panel title={copy.chat.title} open={open} edge="bottom" onClose={onClose} className="fs-shell__chat" label="Chat">
-      <ChatPanel
+      <ChatDock
         bbl={bbl}
         siteLabel={site ? titleCase(site.label).split(",")[0] : undefined}
-        className=""
         onFlyTo={(target) => target.bbl && onPickBbl(target.bbl)}
         onToggleLayer={onToggleLayer}
       />

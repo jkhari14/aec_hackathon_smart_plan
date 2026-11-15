@@ -56,8 +56,11 @@ one, the panel says the answer's text was not kept. Over 8000 characters an answ
 | `useProject.ts` | The project's state, the poll, and the writes |
 | `project_client.ts` | The calls to `/api/projects` |
 | `project_pins.ts` | A chat answer as a pin |
+| `project_url.ts` | The open project in the URL (`?project=<id>`) |
 
 ## Limits
 
-- Built on the PR 0 placeholder tokens; it takes the design system's components once PR 1 lands.
+- It sits in the shell's chat slot as the "Project" tab (`../chat/ChatDock.tsx`), with `embedded`. The open
+  project is in the URL (`?project=<id>`, `project_url.ts`), so the link opens the same project for the other role.
+- The colours are the design system's, through `../chat/chat_theme.css`; the layout is still this folder's own classes.
 - Checked in a browser against the project store and against the sample stubs; no test runner is set up in `web/` yet.
