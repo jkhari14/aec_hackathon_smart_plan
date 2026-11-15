@@ -79,6 +79,31 @@ class ProfileFromPull(unittest.TestCase):
             self.assertNotIn(f'"{field}', text)
 
 
+class SignalTitles(unittest.TestCase):
+    """Real ECB wording from 861 Park Avenue (2026): "UNSAFE" on its own is not a structural condition."""
+
+    def title(self, text):
+        from site_profile.signals import violation_signals
+        lot = {"datasets": {"ecb_violations": {"status": "ok", "records": [
+            {"ecb_violation_number": "1", "issue_date": "20260801", "violation_description": text}]}}}
+        return violation_signals(lot, None)[0]["title"]
+
+    def test_scaffold_delivery_is_not_structural(self):
+        self.assertEqual(self.title("UNSAFE MATERIAL DELIVERY. SCAFFOLD EQUIPMENT STORED ON TOP OF SIDEWALK SHED"),
+                         "Scaffold or material handling cited")
+
+    def test_concrete_washout_is_not_structural(self):
+        self.assertEqual(self.title("FAILURE TO PERFORM PROPER CONCRETE WASHOUT. CREATING AN UNSAFE CONDITION"),
+                         "Concrete washout not handled properly")
+
+    def test_sidewalk_crack_is_not_structural(self):
+        self.assertEqual(self.title("PEDESTRIAN WALKWAY NOT MAINTAINED. 3 INCHES CRACK AND UNEVEN SURFACE"),
+                         "Pedestrian walkway not kept safe")
+
+    def test_cracked_wall_is_structural(self):
+        self.assertEqual(self.title("OBSERVED CRACKS IN THE REAR BEARING WALL"), "Structural condition cited")
+
+
 class WorkTypes(unittest.TestCase):
     def test_user_job_type_infers_work_types(self):
         job, types, inferred = work_types.resolve([], "new_building")
