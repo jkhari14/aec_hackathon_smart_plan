@@ -3,7 +3,7 @@
 // prevented". Filters narrow by hazard, severity and date.
 import "./similar_cases.css";
 
-import { type CSSProperties, type MouseEvent, useEffect, useMemo, useRef, useState } from "react";
+import { type CSSProperties, type MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { Hazard, Severity, SimilarCase } from "../../contracts";
 import { SEVERITY_LABELS } from "../../contracts";
@@ -137,7 +137,7 @@ function CaseCard({ result, focused, onFocus, onOpen }: {
     onFocus();
   };
   return (
-    <article className="fs-case" data-focused={focused} data-pickable={Boolean(onFocus) && !focused} onClickCapture={pick}
+    <article className="fs-case" data-case-id={result.case_id} data-focused={focused} data-pickable={Boolean(onFocus) && !focused} onClickCapture={pick}
       style={{ "--fs-hz": `var(--fs-hz-${c.hazards[0]})` } as CSSProperties}>
       <button type="button" className="fs-case__main" aria-pressed={focused} onClick={onFocus} disabled={!onFocus}
         title={focused ? "Hide it on the map" : "Show it joined to this site on the map"}>
@@ -158,32 +158,89 @@ function CaseCard({ result, focused, onFocus, onOpen }: {
 
 /** The case's details in a popup: in common, different, what happened, sources. X, Esc or a click outside
     closes it; the map keeps the case's strand behind it. */
+const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/** The card a popup belongs to, measured now (the panel may have scrolled since it opened). */
+function cardRect(caseId: string): DOMRect | null {
+  const card = document.querySelector<HTMLElement>(`.fs-case[data-case-id="${CSS.escape(caseId)}"]`);
+  const rect = card?.getBoundingClientRect();
+  return rect && rect.width > 0 && rect.bottom > 0 && rect.top < window.innerHeight ? rect : null;
+}
+
+/** The transform that lays the popup over the card, for a grow-in or shrink-out. */
+function overCard(dialog: HTMLElement, caseId: string): string | null {
+  const from = cardRect(caseId);
+  if (!from) return null;
+  const to = dialog.getBoundingClientRect();
+  const dx = from.left + from.width / 2 - (to.left + to.width / 2);
+  const dy = from.top + from.height / 2 - (to.top + to.height / 2);
+  return `translate(${dx}px, ${dy}px) scale(${from.width / to.width}, ${from.height / to.height})`;
+}
+
+const GROW = { duration: 420, easing: "cubic-bezier(0.2, 0.9, 0.25, 1.04)" };
+const SHRINK = { duration: 260, easing: "cubic-bezier(0.4, 0, 0.8, 0.4)" };
+
+/** The case's details in a popup that grows out of its card: in common, different, what happened, sources.
+    X, Esc or a click outside shrinks it back into the card; the map keeps the case's strand behind it. */
 function CaseDialog({ result, onClose }: { result: SimilarCase; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const closing = useRef(false);
   const c = result.case;
   const closeRef = useRef(onClose);
   closeRef.current = onClose;
-  // Esc closes a modal dialog natively; listen for it here so the app's state follows.
-  useEffect(() => {
+
+  const close = useCallback(() => {
     const dialog = ref.current;
-    // "cancel" fires at once on Esc; "close" is a backup for any other way the browser closes it.
-    const closed = () => closeRef.current();
-    dialog?.addEventListener("cancel", closed);
-    dialog?.addEventListener("close", closed);
-    return () => {
-      dialog?.removeEventListener("cancel", closed);
-      dialog?.removeEventListener("close", closed);
+    if (!dialog || closing.current) return;
+    closing.current = true;
+    const target = reduceMotion() ? null : overCard(dialog, result.case_id);
+    dialog.dataset.state = "closing";
+    if (!target) {
+      closeRef.current();
+      return;
+    }
+    const anim = dialog.animate([{ transform: "none", opacity: 1 }, { transform: target, opacity: 0 }],
+      { ...SHRINK, fill: "forwards" });
+    // Close when the shrink ends, or shortly after in any case: a browser that pauses animations (a
+    // background tab) must never leave the popup stuck open.
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      closeRef.current();
     };
-  }, []);
+    anim.onfinish = finish;
+    window.setTimeout(finish, SHRINK.duration + 150);
+  }, [result.case_id]);
+
+  // Esc fires "cancel": stop the instant close so it can shrink back first.
   useEffect(() => {
     const dialog = ref.current;
-    // No close() on cleanup: it fires "close", which would shut the popup again when React re-runs this
-    // effect in development. Unmounting removes the dialog from the page anyway.
-    if (dialog && !dialog.open) dialog.showModal();
-  }, []);
+    const cancel = (event: Event) => {
+      event.preventDefault();
+      close();
+    };
+    dialog?.addEventListener("cancel", cancel);
+    return () => dialog?.removeEventListener("cancel", cancel);
+  }, [close]);
+
+  useEffect(() => {
+    const dialog = ref.current;
+    // No close() on cleanup: React re-runs this effect in development, and unmounting removes the dialog.
+    if (!dialog || dialog.open) return;
+    dialog.showModal();
+    if (reduceMotion()) return;
+    const from = overCard(dialog, result.case_id);
+    dialog.animate(
+      from ? [{ transform: from, opacity: 0.5 }, { transform: "none", opacity: 1 }]
+        : [{ transform: "translateY(12px) scale(0.97)", opacity: 0 }, { transform: "none", opacity: 1 }],
+      GROW,
+    );
+  }, [result.case_id]);
+
   return (
     <dialog ref={ref} className="fs-case-dialog" aria-labelledby="fs-case-dialog-title"
-      onClick={(event) => event.target === ref.current && onClose()}
+      onClick={(event) => event.target === ref.current && close()}
       style={{ "--fs-hz": `var(--fs-hz-${c.hazards[0]})` } as CSSProperties}>
       <header className="fs-case-dialog__head">
         <ScoreRing score={result.score} />
@@ -192,7 +249,7 @@ function CaseDialog({ result, onClose }: { result: SimilarCase; onClose: () => v
           <span className="fs-case__meta fs-num">{where(c)}</span>
         </div>
         <SeverityBadge level={c.severity} />
-        <button type="button" className="fs-case-dialog__close" onClick={onClose} aria-label="Close">×</button>
+        <button type="button" className="fs-case-dialog__close" onClick={close} aria-label="Close">×</button>
       </header>
       <div className="fs-case__body">
         {result.matched_on.length > 0 && (
