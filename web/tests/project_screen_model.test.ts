@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import {
-  CONSTRUCTION_CARDS, DOC_SLOTS, defaultScope, groupByOwner, ownerFor, ROLES, scopeValues, SCOPE_OPTIONS, withOwners,
+  CONSTRUCTION_CARDS, DEPTH_BANDS, DOC_SLOTS, defaultScope, STAGE_OPTIONS, groupByOwner, ownerFor, ROLES, scopeValues, SCOPE_OPTIONS, withOwners,
   WORK_TYPE_CARDS,
 } from "../src/features/project_screen/model.ts";
 
@@ -93,4 +93,14 @@ test("attached neighbours alone bring the neighbour survey slot", () => {
   assert.equal(slot.relevant("alteration" as never, ["structural"] as never, { attached: true }), true);
   assert.equal(slot.relevant("alteration" as never, ["structural"] as never, { attached: false }), false);
   assert.equal(slot.relevant("alteration" as never, ["structural"] as never), false);
+});
+
+test("dig depth bands send their deepest depth, and 'not sure' sends nothing", () => {
+  assert.deepEqual(DEPTH_BANDS.map((b) => b.feet), [null, 4.9, 10, 20, 21]);
+  assert.equal(DEPTH_BANDS[0].label, "Not sure");
+});
+
+test("stage options are design, filing and construction", () => {
+  assert.deepEqual(STAGE_OPTIONS.map((s) => s.value), ["design", "pre_filing", "construction"]);
+  assert.deepEqual(STAGE_OPTIONS.map((s) => s.label), ["Design", "Filing", "Construction"]);
 });

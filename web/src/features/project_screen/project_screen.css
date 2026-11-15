@@ -557,3 +557,28 @@ button.fs-ps-card[aria-pressed="true"]:hover,
     gap: 2px;
   }
 }
+
+/* Setup's quick answers: dig depth, new building height, stage. */
+.fs-ps-quick {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.fs-ps-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.fs-ps-field__label {
+  font-size: var(--fs-text-sm);
+  font-weight: 600;
+  color: var(--fs-text);
+}
+.fs-ps-storeys {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.fs-ps-storeys .fs-ps-input {
+  width: 96px;
+}

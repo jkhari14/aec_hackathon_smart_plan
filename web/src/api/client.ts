@@ -15,6 +15,7 @@ import type {
   SearchResult,
   SimilarCases,
   SiteProfile,
+  Stage,
   WarningRuleCheck,
   WorkType,
 } from "../contracts";
@@ -105,10 +106,13 @@ export const api = {
     request<WarningRuleCheck[]>(`${site(bbl)}/warnings/checks${asOf ? `?as_of=${encodeURIComponent(asOf)}` : ""}`, warningChecksFixture),
   pattern: (bbl: string) => request<PatternScore>(`${site(bbl)}/pattern`, patternFixture),
   /** With the project screen's setup choices, the checklist follows the job type and scope picked there. */
-  actions: (bbl: string, opts: { jobType?: JobType; workTypes?: WorkType[] } = {}) => {
+  actions: (bbl: string, opts: { jobType?: JobType; workTypes?: WorkType[]; depthFt?: number; proposedStoreys?: number; stage?: Stage } = {}) => {
     const q = new URLSearchParams();
     if (opts.jobType) q.set("job_type", opts.jobType);
     if (opts.workTypes?.length) q.set("work_types", opts.workTypes.join(","));
+    if (opts.depthFt != null) q.set("excavation_depth_ft", String(opts.depthFt));
+    if (opts.proposedStoreys != null) q.set("proposed_storeys", String(opts.proposedStoreys));
+    if (opts.stage) q.set("stage", opts.stage);
     const query = q.toString();
     return request<ActionItem[]>(`${site(bbl)}/actions${query ? `?${query}` : ""}`, actionsFixture);
   },

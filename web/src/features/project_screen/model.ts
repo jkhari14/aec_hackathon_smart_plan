@@ -1,7 +1,25 @@
 // The project screen's rules, kept free of React and the API so they can be tested on their own
 // (web/tests/project_screen_model.test.ts): the setup cards, the scope sent to the checklist, who owns an
 // item, how the checklist groups, and when a document slot is worth showing.
-import type { ActionItem, ConstructionType, Discipline, JobType, Role, WorkType } from "../../contracts";
+import type { ActionItem, ConstructionType, Discipline, JobType, Role, Stage, WorkType } from "../../contracts";
+
+export type DepthBand = "unsure" | "under5" | "5to10" | "10to20" | "over20";
+
+/** Dig depth as bands. Each sends its deepest depth, so a code threshold is never under-called;
+    "Not sure" sends nothing and the depth rows say they need it. */
+export const DEPTH_BANDS: { value: DepthBand; label: string; feet: number | null }[] = [
+  { value: "unsure", label: "Not sure", feet: null },
+  { value: "under5", label: "Under 5 ft", feet: 4.9 },
+  { value: "5to10", label: "5-10 ft", feet: 10 },
+  { value: "10to20", label: "10-20 ft", feet: 20 },
+  { value: "over20", label: "Over 20 ft", feet: 21 },
+];
+
+export const STAGE_OPTIONS: { value: Stage; label: string }[] = [
+  { value: "design", label: "Design" },
+  { value: "pre_filing", label: "Filing" },
+  { value: "construction", label: "Construction" },
+];
 
 export const WORK_TYPE_CARDS: { value: JobType; label: string; hint: string }[] = [
   { value: "new_building", label: "New construction", hint: "A new building on the lot" },
