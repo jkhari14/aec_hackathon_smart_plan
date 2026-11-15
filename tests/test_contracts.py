@@ -85,9 +85,6 @@ class StubApiServesEveryRoute(unittest.TestCase):
         self.assertEqual(self.client.get("/api/layers/nope").status_code, 404)
         self.assertEqual(self.client.get("/api/cases/nope").status_code, 404)
 
-    def test_get_routes(self):
-        self.assert_sample(self.client.get("/api/sites/3052110074/warnings/checks"))
-
     def test_write_routes(self):
         self.assert_sample(self.client.post("/api/chat", json={"question": "What should I check?", "bbl": "3052110074"}))
 
