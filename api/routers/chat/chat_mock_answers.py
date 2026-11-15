@@ -124,7 +124,8 @@ def propose(view: SiteView, question: str) -> Optional[dict]:
         chosen = [a for a in view.actions if not wanted or a.get("discipline") in wanted]
         chosen.sort(key=lambda a: not a.get("life_safety"))  # life safety first
         # With a project open these are its own checklist items, said with the owner and status its team recorded.
-        items = [_says((f'Project checklist item (owner: {a.get("owner_role") or "not assigned"}; status: {a.get("status")})'
+        items = [_says((f'Project checklist item (owner: {str(a.get("owner_role") or "not assigned").replace("_", " ")}; status: '
+                        f'{str(a.get("status")).replace("_", " ")})'
                         if view.project_open else f'Action item ({a.get("discipline")})')
                        + f': "{a.get("title")}". Proof needed: "{a.get("proof_needed")}".', f"action:{a['id']}") for a in chosen[:6]]
         if items and view.project_unread:  # the count sentence says this is the lot's general list, not the project's

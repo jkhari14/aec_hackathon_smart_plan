@@ -74,10 +74,11 @@ class OpenProjectTests(ProjectChecklistTestCase):
     def test_the_model_reads_it_as_the_projects_checklist_with_owner_and_status_and_no_member_names(self):
         text = SiteView(self.context()[0]).digest()
         self.assertIn("PROJECT CHECKLIST (the open project's own items", text)
-        self.assertIn("job type: new_building; scope: support_of_excavation; stage: pre_filing", text)
+        self.assertIn("job type: new building; scope: support of excavation; stage: pre filing", text)
         self.assertIn("Excavation-support drawings", text)
-        self.assertIn("status: done | life safety: yes | owner: structural_engineer", text)
-        self.assertIn("added by the structural_engineer: the confirmed drawing shows excavation", text)
+        self.assertIn("status: done | life safety: yes | owner: structural engineer", text)
+        self.assertIn("added by the structural engineer: the confirmed drawing shows excavation", text)
+        self.assertNotIn("structural_engineer |", text)  # roles are read as words, not stored values
         self.assertIn("owner: not assigned", text)  # the fixture's third item has no owner
         self.assertNotIn("ACTION ITEMS (", text)
         self.assertNotIn("Person One", text)
@@ -86,8 +87,18 @@ class OpenProjectTests(ProjectChecklistTestCase):
     def test_the_count_and_an_empty_checklist_are_said_of_the_project_not_the_site(self):
         self.assertEqual(self.count(self.context()[0]), "4 action items on the open project's checklist.")
         listed = self.answer("What is on the checklist for the structural engineer?").plain_text
-        self.assertIn('Project checklist item (owner: structural_engineer; status: open): "Excavation-support drawings"', listed)
-        self.assertIn("(owner: structural_engineer; status: done)", listed)
+        self.assertIn('Project checklist item (owner: structural engineer; status: open): "Excavation-support drawings"', listed)
+        self.assertIn("(owner: structural engineer; status: done)", listed)
+
+    def test_who_owns_a_checklist_item_asks_for_a_role_so_it_gets_no_names_notice(self):
+        def names_notice(question, project_id="open"):
+            return "names_withheld" in [part.code for part in self.answer(question, project_id).parts if part.kind == "notice"]
+
+        self.assertFalse(names_notice("Who owns the excavation-support drawings item on the checklist?"))
+        # Asking for a name outright still gets the notice, and so does "who" with no project open or about the lot.
+        self.assertTrue(names_notice("What is the name of the owner of that checklist item?"))
+        self.assertTrue(names_notice("Who owns the excavation-support drawings item on the checklist?", None))
+        self.assertTrue(names_notice("Who owns this building?"))
         empty = self.store.create_project("Not drafted yet", OTHER_BBL, "design", TEAM)["id"]
         context, _ = self.context(empty)
         self.assertEqual((context.project.status, context.actions.value), ("ok", []))

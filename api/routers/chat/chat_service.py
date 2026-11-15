@@ -22,8 +22,10 @@ _ASKS_VERDICT = re.compile(r"\b(?:safe|unsafe|safely|compliant|comply|complies|c
                            r"negligen\w*|liable)\b", re.I)
 _ASKS_FORECAST = re.compile(r"\bwill (?:it|this|the)\b|\bgoing to (?:collapse|fail|fall)\b|\bhow likely\b|\bpredict\w*|"
                             r"\bchances?\b|\bprobab\w+", re.I)
-_ASKS_NAME = re.compile(r"\bwho\b|\b(?:owner|contractor|applicant|engineer|architect|developer|landlord)'?s?\s+name\b|"
-                        r"\bname of\b", re.I)
+_ASKS_NAME = re.compile(r"\b(?:owner|contractor|applicant|engineer|architect|developer|landlord)'?s?\s+name\b|\bname of\b", re.I)
+_ASKS_WHO = re.compile(r"\bwho\b", re.I)
+# "Who owns that item?" about the open project's checklist asks for a role, which the chat gives: no names notice.
+_ABOUT_CHECKLIST = re.compile(r"\bchecklist\b|\b(?:action )?items?\b|\btasks?\b", re.I)
 
 
 def answer(request: ChatRequest, load_context: ContextLoader, model=None) -> ChatAnswer:
@@ -56,7 +58,7 @@ def _live(request: ChatRequest, view: SiteView, model) -> ChatAnswer:
     if built.problems:  # one correction round, with the reasons
         turn = session.turn(built.problems)
         built = build_parts(view, turn.proposal, turn.web_results, turn.searched, *pin)
-    parts = _question_notices(question) + built.parts + _problem_notices(built)
+    parts = _question_notices(question, view) + built.parts + _problem_notices(built)
     if built.problems:
         log.info("chat held back %d item(s): %s", len(built.problems), built.problems)
     if all(part.kind == "notice" for part in built.parts) and not built.actions:
@@ -67,13 +69,14 @@ def _live(request: ChatRequest, view: SiteView, model) -> ChatAnswer:
     return _finish(request, view, "live", parts, built.actions, web, session.usage)
 
 
-def _question_notices(question: str) -> list[AnswerPart]:
+def _question_notices(question: str, view: Optional[SiteView] = None) -> list[AnswerPart]:
     parts: list[AnswerPart] = []
     if _ASKS_VERDICT.search(question):
         parts.append(notice("not_a_determination"))
     if _ASKS_FORECAST.search(question):
         parts.append(notice("not_a_prediction"))
-    if _ASKS_NAME.search(question):
+    about_a_role = view is not None and view.project_open and _ABOUT_CHECKLIST.search(question)
+    if _ASKS_NAME.search(question) or (_ASKS_WHO.search(question) and not about_a_role):
         parts.append(notice("names_withheld"))
     return parts
 
@@ -92,7 +95,7 @@ def _problem_notices(built: Built) -> list[AnswerPart]:
 def _mock(request: ChatRequest, view: SiteView, first: list[AnswerPart]) -> ChatAnswer:
     """No model: a prepared answer matched by keyword, through the same checks as a live one."""
     question = request.question.strip()
-    parts = first + [notice("mock_answer")] + _question_notices(question)
+    parts = first + [notice("mock_answer")] + _question_notices(question, view)
     proposed = chat_mock_answers.propose(view, question)
     if not proposed:
         return _finish(request, view, "mock", parts + [notice("mock_no_match")], [], "off")
