@@ -487,6 +487,7 @@
     "/api/sites/{bbl}/actions": {
       "get": {
         "summary": "Actions",
+        "description": "`job_type` and `work_types` (comma-separated) are the project screen's setup choices.",
         "operationId": "actions_api_sites__bbl__actions_get",
         "parameters": [
           {
@@ -512,6 +513,38 @@
                 }
               ],
               "title": "Stage"
+            }
+          },
+          {
+            "name": "job_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Job Type"
+            }
+          },
+          {
+            "name": "work_types",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Work Types"
             }
           }
         ],

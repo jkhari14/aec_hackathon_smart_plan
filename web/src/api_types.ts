@@ -167,7 +167,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Actions */
+        /**
+         * Actions
+         * @description `job_type` and `work_types` (comma-separated) are the project screen's setup choices.
+         */
         get: operations["actions_api_sites__bbl__actions_get"];
         put?: never;
         post?: never;
@@ -1382,6 +1385,8 @@ export interface operations {
         parameters: {
             query?: {
                 stage?: string | null;
+                job_type?: string | null;
+                work_types?: string | null;
             };
             header?: never;
             path: {
