@@ -6,7 +6,7 @@ import { test } from "node:test";
 import { shouldApply, layersForWork, WORK_LAYERS } from "../src/app/work_layers.ts";
 import { ATTACHED_M, buildingKinds, KIND_COLORS } from "../src/features/city_map/building_kinds.ts";
 import { boundsFor, fitPadding, resultsFor, visibleStrands } from "../src/features/city_map/strands.ts";
-import { ringDash } from "../src/features/similar_cases/ring.ts";
+import { resemblance, ringDash } from "../src/features/similar_cases/ring.ts";
 
 const results = [{ case_id: "a" }, { case_id: "b" }, { case_id: "c" }];
 
@@ -77,4 +77,12 @@ test("similar results belong to the site they were loaded for", () => {
   assert.deepEqual(resultsFor(loaded, "3052110074"), [{ case_id: "a" }]);
   assert.deepEqual(resultsFor(loaded, "1000010001"), []);
   assert.deepEqual(resultsFor(null, "3052110074"), []);
+});
+
+test("similarity reads as a word, not a percentage", () => {
+  assert.equal(resemblance(0.64).word, "Strong");
+  assert.equal(resemblance(0.5).word, "Strong");
+  assert.equal(resemblance(0.42).word, "Some");
+  assert.equal(resemblance(0.34).word, "Weak");
+  assert.equal(resemblance(Number.NaN).word, "Weak");
 });

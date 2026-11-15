@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import {
-  CONSTRUCTION_CARDS, DOC_SLOTS, defaultScope, groupByOwner, ownerFor, ROLES, scopeValues, SCOPE_OPTIONS, withOwners,
+  appliesSummary, asksDepth, trailKind, currentMilestone, itemNumbers, milestoneSummary, MILESTONES, phaseOf, CONSTRUCTION_CARDS, DEPTH_BANDS, DOC_SLOTS, defaultScope, STAGE_OPTIONS, groupByOwner, ownerFor, ROLES, scopeValues, SCOPE_OPTIONS, withOwners,
   WORK_TYPE_CARDS,
 } from "../src/features/project_screen/model.ts";
 
@@ -30,7 +30,7 @@ test("construction cards carry the five construction types", () => {
 test("default scope follows the job type and only offers scope options", () => {
   assert.deepEqual(defaultScope("new_building"), ["excavation", "foundation", "support_of_excavation", "structural", "scaffold"]);
   assert.deepEqual(defaultScope("alteration"), ["structural", "scaffold"]);
-  assert.deepEqual(defaultScope("demolition"), ["scaffold"]);
+  assert.deepEqual(defaultScope("demolition"), ["demolition", "scaffold"]);
   const offered = new Set(SCOPE_OPTIONS.map((o) => o.value));
   for (const job of ["new_building", "alteration", "demolition"] as const) {
     for (const w of defaultScope(job)) assert.ok(offered.has(w), w);
@@ -44,7 +44,9 @@ test("scopeValues keeps the job's other work, swaps in the picked scope, and tie
   assert.deepEqual(scopeValues("alteration", ["excavation"]), ["earth_work", "excavation", "sprinkler", "plumbing", "mechanical"]);
   assert.deepEqual(scopeValues("new_building", ["excavation"]),
     ["earth_work", "excavation", "sprinkler", "standpipe", "plumbing", "mechanical", "construction_fence"]);
-  assert.deepEqual(scopeValues("demolition", []), ["demolition", "construction_fence"]);
+  // Demolition is a scope choice: picked, it is in; unpicked, it is not.
+  assert.deepEqual(scopeValues("demolition", ["demolition"]), ["demolition", "construction_fence"]);
+  assert.deepEqual(scopeValues("demolition", []), ["construction_fence"]);
 });
 
 test("roles are in the screen's order", () => {
@@ -93,4 +95,71 @@ test("attached neighbours alone bring the neighbour survey slot", () => {
   assert.equal(slot.relevant("alteration" as never, ["structural"] as never, { attached: true }), true);
   assert.equal(slot.relevant("alteration" as never, ["structural"] as never, { attached: false }), false);
   assert.equal(slot.relevant("alteration" as never, ["structural"] as never), false);
+});
+
+test("dig depth bands send their deepest depth, and 'not sure' sends nothing", () => {
+  assert.deepEqual(DEPTH_BANDS.map((b) => b.feet), [null, 4.9, 10, 20, 21]);
+  assert.equal(DEPTH_BANDS[0].label, "Not sure");
+});
+
+test("stage options are design, filing and construction", () => {
+  assert.deepEqual(STAGE_OPTIONS.map((s) => s.value), ["design", "pre_filing", "construction"]);
+  assert.deepEqual(STAGE_OPTIONS.map((s) => s.label), ["Design", "Filing", "Construction"]);
+});
+
+test("the depth question shows for any job that digs, underpinning-only included", () => {
+  assert.equal(asksDepth("alteration", ["underpinning"]), true);
+  assert.equal(asksDepth("new_building", ["support_of_excavation"]), true);
+  assert.equal(asksDepth("alteration", ["structural", "facade"]), false);
+});
+
+test("items are numbered by owner group: A for architect, S for structural engineer", () => {
+  const groups = [
+    { role: "architect" as const, items: [item("a1", "architect"), item("a2", "architect")] },
+    { role: "structural_engineer" as const, items: [item("s1", "structural")] },
+    { role: null, items: [item("u1", "contractor")] },
+  ];
+  const n = itemNumbers(groups as never);
+  assert.deepEqual([n.get("a1"), n.get("a2"), n.get("s1"), n.get("u1")], ["A1", "A2", "S1", "U1"]);
+});
+
+test("an item saved before phases existed is placed in Design", () => {
+  assert.equal(phaseOf(item("x", "architect") as never), "design");
+  assert.equal(phaseOf(item("y", "architect", { phase: "notice" }) as never), "notice");
+});
+
+test("milestones run in project order", () => {
+  assert.deepEqual(MILESTONES.map((m) => m.phase), ["design", "filing", "notice", "before_excavation", "during_work"]);
+});
+
+test("each milestone counts its items, how many are done, and whether any is life safety", () => {
+  const items = [
+    item("a", "architect", { phase: "notice", status: "done", life_safety: false }),
+    item("b", "architect", { phase: "notice", status: "open", life_safety: true }),
+    item("c", "architect", { status: "open", life_safety: false }),
+  ];
+  const byPhase = Object.fromEntries(milestoneSummary(items as never).map((m) => [m.phase, m]));
+  assert.deepEqual(byPhase.notice, { phase: "notice", total: 2, done: 1, lifeSafety: true });
+  assert.deepEqual(byPhase.design, { phase: "design", total: 1, done: 0, lifeSafety: false });
+  assert.deepEqual(byPhase.filing, { phase: "filing", total: 0, done: 0, lifeSafety: false });
+});
+
+test("the project's stage marks where it is on the timeline", () => {
+  assert.equal(currentMilestone("design"), "design");
+  assert.equal(currentMilestone("pre_filing"), "filing");
+  assert.equal(currentMilestone("construction"), "during_work");
+  assert.equal(currentMilestone("pre_acquisition"), "design");
+});
+
+test("a row about the neighbors shows the first three by name and counts the rest", () => {
+  const all = ["19 Marcus Garvey Blvd", "21 Marcus Garvey Blvd", "296 Ellery Street", "857 Park Avenue", "17 Marcus Garvey Blvd"];
+  assert.deepEqual(appliesSummary(all), { shown: all.slice(0, 3), more: 2 });
+  assert.deepEqual(appliesSummary(all.slice(0, 2)), { shown: all.slice(0, 2), more: 0 });
+  assert.deepEqual(appliesSummary(undefined), { shown: [], more: 0 });
+});
+
+test("a document's trail on an item reads as Added or Flagged", () => {
+  assert.equal(trailKind("Added because the architect uploaded S-101 and confirmed its reading: x."), "Added");
+  assert.equal(trailKind("Flagged because the architect uploaded S-101 and confirmed its reading: x."), "Flagged");
+  assert.equal(trailKind(null), null);
 });

@@ -2,8 +2,9 @@
 // 3D buildings: Cityweft's model of the blocks around the site (through /api/context3d, which holds the
 // key), or Google Photorealistic 3D Tiles citywide when VITE_GOOGLE_MAPS_KEY is set, to compare the two.
 import type { Layer, PickingInfo } from "@deck.gl/core";
-import { ArcLayer, ScatterplotLayer } from "@deck.gl/layers";
+import { PathLayer, ScatterplotLayer } from "@deck.gl/layers";
 
+import { API_BASE } from "../../api/client";
 import type { SimilarCase } from "../../contracts";
 import { buildingKinds, KIND_COLORS } from "./building_kinds";
 import type { Picked } from "./site_lots";
@@ -12,8 +13,41 @@ import type { Picked } from "./site_lots";
 const ARC_FROM: [number, number, number] = [20, 20, 20];
 const ARC_TO: [number, number, number] = [74, 108, 240];
 
-/** Strands from similar cases to the site. `progress` 0..1 draws them in from the case end. The focused
-    case's dot is larger, with an ink ring; clicking a dot focuses its case. */
+// The arc's height as a share of its length, and how many segments trace it.
+const ARC_HEIGHT = 0.35;
+const ARC_STEPS = 64;
+
+type Vec3 = [number, number, number];
+type Strand = { result: SimilarCase; path: Vec3[]; colors: [number, number, number, number][] };
+
+const mix = (a: number, b: number, t: number) => a + (b - a) * t;
+const colorAt = (t: number): [number, number, number, number] => [
+  mix(ARC_FROM[0], ARC_TO[0], t), mix(ARC_FROM[1], ARC_TO[1], t), mix(ARC_FROM[2], ARC_TO[2], t), mix(220, 240, t),
+];
+
+/** The point `t` (0..1) along the full arc from `from` to `to`: the same raised curve deck's ArcLayer
+    draws, so the strand's shape never changes while it is being drawn. */
+export function arcPoint(from: [number, number], to: [number, number], t: number): Vec3 {
+  const metresX = (to[0] - from[0]) * 111_320 * Math.cos((((from[1] + to[1]) / 2) * Math.PI) / 180);
+  const metresY = (to[1] - from[1]) * 110_540;
+  const length = Math.hypot(metresX, metresY);
+  return [mix(from[0], to[0], t), mix(from[1], to[1], t), Math.sqrt(t * (1 - t)) * length * ARC_HEIGHT];
+}
+
+/** The first `progress` of the arc, as a path: whole segments, then a head point exactly at `progress`,
+    so the line grows smoothly from the case toward the site like a pen drawing it. */
+export function drawnArc(from: [number, number], to: [number, number], progress: number): Vec3[] {
+  const p = Math.max(0, Math.min(1, progress));
+  const whole = Math.floor(p * ARC_STEPS);
+  const path: Vec3[] = [];
+  for (let i = 0; i <= whole; i++) path.push(arcPoint(from, to, i / ARC_STEPS));
+  if (p * ARC_STEPS > whole) path.push(arcPoint(from, to, p));
+  return path;
+}
+
+/** Strands from similar cases to the site. `progress` 0..1 draws each one along its final curve, from the
+    case end to the site, like a line being drawn. The focused case's dot is larger, with an ink ring;
+    clicking a dot focuses its case. */
 export function similarCaseLayers(
   site: Picked,
   results: SimilarCase[],
@@ -22,23 +56,23 @@ export function similarCaseLayers(
   onPick?: (caseId: string) => void,
 ): Layer[] {
   const target: [number, number] = [site.lon, site.lat];
-  const toward = (c: SimilarCase): [number, number] => [
-    c.case.lon + (target[0] - c.case.lon) * progress,
-    c.case.lat + (target[1] - c.case.lat) * progress,
-  ];
+  const strands: Strand[] = results.map((result) => {
+    const path = drawnArc([result.case.lon, result.case.lat], target, progress);
+    return { result, path, colors: path.map((_, i) => colorAt(Math.min(1, i / ARC_STEPS))) };
+  });
   return [
-    new ArcLayer<SimilarCase>({
+    new PathLayer<Strand>({
       id: "similar-case-arcs",
-      data: results,
-      getSourcePosition: (c) => [c.case.lon, c.case.lat],
-      getTargetPosition: toward,
-      getSourceColor: [...ARC_FROM, 220],
-      getTargetColor: [...ARC_TO, 240],
+      data: strands.filter((s) => s.path.length > 1),
+      getPath: (s) => s.path,
+      getColor: (s) => s.colors,
       // Closer matches draw a little bolder; the score is similarity, never a prediction.
-      getWidth: (c) => (c.case_id === focusId ? 4 : 1.5 + 2 * c.score),
-      getHeight: 0.35,
-      greatCircle: false,
-      updateTriggers: { getTargetPosition: progress, getWidth: focusId },
+      getWidth: (s) => (s.result.case_id === focusId ? 4 : 1.5 + 2 * s.result.score),
+      widthUnits: "pixels",
+      capRounded: true,
+      jointRounded: true,
+      billboard: true,
+      updateTriggers: { getPath: progress, getColor: progress, getWidth: focusId },
     }),
     new ScatterplotLayer<SimilarCase>({
       id: "similar-case-origins",
@@ -166,7 +200,7 @@ function analyse(positions: Float32Array, buildings: [number, number, number][])
 /** Fetch and unpack the site model. Throws with the API's reason (no key, Cityweft down) on failure. */
 export async function loadSiteModel(site: Picked, signal?: AbortSignal): Promise<SiteModel> {
   const params = new URLSearchParams({ lat: String(site.lat), lon: String(site.lon) });
-  const response = await fetch(`/api/context3d?${params}`, { signal });
+  const response = await fetch(`${API_BASE}/api/context3d?${params}`, { signal });
   if (!response.ok) {
     let reason = `HTTP ${response.status}`;
     try {
@@ -174,7 +208,7 @@ export async function loadSiteModel(site: Picked, signal?: AbortSignal): Promise
     } catch {
       // not JSON: keep the status
     }
-    throw new Error(reason);
+    throw Object.assign(new Error(reason), { status: response.status });
   }
   const buffer = await response.arrayBuffer();
   const view = new DataView(buffer);

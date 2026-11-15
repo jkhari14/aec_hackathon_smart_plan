@@ -105,12 +105,14 @@ class Scoring(unittest.TestCase):
         found = similarity.compare_buildings(self.HERE, there)
         self.assertEqual(found["matched"], ["era", "wall_system", "attached"])
         self.assertEqual(found["differs"], [])
-        self.assertAlmostEqual(found["score"], 0.18 + 0.18 + 0.10)
+        w = similarity.WEIGHTS
+        self.assertAlmostEqual(found["score"], w["building_era"] + w["building_wall_system"] + w["building_attached"])
 
     def test_a_different_fact_is_a_difference(self):
         there = bp.building("case", year=1985, floors=20, building_class=None, attached=False, stated_wall=bp.FRAME)
         found = similarity.compare_buildings(self.HERE, there)
-        self.assertEqual(found, {"score": 0.0, "matched": [], "differs": ["era", "wall_system", "floors_band", "attached"]})
+        self.assertEqual(found, {"score": 0.0, "matched": [], "near": [],
+                                 "differs": ["era", "wall_system", "floors_band", "attached"]})
 
     def test_the_weights_sum_to_one(self):
         self.assertAlmostEqual(sum(similarity.WEIGHTS.values()), 1.0)

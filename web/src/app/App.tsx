@@ -115,7 +115,7 @@ export function App() {
     // A new site lets go of the old site's case at once, before the map can frame or draw it.
     setFocusCase(null);
     setSite(result);
-    setView({ site: result.bbl, tab: "overview" });
+    setView({ site: result.bbl, tab: "similar" });
   }, [setView]);
 
   const shortcuts: Shortcut[] = [
@@ -214,7 +214,7 @@ export function App() {
           site={site}
           onClose={() => {
             setFocusCase(null);
-            setView({ site: null, tab: "overview" });
+            setView({ site: null, tab: "similar" });
           }}
           tab={view.tab}
           onTab={(tab) => setView({ tab })}
@@ -232,7 +232,7 @@ export function App() {
         onExpanded={(chat) => setView({ chat })}
         bbl={view.site}
         site={site}
-        onPickBbl={(bbl) => setView({ site: bbl, tab: "overview" })}
+        onPickBbl={(bbl) => setView({ site: bbl, tab: "similar" })}
         onToggleLayer={toggleLayer}
       />
 

@@ -11,7 +11,13 @@ pattern score use it.
   structural system. Served by `POST /api/projects/{id}/model/drawing` with the PDF as the body
   (`Content-Type: application/pdf`). Needs `pip install anthropic` and `ANTHROPIC_API_KEY` in the
   environment; without them the route answers 503 "Couldn't read the drawing". An AI-read drawing is
-  a suggestion for the engineer to confirm, so its confidence is capped at 0.7.
+  a suggestion to confirm, so its confidence is capped at 0.7, and the route saves nothing.
+- `router.py`: `POST /api/projects/{id}/model/confirm` (`DrawingConfirm`) takes the reading the uploader
+  checked: it becomes the project's model, the document is listed, and `actions.from_model` adds or flags
+  checklist items for the roles it concerns, each with who, why and when.
+- `geotech.py`: reads a geotechnical report PDF the same way (groundwater, soil, bearing, rock), served by
+  `POST /api/projects/{id}/geotech` (a suggestion, saved nowhere) and `POST /api/projects/{id}/geotech/confirm`
+  (`GeotechConfirm`: lists the report and adds or flags checklist items via `actions.from_model.geotech_actions`).
 - `store.py`: the latest model per project and per site, in memory until Jahleel's project store
   (PR 4) persists it.
 

@@ -73,5 +73,7 @@
     }
   ],
   "structural_model": null,
-  "created_at": "2026-11-14T18:55:00-05:00"
+  "created_at": "2026-11-14T18:55:00-05:00",
+  "excavation_depth_ft": null,
+  "proposed_storeys": null
 }

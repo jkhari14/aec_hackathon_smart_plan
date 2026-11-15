@@ -4,10 +4,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const SEEN = "foresite.intro.seen";
-// The whole opening is at most 2 s: a 1.6 s build and a 0.4 s fade. If the video hasn't finished by
-// then (slow network, autoplay blocked), it gets out of the way anyway.
-const GIVE_UP_MS = 1600;
-const FADE_MS = 400;
+// The whole opening is 3 s: the 1.6 s video played at 0.8x (a 2 s build), a short hold on the finished
+// logo, then a 0.8 s fade-and-zoom into the map. A click or key skips it at any point; a video error
+// skips it at once.
+const PLAYBACK_RATE = 0.8;
+const HOLD_MS = 2200;
+const FADE_MS = 800;
+
+/** Slows the build; set as soon as the element exists, so the first frame already plays at this speed. */
+const slowDown = (video: HTMLVideoElement | null) => {
+  if (!video) return;
+  video.defaultPlaybackRate = PLAYBACK_RATE;
+  video.playbackRate = PLAYBACK_RATE;
+};
 
 function alreadySeen(): boolean {
   try {
@@ -48,7 +57,7 @@ export function Intro({ onDone }: { onDone: () => void }) {
 
   useEffect(() => {
     if (state !== "playing") return;
-    const timer = window.setTimeout(finish, GIVE_UP_MS);
+    const timer = window.setTimeout(finish, HOLD_MS);
     const key = () => finish();
     window.addEventListener("keydown", key);
     return () => {
@@ -61,6 +70,7 @@ export function Intro({ onDone }: { onDone: () => void }) {
   return (
     <div className="fs-intro" data-state={state} onClick={finish} role="presentation">
       <video
+        ref={slowDown}
         className="fs-intro__video"
         src={`${import.meta.env.BASE_URL}4site-intro.mp4`}
         poster={`${import.meta.env.BASE_URL}4site-intro-poster.png`}
@@ -68,7 +78,6 @@ export function Intro({ onDone }: { onDone: () => void }) {
         muted
         playsInline
         preload="auto"
-        onEnded={finish}
         onError={finish}
         aria-label="4site"
       />

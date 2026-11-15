@@ -49,6 +49,8 @@ type Props = {
 };
 
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// The longest a strand waits for the camera before it starts drawing anyway.
+const STRAND_WAIT_MS = 2500;
 
 /** "Why am I seeing this?": what the record is, its severity, source and date. Built as DOM, never HTML. */
 function recordCard(p: Record<string, unknown>): HTMLElement {
@@ -387,8 +389,12 @@ export function CityMap({
         };
         riseFrame = requestAnimationFrame(step);
       })
-      .catch((error: Error) => {
-        if (!cancelled) setCityweftNote(`Cityweft model unavailable: ${error.message}. Showing extruded buildings.`);
+      .catch((error: Error & { status?: number }) => {
+        if (cancelled || error.name === "AbortError") return;
+        // 503 means this API has no Cityweft key: a setup choice, not a failure, so say it plainly.
+        setCityweftNote(error.status === 503
+          ? "Showing extruded buildings (Cityweft 3D isn't set up on this server)."
+          : `Cityweft model unavailable: ${error.message}. Showing extruded buildings.`);
       });
     Promise.all([loadSiteLots(picked), loadSiteBuildings(picked.bbl)]).then(([{ lots, walls, profile, sample: s, note }, buildings]) => {
       if (cancelled) return;
@@ -422,15 +428,19 @@ export function CityMap({
     };
   }, [ready, picked]);
 
-  // Strands: the focused case (or all of them), drawn in from the case end.
+  // Strands: the focused case (or all of them), drawn in from the case end. The line waits for the camera
+  // to finish framing the two places (the effect below), then draws, so the whole stroke is seen.
   useEffect(() => {
     const map = mapRef.current;
     if (!ready || !map || !picked) return;
     const shown = visibleStrands(similar, focusCaseId, showAllStrands);
     let frame = 0;
-    const start = performance.now();
+    const asked = performance.now();
+    let start: number | null = null;
     const step = (now: number) => {
-      const t = reducedMotion() ? 1 : Math.min(1, (now - start) / 1100);
+      // Never wait longer than STRAND_WAIT_MS, so a user dragging the map can't hold the line back.
+      if (start === null && (reducedMotion() || !map.isMoving() || now - asked > STRAND_WAIT_MS)) start = now;
+      const t = start === null ? 0 : reducedMotion() ? 1 : Math.min(1, (now - start) / 1100);
       deckLayers.current.arcs = similarCaseLayers(picked, shown, 1 - (1 - t) ** 3, focusCaseId, (id) => onFocusRef.current?.(id));
       drawDeck();
       if (t < 1) frame = requestAnimationFrame(step);

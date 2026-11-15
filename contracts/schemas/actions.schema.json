@@ -99,6 +99,129 @@
       "life_safety": {
         "title": "Life Safety",
         "type": "boolean"
+      },
+      "added_by_role": {
+        "anyOf": [
+          {
+            "enum": [
+              "architect",
+              "structural_engineer",
+              "developer",
+              "contractor"
+            ],
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Added By Role"
+      },
+      "added_reason": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Added Reason"
+      },
+      "added_at": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Added At"
+      },
+      "phase": {
+        "anyOf": [
+          {
+            "enum": [
+              "design",
+              "filing",
+              "notice",
+              "before_excavation",
+              "during_work"
+            ],
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Phase"
+      },
+      "when": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "When"
+      },
+      "done_by_role": {
+        "anyOf": [
+          {
+            "enum": [
+              "architect",
+              "structural_engineer",
+              "developer",
+              "contractor"
+            ],
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Done By Role"
+      },
+      "done_at": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Done At"
+      },
+      "applies_to": {
+        "default": [],
+        "items": {
+          "type": "string"
+        },
+        "title": "Applies To",
+        "type": "array"
+      },
+      "evidence": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Evidence"
       }
     },
     "required": [

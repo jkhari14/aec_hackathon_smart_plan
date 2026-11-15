@@ -270,6 +270,59 @@ class SimilarCase(Contract):
     differs_on: list[str]
 
 
+class LessonCase(Contract):
+    """A past incident behind a lesson. `basis` says whether its failure mode comes from a reported cause or only
+    from what happened (no cause published)."""
+
+    case_id: str
+    title: str
+    address: str
+    date: str
+    severity: Severity
+    basis: Literal["reported_cause", "event_only"]
+    # Where the incident is reported (the case's first source).
+    source_name: str
+    source_url: Optional[str] = None
+
+
+class LessonTag(Contract):
+    """One case tagged with this lesson's failure mode, and the basis of the tag."""
+
+    case_id: str
+    basis: Literal["reported_cause", "event_only"]
+
+
+class LessonItem(Contract):
+    """A checklist item that prevents the failure mode."""
+
+    source_rule: str
+    title: str
+    code_ref: Optional[str] = None
+
+
+class Lesson(Contract):
+    """A failure mode seen on similar past projects: the incidents, what prevents it, and this lot's own records."""
+
+    id: str
+    label: str
+    hazard: Hazard
+    options: list[Literal["renovate", "demolish_rebuild", "new_build"]]
+    scopes: list[WorkType]
+    cases: list[LessonCase]
+    case_count: int
+    # Every case tagged with this mode (the three in `cases` are the closest), so a case can show its lessons.
+    tagged: list[LessonTag] = []
+    prevent_with: list[LessonItem]
+    here: Optional[str] = None
+
+
+class SiteOutlook(Contract):
+    """What could go wrong here, for every option: lessons from similar past projects, worst first."""
+
+    bbl: str
+    lessons: list[Lesson]
+
+
 class SimilarCases(Contract):
     bbl: str
     results: list[SimilarCase]
@@ -330,6 +383,20 @@ class ActionItem(Contract):
     owner_role: Optional[Role] = None
     source_rule: str
     life_safety: bool
+    # Provenance, set by the project store when a team member's document added or flagged the item (for
+    # example a confirmed drawing reading). Never set for the checklist drafted from the site's rules.
+    added_by_role: Optional[Role] = None
+    added_reason: Optional[str] = None
+    added_at: Optional[str] = None
+    # When it's due on the project timeline (actions/phases.py), and the sign-off: who marked it done and when.
+    phase: Optional[Literal["design", "filing", "notice", "before_excavation", "during_work"]] = None
+    when: Optional[str] = None
+    done_by_role: Optional[Role] = None
+    done_at: Optional[str] = None
+    # What makes the row about this lot: the neighbouring buildings it concerns, and what the public record
+    # already shows that bears on it (actions/site_context.py).
+    applies_to: list[str] = []
+    evidence: Optional[str] = None
 
 
 # Projects
@@ -373,6 +440,9 @@ class Project(Contract):
     job_type: Optional[JobType] = None
     construction_type: Optional[ConstructionType] = None
     work_types: list[WorkType] = []
+    # Setup's quick answers: how deep the dig goes (ft) and the new building's storeys. Empty when not given.
+    excavation_depth_ft: Optional[float] = None
+    proposed_storeys: Optional[float] = None
 
 
 class ProjectCreate(Contract):
@@ -383,12 +453,49 @@ class ProjectCreate(Contract):
     job_type: Optional[JobType] = None
     construction_type: Optional[ConstructionType] = None
     work_types: Optional[list[WorkType]] = None
+    excavation_depth_ft: Optional[float] = Field(None, ge=0)
+    proposed_storeys: Optional[float] = Field(None, ge=0)
+
+
+class DrawingConfirm(Contract):
+    """A drawing reading the uploader checked and confirmed: it becomes the project's structural model and
+    turns into checklist items for the roles it concerns (each saying which document added it and who)."""
+
+    model: StructuralModel
+    by_role: Role
+    document: str = Field(min_length=1, max_length=200)  # the file's name, e.g. "S-101.pdf"
+    slot: str = Field(default="structural", min_length=1, max_length=60)  # the Documents slot it was added to
+    evidence: Optional[str] = Field(default=None, max_length=2000)  # the reader's note on the sheets it used
+
+
+class GeotechFindings(Contract):
+    """What a geotechnical report states, as read by AI and confirmed by the uploader. Null: not stated."""
+
+    groundwater_depth_ft: Optional[float] = Field(default=None, ge=0)
+    soil_description: Optional[str] = Field(default=None, max_length=300)
+    allowable_bearing_tsf: Optional[float] = Field(default=None, ge=0)
+    rock_depth_ft: Optional[float] = Field(default=None, ge=0)
+    boring_count: Optional[int] = Field(default=None, ge=0)
+    max_boring_depth_ft: Optional[float] = Field(default=None, ge=0)
+    confidence: float = Field(ge=0, le=1)
+
+
+class GeotechConfirm(Contract):
+    """A geotechnical report reading the uploader checked and confirmed: it turns into checklist items."""
+
+    findings: GeotechFindings
+    by_role: Role
+    document: str = Field(min_length=1, max_length=200)
+    slot: str = Field(default="geotech", min_length=1, max_length=60)
+    evidence: Optional[str] = Field(default=None, max_length=2000)
 
 
 class ActionItemUpdate(Contract):
     id: str
     status: Optional[Literal["open", "in_progress", "done", "not_applicable"]] = None
     owner_role: Optional[Role] = None
+    # The role marking it, recorded as the sign-off when the status becomes done.
+    by_role: Optional[Role] = None
 
 
 class NoteCreate(Contract):
