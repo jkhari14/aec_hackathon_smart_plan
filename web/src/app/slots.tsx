@@ -1,7 +1,7 @@
 // The panels the shell hosts. Each is a slot with a working interim body so the shell can be judged on
 // fixtures now; the owners' PRs replace the bodies, not the frames:
 //   LayerSlot   -> Shandon's layer panel (PR 5)
-//   SiteSlot    -> Camilo's site, similar-case and action panels (PR 10)
+//   SiteSlot    -> Camilo's site, similar-case and action panels (PR 10, filled)
 //   ChatSlot    -> Jahleel's chat panel (PR 9)
 import type { CSSProperties } from "react";
 
@@ -19,6 +19,7 @@ import {
   SourceLabel,
   Toggle,
 } from "../design";
+import { SitePanel, useSiteData, type SiteTab } from "../features/site_panel/SitePanel";
 import { titleCase } from "./CommandBar";
 
 // ---- Layers --------------------------------------------------------------------------------------
@@ -86,10 +87,13 @@ type SiteSlotProps = {
   bbl: string | null;
   site: SearchResult | null;
   onClose: () => void;
+  tab: SiteTab;
+  onTab: (tab: SiteTab) => void;
 };
 
-export function SiteSlot({ bbl, site, onClose }: SiteSlotProps) {
+export function SiteSlot({ bbl, site, onClose, tab, onTab }: SiteSlotProps) {
   const open = Boolean(bbl);
+  const data = useSiteData(bbl);
   return (
     <Panel
       title={site ? titleCase(site.label).split(",")[0] : bbl ? `BBL ${bbl}` : "Site"}
@@ -107,14 +111,7 @@ export function SiteSlot({ bbl, site, onClose }: SiteSlotProps) {
       className="fs-shell__site"
       label="Site"
     >
-      <p className="fs-label">Top signals</p>
-      <SkeletonCard lines={2} />
-      <SkeletonCard lines={2} />
-      <SkeletonCard lines={1} />
-      <EmptyState title="Site panel arrives in PR 10">
-        The top three signals (life safety first), similar cases and actions by discipline fill this panel.
-        Lot facts tuck into a section below them.
-      </EmptyState>
+      {open && <SitePanel data={data} tab={tab} onTab={onTab} />}
     </Panel>
   );
 }
