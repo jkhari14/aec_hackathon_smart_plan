@@ -111,9 +111,12 @@ owner's module that lands is picked up by the chat with no change here.
 - With no profile for the lot, the chat answers 404 rather than guess.
 - **Early-warning rule checks** (`SiteContext.warning_checks`): when a rule could not run, "no warnings"
   is answered "unknown", a count of warnings is "at least", and warnings cited without a count carry a
-  line saying some rules were not checked. The chat is ready for this, but `app_context` does not fill
-  it yet: the rule-checks contract and route have landed on `main` since, and `load_site_part` has no
-  part for them. Until it is wired, an empty warnings list reads "none found".
+  line saying not every rule could be confirmed as checked. `app_context` reads the checks from
+  `early_warning.api.site_warning_checks`, the function behind `GET /api/sites/{bbl}/warnings/checks`, for
+  the same lot and as-of day as the warnings, and only when the warnings themselves loaded. If that call
+  fails, or answers off its contract, the checks are a failure with a reason: the chat then says it
+  cannot tell whether every rule ran, with the same "unknown" and "at least" wording, and never
+  assumes they all did. The rules run once for the warnings and once more for the checks.
 
 Every piece that can fail to load is a `Loaded` with a status, because "could not load" must never
 reach the chat as an empty list.

@@ -39,8 +39,8 @@ NOTICES = {
     "earlier date: the datasets keep only the current status.",
     "not_a_prediction": "A warning or a similar past case is a pattern compared with similar sites. It is not a "
     "prediction that anything will happen at this site.",
-    "warning_rules_unchecked": "Some early-warning rules could not be checked for this site, so the warnings shown "
-    "here may not be all of them.",
+    "warning_rules_unchecked": "Not every early-warning rule could be confirmed as checked for this site, so the "
+    "warnings shown here may not be all of them.",
     "complaints_overlap": "311 requests and DOB complaints can be the same complaint and share no key, so their "
     "counts are never added.",
     "web_off_as_of": "Web search is off in an as-of view: the web holds what is known today, not what was "
@@ -189,15 +189,17 @@ def _list_check(view: SiteView, key: str, built: Built) -> None:
     unchecked = view.rules_not_checked if name == "warnings" else []
     missing = (f"{len(unchecked)} early-warning rule{' was' if len(unchecked) == 1 else 's were'} not checked "
                f"({'; '.join(unchecked[:4])}{'; and more' if len(unchecked) > 4 else ''})") if unchecked else ""
+    if name == "warnings" and view.rule_checks_failed:
+        missing = "the checks on whether each early-warning rule ran could not be loaded"
     built.counted.add(key)
-    if not entries and unchecked:
+    if not entries and missing:
         built.parts.append(UnknownPart(text=f"Unknown: no {noun} was raised for this site{before}, but {missing}, so nothing is "
                                             "known from them. This is not the same as none.", queried=[piece]))
     elif not entries:
         built.parts.append(NotFoundPart(text=f"None found: no {noun} for this site{before}.", queried=[piece]))
     else:
-        text = f"{'At least ' if unchecked else ''}{len(entries)} {noun}{'' if len(entries) == 1 else 's'} for this site{before}."
-        built.parts.append(part_type(text=text + (f" {missing[0].upper()}{missing[1:]}, so this is a floor." if unchecked else ""),
+        text = f"{'At least ' if missing else ''}{len(entries)} {noun}{'' if len(entries) == 1 else 's'} for this site{before}."
+        built.parts.append(part_type(text=text + (f" {missing[0].upper()}{missing[1:]}, so this is a floor." if missing else ""),
                                      sources=[view.items[f"{prefix}:{entry['id']}"].source for entry in entries[:8]]))
 
 
@@ -352,7 +354,7 @@ def build_parts(view: SiteView, proposed: object, web_results: list[WebResult], 
         built.parts.append(notice("complaints_overlap"))
     if any(part.kind in ("case", "warning") for part in built.parts):
         built.parts.append(notice("not_a_prediction"))
-    if view.rules_not_checked and "early_warnings" not in built.counted and any(part.kind == "warning" for part in built.parts):
+    if view.warnings_may_be_incomplete and "early_warnings" not in built.counted and any(part.kind == "warning" for part in built.parts):
         built.parts.append(notice("warning_rules_unchecked"))
     _actions(view, proposal.actions, project_id, has_history, built)
     return built

@@ -116,7 +116,7 @@ def propose(view: SiteView, question: str) -> Optional[dict]:
     if _WARNING_CUE.search(question):
         items = [_says(f'Early warning "{w.get("title")}": "{w.get("explanation")}"', f"warning:{w['id']}") for w in view.warnings[:6]]
         # With nothing to quote, or a rule that could not run, the server says what is known: none, unknown or a floor.
-        if not items or view.rules_not_checked:
+        if not items or view.warnings_may_be_incomplete:
             items.append(_item("dataset_check", dataset_key="early_warnings"))
         return {"items": items, "actions": []}
     if _ACTION_CUE.search(question):

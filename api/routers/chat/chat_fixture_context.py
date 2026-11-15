@@ -43,5 +43,6 @@ def fixture_context(bbl: str, job_type: Optional[str], stage: Optional[str], as_
         raise SiteContextUnavailable(f"the fixtures hold no site {bbl}")
     return SiteContext(
         bbl=bbl, as_of=as_of, profile=profile, records=[], datasets=datasets_from_profile(profile.value, bbl),
-        similar=similar_entries(_read("similar_cases")), warnings=_read("warnings"), actions=_read("actions"),
+        similar=similar_entries(_read("similar_cases")), warnings=_read("warnings"),
+        warning_checks=_read("warning_checks"), actions=_read("actions"),
         layers=_read("layer_catalog"), sample=True)

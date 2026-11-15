@@ -99,6 +99,8 @@ class SiteView:
             str(check.get("title") or check.get("rule_id") or "an unnamed rule")
             for check in (context.warning_checks.value or []) if check.get("status") == "error"
         ] if context.warning_checks.status == "ok" else []
+        # The checks themselves failed to load: whether every rule ran is not known.
+        self.rule_checks_failed = context.warning_checks.status == "error"
         self.actions: list[dict] = []
         self.layers: dict[str, str] = {}  # layer id -> name, when the layer list loaded
         self.layer_hazards: dict[str, str] = {}  # layer id -> the hazard it shows
@@ -117,6 +119,11 @@ class SiteView:
                            for layer in context.layers.value or [] if layer.get("layer_id")}
             self.layer_hazards = {str(layer["layer_id"]): str(layer.get("hazard") or "")
                                   for layer in context.layers.value or [] if layer.get("layer_id")}
+
+    @property
+    def warnings_may_be_incomplete(self) -> bool:
+        """A rule could not run, or the checks that say which rules ran did not load."""
+        return bool(self.rules_not_checked) or self.rule_checks_failed
 
     # ---- visibility ----
 
@@ -322,9 +329,11 @@ class SiteView:
             f"[warning:{w['id']}] rule {w.get('rule_id')} | hazard {w.get('hazard')} | severity {w.get('severity')} | first seen "
             f"{w.get('first_seen')} | {w.get('title')}: {w.get('explanation')} | rests on records: {_flat(w.get('evidence_record_ids') or [])}"
             for w in self.warnings] or ["none in this view"]
-        if self.rules_not_checked and not self._not_loaded("warnings"):
-            out.append(f"RULES THAT COULD NOT BE CHECKED: {'; '.join(self.rules_not_checked)}. The list above may be "
-                       "incomplete. To say how many warnings there are, use dataset_check with the key early_warnings.")
+        if self.warnings_may_be_incomplete and not self._not_loaded("warnings"):
+            which = ("RULES THAT COULD NOT BE CHECKED: " + "; ".join(self.rules_not_checked) if self.rules_not_checked
+                     else "WHETHER EVERY RULE RAN IS NOT KNOWN: the rule checks could not be loaded")
+            out.append(f"{which}. The list above may be incomplete. To say how many warnings there are, use "
+                       "dataset_check with the key early_warnings.")
         out += ["", "SIMILAR PAST CASES, closest first (a cause only as publicly reported, or under investigation)"]
         out += [self._not_loaded("similar")] if self._not_loaded("similar") else (
             [self.case_line(entry) for entry in self.cases[:CASES_SHOWN]] or ["none in this view"])
