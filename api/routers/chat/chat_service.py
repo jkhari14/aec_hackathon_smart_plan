@@ -59,7 +59,7 @@ def first_answer(request: ChatRequest, load_context: ContextLoader, model=None) 
     if model is None or request.example_id:
         return None
     as_of = request.as_of.isoformat() if request.as_of else None
-    view = SiteView(load_context(request.bbl, request.job_type, request.stage, as_of))
+    view = SiteView(load_context(request.bbl, request.job_type, request.stage, as_of, request.project_id))
     question = request.question.strip()
     try:
         session = model.open_first(first_pass_blocks(view), conversation(request.history, question))
@@ -72,7 +72,7 @@ def first_answer(request: ChatRequest, load_context: ContextLoader, model=None) 
     if not _has_sourced_part(built):
         log.warning("first chat answer had nothing to show: %s", built.problems or "it gave only a gap or a notice")
         return None
-    parts = [notice("first_pass")] + _question_notices(question) + built.parts
+    parts = [notice("first_pass")] + _question_notices(question, view) + built.parts
     return _finish(request, view, "live", parts, [], "off_as_of" if view.as_of else "not_used", session.usage)
 
 
