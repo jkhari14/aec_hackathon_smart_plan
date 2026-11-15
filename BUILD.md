@@ -209,7 +209,7 @@ planning/         plan and transcripts
 ## Jacob: lead, integrator, merge captain
 
 **Owns:** `contracts/`, `api/main.py`, `api/contracts.py`, `api/stubs.py`, `web/src/contracts.ts`, `early_warning/`,
-`web/src/features/early_warnings/`, `data/layers/watchlist.geojson`, `.github/`, `.claude/`, `tools/`, `.gitignore`, deploy config, `AGENTS.md`, `BUILD.md`.
+`web/src/features/early_warnings/`, `data/layers/watchlist.geojson`, `.github/`, `.claude/`, `tools/`, `.gitignore`, `deploy/`, `AGENTS.md`, `BUILD.md`.
 Also merges every PR in order and runs the end-to-end check after each wave.
 
 **References in `jahleel/`:** `api/brief/brief_models.py` (closed status sets), `api/preflight_api.py`
