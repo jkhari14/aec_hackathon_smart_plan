@@ -50,7 +50,7 @@ You pick a site, press **Continue to project →**, and get a full-screen view w
 - Documents are names only (no upload).
 - Setup is fixed once drafted; changing the job means a new project.
 
-## Decided next: the UI refresh
+## Built: the UI refresh
 
 Design: [`docs/superpowers/specs/2026-11-14-ui-refresh-design.md`](superpowers/specs/2026-11-14-ui-refresh-design.md)
 
@@ -63,6 +63,12 @@ Design: [`docs/superpowers/specs/2026-11-14-ui-refresh-design.md`](superpowers/s
 - **Building colours:** site blue, attached neighbours charcoal, the rest pale grey (no more height ramp).
 - **The 2D button** moves into the camera controls, and **the Layers button** gets a label.
 - **Layers switch on by work type.**
+- **Black primary buttons** on paper; blue is kept for highlights.
+- **Opening:** the 8-bit logo builds itself once per visit (`web/public/4site-intro.mp4`, made from the
+  GIF; click or any key skips), then the home page materialises. The top bar uses the flat 4site logo.
+
+A fresh reviewer checked this too: one critical issue (clicking a case dot on the map picked that lot
+as the site) and the important ones were fixed and re-checked in the browser.
 
 ## Files to know
 

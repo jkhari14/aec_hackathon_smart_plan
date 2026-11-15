@@ -19,6 +19,7 @@ import { useProjectIdInUrl } from "../features/project/project_url";
 import { useProject } from "../features/project/useProject";
 import { ProjectScreen } from "../features/project_screen/ProjectScreen";
 import { CommandBar, titleCase, type Command } from "./CommandBar";
+import { Intro } from "./Intro";
 import { useTheme } from "./preferences";
 import { ShortcutsHelp } from "./ShortcutsHelp";
 import { keyLabel, useShortcuts, type Shortcut } from "./shortcuts";
@@ -39,6 +40,9 @@ export function App() {
   const [site, setSite] = useState<SearchResult | null>(null);
   const [sample, setSample] = useState(false);
   const markSample = useCallback(() => setSample(true), []);
+  // The shell materialises once the opening logo has played (or straight away when it is skipped).
+  const [entered, setEntered] = useState(false);
+  const enter = useCallback(() => setEntered(true), []);
   // One strand at a time: the focused similar case, or every strand when the switch is on.
   const [focusCase, setFocusCase] = useState<string | null>(null);
   const [allStrands, setAllStrands] = useState(false);
@@ -150,7 +154,7 @@ export function App() {
   const behind = view.screen === "project";
 
   return (
-    <main className="fs-shell" data-site={Boolean(view.site)} data-chat={view.chat} data-layers={view.layers}>
+    <main className="fs-shell" data-entered={entered} data-site={Boolean(view.site)} data-chat={view.chat} data-layers={view.layers}>
       <div className="fs-shell__map" inert={behind}>
         <CityMap
           site={site && site.bbl === view.site ? site : null}
@@ -253,6 +257,8 @@ export function App() {
           onBack={() => setView({ screen: "map" })}
         />
       )}
+
+      <Intro onDone={enter} />
 
       <CommandBar open={commandOpen} onClose={() => setCommandOpen(false)} onPickSite={pickSite} commands={commands} />
       <ShortcutsHelp open={helpOpen} onClose={() => setHelpOpen(false)} shortcuts={shortcuts} />
