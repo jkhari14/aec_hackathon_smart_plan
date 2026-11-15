@@ -91,4 +91,6 @@ CREATE INDEX IF NOT EXISTS pins_by_project ON pins(project_id);
 ADDED_COLUMNS = (("pins", "body", "TEXT"), ("projects", "job_type", "TEXT"), ("projects", "construction_type", "TEXT"),
                  ("projects", "work_types_json", "TEXT"), ("items", "added_by_role", "TEXT"),
                  ("items", "added_reason", "TEXT"), ("items", "added_at", "TEXT"),
-                 ("projects", "excavation_depth_ft", "REAL"), ("projects", "proposed_storeys", "REAL"))
+                 ("projects", "excavation_depth_ft", "REAL"), ("projects", "proposed_storeys", "REAL"),
+                 ("items", "phase", "TEXT"), ("items", "due_when", "TEXT"), ("items", "done_by_role", "TEXT"),
+                 ("items", "done_at", "TEXT"))

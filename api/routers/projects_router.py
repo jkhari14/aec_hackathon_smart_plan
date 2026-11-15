@@ -80,7 +80,7 @@ def add_items(project_id: str, body: list[ActionItem], response: Response, store
 def update_items(project_id: str, body: list[ActionItemUpdate], response: Response,
                  store: ProjectStore = Depends(project_store)):
     # All or nothing. owner_role sent as null unassigns the item; left out, it stays as it is.
-    updates = [{"id": update.id, "status": update.status,
+    updates = [{"id": update.id, "status": update.status, "by_role": update.by_role,
                 "owner_role": update.owner_role if "owner_role" in update.model_fields_set else UNCHANGED}
                for update in body]
     _run(store.update_items, project_id, updates)

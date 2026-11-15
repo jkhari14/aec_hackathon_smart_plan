@@ -140,6 +140,67 @@
           ],
           "default": null,
           "title": "Added At"
+        },
+        "phase": {
+          "anyOf": [
+            {
+              "enum": [
+                "design",
+                "filing",
+                "notice",
+                "before_excavation",
+                "during_work"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Phase"
+        },
+        "when": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "When"
+        },
+        "done_by_role": {
+          "anyOf": [
+            {
+              "enum": [
+                "architect",
+                "structural_engineer",
+                "developer",
+                "contractor"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Done By Role"
+        },
+        "done_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Done At"
         }
       },
       "required": [

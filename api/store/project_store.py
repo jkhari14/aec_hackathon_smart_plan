@@ -21,8 +21,12 @@ _BBL = re.compile(r"[1-5][0-9]{9}", re.ASCII)  # fullmatch: no trailing newline 
 _PROJECT_ID = re.compile(r"[0-9a-f]{16}", re.ASCII)
 UNCHANGED = object()  # update_items: leave the field as it is
 _ITEM_FIELDS = ("id", "discipline", "hazard", "title", "why", "code_ref", "proof_needed", "status", "owner_role",
-                "source_rule", "life_safety")
+                "source_rule", "life_safety", "phase", "due_when")
 _PROVENANCE = ("added_by_role", "added_reason", "added_at")
+# When the item is due (the column is due_when: WHEN is an SQL keyword) and who marked it done, and when.
+_TIMING = ("phase", "due_when")
+_SIGN_OFF = ("done_by_role", "done_at")
+PHASES = ("design", "filing", "notice", "before_excavation", "during_work")
 
 
 class ProjectStoreError(ValueError):
@@ -73,6 +77,8 @@ def _item_row(item: dict) -> dict:
         "owner_role": _choice(item.get("owner_role"), "owner_role", ROLES, nullable=True),
         "source_rule": _text(item.get("source_rule"), "source_rule", "ref"),
         "life_safety": int(item["life_safety"]),
+        "phase": _choice(item.get("phase"), "phase", PHASES, nullable=True),
+        "due_when": _text(item.get("when"), "when", "ref", required=False),
     }
 
 
@@ -235,6 +241,11 @@ class ProjectStore:
                 changes = {}
                 if update.get("status", UNCHANGED) is not UNCHANGED and update["status"] is not None:
                     changes["status"] = _choice(update["status"], "status", ITEM_STATUSES)
+                    # The sign-off: who marked it done and when; any other status clears it.
+                    done = changes["status"] == "done"
+                    by = update.get("by_role")
+                    changes["done_by_role"] = self._member_role(db, project_id, by, "by_role", nullable=True) if done else None
+                    changes["done_at"] = _now() if done else None
                 if update.get("owner_role", UNCHANGED) is not UNCHANGED:
                     changes["owner_role"] = self._member_role(db, project_id, update["owner_role"], "owner_role", nullable=True)
                 if not changes:
@@ -303,7 +314,9 @@ class ProjectStore:
             def rows(sql: str) -> list[dict]:
                 return [dict(r) for r in db.execute(sql, (project_id,)).fetchall()]
 
-            items = rows(f"SELECT {', '.join(_ITEM_FIELDS + _PROVENANCE)} FROM items WHERE project_id = ? ORDER BY position")
+            items = rows(f"SELECT {', '.join(_ITEM_FIELDS + _PROVENANCE + _SIGN_OFF)} FROM items WHERE project_id = ? ORDER BY position")
+            for item in items:
+                item["when"] = item.pop("due_when")
             project = {
                 "id": row["id"], "name": row["name"], "site_bbl": row["site_bbl"], "stage": row["stage"],
                 "members": rows("SELECT name, role FROM members WHERE project_id = ? ORDER BY position"),

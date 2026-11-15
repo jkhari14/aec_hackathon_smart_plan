@@ -439,6 +439,14 @@ export interface components {
             added_reason?: string | null;
             /** Added At */
             added_at?: string | null;
+            /** Phase */
+            phase?: ("design" | "filing" | "notice" | "before_excavation" | "during_work") | null;
+            /** When */
+            when?: string | null;
+            /** Done By Role */
+            done_by_role?: ("architect" | "structural_engineer" | "developer" | "contractor") | null;
+            /** Done At */
+            done_at?: string | null;
         };
         /** ActionItemUpdate */
         ActionItemUpdate: {
@@ -448,6 +456,8 @@ export interface components {
             status?: ("open" | "in_progress" | "done" | "not_applicable") | null;
             /** Owner Role */
             owner_role?: ("architect" | "structural_engineer" | "developer" | "contractor") | null;
+            /** By Role */
+            by_role?: ("architect" | "structural_engineer" | "developer" | "contractor") | null;
         };
         /** BearingWall */
         BearingWall: {

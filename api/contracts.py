@@ -335,6 +335,11 @@ class ActionItem(Contract):
     added_by_role: Optional[Role] = None
     added_reason: Optional[str] = None
     added_at: Optional[str] = None
+    # When it's due on the project timeline (actions/phases.py), and the sign-off: who marked it done and when.
+    phase: Optional[Literal["design", "filing", "notice", "before_excavation", "during_work"]] = None
+    when: Optional[str] = None
+    done_by_role: Optional[Role] = None
+    done_at: Optional[str] = None
 
 
 # Projects
@@ -432,6 +437,8 @@ class ActionItemUpdate(Contract):
     id: str
     status: Optional[Literal["open", "in_progress", "done", "not_applicable"]] = None
     owner_role: Optional[Role] = None
+    # The role marking it, recorded as the sign-off when the status becomes done.
+    by_role: Optional[Role] = None
 
 
 class NoteCreate(Contract):

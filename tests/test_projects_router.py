@@ -88,6 +88,24 @@ class ProjectsRouterTests(ProjectsRouterTestCase):
         bad = self.architect_tab.post("/api/projects", json={**body, "excavation_depth_ft": -1})
         self.assertEqual(bad.status_code, 422, bad.text)
 
+    def test_items_keep_phase_and_the_done_sign_off(self):
+        item = {**fixture("actions")[0], "phase": "notice", "when": "60 days before work"}
+        self.architect_tab.post(f"{self.path}/items", json=[item])
+        got = {i["id"]: i for i in self.architect_tab.get(self.path).json()["items"]}[item["id"]]
+        self.assertEqual((got["phase"], got["when"]), ("notice", "60 days before work"))
+        done = self.engineer_tab.patch(f"{self.path}/items",
+                                       json=[{"id": item["id"], "status": "done", "by_role": "structural_engineer"}]).json()
+        row = {i["id"]: i for i in done["items"]}[item["id"]]
+        self.assertEqual(row["done_by_role"], "structural_engineer")
+        self.assertTrue(row["done_at"])
+        reopened = self.engineer_tab.patch(f"{self.path}/items", json=[{"id": item["id"], "status": "open"}]).json()
+        row = {i["id"]: i for i in reopened["items"]}[item["id"]]
+        self.assertEqual((row["done_by_role"], row["done_at"]), (None, None))
+        anon = self.engineer_tab.patch(f"{self.path}/items", json=[{"id": item["id"], "status": "done"}]).json()
+        row = {i["id"]: i for i in anon["items"]}[item["id"]]
+        self.assertIsNone(row["done_by_role"])
+        self.assertTrue(row["done_at"])
+
     def test_unknown_projects_and_items_are_404(self):
         for response in (
             self.architect_tab.get("/api/projects/0123456789abcdef"),

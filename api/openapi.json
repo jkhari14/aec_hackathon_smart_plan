@@ -1296,6 +1296,63 @@
               }
             ],
             "title": "Added At"
+          },
+          "phase": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "design",
+                  "filing",
+                  "notice",
+                  "before_excavation",
+                  "during_work"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phase"
+          },
+          "when": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "When"
+          },
+          "done_by_role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "architect",
+                  "structural_engineer",
+                  "developer",
+                  "contractor"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Done By Role"
+          },
+          "done_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Done At"
           }
         },
         "additionalProperties": false,
@@ -1351,6 +1408,23 @@
               }
             ],
             "title": "Owner Role"
+          },
+          "by_role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "architect",
+                  "structural_engineer",
+                  "developer",
+                  "contractor"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "By Role"
           }
         },
         "additionalProperties": false,
