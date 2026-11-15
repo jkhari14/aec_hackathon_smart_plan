@@ -10,7 +10,9 @@
     "job_type": "new_building",
     "members": [
       { "name": "Architect (demo)", "role": "architect" },
-      { "name": "Structural engineer (demo)", "role": "structural_engineer" }
+      { "name": "Structural engineer (demo)", "role": "structural_engineer" },
+      { "name": "Developer (demo)", "role": "developer" },
+      { "name": "Contractor (demo)", "role": "contractor" }
     ]
   },
   "layers_on": ["structural_complaints", "construction_incidents", "watchlist"],
