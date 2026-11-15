@@ -4,10 +4,11 @@ import os
 import unittest
 from unittest import mock
 
-from fastapi import HTTPException
 from pydantic import ValidationError
 
+from api import contracts
 from api.routers.chat import chat_service, chat_tools
+from api.routers.chat.chat_contract_map import from_contract, to_contract
 from api.routers.chat.chat_model_call import AnthropicChatModel
 from api.routers.chat.chat_models import ChatRequest
 from api.routers.chat.chat_site_context import Loaded, SiteContextUnavailable
@@ -182,40 +183,92 @@ class ToolTests(unittest.TestCase):
         self.assertIn(f"[{OLD_CASE}]", result["content"])
 
 
-class RouteTests(unittest.TestCase):
-    """The route functions called directly: the app's own test client needs a package the app does not."""
+class ContractTests(unittest.TestCase):
+    def test_every_part_kind_maps_to_the_contract_with_its_source(self):
+        view_answer = ask(model=ScriptedModel({"items": [
+            GOOD, says("A past case resembles this site.", OLD_CASE), says("A rule found a pattern.", MARCH_WARNING),
+            says("A survey is listed for the structural engineer.", SURVEY_ACTION), item("record_search", text="zebra", bbl=SITE_BBL),
+            item("dataset_check", bbl="3000010002", dataset_key="dob_violations")],
+            "actions": [action("fly_to", ref=OLD_CASE), action("toggle_layer", layer_id="sandy_inundation"), action("pin_answer", ref="this")]}),
+            project_id="p1")
+        sent = to_contract(view_answer)
+        contracts.ChatResponse.model_validate(sent.model_dump())
+        self.assertEqual([p.kind for p in sent.answer_parts],
+                         ["public_record", "case", "warning", "action", "not_found", "unknown", "notice", "notice", "notice", "notice"])
+        record, case, warning, act = sent.answer_parts[:4]
+        self.assertEqual((record.record_id, record.source_name, record.source_url),
+                         (STOP_WORK, "DOB violations V100", "https://data.example.org/dob_violations?bbl=3000010001"))
+        self.assertEqual((case.record_id, case.source_url), ("ex-underpinning-2019", "https://example.org/report"))
+        self.assertIn("as publicly reported: City incident report", case.source_name)
+        self.assertEqual((warning.record_id, act.record_id, act.source_name), ("w1", "a1", "BC 3309.4.3"))
+        self.assertFalse(sent.offline)
+        self.assertEqual([a.type for a in sent.actions], ["fly_to", "toggle_layer", "pin"])
+        self.assertEqual(sent.actions[0].payload["bbl"], "3000020001")
+        self.assertEqual(sent.actions[2].payload, {"kind": "chat_answer", "project_id": "p1", "target": "this", "title": "What is on file?"})
+
+    def test_a_mock_answer_is_offline_and_a_web_part_keeps_its_link(self):
+        self.assertTrue(to_contract(ask("What warnings are there?")).offline)
+        web = to_contract(ask(model=ScriptedModel([says("The city publishes its codes.", WEB.url)], web_results=[WEB], searched=True)))
+        self.assertEqual((web.answer_parts[0].kind, web.answer_parts[0].source_url), ("web", WEB.url))
+
+    def test_a_contract_request_over_a_cap_or_without_a_site_is_refused(self):
+        ok = from_contract(contracts.ChatRequest(question="x", bbl=SITE_BBL, as_of=JUNE_1, history=[{"question": "q", "answer": "a"}]))
+        self.assertEqual((ok.bbl, ok.as_of.isoformat(), len(ok.history)), (SITE_BBL, JUNE_1, 1))
+        for bad in ({"question": "x"}, {"question": "x" * 1001, "bbl": SITE_BBL}, {"question": "x", "bbl": "12"},
+                    {"question": "x", "bbl": SITE_BBL, "as_of": "June"}, {"question": " ", "bbl": SITE_BBL},
+                    {"question": "x", "bbl": SITE_BBL, "history": [{"question": "q", "answer": "a"}] * 9}):
+            with self.assertRaises(ValidationError, msg=bad):
+                from_contract(contracts.ChatRequest(**bad))
+
+
+class AppRouteTests(unittest.TestCase):
+    """POST /api/chat on the real app, which reads the sample site from contracts/fixtures/ until the site routes are real."""
+
+    FIXTURE_BBL = "3052110074"
 
     def setUp(self):
-        from api.routers.chat.chat_router import chat_router_for
-
-        def load(bbl, job_type, stage, as_of):
-            if bbl != SITE_BBL:
-                raise SiteContextUnavailable(bbl)
-            return example_context(as_of=as_of)
-        routes = {(route.path, next(iter(route.methods))): route.endpoint for route in chat_router_for(load).routes}
-        self.setup, self.answer = routes[("/api/chat/setup", "GET")], routes[("/api/chat", "POST")]
+        from fastapi.testclient import TestClient
+        from api.main import app
         patcher = mock.patch.dict(os.environ, {"FORESITE_CHAT_LIVE": "0"})
         patcher.start()
         self.addCleanup(patcher.stop)
+        self.client = TestClient(app)
 
-    def test_a_question_is_answered_in_mock_mode_with_no_key(self):
-        self.assertFalse(self.setup().live)
-        answer = self.answer(ChatRequest(bbl=SITE_BBL, question="Search the records for fence", as_of=JUNE_1))
-        self.assertEqual((answer.mode, answer.as_of), ("mock", JUNE_1))
+    def post(self, question, **more):
+        return self.client.post("/api/chat", json={"question": question, "bbl": self.FIXTURE_BBL, **more})
 
-    def test_an_unknown_site_or_saved_example_is_a_404(self):
-        for request in (ChatRequest(bbl="3999999999", question="x"), ChatRequest(bbl=SITE_BBL, example_id="nope")):
-            with self.assertRaises(HTTPException) as refused:
-                self.answer(request)
-            self.assertEqual(refused.exception.status_code, 404)
+    def kinds(self, reply):
+        return [part.kind for part in contracts.ChatResponse.model_validate(reply.json()).answer_parts]
 
-    def test_a_malformed_request_is_refused_not_cut(self):
-        long_history = [{"question": "q", "answer": "a" * 4000}] * 4
-        for bad in ({"bbl": "123", "question": "x"}, {"bbl": SITE_BBL}, {"bbl": SITE_BBL, "question": "x" * 1001},
-                    {"bbl": SITE_BBL, "question": "x", "surprise": 1}, {"bbl": SITE_BBL, "question": "x", "history": long_history},
-                    {"bbl": SITE_BBL, "question": "x", "history": [{"question": "q", "answer": "a"}] * 9}):
-            with self.assertRaises(ValidationError, msg=bad):
-                ChatRequest(**bad)
+    def test_the_chat_route_is_ours_and_marks_fixture_data(self):
+        reply = self.post("What warnings are there?")
+        self.assertEqual((reply.status_code, reply.headers["X-ForeSite-Fixture"], reply.json()["offline"]), (200, "true", True))
+        self.assertEqual(self.kinds(reply), ["notice", "warning", "notice"])
+        self.assertFalse(self.client.get("/api/chat/setup").json()["live"])
+
+    def test_similar_cases_actions_and_page_actions_come_from_the_fixtures(self):
+        self.assertIn("case", self.kinds(self.post("Any similar cases?")))
+        self.assertIn("action", self.kinds(self.post("What are the action items?")))
+        reply = self.post("Fly to the site")
+        self.assertEqual([a["type"] for a in reply.json()["actions"]], ["fly_to"])
+        self.assertEqual(reply.json()["actions"][0]["payload"]["bbl"], self.FIXTURE_BBL)
+
+    def test_a_count_is_the_sources_own_and_a_failed_dataset_is_unknown(self):
+        ecb = self.post("How many ECB violations are there?")
+        self.assertEqual(self.kinds(ecb)[1], "public_record")
+        self.assertTrue(ecb.json()["answer_parts"][1]["text"].startswith("3 records in "))
+        self.assertEqual(self.kinds(self.post("How many 311 requests are there?"))[1], "unknown")
+        self.assertEqual(self.kinds(self.post("How many ECB violations are there?", as_of="2026-06-01"))[1], "unknown")
+
+    def test_a_search_over_records_that_were_not_loaded_is_unknown_never_none_found(self):
+        self.assertEqual(self.kinds(self.post("Search the records for fence"))[1:], ["unknown"])
+
+    def test_no_site_another_site_and_an_oversized_question(self):
+        none = self.client.post("/api/chat", json={"question": "hello"})
+        self.assertEqual((none.status_code, self.kinds(none)), (200, ["notice"]))
+        self.assertEqual(self.client.post("/api/chat", json={"question": "x", "bbl": "3999999999"}).status_code, 404)
+        self.assertEqual(self.post("x" * 1001).status_code, 422)
+        self.assertEqual(self.client.post("/api/chat", json={"question": "x", "surprise": 1}).status_code, 422)
 
 
 if __name__ == "__main__":

@@ -59,6 +59,7 @@ class DatasetStatus:
     name: str
     status: str  # "ok", "error" or "skipped"
     capped: bool = False  # the pull hit its row cap: counts are a floor and the oldest records are missing
+    count: Optional[int] = None  # the source's own count, used only when the records were not handed over
     reason: Optional[str] = None
     url: Optional[str] = None
 

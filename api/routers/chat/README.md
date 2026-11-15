@@ -4,9 +4,16 @@
 from, plus **actions** for the page to carry out. Ported from the reference in `jahleel/api/chat/`
 (its README explains the design at length); this file covers what is different here.
 
-**State: built against stand-in data.** The chat is written and tested against a made-up site shaped
-like the shared contracts in `BUILD.md`. It is not wired into the app yet: that needs the contracts
-and app skeleton (PR 0) and the site routes and project store (PR 4). No real model call has been made.
+**State: wired in, on sample data.** `POST /api/chat` in `api/main.py` is this chat, replacing the
+stub, and it returns the shared contract's `ChatResponse`. Until the site routes are real (PR 4) it
+reads the one sample site in `contracts/fixtures/` and marks every answer with the fixture header,
+as the stubs do. The fixtures hold no list of the site's records, so a record search there answers
+"unknown", not "none found". No real model call has been made.
+
+This PR sits on a small contract change (its own PR): `ChatAnswerPart.kind` gains `warning`,
+`action`, `not_found`, `unknown` and `notice`, and `ChatRequest` gains optional `job_type`, `stage`
+and `history`. The contract's `ai_suggestion` and `user_input` kinds are not produced: every part
+here rests on a source or is a fixed server line.
 
 ## What an answer holds
 
@@ -21,6 +28,9 @@ and app skeleton (PR 0) and the site routes and project store (PR 4). No real mo
 | `unknown` | a query or a load failed: nothing is known | Unknown. This is not zero |
 | `notice` | a fixed line the server writes | (small print) |
 
+On the wire these are the contract's kinds (`record` is `public_record`, `lead` is `web`), with a
+part's first source in `source_name`, `source_url` and `record_id` (`chat_contract_map.py`).
+
 The model never chooses a kind: the server derives it from the ids a statement cites, and a
 statement citing two kinds of source is held back. Counts, search results, "none found" and
 "unknown" are written by the server. A statement is also held back for a number that is not in its
@@ -30,8 +40,8 @@ prediction, or a company name. One correction round, then what still fails is dr
 **Actions** (`ChatAnswer.actions`), each checked before it is returned:
 - `toggle_layer`: only a layer id the layer list has.
 - `fly_to`: only an item of this view with a place (the site, a neighbor, a record, a case).
-- `pin_answer`: only with an open project (`project_id` in the request). `target` is `this` or
-  `previous`. The chat writes nothing itself: the page saves the pin, as the person signed in.
+- `pin_answer` (`pin` on the wire): only with an open project (`project_id` in the request). `target`
+  is `this` or `previous`. The chat writes nothing itself: the page saves the pin, as the person signed in.
 
 **As-of:** a record, past case or warning dated on or after the day is not in the view, the searches
 or the model's reading text; neither is text added later or today's status; web search is off.
@@ -43,7 +53,8 @@ Saved example answers are not written yet (they need the demo sites).
 ## What it needs from the rest of the app
 
 One function, `(bbl, job_type, stage, as_of) -> SiteContext` (`chat_site_context.py`), passed to
-`chat_router_for(...)` when the app mounts the route. A `SiteContext` holds the site profile, the
+`chat_router_for(...)` in `api/main.py`. Today that is `fixture_context`; the real one replaces it
+when the site routes land. A `SiteContext` holds the site profile, the
 site's and touching lots' records with each dataset's status, the similar cases, the warnings, the
 action items and the layer list. Every piece that can fail to load is a `Loaded` with a status,
 because "could not load" must never reach the chat as an empty list.
@@ -63,6 +74,8 @@ chat_prompt.py         the instructions and the tool the model answers through
 chat_model_call.py     the model call with web search and our tools
 chat_mock_answers.py   mock mode
 chat_service.py        live or mock: one answer
+chat_contract_map.py   the chat's answer as the contract's ChatResponse; the contract's request as the chat's
+chat_fixture_context.py the sample site from contracts/fixtures/, until the site routes are real
 chat_router.py         POST /api/chat, GET /api/chat/setup, 12 live questions a minute
 ```
 
@@ -72,8 +85,10 @@ to force mock mode, `FORESITE_CHAT_MODEL`, `FORESITE_CHAT_EFFORT`.
 
 ## Limits
 
-- Stand-in data only so far; field names follow `BUILD.md` and may need small changes when the
-  contracts land.
+- Sample data only so far: one site, no record list. The record search and as-of counts need the real
+  site data.
+- One source per part on the wire: a part resting on several records names them in `source_name` and
+  links the first.
 - The word-list checks catch plain phrasings and miss others. A person's name cannot be detected in code.
 - The searches match words, not meaning.
 - The chat panel and project panel (web) are not built yet: they wait on the design system.

@@ -52,6 +52,7 @@ class DatasetView:
     reason: Optional[str]
     url: Optional[str]
     lot_label: str
+    records_loaded: bool = True  # False when the source gave only a count: there is nothing here to search
 
     def queried(self) -> QueriedDataset:
         return QueriedDataset(key=self.key, name=self.name, bbl=self.bbl, url=self.url)
@@ -113,7 +114,13 @@ class SiteView:
 
     def _dated_before(self, when: Optional[str]) -> bool:
         """Dated before the day. Undated text cannot be placed, so an as-of view leaves it out."""
-        return self.as_of is None or (when is not None and str(when)[:10] < self.as_of)
+        if self.as_of is None:
+            return True
+        if when is None:
+            return False
+        when = str(when)[:10]
+        # A date given only as a year or a month ("2020") is before the day only if that whole year or month is.
+        return when < self.as_of[:len(when)] if len(when) < 10 else when < self.as_of
 
     def _scrub(self, text: str) -> str:
         if self.as_of is None:
@@ -141,7 +148,9 @@ class SiteView:
         for neighbor in self.profile.get("neighbors") or []:
             if neighbor.get("bbl"):
                 attached = ", attached" if neighbor.get("attached") else ""
-                labels.setdefault(str(neighbor["bbl"]), f"lot {neighbor['bbl']} (touching the site{attached})")
+                where = f"lot {neighbor['bbl']}, touching the site{attached}"
+                labels.setdefault(str(neighbor["bbl"]), f"{neighbor['address']} ({where})" if neighbor.get("address")
+                                  else f"lot {neighbor['bbl']} (touching the site{attached})")
         for bbl in [d.bbl for d in self.context.datasets] + [r.bbl for r in self.context.records]:
             labels.setdefault(bbl, f"lot {bbl}")
         return labels
@@ -149,13 +158,15 @@ class SiteView:
     def _add_datasets(self) -> None:
         for dataset in self.context.datasets:
             count = None
-            if dataset.status == "ok":
-                count = sum(1 for r in self.context.records
-                            if r.bbl == dataset.bbl and r.dataset_key == dataset.key and self._dated_before(r.date))
+            listed = [r for r in self.context.records if r.bbl == dataset.bbl and r.dataset_key == dataset.key]
+            if dataset.status == "ok" and (listed or dataset.count is None):
+                count = sum(1 for r in listed if self._dated_before(r.date))
+            elif dataset.status == "ok" and self.as_of is None:
+                count = dataset.count  # the source's own count, when the records themselves were not handed over
             self.datasets[(dataset.bbl, dataset.key)] = DatasetView(
                 bbl=dataset.bbl, key=dataset.key, name=dataset.name, status=dataset.status, count=count,
                 capped=dataset.status == "ok" and dataset.capped, reason=dataset.reason, url=dataset.url,
-                lot_label=self.lot_labels[dataset.bbl])
+                lot_label=self.lot_labels[dataset.bbl], records_loaded=bool(listed) or not dataset.count)
 
     def _add_site_facts(self) -> None:
         if not self.profile:
@@ -165,7 +176,8 @@ class SiteView:
         if self.profile.get("work_types_inferred"):
             detail += ". The work types are inferred from the job type, not read from a filing"
         signals = [s for s in self.profile.get("signals") or []
-                   if self.as_of is None or (isinstance(s, dict) and self._dated_before(s.get("date")))]
+                   if self.as_of is None or (isinstance(s, dict) and self._dated_before(s.get("date"))
+                                             and not self.after_as_of & set(s.get("record_ids") or []))]
         if signals:
             detail += ". Signals: " + _flat(signals)
         ref = f"site:{self.site_bbl}"

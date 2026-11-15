@@ -181,6 +181,10 @@ def _dataset_check(view: SiteView, item: ProposedItem, built: Built, where: str)
         why = "the query failed" if dataset.status == "error" else f"it was not queried ({dataset.reason or 'no reason given'})"
         built.parts.append(UnknownPart(text=f"Unknown: {dataset.name} for {lot}: {why}, so nothing is known. This is not zero.",
                                        queried=queried))
+    elif dataset.count is None:
+        # The source gave a count for today only and no records to cut at the day.
+        built.parts.append(UnknownPart(text=f"Unknown: {dataset.name} for {lot}{before}: the records were not loaded, so they "
+                                            "cannot be counted for this view. This is not zero.", queried=queried))
     elif not dataset.count and dataset.capped:
         # A capped pull lost its oldest records, so an empty as-of view cannot say "none".
         built.parts.append(UnknownPart(
@@ -323,9 +327,9 @@ def without_repeats(parts: list[AnswerPart]) -> list[AnswerPart]:
     seen, kept = set(), []
     for part in parts:
         if part.kind == "notice":
-            if part.code in seen:
+            if (part.code, part.text) in seen:  # the text too: each page action has its own line under one code
                 continue
-            seen.add(part.code)
+            seen.add((part.code, part.text))
         kept.append(part)
     return kept
 

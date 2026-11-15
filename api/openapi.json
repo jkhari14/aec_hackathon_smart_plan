@@ -868,10 +868,35 @@
         }
       }
     },
+    "/api/chat/setup": {
+      "get": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Chat Setup",
+        "operationId": "chat_setup_api_chat_setup_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatSetup"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/chat": {
       "post": {
-        "summary": "Chat",
-        "operationId": "chat_api_chat_post",
+        "tags": [
+          "chat"
+        ],
+        "summary": "Chat Answer",
+        "description": "A question about one site, answered in parts that each say where they came from.",
+        "operationId": "chat_answer_api_chat_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1572,6 +1597,43 @@
         ],
         "title": "ChatResponse"
       },
+      "ChatSetup": {
+        "properties": {
+          "live": {
+            "type": "boolean",
+            "title": "Live"
+          },
+          "examples": {
+            "items": {
+              "$ref": "#/components/schemas/ExampleQuestion"
+            },
+            "type": "array",
+            "title": "Examples",
+            "default": []
+          },
+          "max_question_chars": {
+            "type": "integer",
+            "title": "Max Question Chars",
+            "default": 1000
+          },
+          "max_earlier_exchanges": {
+            "type": "integer",
+            "title": "Max Earlier Exchanges",
+            "default": 8
+          },
+          "max_history_chars": {
+            "type": "integer",
+            "title": "Max History Chars",
+            "default": 12000
+          }
+        },
+        "type": "object",
+        "required": [
+          "live"
+        ],
+        "title": "ChatSetup",
+        "description": "What a client needs before the first question."
+      },
       "DatasetStatus": {
         "properties": {
           "key": {
@@ -1702,6 +1764,25 @@
           "first_seen"
         ],
         "title": "EarlyWarning"
+      },
+      "ExampleQuestion": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "question": {
+            "type": "string",
+            "title": "Question"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "question"
+        ],
+        "title": "ExampleQuestion"
       },
       "FloodContext": {
         "properties": {

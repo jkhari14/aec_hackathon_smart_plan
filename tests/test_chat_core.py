@@ -42,6 +42,14 @@ class AsOfViewTests(unittest.TestCase):
         self.assertNotIn(STOP_WORK, SiteView(example_context(as_of="2026-04-20")).items)  # dated 2026-04-20
         self.assertIn(STOP_WORK, SiteView(example_context(as_of="2026-04-21")).items)
 
+    def test_a_case_dated_only_by_year_is_before_the_day_only_if_the_whole_year_is(self):
+        def cases(year):
+            entry = {"similar": {"case_id": "c", "score": 0.5}, "case": {"id": "c", "title": "t", "date": year}}
+            return SiteView(example_context(as_of=JUNE_1, similar=Loaded.ok([entry]))).cases
+        self.assertEqual(len(cases("2025")), 1)
+        self.assertEqual(cases("2026"), [])
+        self.assertEqual(cases(None), [])
+
     def test_a_warning_resting_on_a_record_the_view_cannot_see_is_left_out(self):
         april = SiteView(example_context(as_of="2026-04-01", warnings=Loaded.ok([
             {"id": "w9", "rule_id": "r", "title": "t", "first_seen": "2026-03-30", "evidence_record_ids": [STOP_WORK]}])))
@@ -120,7 +128,7 @@ class CountAndSearchTests(unittest.TestCase):
             (SITE_BBL, "ecb_violations"), (SITE_BBL, "dob_complaints"), (ATTACHED_BBL, "dob_violations"), (OTHER_BBL, "dob_complaints"))}
         self.assertEqual([p.kind for p in texts.values()], ["record", "not_found", "unknown", "record"])
         self.assertTrue(texts[(SITE_BBL, "ecb_violations")].text.startswith("1 record in ECB violations"))
-        self.assertIn("This is not zero", texts[(ATTACHED_BBL, "dob_violations")].text)
+        self.assertIn("the query failed, so nothing is known. This is not zero", texts[(ATTACHED_BBL, "dob_violations")].text)
         self.assertTrue(texts[(OTHER_BBL, "dob_complaints")].text.startswith("At least 1 record"))
         self.assertTrue(build(FULL, check(SITE_BBL, "nope")).problems)
 

@@ -71,7 +71,7 @@ def search(view: SiteView, query: RecordQuery) -> RecordSearch:
     for (bbl, key), dataset in view.datasets.items():
         if (query.bbl and bbl != query.bbl) or (query.dataset_key and key != query.dataset_key):
             continue
-        (found.searched if dataset.status == "ok" else found.not_searched).append(dataset)
+        (found.searched if dataset.status == "ok" and dataset.records_loaded else found.not_searched).append(dataset)
         if dataset.capped:
             found.capped.append(dataset)
     in_scope = {(d.bbl, d.key) for d in found.searched}
@@ -122,8 +122,8 @@ def search_parts(view: SiteView, found: RecordSearch) -> list[AnswerPart]:
                                   queried=[d.queried() for d in found.searched]))
     if found.not_searched:
         parts.append(UnknownPart(
-            text=f"Unknown: {_names(found.not_searched)} could not be searched because the query for it failed or was "
-                 "skipped, so nothing is known there. This is not zero.",
+            text=f"Unknown: {_names(found.not_searched)} could not be searched (the query failed or was skipped, or "
+                 "its records were not loaded), so nothing is known there. This is not zero.",
             queried=[d.queried() for d in found.not_searched]))
     return parts
 
@@ -135,7 +135,7 @@ def search_text_for_model(view: SiteView, found: RecordSearch) -> str:
              + (f"; the newest {len(shown)} are below." if len(found.matches) > len(shown) else ".")]
     lines += [f"[{r.id}] lot {r.bbl} | {r.date or 'undated'} | {view.items[r.id].source.detail}" for r in shown]
     if found.not_searched:
-        lines.append(f"NOT SEARCHED (the query failed or was skipped; nothing is known, not zero): {_names(found.not_searched)}")
+        lines.append(f"NOT SEARCHED (the query failed or was skipped, or its records were not loaded; nothing is known, not zero): {_names(found.not_searched)}")
     if found.capped:
         lines.append(f"CAPPED (oldest records missing, so any count is a floor): {_names(found.capped)}")
     lines.append("Cite a record by its id in a statement. To tell the reader how many matched, or that none did, "
