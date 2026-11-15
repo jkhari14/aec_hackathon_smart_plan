@@ -4,7 +4,7 @@ import type { FeatureCollection, MultiPolygon, Polygon, Position } from "geojson
 import type { IControl, Map as MapLibreMap } from "maplibre-gl";
 
 // Magenta: no hazard, neighbor or party-wall color is near it, and it reads on the dark basemap.
-// shortcut: hard-coded like the other map colors until the map takes Camilo's tokens.
+// shortcut: hard-coded like the other map colors until the map takes the design tokens.
 export const SELECTION_COLOR = "#ff3fd2";
 
 // NYC Building Footprints: outline and roof height (feet) for each building, keyed by lot.
