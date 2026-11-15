@@ -6,18 +6,25 @@ site only. For any other lot that part is "not available": sample data is never 
 A part that fails to load is a failure with its reason, never an empty list.
 """
 
+from datetime import date
 from typing import Any, Optional
 
-from pydantic import BaseModel
+from fastapi import HTTPException
+from pydantic import BaseModel, TypeAdapter
+
+from api.contracts import WarningRuleCheck
 
 from api.routers.chat.chat_fixture_context import datasets_from_profile, similar_entries
 from api.routers.chat.chat_site_context import Loaded, SiteContext, SiteContextUnavailable
 from api.routers.layers_router import load_layer_catalog
-from api.routers.router_data import DataUnavailable, data_root
+from api.routers.router_data import DataUnavailable, data_root, owner_function
 from api.routers.sites_router import load_site_part
 from api.stubs import fixture
 
 SAMPLE_OF_ANOTHER_SITE = "only sample data is available, and it describes another site"
+# What GET /api/sites/{bbl}/warnings/checks serves: one entry per early-warning rule, run or not.
+RULE_CHECKS_SOURCE = ("early_warning.api", "site_warning_checks")
+_RULE_CHECKS = TypeAdapter(list[WarningRuleCheck])
 
 
 def _plain(value: Any) -> Any:
@@ -27,6 +34,27 @@ def _plain(value: Any) -> Any:
     if isinstance(value, list):
         return [_plain(entry) for entry in value]
     return value
+
+
+def rule_checks(bbl: str, as_of: Optional[str], is_sample_site: bool) -> tuple[Loaded, bool]:
+    """Whether each early-warning rule could run, and whether that is the labelled sample.
+
+    `as_of` is a day the site routes have already accepted. A failure is a failure with its reason:
+    the chat then says it cannot tell whether every rule ran, never that they all did.
+    """
+    where = ".".join(RULE_CHECKS_SOURCE)
+    try:
+        build = owner_function(*RULE_CHECKS_SOURCE)
+        if build is None and not is_sample_site:
+            return Loaded.not_available(SAMPLE_OF_ANOTHER_SITE), False
+        answer = fixture("warning_checks") if build is None else build(bbl, as_of=date.fromisoformat(as_of) if as_of else None)
+        return Loaded.ok(_plain(_RULE_CHECKS.validate_python(answer))), build is None
+    except DataUnavailable as error:
+        return Loaded.failed(str(error)), False
+    except HTTPException as error:
+        return Loaded.failed(f"{where}: {error.detail}"), False
+    except Exception as error:  # any failure is reported as a failure, never read as "every rule ran"
+        return Loaded.failed(f"{where} could not answer ({type(error).__name__})"), False
 
 
 def app_context(bbl: str, job_type: Optional[str], stage: Optional[str], as_of: Optional[str]) -> SiteContext:
@@ -53,7 +81,12 @@ def app_context(bbl: str, job_type: Optional[str], stage: Optional[str], as_of: 
         layers = Loaded.ok(_plain(load_layer_catalog(data_root()).data))
     except DataUnavailable as error:
         layers = Loaded.failed(str(error))
+    warnings = part("warnings", as_of=as_of)
+    # The rule checks qualify the warnings list, so they are read only when there is a list to qualify.
+    checks, checks_are_sample = rule_checks(bbl, as_of, is_sample_site) if warnings.status == "ok" else (
+        Loaded.not_available("the early warnings did not load"), False)
+    used_sample = used_sample or checks_are_sample
     return SiteContext(
         bbl=bbl, as_of=as_of, profile=profile, records=[], datasets=datasets_from_profile(profile.value, bbl),
-        similar=similar_entries(part("similar")), warnings=part("warnings", as_of=as_of),
+        similar=similar_entries(part("similar")), warnings=warnings, warning_checks=checks,
         actions=part("actions", stage=stage), layers=layers, sample=used_sample)

@@ -227,12 +227,27 @@ class RuleCheckTests(unittest.TestCase):
         # Action items are not the rules' results: they are counted as before.
         self.assertEqual(one(view, check("", "action_items")).text, "2 action items for this site.")
 
-    def test_checks_that_all_ran_or_did_not_load_change_nothing(self):
+    def test_checks_that_all_ran_or_are_not_built_change_nothing(self):
         ran = Loaded.ok([{"rule_id": "r1", "title": "t", "status": "ok"}, {"rule_id": "r3", "title": "t", "status": "not_applicable"}])
-        for checks in (ran, Loaded.failed("timeout"), Loaded.not_available("not built")):
+        for checks in (ran, Loaded.not_available("not built")):
             view = SiteView(example_context(warning_checks=checks))
-            self.assertEqual((view.rules_not_checked, one(view, check("", "early_warnings")).text),
-                             ([], "2 early-warning rule results for this site."))
+            self.assertEqual((view.warnings_may_be_incomplete, one(view, check("", "early_warnings")).text),
+                             (False, "2 early-warning rule results for this site."))
+
+    def test_checks_that_failed_to_load_are_never_read_as_every_rule_ran(self):
+        failed = Loaded.failed("timeout")
+        view = SiteView(example_context(warning_checks=failed))
+        self.assertEqual((view.rules_not_checked, view.warnings_may_be_incomplete), ([], True))
+        self.assertEqual(one(view, check("", "early_warnings")).text, "At least 2 early-warning rule results for this site. The checks on "
+                         "whether each early-warning rule ran could not be loaded, so this is a floor.")
+        none = one(SiteView(example_context(warning_checks=failed, warnings=Loaded.ok([]))), check("", "early_warnings"))
+        self.assertEqual((none.kind, "could not be loaded, so nothing is known from them. This is not the same as none." in none.text),
+                         ("unknown", True))
+        cited = build(view, says("A rule found a pattern.", MARCH_WARNING))
+        self.assertEqual([p.code for p in cited.parts if p.kind == "notice"], ["not_a_prediction", "warning_rules_unchecked"])
+        self.assertIn("WHETHER EVERY RULE RAN IS NOT KNOWN: the rule checks could not be loaded", view.digest())
+        # With the warnings themselves not loaded there is nothing to qualify.
+        self.assertNotIn("RULE RAN", SiteView(example_context(warning_checks=failed, warnings=Loaded.failed("timeout"))).digest())
 
     def test_a_warning_cited_without_the_count_still_says_a_rule_was_not_checked(self):
         view = SiteView(example_context(warning_checks=self.CHECKS))
