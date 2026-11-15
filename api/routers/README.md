@@ -20,15 +20,17 @@ keeps features dated on or before it; an undated feature is kept only on a layer
 
 | Route | Module | Function |
 | --- | --- | --- |
-| `/api/sites/{bbl}/profile` | `site_profile` | `site_profile_for(bbl, job_type, stage, as_of)` |
-| `/api/sites/{bbl}/similar` | `site_profile` | `similar_cases_for(bbl, hazard, severity_min)` |
+| `/api/sites/{bbl}/profile` | `site_profile.router` | `site_profile(bbl, response, job_type, stage, as_of)` (PR 6) |
+| `/api/sites/{bbl}/similar` | `site_profile.router` | `similar_cases(bbl, response, hazard, severity_min)` (PR 6) |
 | `/api/sites/{bbl}/warnings` | `early_warning` | `warnings_for(bbl, as_of)` |
 | `/api/sites/{bbl}/pattern` | `foresight_model` | `pattern_score_for(bbl)` |
 | `/api/sites/{bbl}/actions` | `actions` | `actions_for(bbl, stage)` |
 
 Arguments come as keywords, already checked (the BBL, the closed sets, the date). Return the route's
 contract model or a dict that matches it; an off-contract answer is a 500, never served. Raise
-`HTTPException` for your own errors. To rename a function, edit `SITE_SOURCES` in `sites_router.py`.
+`HTTPException` for your own errors. A function that takes `response` gets one, and an answer it marks
+`X-ForeSite-Fixture: true` stays labelled as sample data. A module that is there but fails to import
+is an error, never the sample. To rename a function, edit `SITE_SOURCES` in `sites_router.py`.
 
 **Python calls (for the chat).** The same answers without HTTP, each a `LoadedData(data, sample)`:
 `load_site_part(part, bbl, job_type=, stage=, as_of=, hazard=, severity_min=)` in `sites_router.py`

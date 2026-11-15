@@ -1,7 +1,9 @@
 """The search, sites and cases routes. GeoSearch is replaced by a fake: no test reaches the network."""
 
 import json
+import sys
 import tempfile
+import types
 import unittest
 import urllib.error
 from pathlib import Path
@@ -20,6 +22,7 @@ from api.routers.search_router import MAX_RESULTS, geosearch_fetcher
 from api.stubs import FIXTURE_HEADER, fixture
 
 BBL = "3052110074"
+NO_OWNERS = mock.patch("api.routers.sites_router._owner_function", return_value=None)  # as if no owner had landed
 
 
 # Real GeoSearch values (contracts/fixtures/search_results.json); 2625 Bedford's BIN really is the 3000000 placeholder.
@@ -76,9 +79,10 @@ class SitesRouterTests(unittest.TestCase):
         self.client = TestClient(app, raise_server_exceptions=False)
 
     def test_until_an_owner_lands_the_labelled_sample_answers(self):
-        for route in ("profile", "similar", "warnings", "pattern", "actions"):
-            response = self.client.get(f"/api/sites/{BBL}/{route}")
-            self.assertEqual((response.status_code, response.headers.get(FIXTURE_HEADER)), (200, "true"), route)
+        with NO_OWNERS:
+            for route in ("profile", "similar", "warnings", "pattern", "actions"):
+                response = self.client.get(f"/api/sites/{BBL}/{route}")
+                self.assertEqual((response.status_code, response.headers.get(FIXTURE_HEADER)), (200, "true"), route)
 
     def test_an_owner_function_answers_once_it_is_defined(self):
         calls = []
@@ -140,7 +144,8 @@ class PythonLoaderTests(unittest.TestCase):
         return mock.patch.object(actions_module, "actions_for", function, create=True)
 
     def test_the_sample_says_it_is_the_sample(self):
-        loaded = load_site_part("actions", BBL, as_of="2026-06-01")
+        with NO_OWNERS:
+            loaded = load_site_part("actions", BBL, as_of="2026-06-01")
         self.assertTrue(loaded.sample)
         self.assertEqual(loaded.data[0].id, fixture("actions")[0]["id"])
 
@@ -180,6 +185,47 @@ class PythonLoaderTests(unittest.TestCase):
             (root / "cases" / "cases.json").write_text("[{}]")
             with self.assertRaises(DataUnavailable):
                 load_cases(root)
+
+
+class OwnerRouteFunctionTests(unittest.TestCase):
+    """PR 6's shape: route functions in site_profile.router that take a response and may label it sample."""
+
+    def setUp(self):
+        self.client = TestClient(app, raise_server_exceptions=False)
+        self.calls = []
+
+        def site_profile(bbl, response, job_type=None, stage=None, as_of=None):
+            self.calls.append(("profile", bbl, job_type, stage, as_of))
+            return {**fixture("site_profile"), "bbl": bbl}
+
+        def similar_cases(bbl, response, hazard=None, severity_min=None):
+            self.calls.append(("similar", bbl, hazard, severity_min))
+            response.headers[FIXTURE_HEADER] = "true"  # ranked over the sample case library
+            return {**fixture("similar_cases"), "bbl": bbl}
+
+        self.module = types.ModuleType("site_profile.router")
+        self.module.site_profile, self.module.similar_cases = site_profile, similar_cases
+
+    def test_their_route_functions_answer_and_their_sample_label_is_kept(self):
+        other = "1000010001"
+        with mock.patch.dict(sys.modules, {"site_profile.router": self.module}):
+            profile = self.client.get(f"/api/sites/{other}/profile?stage=design")
+            similar = self.client.get(f"/api/sites/{other}/similar?severity_min=2")
+            loaded = load_site_part("similar", other)
+        self.assertEqual((profile.json()["bbl"], profile.headers.get(FIXTURE_HEADER)), (other, None))
+        self.assertEqual((similar.json()["bbl"], similar.headers.get(FIXTURE_HEADER)), (other, "true"))
+        self.assertTrue(loaded.sample, "a Python caller sees the owner's sample label too")
+        self.assertEqual(self.calls[:2], [("profile", other, None, "design", None), ("similar", other, None, 2)])
+
+    def test_owner_code_that_is_there_but_broken_is_an_error_not_the_sample(self):
+        def broken_import(name):
+            raise ModuleNotFoundError("No module named 'shapely'", name="shapely")
+
+        with mock.patch("api.routers.sites_router.importlib.import_module", broken_import):
+            response = self.client.get(f"/api/sites/{BBL}/profile")
+            with self.assertRaises(DataUnavailable):
+                load_site_part("profile", BBL)
+        self.assertEqual((response.status_code, response.headers.get(FIXTURE_HEADER)), (500, None))
 
 
 if __name__ == "__main__":
