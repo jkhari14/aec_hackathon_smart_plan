@@ -70,18 +70,21 @@ def soql_in(values: list[str]) -> str:
     return "(" + ",".join(f"'{value}'" for value in values) + ")"
 
 
-def build_url(dataset_id: str, params: dict[str, str]) -> str:
+def build_url(dataset_id: str, params: dict[str, str], base: str = SODA_BASE) -> str:
     query = urllib.parse.urlencode({f"${key}": value for key, value in params.items()})
-    return f"{SODA_BASE}/{dataset_id}.json?{query}"
+    return f"{base}/{dataset_id}.json?{query}"
 
 
-def query(dataset_id: str, params: dict[str, str]) -> tuple[list[dict], str]:
-    """Run one query; returns (rows, url). One retry on throttling, 5xx or a network error."""
+def query(dataset_id: str, params: dict[str, str], base: str = SODA_BASE) -> tuple[list[dict], str]:
+    """Run one query; returns (rows, url). One retry on throttling, 5xx or a network error.
+
+    `base` is another Socrata portal's resource URL (data.ny.gov, say); the default is NYC Open Data.
+    """
     params = {"limit": str(ROW_LIMIT), **params}
-    url = build_url(dataset_id, params)
+    url = build_url(dataset_id, params, base)
     headers = {"Accept": "application/json"}
     token = os.environ.get("SODA_APP_TOKEN")
-    if token:
+    if token and base == SODA_BASE:  # the NYC Open Data token goes to NYC Open Data only
         headers["X-App-Token"] = token
     last_error = "no attempt made"
     for attempt in (1, 2):

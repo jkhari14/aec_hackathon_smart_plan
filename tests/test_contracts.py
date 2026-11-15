@@ -6,6 +6,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from fastapi.testclient import TestClient
 from jsonschema import Draft202012Validator
@@ -86,7 +87,8 @@ class StubApiServesEveryRoute(unittest.TestCase):
         self.assertEqual(self.client.get("/api/cases/nope").status_code, 404)
 
     def test_write_routes(self):
-        self.assert_sample(self.client.post("/api/chat", json={"question": "What should I check?", "bbl": "3052110074"}))
+        with mock.patch("api.routers.sites_router.owner_function", return_value=None):  # the chat over fixture site parts
+            self.assert_sample(self.client.post("/api/chat", json={"question": "What should I check?", "bbl": "3052110074"}))
 
     def test_bad_input_is_rejected(self):
         response = self.client.post("/api/projects", json={"name": "x", "site_bbl": "1", "stage": "someday", "members": []})

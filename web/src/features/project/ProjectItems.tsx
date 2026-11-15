@@ -17,7 +17,7 @@ const STATUS_LABELS: Record<ActionItem["status"], string> = {
   done: "Done",
   not_applicable: "Not applicable",
 };
-const SELECT = "rounded border border-line bg-night px-1.5 py-1 text-xs focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-400 disabled:opacity-50";
+const SELECT = "rounded border border-line bg-night px-1.5 py-1 text-xs focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--fs-focus)] disabled:opacity-50";
 const CLOSED: ActionItem["status"][] = ["done", "not_applicable"];
 
 /** Life safety first, then what is still open. */
@@ -57,8 +57,8 @@ export function ProjectItems({ items, role, onUpdate }: Props) {
         {shown.map((item) => (
           <li key={item.id} className="rounded border border-line p-2">
             <div className="flex flex-wrap items-center gap-1.5">
-              {item.life_safety && <span className="rounded bg-red-500/20 px-1.5 py-0.5 text-[0.7rem] font-semibold text-red-300">Life safety</span>}
-              <span className="rounded bg-white/10 px-1.5 py-0.5 text-[0.7rem] text-muted">{item.discipline}</span>
+              {item.life_safety && <span className="rounded bg-red-500/20 px-1.5 py-0.5 text-[0.7rem] font-semibold text-[color:var(--fs-error)]">Life safety</span>}
+              <span className="rounded bg-line/60 px-1.5 py-0.5 text-[0.7rem] text-muted">{item.discipline}</span>
               {item.code_ref && <span className="text-[0.7rem] text-muted">{item.code_ref}</span>}
             </div>
             <p className="mt-1 text-sm font-medium">{item.title}</p>
@@ -94,12 +94,12 @@ export function ProjectItems({ items, role, onUpdate }: Props) {
               </label>
               {saving === item.id && <span className="text-xs text-muted">Saving…</span>}
             </div>
-            {problem?.id === item.id && <p className="mt-1 text-xs text-red-300">Not saved: {problem.reason}</p>}
+            {problem?.id === item.id && <p className="mt-1 text-xs text-[color:var(--fs-error)]">Not saved: {problem.reason}</p>}
           </li>
         ))}
       </ul>
       <p className="text-[0.7rem] leading-snug text-muted">
-        Status and owner are set by the people on this project. ForeSite does not check proof, and "done" here is not a finding
+        Status and owner are set by the people on this project. 4site does not check proof, and "done" here is not a finding
         that a duty was met.
       </p>
     </div>

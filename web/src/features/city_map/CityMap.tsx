@@ -1,5 +1,5 @@
 // The map home: a full-bleed dark city map with every layer from /api/layers (clustered, fading in by
-// zoom), extruded buildings, address search or click to pick a site, a cinematic fly-to, and the site
+// zoom), extruded buildings, click to pick a site, a cinematic fly-to, and the site
 // with its touching lots highlighted, the shared party wall glowing, and similar cases arcing in from
 // across the city. 3D buildings come from Cityweft (the blocks around a picked site) or, to compare,
 // Google Photorealistic 3D Tiles (citywide, needs VITE_GOOGLE_MAPS_KEY); a switch on the map picks one.
@@ -14,7 +14,7 @@ import "./city_map.css";
 import { api } from "../../api/client";
 import type { LayerFeature } from "../../contracts";
 import { SEVERITY_LABELS } from "../../contracts";
-import { LayerPanel, type LayerState } from "../layer_panel/LayerPanel";
+import type { LayerState } from "../layer_panel/LayerPanel";
 import {
   addAreaLayers, addBuildings, addPointLayers, addSiteLayers, areaLayerIds, BASEMAP, NYC_CENTER, pointLayerIds, sourceId,
 } from "./map_style";
@@ -24,10 +24,15 @@ import {
   similarCaseTooltip, SITE_COLOR, type SiteModel, siteModelLayer,
 } from "./story_layers";
 import { CameraControls } from "./CameraControls";
-import { SiteSearch } from "./SiteSearch";
 
-// `features` is unused: kept so the PR 0 placeholder App still compiles until Camilo's shell replaces it.
-type Props = { features?: LayerFeature[] };
+// The shell owns the picked site, the layer toggles and the search; the map draws them and reports clicks.
+// Without `enabled`, every layer keeps its catalog default.
+type Props = {
+  site?: Picked | null;
+  onPick?: (site: Picked) => void;
+  enabled?: Set<string>;
+  onSample?: () => void;
+};
 
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -120,15 +125,14 @@ function ModelLegend({ model, scope, onScope }: { model: SiteModel; scope: Model
   );
 }
 
-export function CityMap(_props: Props) {
+export function CityMap({ site: picked = null, onPick, enabled, onSample }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const [ready, setReady] = useState(false);
   const [layers, setLayers] = useState<LayerState[]>([]);
-  const [picked, setPicked] = useState<Picked | null>(null);
-  const [home, setHome] = useState<CameraView>(CITY_VIEW);
   const [siteStatus, setSiteStatus] = useState<string | null>(null);
   const [sample, setSample] = useState(false);
+  const [home, setHome] = useState<CameraView>(CITY_VIEW);
   const [source3d, setSource3d] = useState<Source3d>("cityweft");
   const [cityweftNote, setCityweftNote] = useState<string | null>(null);
   const [googleNote, setGoogleNote] = useState<string | null>(null);
@@ -201,8 +205,22 @@ export function CityMap(_props: Props) {
     };
   }, [ready]);
 
+  useEffect(() => {
+    if (sample) onSample?.();
+  }, [sample, onSample]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!ready || !map || !enabled) return;
+    for (const { entry } of layers) {
+      for (const id of [...pointLayerIds(entry.layer_id), ...areaLayerIds(entry.layer_id)]) {
+        if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", enabled.has(entry.layer_id) ? "visible" : "none");
+      }
+    }
+  }, [ready, layers, enabled]);
+
   // Clicks: a cluster zooms in, a record explains itself, anywhere else picks the site under the cursor.
-  const pickSite = useCallback((site: Picked) => setPicked(site), []);
+  const pickSite = useCallback((site: Picked) => onPick?.(site), [onPick]);
   useEffect(() => {
     const map = mapRef.current;
     if (!ready || !map) return;
@@ -232,7 +250,16 @@ export function CityMap(_props: Props) {
   // Picking a site: fly in, then highlight it and its touching lots.
   useEffect(() => {
     const map = mapRef.current;
-    if (!ready || !map || !picked) return;
+    if (!ready || !map) return;
+    const empty: FeatureCollection = { type: "FeatureCollection", features: [] };
+    (map.getSource("site-lots") as GeoJSONSource).setData(empty);
+    (map.getSource("party-walls") as GeoJSONSource).setData(empty);
+    deckLayers.current.arcs = [];
+    setCityweft(null);
+    drawDeck();
+    setSiteStatus(null);
+    setCityweftNote(null);
+    if (!picked) return;
     let cancelled = false;
     // Far enough back to see the site with its surrounding blocks, not just the lot.
     const camera: CameraView = { center: [picked.lon, picked.lat], zoom: 16.4, pitch: 52, bearing: -28 };
@@ -240,13 +267,7 @@ export function CityMap(_props: Props) {
     if (reducedMotion()) map.jumpTo(camera);
     else map.flyTo({ ...camera, duration: 3200, curve: 1.6, essential: false });
     setSiteStatus("Loading the site and its touching lots…");
-    const empty: FeatureCollection = { type: "FeatureCollection", features: [] };
-    (map.getSource("site-lots") as GeoJSONSource).setData(empty);
-    (map.getSource("party-walls") as GeoJSONSource).setData(empty);
-    deckLayers.current.arcs = [];
-    setCityweft(null);
     setCityweftNote("Loading the Cityweft 3D model of the surrounding blocks…");
-    drawDeck();
     let frame = 0;
     let riseFrame = 0;
     // Cityweft's model of the blocks around the site; on failure the extruded buildings stay and the reason shows.
@@ -341,39 +362,18 @@ export function CityMap(_props: Props) {
     drawDeck();
   }, [ready, source3d, googleLayer, cityweft, scope]);
 
-  // Keep the site in view when the layer panel opens over the map's right side.
-  const onPanelOpen = useCallback((open: boolean) => {
-    mapRef.current?.easeTo({ padding: { right: open ? 352 : 0, top: 72, left: 0, bottom: 0 }, duration: reducedMotion() ? 0 : 250 });
-  }, []);
-
-  const toggle = (layerId: string) => {
-    const map = mapRef.current;
-    setLayers((ls) => ls.map((l) => {
-      if (l.entry.layer_id !== layerId) return l;
-      const on = !l.on;
-      for (const id of [...pointLayerIds(layerId), ...areaLayerIds(layerId)]) {
-        if (map?.getLayer(id)) map.setLayoutProperty(id, "visibility", on ? "visible" : "none");
-      }
-      return { ...l, on };
-    }));
-  };
-
   // maplibre-gl.css sets the map element to position: relative, so it sizes to this wrapper instead.
   return (
     <div className="absolute inset-0">
       <div ref={container} className="h-full w-full" />
-      <SiteSearch picked={picked} status={siteStatus} onPick={pickSite} />
-      <LayerPanel layers={layers} onToggle={toggle} onOpenChange={onPanelOpen} />
+      {picked && siteStatus && (
+        <div className="fs-hint" role="status">{siteStatus}</div>
+      )}
       <div className="absolute bottom-20 left-4 flex max-w-sm flex-col gap-1.5">
         <CameraControls map={ready ? mapRef.current : null} site={picked ? [picked.lon, picked.lat] : null} home={home} />
         {source3d === "cityweft" && cityweft && <ModelLegend model={cityweft.model} scope={scope} onScope={setScope} />}
         <Source3dSwitch value={source3d} onChange={setSource3d} note={source3d === "google" ? googleNote : cityweftNote} />
       </div>
-      {sample && (
-        <span className="absolute bottom-4 left-4 rounded bg-sample/15 px-2 py-0.5 text-xs font-medium text-sample">
-          Sample data
-        </span>
-      )}
     </div>
   );
 }

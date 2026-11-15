@@ -1,5 +1,6 @@
 // The project workspace's calls to the API. A project is real data two people share, so nothing here
 // falls back to a fixture: a read or a write that did not reach the store says so.
+import { API_BASE, STATIC } from "../../api/client";
 import type { components } from "../../api_types";
 import type { ActionItem, Project, ProjectCreate } from "../../contracts";
 
@@ -24,7 +25,7 @@ export type ProjectWrite =
   | { status: "unreachable" };
 
 const FIXTURE_HEADER = "X-ForeSite-Fixture";
-const url = (projectId?: string, rest = "") => `/api/projects${projectId ? `/${encodeURIComponent(projectId)}` : ""}${rest}`;
+const url = (projectId?: string, rest = "") => `${API_BASE}/api/projects${projectId ? `/${encodeURIComponent(projectId)}` : ""}${rest}`;
 
 function reasonFrom(detail: unknown): string | null {
   if (typeof detail === "string") return detail;
@@ -40,6 +41,7 @@ const looksLikeProject = (value: unknown): value is Project =>
 
 /** With `etag`, an unchanged project comes back as "unchanged" and no body. */
 export async function readProject(projectId: string, etag: string | null, signal?: AbortSignal): Promise<ProjectRead> {
+  if (STATIC) return { status: "unreachable" };
   try {
     const response = await fetch(url(projectId), { headers: etag ? { "If-None-Match": etag } : {}, signal });
     if (response.status === 304) return { status: "unchanged" };
@@ -54,6 +56,7 @@ export async function readProject(projectId: string, etag: string | null, signal
 }
 
 async function write(path: string, method: "POST" | "PATCH", body: unknown): Promise<ProjectWrite> {
+  if (STATIC) return { status: "unreachable" };
   try {
     const response = await fetch(path, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
     const payload: unknown = await response.json();

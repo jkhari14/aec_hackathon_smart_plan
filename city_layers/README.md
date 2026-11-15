@@ -5,11 +5,13 @@ tagged with a hazard and a severity. Plain Python 3.9+, no packages, no API keys
 `data_pull`'s Open Data client, the checklist's date parser and the hand-imported complaint code key.
 
 ```bash
-python3 -m city_layers.build_layers                    # pull every layer (about 6 minutes)
+python3 -m city_layers.build_layers                    # pull every layer (about 8 minutes)
 python3 -m city_layers.build_layers sandy_inundation   # pull only the named layers
 python3 -m city_layers.build_layers --catalog          # no pull: rebuild catalog.json from the files
 python3 -m city_layers.build_layers --list             # the layer ids and their sources
-.venv/bin/python -m unittest tests.test_city_layers    # offline tests
+python3 -m city_layers.refresh_layers --every 6        # refresh now, then every 6 hours
+python3 -m city_layers.site_context 40.638718 -73.953869 --bbl 3052110073   # one site, asked of the sources
+.venv/bin/python -m unittest tests.test_city_layers tests.test_city_layers_sources   # offline tests
 ```
 
 Optional: set `SODA_APP_TOKEN` to a free NYC Open Data app token for higher rate limits.
@@ -23,7 +25,7 @@ Optional: set `SODA_APP_TOKEN` to a free NYC Open Data app token for higher rate
 
 [data/layers/README.md](../data/layers/README.md) describes the files for the people who read them.
 
-## The layers (v1)
+## The layers
 
 | layer_id | Source | Placed by | Hazard | Severity | Date |
 |---|---|---|---|---|---|
@@ -32,8 +34,11 @@ Optional: set `SODA_APP_TOKEN` to a free NYC Open Data app token for higher rate
 | `vacate_orders` | HPD Order to Repair/Vacate `tb8q-a3ar`, reason "Fire Damage" only | the record's coordinates | `fire` | 1 | effective date |
 | `fdny_vacates` | FDNY Building Vacate List `n5xc-7jfa` | BBL to lot point | `fire` | 1 | vacate date |
 | `unsafe_facades` | DOB NOW: Safety facade filings `xubg-57si`, one per building | BBL to lot point, else BIN to footprint lot | `facade` | 1 for UNSAFE, 0 for SWARMP | the newest filing's date |
+| `fema_flood_zones` | FEMA National Flood Hazard Layer, the city's special flood hazard areas | polygons, simplified to about 10 m | `flood` | 0 | none |
 | `sandy_inundation` | Sandy Inundation Zone `5xsi-dfpx` | polygons, simplified to about 10 m | `flood` | 0 | 2012-10-29, the storm |
+| `flooding_complaints` | 311 requests routed to DEP `erm2-nwe9`: street and highway flooding, sewer backups, water in basements, last twelve months | the record's coordinates | `flood` | 0 | date created |
 | `e_designations` | E-Designations `hxm3-23vy`, hazardous materials only | BBL to lot point | `contamination` | 0 | effective date |
+| `remediation_sites` | NYS DEC Environmental Remediation Sites `c6ci-rzpg` (data.ny.gov), one per site | the record's coordinates | `contamination` | 0 | none |
 
 A lot point is PLUTO's point for the lot. When PLUTO lacks the lot (it lists a condo under its
 billing lot, not the base lot a record names), it is the middle of the lot's polygon on the tax map
@@ -45,7 +50,9 @@ choices are for the domain lead to confirm:
 - A complaint is always 0, whatever its disposition. The disposition is in the summary with its own date.
 - A vacate order is 1. A facade filed UNSAFE is 1 (it requires public protection and repair); SWARMP is 0.
 - An incident with nobody reported hurt is 1, as in the shared fixture.
-- An E-designation and the Sandy zone are 0: context about a lot, not an event on it.
+- An E-designation, a flood zone and the Sandy zone are 0: context about a lot, not an event on it.
+- A 311 flooding report is 0, like a complaint. A state remediation site is 0 whatever its class;
+  class 02 ("significant threat") might deserve more.
 
 ## Rules the layers keep
 
@@ -68,6 +75,39 @@ choices are for the domain lead to confirm:
   view can tell. Two fields are the status at the pull and have no date: a facade's status, and
   "no rescind date" or "no disposition", which are worded "at the pull".
 - **Complaints are never added to 311 requests.** The same complaint can be in both, with no shared key.
+
+## One site, asked of the sources
+
+[site_context.py](site_context.py) asks each source about one point or lot at full detail, for the
+site profile. The map layers are simplified, so do not read a lot's answer off them.
+
+```python
+from city_layers import site_context
+site_context.site_context(lon, lat, bbl)        # flood, soil, e_designation fields plus one sample per source
+site_context.fema_zone(lon, lat)                # zone, subtype, special flood hazard area, base flood elevation
+site_context.sandy_flooded(lon, lat)            # True or False, from the full-detail polygons
+site_context.e_designation(bbl)                 # every designation on the lot: hazardous materials, air, noise
+site_context.soil_unit(lon, lat)                # the USDA soil survey map unit
+site_context.weather(lon, lat, start, end)      # daily rain and temperatures, heavy-rain and freeze-thaw days
+```
+
+Every answer has a `status`: `ok` (a `value` of None means the source has nothing there), `error`
+(the query failed, so nothing is known) or `skipped` with a `reason`. Two are skipped for now:
+
+- **Depth to bedrock.** USGS serves it as map tiles only (`DTB_NewYorkCity`, depth in feet, about
+  30 m cells). A point lookup needs the raster download and a raster library.
+- **Stormwater flood maps.** The city publishes a 34 MB zip of GIS files and map tiles, with no point lookup.
+
+Weather comes from a model grid cell a few km across, not a gauge at the site, and Open-Meteo's
+free service is for non-commercial use. A heavy-rain day has more than 25 mm (the PR 7 rule); a
+freeze-thaw day went below 0 °C and back above it.
+
+## Scheduled refresh
+
+`python3 -m city_layers.refresh_layers` pulls every layer and logs the run in
+`data/layers/refresh_log.json` (the last 20 runs, with each layer's outcome). `--every HOURS` keeps
+going; or run it from cron. A layer whose source fails keeps its last good file. The refresh only
+rewrites files: committing or deploying them is a separate step.
 
 ## Job type to work types
 
@@ -112,12 +152,13 @@ Sources for PR 16, each checked with one query:
 | DEP Stormwater Flood Maps | `9i7c-xyvv` | **A 34 MB zip of GIS files, not a queryable dataset.** Needs another route |
 | USDA soil (Soil Data Access) | `sdmdataaccess.sc.egov.usda.gov/Tabular/post.rest` | Answers a point query: "Urban land-Flatbush complex, 0 to 3 percent slopes" at 2625 Bedford |
 | Open-Meteo archive | `archive-api.open-meteo.com/v1/archive` | Daily rain and temperatures. The answer is for a grid cell about 3 km from the point asked |
-| USGS depth to bedrock, 311 flooding | | Not checked yet |
+| USGS depth to bedrock | `tiledimageservices.arcgis.com/.../DTB_NewYorkCity/ImageServer` | **Tiles only.** `identify` answers "Invalid URL", so there is no point lookup |
+| 311 flooding | `erm2-nwe9`, `agency='DEP'` | 15,862 requests in the last twelve months. DEP renamed its types in 2026 ("Street Flooding (SJ)" became "Flooding on Street"), so both names are matched. Highway requests rarely have coordinates |
 
-## Not in v1
+## Not done
 
-- FEMA, DEP stormwater, 311 flooding, NYS DEC, and the site samplers for bedrock, soil and weather: PR 16.
+- The DEP stormwater flood maps, as a layer or a lookup, and the depth to bedrock lookup (see above).
 - Parquet copies. The plan mentions them; nothing reads them yet, and GeoJSON keeps the pull free of packages.
-- A site-level answer for "is this lot E-designated" or "was this lot flooded by Sandy". The layers are
-  for the map: the Sandy outline is simplified, and air and noise E-designations are not in the layer. PR 16.
-- Complaints before 2024. The window is `YEARS_BACK` in `structural_complaints.py`.
+- Complaints before 2024 and 311 flooding reports older than twelve months. The windows are
+  `YEARS_BACK` in `structural_complaints.py` and `DAYS_BACK` in `flooding_complaints.py`.
+- FEMA's preliminary flood maps. The layer and the lookup read the effective map only.

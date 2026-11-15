@@ -1,0 +1,92 @@
+{
+ "rows": 434,
+ "base_rate": 0.074,
+ "min_support": 5,
+ "note": "Hypotheses for early-warning rules, from a small sample; not findings.",
+ "patterns": [
+  {
+   "pattern": [
+    "complaint_03@site",
+    "filing"
+   ],
+   "description": "complaint: adjacent building not protected (site) then earth-work, foundation or SOE filing on the site",
+   "support": 7,
+   "followed_by_outcome": 2,
+   "outcome_rate": 0.286,
+   "lift": 3.88
+  },
+  {
+   "pattern": [
+    "complaint_30@touching"
+   ],
+   "description": "complaint: building shaking or structural stability affected (touching lot)",
+   "support": 24,
+   "followed_by_outcome": 6,
+   "outcome_rate": 0.25,
+   "lift": 3.39
+  },
+  {
+   "pattern": [
+    "complaint_30@touching",
+    "filing"
+   ],
+   "description": "complaint: building shaking or structural stability affected (touching lot) then earth-work, foundation or SOE filing on the site",
+   "support": 24,
+   "followed_by_outcome": 6,
+   "outcome_rate": 0.25,
+   "lift": 3.39
+  },
+  {
+   "pattern": [
+    "complaint_03@site"
+   ],
+   "description": "complaint: adjacent building not protected (site)",
+   "support": 11,
+   "followed_by_outcome": 2,
+   "outcome_rate": 0.182,
+   "lift": 2.47
+  },
+  {
+   "pattern": [
+    "complaint_30@site",
+    "filing"
+   ],
+   "description": "complaint: building shaking or structural stability affected (site) then earth-work, foundation or SOE filing on the site",
+   "support": 14,
+   "followed_by_outcome": 2,
+   "outcome_rate": 0.143,
+   "lift": 1.94
+  },
+  {
+   "pattern": [
+    "complaint_30@site"
+   ],
+   "description": "complaint: building shaking or structural stability affected (site)",
+   "support": 14,
+   "followed_by_outcome": 2,
+   "outcome_rate": 0.143,
+   "lift": 1.94
+  },
+  {
+   "pattern": [
+    "complaint_03@touching",
+    "filing"
+   ],
+   "description": "complaint: adjacent building not protected (touching lot) then earth-work, foundation or SOE filing on the site",
+   "support": 10,
+   "followed_by_outcome": 1,
+   "outcome_rate": 0.1,
+   "lift": 1.36
+  },
+  {
+   "pattern": [
+    "complaint_03@touching"
+   ],
+   "description": "complaint: adjacent building not protected (touching lot)",
+   "support": 14,
+   "followed_by_outcome": 1,
+   "outcome_rate": 0.071,
+   "lift": 0.97
+  }
+ ]
+}

@@ -3,6 +3,8 @@
 // See README.md for how the shell mounts it with useProject.
 import { useState, type FormEvent } from "react";
 
+import "../chat/chat_theme.css";
+
 import type { ProjectCreate } from "../../contracts";
 import { ProjectItems } from "./ProjectItems";
 import { ROLE_LABELS, type ProjectPin, type Role } from "./project_client";
@@ -18,11 +20,13 @@ export type ProjectPanelProps = {
   onOpenPin?: (pin: ProjectPin) => void;
   defaultOpen?: boolean;
   className?: string;
+  /** Only the workspace itself, for a frame the shell already draws. */
+  embedded?: boolean;
 };
 
 const DOCKED = "absolute bottom-4 left-4 z-10 w-[24rem] max-w-[calc(100vw-2rem)]";
-const BUTTON = "rounded border border-line px-2 py-1 text-xs hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-400 disabled:cursor-not-allowed disabled:opacity-50";
-const INPUT = "w-full rounded border border-line bg-night px-2 py-1.5 text-sm placeholder:text-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-400";
+const BUTTON = "rounded border border-line px-2 py-1 text-xs hover:bg-line/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--fs-focus)] disabled:cursor-not-allowed disabled:opacity-50";
+const INPUT = "w-full rounded border border-line bg-night px-2 py-1.5 text-sm placeholder:text-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--fs-focus)]";
 const HEADING = "text-xs font-semibold uppercase tracking-wide text-muted";
 const PIN_KINDS: Record<ProjectPin["kind"], string> = {
   record: "Public record",
@@ -83,8 +87,8 @@ function StartProject({ workspace, siteBbl, siteLabel, onProjectCreated }: Proje
         </label>
       ))}
       <button type="submit" className={BUTTON} disabled={busy || missing !== null}>{busy ? "Starting…" : "Start the project"}</button>
-      {missing && <p className="text-xs text-amber-300">{missing}</p>}
-      {problem && <p className="text-xs text-red-300">Not started: {problem}</p>}
+      {missing && <p className="text-xs text-sample">{missing}</p>}
+      {problem && <p className="text-xs text-[color:var(--fs-error)]">Not started: {problem}</p>}
     </form>
   );
 }
@@ -118,7 +122,7 @@ function Notes({ workspace }: { workspace: ProjectWorkspace }) {
           <textarea className={`${INPUT} resize-none`} rows={2} maxLength={4000} value={text} onChange={(event) => setText(event.target.value)} />
         </label>
         <button type="submit" className={BUTTON} disabled={busy || !text.trim()}>{busy ? "Saving…" : "Add note"}</button>
-        {problem && <p className="text-xs text-red-300">Not saved: {problem}</p>}
+        {problem && <p className="text-xs text-[color:var(--fs-error)]">Not saved: {problem}</p>}
       </form>
       {notes.length === 0 && <p className="text-sm text-muted">No notes yet.</p>}
       <ul className="space-y-1.5">
@@ -164,6 +168,7 @@ export function ProjectPanel(props: ProjectPanelProps) {
   const [open, setOpen] = useState(props.defaultOpen ?? true);
   const [adding, setAdding] = useState<{ busy: boolean; problem: string | null }>({ busy: false, problem: null });
   const project = state.status === "ok" ? state.project : null;
+  const embedded = props.embedded ?? false;
 
   async function addSiteItems() {
     setAdding({ busy: true, problem: null });
@@ -175,26 +180,8 @@ export function ProjectPanel(props: ProjectPanelProps) {
     }
   }
 
-  return (
-    <section aria-label="Project workspace" className={`${props.className ?? DOCKED} flex flex-col rounded-lg border border-line bg-panel/95 text-text shadow-lg backdrop-blur`}>
-      <button
-        type="button"
-        aria-expanded={open}
-        onClick={() => setOpen(!open)}
-        className="flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-left hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-400"
-      >
-        <span className="min-w-0">
-          <span className="block text-sm font-semibold">Project</span>
-          <span className="block truncate text-xs text-muted">{project ? project.name : state.status === "none" ? "No project open" : "…"}</span>
-        </span>
-        <span className="flex items-center gap-2">
-          {state.status === "ok" && state.sample && <span className="rounded bg-sample/15 px-2 py-0.5 text-xs font-medium text-sample">Sample data</span>}
-          <span aria-hidden="true" className="text-muted">{open ? "–" : "+"}</span>
-        </span>
-      </button>
-
-      {open && (
-        <div className="max-h-[60vh] space-y-4 overflow-y-auto border-t border-line px-3 py-3">
+  const body = (
+        <div className={embedded ? "space-y-4" : "max-h-[60vh] space-y-4 overflow-y-auto border-t border-line px-3 py-3"}>
           {state.status === "none" && <StartProject {...props} />}
           {state.status === "loading" && <p className="text-sm text-muted">Loading the project…</p>}
           {state.status === "not_found" && <p className="text-sm">No project was found at this link.</p>}
@@ -211,7 +198,7 @@ export function ProjectPanel(props: ProjectPanelProps) {
                 <label className="flex items-center gap-1.5 text-xs text-muted">
                   This tab acts as
                   <select
-                    className="rounded border border-line bg-night px-1.5 py-1 text-xs focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-400"
+                    className="rounded border border-line bg-night px-1.5 py-1 text-xs focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--fs-focus)]"
                     value={role}
                     onChange={(event) => workspace.setRole(event.target.value as Role)}
                   >
@@ -219,7 +206,7 @@ export function ProjectPanel(props: ProjectPanelProps) {
                   </select>
                 </label>
                 {!project.members.some((member) => member.role === role) && (
-                  <p className="text-xs text-amber-300">This project has no {ROLE_LABELS[role].toLowerCase()}, so notes and pins in this role will be refused.</p>
+                  <p className="text-xs text-sample">This project has no {ROLE_LABELS[role].toLowerCase()}, so notes and pins in this role will be refused.</p>
                 )}
               </div>
               <div className="space-y-1.5">
@@ -228,7 +215,7 @@ export function ProjectPanel(props: ProjectPanelProps) {
                 <button type="button" className={BUTTON} disabled={adding.busy} onClick={() => void addSiteItems()}>
                   {adding.busy ? "Adding…" : "Add this site's action items"}
                 </button>
-                {adding.problem && <p className="text-xs text-red-300">Not added: {adding.problem}</p>}
+                {adding.problem && <p className="text-xs text-[color:var(--fs-error)]">Not added: {adding.problem}</p>}
               </div>
               <div className="space-y-1.5">
                 <h3 className={HEADING}>Notes</h3>
@@ -241,7 +228,35 @@ export function ProjectPanel(props: ProjectPanelProps) {
             </>
           )}
         </div>
-      )}
+  );
+
+  if (embedded) {
+    return (
+      <div className="fs-chatscope">
+        {state.status === "ok" && state.sample && <p className="pb-2 text-xs font-medium text-sample">Sample data</p>}
+        {body}
+      </div>
+    );
+  }
+
+  return (
+    <section aria-label="Project workspace" className={`fs-chatscope ${props.className ?? DOCKED} flex flex-col rounded-lg border border-line bg-panel/95 text-text shadow-lg backdrop-blur`}>
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+        className="flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-left hover:bg-line/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--fs-focus)]"
+      >
+        <span className="min-w-0">
+          <span className="block text-sm font-semibold">Project</span>
+          <span className="block truncate text-xs text-muted">{project ? project.name : state.status === "none" ? "No project open" : "…"}</span>
+        </span>
+        <span className="flex items-center gap-2">
+          {state.status === "ok" && state.sample && <span className="rounded bg-sample/15 px-2 py-0.5 text-xs font-medium text-sample">Sample data</span>}
+          <span aria-hidden="true" className="text-muted">{open ? "–" : "+"}</span>
+        </span>
+      </button>
+      {open && body}
     </section>
   );
 }

@@ -20,8 +20,8 @@ from datetime import date
 from pathlib import Path
 
 from city_layers import (
-    construction_incidents, e_designations, fdny_vacates, sandy_inundation, structural_complaints,
-    unsafe_facades, vacate_orders,
+    construction_incidents, e_designations, fdny_vacates, fema_flood_zones, flooding_complaints,
+    remediation_sites, sandy_inundation, structural_complaints, unsafe_facades, vacate_orders,
 )
 from city_layers.layer_file import (
     LAYERS_DIR, LayerPullError, collection, error_collection, layer_path, read_collection, write_catalog,
@@ -31,7 +31,7 @@ from city_layers.layer_file import (
 # In the order the layer panel lists them.
 MODULES = (
     construction_incidents, structural_complaints, vacate_orders, fdny_vacates, unsafe_facades,
-    sandy_inundation, e_designations,
+    fema_flood_zones, sandy_inundation, flooding_complaints, e_designations, remediation_sites,
 )
 LAYERS = {module.INFO.layer_id: module for module in MODULES}
 _REFRESH_FAILED = " A refresh on "

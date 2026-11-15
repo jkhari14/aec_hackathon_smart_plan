@@ -255,6 +255,10 @@ class AppRouteTests(unittest.TestCase):
         patcher = mock.patch.dict(os.environ, {"FORESITE_CHAT_LIVE": "0"})
         patcher.start()
         self.addCleanup(patcher.stop)
+        # Every site part from its fixture, as if no owner module had landed, so the answers below stay fixed.
+        owners = mock.patch("api.routers.sites_router.owner_function", return_value=None)
+        owners.start()
+        self.addCleanup(owners.stop)
         self.client = TestClient(app)
 
     def post(self, question, **more):

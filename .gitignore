@@ -3,6 +3,8 @@ __pycache__/
 *.pyc
 node_modules/
 **/web/dist/
+# Rebuilt by every deploy (tools/demo_snapshot.py).
+web/public/snapshot/
 .DS_Store
 # Files imported by hand stay on the machine that fetched them; only provenance and facts are committed.
 data/manual_imports/**/raw/

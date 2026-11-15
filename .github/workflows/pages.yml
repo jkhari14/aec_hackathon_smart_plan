@@ -1,0 +1,61 @@
+name: Deploy web
+
+# Run by hand (Actions > Deploy web > Run workflow) after a merge, and once more at the freeze.
+# Builds the demo snapshot from the committed caches, then the web app, and publishes it on GitHub Pages.
+# Set the repository variable FORESITE_API_BASE to the deployed API's URL; without it the site is static
+# and reads only the snapshot and the fixtures.
+on:
+  workflow_dispatch:
+    inputs:
+      as_of:
+        description: "Also save as-of answers for this date (YYYY-MM-DD)"
+        default: "2026-06-01"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: api/requirements.txt
+      - run: pip install -r api/requirements.txt
+      - name: Save the demo snapshot
+        run: python -m tools.demo_snapshot --as-of "${{ inputs.as_of }}"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+        working-directory: web
+      - name: Build
+        working-directory: web
+        env:
+          VITE_API_BASE: ${{ vars.FORESITE_API_BASE }}
+          VITE_STATIC: ${{ vars.FORESITE_API_BASE == '' && '1' || '' }}
+        run: npm run build -- --base=/${{ github.event.repository.name }}/ && cp dist/index.html dist/404.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
