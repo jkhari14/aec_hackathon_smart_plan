@@ -5,7 +5,7 @@ import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 import { C, PIXEL } from "../theme";
 import { Eyebrow, HardCard, Headline, PixelLabel, Reveal, Slide } from "../ui";
 
-export const HOW_BEATS = { sim: 0, warn: 400, list: 730, chat: 1030 };
+export const HOW_BEATS = { sim: 0, warn: 400, list: 400, chat: 760 };
 
 function Beat({ from, to, children }: { from: number; to: number; children: React.ReactNode }) {
   const frame = useCurrentFrame();
@@ -164,7 +164,7 @@ function Checklist() {
   const frame = useCurrentFrame();
   const L = frame - HOW_BEATS.list;
   const at = (a: number, b = a + 12) => interpolate(L, [a, b], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const inputs = ["New construction · masonry", "Excavation · foundation · SOE", "This site’s records and conditions"];
+  const inputs = ["New construction · masonry", "Excavation · foundation · SOE", "Uploaded plans and geotech reports"];
   const status = L > 150 ? "In progress" : "Open";
   return (
     <AbsoluteFill>
@@ -173,7 +173,7 @@ function Checklist() {
         <Headline delay={HOW_BEATS.list + 4} size={60} style={{ marginTop: 14 }} lines={[["One", "live", "checklist,", "by", "milestone,", "with", "the", { t: "proof", color: C.blue }, { t: "each", color: C.blue }, { t: "item", color: C.blue }, { t: "needs", color: C.blue }]]} />
       </div>
       <div style={{ position: "absolute", left: 120, top: 270, width: 520 }}>
-        <PixelLabel size={17} style={{ opacity: at(6) }}>The project</PixelLabel>
+        <PixelLabel size={17} style={{ opacity: at(6) }}>The project · updates with every uploaded document</PixelLabel>
         {inputs.map((t, i) => (
           <div key={t} style={{ marginTop: 12, padding: "12px 18px", border: `3px solid ${C.ink}`, background: C.card, fontSize: 24, opacity: at(10 + i * 8), transform: `translateX(${(1 - at(10 + i * 8)) * -20}px)` }}>{t}</div>
         ))}
@@ -269,11 +269,8 @@ function Chat() {
 export function HowItWorks({ duration }: { duration: number }) {
   return (
     <Slide section="How it works" index={6} duration={duration}>
-      <Beat from={0} to={HOW_BEATS.warn}>
+      <Beat from={0} to={HOW_BEATS.list}>
         <Similarity />
-      </Beat>
-      <Beat from={HOW_BEATS.warn} to={HOW_BEATS.list}>
-        <Warnings />
       </Beat>
       <Beat from={HOW_BEATS.list} to={HOW_BEATS.chat}>
         <Checklist />

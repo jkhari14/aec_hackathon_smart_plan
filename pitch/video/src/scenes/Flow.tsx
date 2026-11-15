@@ -17,7 +17,7 @@ const MID: Node[] = [
   { id: "profile", x: 750, y: 360, w: 430, t: "Site profile", s: "the lot + every lot it touches", tone: "dark" },
   { id: "sim", x: 750, y: 500, w: 430, t: "Similarity", s: "weighted features vs 42 past cases", tone: "blue" },
   { id: "rules", x: 750, y: 640, w: 430, t: "Early-warning rules", s: "record sequences in time", tone: "blue" },
-  { id: "chat", x: 750, y: 780, w: 430, t: "Claude, grounded", s: "answers only from cited records", tone: "blue" },
+  { id: "chat", x: 750, y: 780, w: 430, t: "Claude, cited", s: "every answer cites its source record", tone: "blue" },
 ];
 const OUT: Node[] = [
   { id: "map", x: 1400, y: 330, w: 410, t: "Site on the 3D map", s: "with its neighbors highlighted" },

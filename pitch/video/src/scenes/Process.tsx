@@ -136,7 +136,7 @@ function Build() {
           <div key={id} style={{ position: "absolute", left: 820, top: 300 + i * 82, display: "flex", alignItems: "center", gap: 14, opacity: p }}>
             <Img src={staticFile(`team/${id}.jpg`)} style={{ width: 68, height: 68, borderRadius: "50%", border: `3px solid ${C.ink}`, filter: "grayscale(1)" }} />
             <div style={{ display: "flex", gap: 5 }}>
-              {Array.from({ length: n }).map((_, k) => (
+              {Array.from({ length: 0 * n }).map((_, k) => (
                 <div key={k} style={{ width: 16, height: 26, background: C.blue, opacity: interpolate(L, [70 + k * 4, 76 + k * 4], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }} />
               ))}
             </div>
@@ -156,7 +156,7 @@ function Build() {
         ))}
         <PixelLabel color="rgba(255,255,255,0.6)" size={14} style={{ marginTop: 18, lineHeight: 1.5 }}>Conflicts reconciled with merge commits · never force-pushed</PixelLabel>
       </div>
-      <PixelLabel color={C.ink} size={16} style={{ position: "absolute", left: 820, top: 970, opacity: back }}>Merged PRs per teammate</PixelLabel>
+      <PixelLabel color={C.ink} size={16} style={{ position: "absolute", left: 820, top: 970, opacity: back }}>Eight agent sessions, one per teammate</PixelLabel>
     </AbsoluteFill>
   );
 }

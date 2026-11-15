@@ -20,11 +20,10 @@ export const SEGMENTS: Segment[] = [
   { from: 64.5, to: 94.3, speed: 1.8, chip: "04 · Start a project", keys: [panel(64.5, 1.45, 330), panel(70.5, 1.45, 330), wide(75.7), { t: 77.5, z: 1.4, x: 960, y: 330 }, { t: 84, z: 1.4, x: 960, y: 330 }, { t: 86, z: 1.25, x: 960, y: 760 }, { t: 92, z: 1.25, x: 960, y: 760 }, wide(94.3)] },
   { from: 94.3, to: 118.5, speed: 1.6, chip: "05 · One checklist for the whole team", keys: [wide(94.3), { t: 96, z: 1.35, x: 960, y: 380 }, { t: 102.9, z: 1.35, x: 960, y: 380 }, { t: 104, z: 1.4, x: 960, y: 600 }, { t: 108.5, z: 1.4, x: 960, y: 600 }, { t: 110.5, z: 1.45, x: 960, y: 640 }, { t: 118, z: 1.45, x: 960, y: 640 }, wide(118.5)] },
   { from: 119.5, to: 146.5, speed: 1.6, chip: "06 · Ask the chat", keys: [wide(119.5), { t: 121, z: 1.45, x: 960, y: 760 }, { t: 146.5, z: 1.45, x: 960, y: 720 }] },
-  { from: 148.3, to: 152.6, speed: 1.2, keys: [wide(148.3), wide(152.6)] },
 ];
 
 const TITLE = 75;
-const CARD = 40;
+const CARD = 60;
 const clipFrames = (s: Segment) => Math.round(((s.to - s.from) * FPS) / s.speed);
 const frames = (s: Segment) => clipFrames(s) + (s.chip ? CARD : 0);
 export const DEMO_FRAMES = TITLE + SEGMENTS.reduce((n, s) => n + frames(s), 0);

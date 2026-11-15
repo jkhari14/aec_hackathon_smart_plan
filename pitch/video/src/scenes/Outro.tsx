@@ -29,15 +29,12 @@ export function Outro({ duration }: { duration: number }) {
       >
         <Img src={staticFile("logo-8bit.png")} style={{ width: 460 + 200 * (1 - logo), marginTop: -40 }} />
         <div style={{ textAlign: "center", marginTop: 10 }}>
-          <Reveal delay={settle + 10}>
-            <div style={{ fontSize: 44, color: C.ink2, letterSpacing: "-0.01em" }}>The warnings were always public.</div>
-          </Reveal>
           <Headline
             delay={settle + 30}
             size={100}
             stagger={4}
             style={{ marginTop: 22 }}
-            lines={[["4site", "turns", "them", "into"], [{ t: "risk", color: C.blue }, { t: "intelligence,", color: C.blue }], ["before", "work", "starts."]]}
+            lines={[["4site", "turns", "warnings", "into"], [{ t: "risk", color: C.blue }, { t: "intelligence,", color: C.blue }], ["before", "work", "starts."]]}
           />
           <Reveal delay={settle + 90}>
             <div style={{ fontFamily: PIXEL, fontSize: 22, letterSpacing: "0.2em", color: C.ink2, marginTop: 40 }}>

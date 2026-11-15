@@ -25,8 +25,8 @@ that the cause is under investigation. Nothing about what could have prevented i
 > excavation permits, and had been cited for working after a stop-work order.
 
 **0:32 The wrong building.**
-> That's the pattern: the warnings are public, but they're filed on the job's record, not on the old
-> building next door, and no one links the two.
+> That's the pattern: the warnings are public, but they sit on the construction site's record, not on the
+> old building next door that they affect, and no one links the two.
 
 **0:41 One slice each.**
 > The architect, the engineer, the geotech, the contractor, DOB, the neighbors: everyone holds one slice
@@ -55,81 +55,75 @@ that the cause is under investigation. Nothing about what could have prevented i
 **1:25 Step 1, pick a site.**
 > The whole city in 3D. We search for the address, and the map flies to it with its touching lots.
 
-**1:32 Step 2, similar projects.**
+**1:33 Step 2, similar projects.**
 > Right away: past projects like this one, closest first. "Watch out for" sums up what went wrong on most of
 > them, a neighbor damaged next to an excavation, with the checklist items that address it.
 
-**1:42** *(the case and its popup)*
+**1:44** *(the case and its popup)*
 > 211 East 34th Street: a strong match. It partly collapsed next to an excavation in 2020, with no injuries.
 > The popup shows what it has in common with this site, its lessons, and what happened, as publicly reported.
 
-**1:54 Step 3, this lot.**
+**1:56 Step 3, this lot.**
 > This lot's own record: the top signals, and early warnings, like work continuing after a stop-work order.
 
-**2:05 Step 4, start a project.**
+**2:08 Step 4, start a project.**
 > Pick what you'd do here, a new build with excavation, and start a project. Setup already knows the lot:
 > nine attached neighbors, what's filed with DOB. It only asks what the records can't tell us, like how
 > deep you'll dig.
 
-**2:23 Step 5, one checklist.**
+**2:27 Step 5, one checklist.**
 > 4site drafts one live checklist for the whole team, along the project's milestones: design, DOB filing,
 > neighbors notified, survey, excavation. Every item has an owner, the code section, and the proof it
 > needs. Some come from DOB NOW: similar filings held at objections, so check those drawings before you file.
 
-**2:40 Step 6, ask the chat.**
+**2:45 Step 6, ask the chat.**
 > And anyone can ask. A first answer arrives in seconds from this site's data, with the code sections, while
 > the full answer searches the records and past cases.
 
-**2:58** *(limitations)*
-> And what 4site doesn't know is always one click away.
-
 ## 3:02 Inputs, process, outputs (13 s)
 > An address, the project and public records go in. We build a site profile, then run similarity,
-> early-warning rules and a grounded Claude. Out come similar projects, warnings, a checklist and answers.
+> early-warning rules and Claude, where every answer cites its source record. Out come similar projects, warnings, a checklist and answers.
 
-## 3:15 How it works (34 s)
+## 3:15 How it works (23 s)
 **3:15 Similarity.**
 > Similarity is a weighted sum of facts an engineer can check. Against 211 East 34th: masonry wall,
 > attached, excavation, geotech records. That's 52 of 100, a strong match. A fact nobody reported never
 > counts as a difference, and a near miss earns half.
 
-**3:28 Early warnings.**
-> Early warnings are sequences in time: a stop-work order, then more work; rain during an open
-> excavation. They're prompts to look, not findings.
-
-**3:39 The checklist.**
+**3:28 The checklist.**
 > The checklist turns all of it into work: 21 items from four sources, code duties, hazard rules, lessons
-> from similar projects, and DOB objections, each with an owner and the proof it needs.
+> from similar projects, and DOB objections, each with an owner and the proof it needs. It's live: when
+> anyone uploads a structural plan or a geotech report, the checklist updates.
 
-## 3:49 Data sources (9 s)
+## 3:38 Data sources (9 s)
 > It's all public and all dated: DOB filings, complaints and violations, façades, flood, soil, weather, a
 > case library, and the building code.
 
-## 3:58 Tech stack (9.5 s)
+## 3:48 Tech stack (9.5 s)
 > React, MapLibre and deck.gl on Vercel, Claude for the chat, Python and FastAPI underneath, and Cityweft
 > for the 3D city.
 
-## 4:08 Impact (9 s)
+## 3:57 Impact (9 s)
 > The neighbor's risk shows up on your site, hindsight becomes a checklist, and the whole team works from
 > one picture.
 
-## 4:17 Limits and next steps (10.5 s)
+## 4:06 Limits and next steps (10.5 s)
 > Public records only, not engineering advice, never a prediction. Next: the reasons behind DOB objections,
 > a forensics ledger, daily alerts, and more cities.
 
-## 4:27 How we built it (20 s)
-**4:27 The process.**
+## 4:17 How we built it (19 s)
+**4:17 The process.**
 > We recorded our brainstorms with Wispr Flow, synthesized them with Cursor and Claude, iterated on the
 > plan, made concept videos, and took feedback, including from a Thornton Tomasetti forensic expert.
 
-**4:42 The build.**
-> BUILD.md was our single source of truth. Each of us ran an agent from it, and the pull requests merged in
-> order.
+**4:31 The build.**
+> BUILD.md was our single source of truth. Each of us ran an agent session from it, and the pull requests
+> merged in order.
 
-## 4:47 Close (8 s)
-> The warnings were always public. 4site turns them into risk intelligence, before work starts.
+## 4:36 Close (8 s)
+> 4site turns warnings into risk intelligence, before work starts. Build on hindsight, design with foresight.
 
-## 4:55 Try it (5 s)
+## 4:44 Try it (5 s)
 *QR code.*
 > Scan the code to see it for yourself. Thank you.
 

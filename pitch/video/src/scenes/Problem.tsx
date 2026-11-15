@@ -201,7 +201,7 @@ export function Problem({ duration }: { duration: number }) {
         <div style={{ position: "absolute", left: 120, top: 110 }}>
           <Eyebrow color={C.red} delay={R0}>The problem</Eyebrow>
           <Headline delay={R0 + 6} size={80} style={{ marginTop: 16 }}
-            lines={[["The", "warnings", "are", "public."], ["They’re", "filed", "on", "the", { t: "wrong", color: C.red }, { t: "building.", color: C.red }]]} />
+            lines={[["The", "warnings", "are", "public,"], ["but", "they", "sit", "on", "the", { t: "neighbor’s", color: C.red }, { t: "record.", color: C.red }]]} />
         </div>
         <Records />
       </Beat>

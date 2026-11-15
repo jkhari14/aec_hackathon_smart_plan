@@ -2,7 +2,7 @@
 import { Img, staticFile } from "remotion";
 
 import { C } from "../theme";
-import { Eyebrow, Headline, PixelLabel, Reveal, Slide, useSpring } from "../ui";
+import { Eyebrow, PixelLabel, Reveal, Slide, useSpring } from "../ui";
 
 export function Cta({ duration }: { duration: number }) {
   const s = useSpring(10, 16);
@@ -10,7 +10,11 @@ export function Cta({ duration }: { duration: number }) {
     <Slide section="Try it" duration={duration}>
       <div style={{ position: "absolute", left: 160, top: 300, width: 900 }}>
         <Eyebrow delay={2}>Try it</Eyebrow>
-        <Headline delay={6} size={96} style={{ marginTop: 18 }} lines={[["See", "4site"], [{ t: "for", color: C.blue }, { t: "yourself.", color: C.blue }]]} />
+        <Reveal delay={6}>
+          <div style={{ fontSize: 96, fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.05, marginTop: 18 }}>
+            See <span style={{ color: C.blue }}>4</span>site<br />for yourself.
+          </div>
+        </Reveal>
         <Reveal delay={24}>
           <p style={{ fontSize: 40, color: C.ink2, marginTop: 30 }}>Scan to explore 4site.</p>
         </Reveal>

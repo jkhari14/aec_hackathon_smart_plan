@@ -27,7 +27,7 @@ export const SCENES: Scene[] = [
   { name: "Solution", frames: 270, render: (d) => <Solution duration={d} /> },
   { name: "Demo", frames: DEMO_FRAMES, render: () => <Demo /> },
   { name: "Flow", frames: 390, render: (d) => <Flow duration={d} /> },
-  { name: "HowItWorks", frames: 1030, render: (d) => <HowItWorks duration={d} /> },
+  { name: "HowItWorks", frames: 700, render: (d) => <HowItWorks duration={d} /> },
   { name: "Data", frames: 280, render: (d) => <Data duration={d} /> },
   { name: "Stack", frames: 285, render: (d) => <Stack duration={d} /> },
   { name: "Impact", frames: 265, render: (d) => <Impact duration={d} /> },
