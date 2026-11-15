@@ -33,7 +33,7 @@ export function KnownFacts({ bbl }: { bbl: string }) {
           <div key={f.label} className="fs-ps-known__row">
             <dt>{f.label}</dt>
             <dd>
-              {f.value ?? <span className="fs-quiet">{done ? "couldn't load" : "loading…"}</span>}
+              {f.value ?? <span className="fs-quiet">{f.missing ?? (done ? "couldn't load" : "loading…")}</span>}
               <span className="fs-ps-known__src">{f.source}</span>
             </dd>
           </div>

@@ -47,3 +47,10 @@ test("a profile that couldn't load leaves every line empty, not invented", () =>
   assert.ok(lines.length >= 3);
   assert.ok(lines.every((f) => f.value === null));
 });
+
+test("a fact the profile doesn't check says 'not checked', not 'couldn't load'", () => {
+  const flood = knownFacts({ ...(profile as object), flood: { fema_zone: null } } as never).find((f) => f.label === "Flood zone");
+  assert.equal(flood?.value, null);
+  assert.equal(flood?.missing, "not checked for this lot");
+  assert.equal(knownFacts(null).find((f) => f.label === "Flood zone")?.missing, undefined);
+});
