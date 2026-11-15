@@ -1,630 +1,1447 @@
 [
-  {
-    "id": "case-211-e-34th-2020",
-    "title": "Partial collapse next to an excavation",
-    "address": "211 E 34th St, Manhattan",
-    "bbl": "1009150002",
-    "lat": 40.74577,
-    "lon": -73.97756,
-    "date": "2020",
-    "hazards": [
-      "structural",
-      "geotech"
-    ],
-    "severity": 2,
-    "job_type": "new_building",
-    "work_types": [
-      "excavation",
-      "support_of_excavation",
-      "underpinning"
-    ],
-    "conditions": {
-      "attached": true,
-      "construction": "masonry"
-    },
-    "summary": "The adjoining building partially collapsed during excavation for the development next door at 509 Third Ave. No injuries were reported.",
-    "cause_as_reported": "DOB cited failures to shore and brace the adjoining building, monitor movement, and evaluate the neighboring structure.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "Patch, citing DOB",
-        "url": "https://patch.com/new-york/brooklyn/what-went-wrong-brooklyns-deadly-building-collapse",
-        "date": null
-      }
-    ]
+ {
+  "id": "case-211-e-34th-2020",
+  "title": "Partial collapse next to an excavation",
+  "address": "211 E 34th St, Manhattan",
+  "bbl": "1009150002",
+  "lat": 40.74577,
+  "lon": -73.97756,
+  "date": "2020-07",
+  "hazards": [
+   "structural",
+   "geotech"
+  ],
+  "severity": 2,
+  "job_type": "new_building",
+  "work_types": [
+   "excavation",
+   "support_of_excavation",
+   "underpinning"
+  ],
+  "conditions": {
+   "attached": true,
+   "construction": "masonry"
   },
-  {
-    "id": "case-714-39th-2018",
-    "title": "Support-of-excavation wall collapse",
-    "address": "714 39th St, Brooklyn",
-    "bbl": "3009150010",
-    "lat": 40.64807,
-    "lon": -73.99907,
-    "date": "2018-09-12",
-    "hazards": [
-      "geotech",
-      "construction_safety"
-    ],
-    "severity": 3,
-    "job_type": "new_building",
-    "work_types": [
-      "excavation",
-      "support_of_excavation"
-    ],
-    "conditions": {
-      "construction": "masonry wall"
-    },
-    "summary": "A support-of-excavation and masonry wall collapsed during excavation for a new cellar. One worker was killed.",
-    "cause_as_reported": "Warnings from workers and adjacent owners about a moving wall were not acted on.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "NYC DOI and Brooklyn DA release",
-        "url": "https://www.nyc.gov/assets/doi/press-releases/2024/March/CYendreleases/DOB.pdf",
-        "date": "2024-03"
-      }
-    ]
+  "summary": "A vacant five-storey building partly collapsed, with a second collapse hours later. Excavation was under way at the adjoining corner property in preparation for a 35-storey building, and the building on the other side was evacuated as a precaution. No injuries were reported.",
+  "cause_as_reported": "DOB cited failures to shore and brace the adjoining building, monitor movement, and evaluate the neighboring structure.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "Patch, citing DOB",
+    "url": "https://patch.com/new-york/brooklyn/what-went-wrong-brooklyns-deadly-building-collapse",
+    "date": "2026-11-12"
+   },
+   {
+    "name": "amNY, partial collapse raises questions about neighbouring properties",
+    "url": "https://www.amny.com/real-estate/partial-building-collapse-in-manhattan-raises-questions-about-neighboring-properties/",
+    "date": "2020-07-08"
+   }
+  ]
+ },
+ {
+  "id": "case-714-39th-2018",
+  "title": "Support-of-excavation wall collapse",
+  "address": "714 39th St, Brooklyn",
+  "bbl": "3009150010",
+  "lat": 40.64807,
+  "lon": -73.99907,
+  "date": "2018-09-12",
+  "hazards": [
+   "geotech",
+   "construction_safety"
+  ],
+  "severity": 3,
+  "job_type": "new_building",
+  "work_types": [
+   "excavation",
+   "support_of_excavation"
+  ],
+  "conditions": {
+   "construction": "masonry wall"
   },
-  {
-    "id": "case-102-02-liberty",
-    "title": "Adjacent wall collapse during underpinning",
-    "address": "102-02 Liberty Ave, Queens",
-    "bbl": "4095230001",
-    "lat": 40.681313,
-    "lon": -73.838397,
-    "date": "2018",
-    "hazards": [
-      "structural",
-      "geotech"
-    ],
-    "severity": 2,
-    "job_type": null,
-    "work_types": [
-      "underpinning",
-      "foundation"
-    ],
-    "conditions": {
-      "attached": true
-    },
-    "summary": "A wall of the adjacent property collapsed during underpinning operations.",
-    "cause_as_reported": "DOB penalized the general contractor for several conditions, including failing to promptly report the accident.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "DOB enforcement bulletin",
-        "url": "https://www.nyc.gov/site/buildings/dob/pr-enforcement-bulletin-1118.page",
-        "date": null
-      }
-    ]
+  "summary": "A support-of-excavation and masonry wall collapsed during excavation for a new cellar. One worker was killed.",
+  "cause_as_reported": "Warnings from workers and adjacent owners about a moving wall were not acted on.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "NYC DOI and Brooklyn DA release",
+    "url": "https://www.nyc.gov/assets/doi/press-releases/2024/March/CYendreleases/DOB.pdf",
+    "date": "2024-03"
+   }
+  ]
+ },
+ {
+  "id": "case-102-02-liberty",
+  "title": "Adjacent wall collapse during underpinning",
+  "address": "102-02 Liberty Ave, Queens",
+  "bbl": "4095230001",
+  "lat": 40.681313,
+  "lon": -73.838397,
+  "date": "2018",
+  "hazards": [
+   "structural",
+   "geotech"
+  ],
+  "severity": 2,
+  "job_type": null,
+  "work_types": [
+   "underpinning",
+   "foundation"
+  ],
+  "conditions": {
+   "attached": true
   },
-  {
-    "id": "case-1915-billingsley-2023",
-    "title": "Partial collapse during facade repair",
-    "address": "1915 Billingsley Terrace, Bronx",
-    "bbl": "2028790184",
-    "lat": 40.854152,
-    "lon": -73.915983,
-    "date": "2023-12-11",
-    "hazards": [
-      "structural",
-      "facade"
-    ],
-    "severity": 2,
-    "job_type": "alteration",
-    "work_types": [
-      "facade",
-      "structural"
-    ],
-    "conditions": {
-      "construction": "masonry, load-bearing piers"
-    },
-    "summary": "The corner of an occupied building collapsed while contractors performed repairs. No serious injuries; dozens of families were displaced.",
-    "cause_as_reported": "A load-bearing masonry pier was not identified as load-bearing on the repair plans and was removed without temporary shoring.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "DOB investigation report",
-        "url": "https://www.nyc.gov/site/buildings/dob/pr-investigation-bx-building.page",
-        "date": null
-      }
-    ]
+  "summary": "A wall of the adjacent property collapsed during underpinning operations.",
+  "cause_as_reported": "DOB penalized the general contractor for several conditions, including failing to promptly report the accident.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "DOB enforcement bulletin",
+    "url": "https://www.nyc.gov/site/buildings/dob/pr-enforcement-bulletin-1118.page",
+    "date": "2018-12-31"
+   }
+  ]
+ },
+ {
+  "id": "case-1915-billingsley-2023",
+  "title": "Partial collapse during facade repair",
+  "address": "1915 Billingsley Terrace, Bronx",
+  "bbl": "2028790184",
+  "lat": 40.854152,
+  "lon": -73.915983,
+  "date": "2023-12-11",
+  "hazards": [
+   "structural",
+   "facade"
+  ],
+  "severity": 2,
+  "job_type": "alteration",
+  "work_types": [
+   "facade",
+   "structural"
+  ],
+  "conditions": {
+   "construction": "masonry, load-bearing piers"
   },
-  {
-    "id": "case-57-ann-2023",
-    "title": "Garage collapse during unpermitted pier repair",
-    "address": "57 Ann St, Manhattan",
-    "bbl": "1000920010",
-    "lat": 40.71041,
-    "lon": -74.00642,
-    "date": "2023-04-18",
-    "hazards": [
-      "structural"
-    ],
-    "severity": 3,
-    "job_type": "alteration",
-    "work_types": [
-      "structural"
-    ],
-    "conditions": {
-      "neighbor_year_built": null,
-      "attached": true,
-      "construction": "steel frame with load-bearing brick piers",
-      "year_built": 1925,
-      "occupancy": "parking structure"
-    },
-    "summary": "A 1925 parking structure partially collapsed while workers removed brick and mortar from a load-bearing pier. One worker was killed and several people were injured. The structure was later demolished.",
-    "cause_as_reported": "The City's final forensic investigation report found the collapse was triggered by removal of brick and mortar from a severely deteriorated load-bearing brick pier, during repair work that proceeded without DOB approval or permits. The report also found that at original construction in 1925 certain load-bearing piers were not properly connected to the adjacent party wall, leaving them more vulnerable to deterioration.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "NYC DOB, final investigation report release",
-        "url": "https://www.nyc.gov/site/buildings/dob/pr-parking-structure-collapse.page",
-        "date": "2025-04-28"
-      },
-      {
-        "name": "ABC7 New York",
-        "url": "https://abc7ny.com/post/nyc-parking-garage-collapse-report-reveals-cause-2023-lower-manhattan-deadly-incident/16270068/",
-        "date": "2025-04-28"
-      }
-    ]
+  "summary": "The corner of an occupied building collapsed while contractors performed repairs. No serious injuries; dozens of families were displaced.",
+  "cause_as_reported": "A load-bearing masonry pier was not identified as load-bearing on the repair plans and was removed without temporary shoring.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "DOB investigation report",
+    "url": "https://www.nyc.gov/site/buildings/dob/pr-investigation-bx-building.page",
+    "date": "2024-11-25"
+   }
+  ]
+ },
+ {
+  "id": "case-57-ann-2023",
+  "title": "Garage collapse during unpermitted pier repair",
+  "address": "57 Ann St, Manhattan",
+  "bbl": "1000920010",
+  "lat": 40.71041,
+  "lon": -74.00642,
+  "date": "2023-04-18",
+  "hazards": [
+   "structural"
+  ],
+  "severity": 3,
+  "job_type": "alteration",
+  "work_types": [
+   "structural"
+  ],
+  "conditions": {
+   "neighbor_year_built": null,
+   "attached": true,
+   "construction": "steel frame with load-bearing brick piers",
+   "year_built": 1925,
+   "occupancy": "parking structure"
   },
-  {
-    "id": "case-95-quincy-2015",
-    "title": "Party-wall collapse from unmonitored excavation",
-    "address": "95 Quincy St, Brooklyn",
-    "bbl": "3019707508",
-    "lat": 40.68641,
-    "lon": -73.95741,
-    "date": "2015-10-12",
-    "hazards": [
-      "structural",
-      "geotech"
-    ],
-    "severity": 2,
-    "job_type": "alteration",
-    "work_types": [
-      "excavation",
-      "underpinning",
-      "foundation"
-    ],
-    "conditions": {
-      "attached": true,
-      "construction": "masonry, pre-Civil War row houses",
-      "excavation_depth_ft": 6.0
-    },
-    "summary": "Excavation at a row house under alteration undermined the attached neighbour, and the shared wall between the two partially collapsed. One person suffered minor injuries. DOB ordered both buildings demolished and the houses on either side evacuated.",
-    "cause_as_reported": "As publicly reported, DOB records showed the foundation of the adjoining house was undermined by as much as six feet. Violations issued three months earlier cited beginning excavation without notifying the city, inability to produce plans for the work, and failure to monitor the adjoining structures for movement.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "Brownstoner",
-        "url": "https://www.brownstoner.com/neighborhood/building-collapse-brooklyn-homeowners-remain-in-limbo",
-        "date": "2015-11"
-      },
-      {
-        "name": "Brownstoner, initial report",
-        "url": "https://www.brownstoner.com/neighborhood/bed-stuy-townhouses-evacuated-collapse-demolish-2015",
-        "date": "2015-10"
-      }
-    ]
+  "summary": "A 1925 parking structure partially collapsed while workers removed brick and mortar from a load-bearing pier. One worker was killed and several people were injured. The structure was later demolished.",
+  "cause_as_reported": "The City's final forensic investigation report found the collapse was triggered by removal of brick and mortar from a severely deteriorated load-bearing brick pier, during repair work that proceeded without DOB approval or permits. The report also found that at original construction in 1925 certain load-bearing piers were not properly connected to the adjacent party wall, leaving them more vulnerable to deterioration.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "NYC DOB, final investigation report release",
+    "url": "https://www.nyc.gov/site/buildings/dob/pr-parking-structure-collapse.page",
+    "date": "2025-04-28"
+   },
+   {
+    "name": "ABC7 New York",
+    "url": "https://abc7ny.com/post/nyc-parking-garage-collapse-report-reveals-cause-2023-lower-manhattan-deadly-incident/16270068/",
+    "date": "2025-04-28"
+   }
+  ]
+ },
+ {
+  "id": "case-95-quincy-2015",
+  "title": "Party-wall collapse from unmonitored excavation",
+  "address": "95 Quincy St, Brooklyn",
+  "bbl": "3019707508",
+  "lat": 40.68641,
+  "lon": -73.95741,
+  "date": "2015-10-12",
+  "hazards": [
+   "structural",
+   "geotech"
+  ],
+  "severity": 2,
+  "job_type": "alteration",
+  "work_types": [
+   "excavation",
+   "underpinning",
+   "foundation"
+  ],
+  "conditions": {
+   "attached": true,
+   "construction": "masonry, pre-Civil War row houses",
+   "excavation_depth_ft": 6.0
   },
-  {
-    "id": "case-656-myrtle-2015",
-    "title": "Wall collapse during building conversion",
-    "address": "656 Myrtle Ave, Brooklyn",
-    "bbl": "3019130023",
-    "lat": 40.69421,
-    "lon": -73.95764,
-    "date": "2015-09-03",
-    "hazards": [
-      "structural",
-      "construction_safety"
-    ],
-    "severity": 3,
-    "job_type": "alteration",
-    "work_types": [
-      "structural",
-      "demolition"
-    ],
-    "conditions": {
-      "attached": true,
-      "construction": "masonry"
-    },
-    "summary": "A building undergoing conversion collapsed during work. A 19-year-old construction worker was killed and two others were seriously injured.",
-    "cause_as_reported": "As publicly reported, the property had been cited the previous year for failing to correct a violation for material falling from the front facade onto the pedestrian walkway, and a citizen complaint had reported that a wall was not stable.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "The Real Deal",
-        "url": "https://therealdeal.com/new-york/2015/09/03/collapsed-wall-at-bed-stuy-construction-site-kills-1-injures-2/",
-        "date": "2015-09-03"
-      }
-    ]
+  "summary": "Excavation at a row house under alteration undermined the attached neighbour, and the shared wall between the two partially collapsed. One person suffered minor injuries. DOB ordered both buildings demolished and the houses on either side evacuated.",
+  "cause_as_reported": "As publicly reported, DOB records showed the foundation of the adjoining house was undermined by as much as six feet. Violations issued three months earlier cited beginning excavation without notifying the city, inability to produce plans for the work, and failure to monitor the adjoining structures for movement.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "Brownstoner",
+    "url": "https://www.brownstoner.com/neighborhood/building-collapse-brooklyn-homeowners-remain-in-limbo",
+    "date": "2015-11"
+   },
+   {
+    "name": "Brownstoner, initial report",
+    "url": "https://www.brownstoner.com/neighborhood/bed-stuy-townhouses-evacuated-collapse-demolish-2015",
+    "date": "2015-10"
+   }
+  ]
+ },
+ {
+  "id": "case-656-myrtle-2015",
+  "title": "Wall collapse during building conversion",
+  "address": "656 Myrtle Ave, Brooklyn",
+  "bbl": "3019130023",
+  "lat": 40.69421,
+  "lon": -73.95764,
+  "date": "2015-09-03",
+  "hazards": [
+   "structural",
+   "construction_safety"
+  ],
+  "severity": 3,
+  "job_type": "alteration",
+  "work_types": [
+   "structural",
+   "demolition"
+  ],
+  "conditions": {
+   "attached": true,
+   "construction": "masonry"
   },
-  {
-    "id": "case-161-maiden-2019",
-    "title": "Tower out of plumb after soil-improvement foundation",
-    "address": "161 Maiden Ln, Manhattan",
-    "bbl": "1000727502",
-    "lat": 40.705513,
-    "lon": -74.004767,
-    "date": "2019",
-    "hazards": [
-      "geotech",
-      "structural"
-    ],
-    "severity": 1,
-    "job_type": "new_building",
-    "work_types": [
-      "foundation",
-      "structural"
-    ],
-    "conditions": {
-      "construction": "concrete superstructure, 58 storeys",
-      "soil": "waterfront fill, foundation not carried to bedrock"
-    },
-    "summary": "A 670-foot residential tower on the East River waterfront was reported to be roughly three inches out of plumb to the north after its superstructure topped out. The curtain wall could not be installed as designed and construction later stalled. Responsibility is disputed between the developer and the contractor in New York State Supreme Court litigation, and no public agency finding of cause has been issued.",
-    "cause_status": "unknown",
-    "sources": [
-      {
-        "name": "Commercial Observer",
-        "url": "https://commercialobserver.com/2019/04/contractor-sues-fortis-over-unsafe-leaning-tower-condo-near-seaport/",
-        "date": "2019-04"
-      },
-      {
-        "name": "The Architect's Newspaper",
-        "url": "https://www.archpaper.com/2019/04/leaning-manhattan-tower-draws-blame-from-both-sides/",
-        "date": "2019-04"
-      }
-    ],
-    "cause_as_reported": null
+  "summary": "A building undergoing conversion collapsed during work. A 19-year-old construction worker was killed and two others were seriously injured.",
+  "cause_as_reported": "As publicly reported, the property had been cited the previous year for failing to correct a violation for material falling from the front facade onto the pedestrian walkway, and a citizen complaint had reported that a wall was not stable.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "The Real Deal",
+    "url": "https://therealdeal.com/new-york/2015/09/03/collapsed-wall-at-bed-stuy-construction-site-kills-1-injures-2/",
+    "date": "2015-09-03"
+   }
+  ]
+ },
+ {
+  "id": "case-161-maiden-2019",
+  "title": "Tower out of plumb after soil-improvement foundation",
+  "address": "161 Maiden Ln, Manhattan",
+  "bbl": "1000727502",
+  "lat": 40.705513,
+  "lon": -74.004767,
+  "date": "2019",
+  "hazards": [
+   "geotech",
+   "structural"
+  ],
+  "severity": 1,
+  "job_type": "new_building",
+  "work_types": [
+   "foundation",
+   "structural"
+  ],
+  "conditions": {
+   "construction": "concrete superstructure, 58 storeys",
+   "soil": "waterfront fill, foundation not carried to bedrock"
   },
-  {
-    "id": "case-729-7th-2019",
-    "title": "Fatal terra cotta facade failure with open violation",
-    "address": "729 7th Ave, Manhattan",
-    "bbl": "1010017501",
-    "lat": 40.760146,
-    "lon": -73.983549,
-    "date": "2019-12-17",
-    "hazards": [
-      "facade"
-    ],
-    "severity": 3,
-    "job_type": null,
-    "work_types": [
-      "facade"
-    ],
-    "conditions": {
-      "construction": "terra cotta clad, 17 storeys"
-    },
-    "summary": "A piece of decorative terra cotta fell from the facade of a 17-storey office building and struck a pedestrian on the sidewalk, who died at the scene.",
-    "cause_as_reported": "As publicly reported, DOB had issued the building a violation eight months earlier for failure to maintain the exterior, citing damaged terra cotta above the 15th floor in several locations that posed a falling hazard to pedestrians, and issued a follow-up violation in July 2019 when the same condition was found unresolved. The last facade inspection report on file under Local Law 11 dated from 2013.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "Commercial Observer",
-        "url": "https://commercialobserver.com/2019/12/729-seventh-avenue-erica-tishman-construction-death/",
-        "date": "2019-12-17"
-      },
-      {
-        "name": "The Real Deal",
-        "url": "https://therealdeal.com/2021/12/23/owner-faces-criminal-charges-in-fatal-midtown-facade-incident",
-        "date": "2021-12-23"
-      }
-    ]
+  "summary": "A 670-foot residential tower on the East River waterfront was reported to be roughly three inches out of plumb to the north after its superstructure topped out. The curtain wall could not be installed as designed and construction later stalled. Responsibility is disputed between the developer and the contractor in New York State Supreme Court litigation, and no public agency finding of cause has been issued.",
+  "cause_status": "unknown",
+  "sources": [
+   {
+    "name": "Commercial Observer",
+    "url": "https://commercialobserver.com/2019/04/contractor-sues-fortis-over-unsafe-leaning-tower-condo-near-seaport/",
+    "date": "2019-04"
+   },
+   {
+    "name": "The Architect's Newspaper",
+    "url": "https://www.archpaper.com/2019/04/leaning-manhattan-tower-draws-blame-from-both-sides/",
+    "date": "2019-04"
+   }
+  ],
+  "cause_as_reported": null
+ },
+ {
+  "id": "case-729-7th-2019",
+  "title": "Fatal terra cotta facade failure with open violation",
+  "address": "729 7th Ave, Manhattan",
+  "bbl": "1010017501",
+  "lat": 40.760146,
+  "lon": -73.983549,
+  "date": "2019-12-17",
+  "hazards": [
+   "facade"
+  ],
+  "severity": 3,
+  "job_type": null,
+  "work_types": [
+   "facade"
+  ],
+  "conditions": {
+   "construction": "terra cotta clad, 17 storeys"
   },
-  {
-    "id": "case-121-2nd-2015",
-    "title": "Gas explosion and collapse of three buildings",
-    "address": "121 2nd Ave, Manhattan",
-    "bbl": "1004637502",
-    "lat": 40.728255,
-    "lon": -73.988333,
-    "date": "2015-03-26",
-    "hazards": [
-      "fire",
-      "structural"
-    ],
-    "severity": 3,
-    "job_type": "alteration",
-    "work_types": [
-      "plumbing"
-    ],
-    "conditions": {
-      "attached": true,
-      "construction": "masonry tenement",
-      "historic_district": true
-    },
-    "summary": "A gas explosion during plumbing work destroyed three adjacent tenement buildings and badly damaged a fourth. Two people were killed and at least nineteen injured. The buildings were in a designated historic district.",
-    "cause_as_reported": "As publicly reported, prosecutors established that an illegal gas delivery system had been installed to divert gas from a commercial line to residential units. Utility inspectors had previously found an unsafe hookup and shut off the gas. Three defendants were convicted of manslaughter in 2019.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "NYC Department of Investigation",
-        "url": "https://www.nyc.gov/assets/doi/press-releases/2016/feb/pr_secondavenueexplosion_21116.pdf",
-        "date": "2016-02-11"
-      },
-      {
-        "name": "ABC7 New York, verdict",
-        "url": "https://abc7ny.com/all-3-defendants-guilty-in-deadly-2015-east-village-explosion/5699774/",
-        "date": "2019-11-15"
-      }
-    ]
+  "summary": "A piece of decorative terra cotta fell from the facade of a 17-storey office building and struck a pedestrian on the sidewalk, who died at the scene.",
+  "cause_as_reported": "As publicly reported, DOB had issued the building a violation eight months earlier for failure to maintain the exterior, citing damaged terra cotta above the 15th floor in several locations that posed a falling hazard to pedestrians, and issued a follow-up violation in July 2019 when the same condition was found unresolved. The last facade inspection report on file under Local Law 11 dated from 2013.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "Commercial Observer",
+    "url": "https://commercialobserver.com/2019/12/729-seventh-avenue-erica-tishman-construction-death/",
+    "date": "2019-12-17"
+   },
+   {
+    "name": "The Real Deal",
+    "url": "https://therealdeal.com/2021/12/23/owner-faces-criminal-charges-in-fatal-midtown-facade-incident",
+    "date": "2021-12-23"
+   }
+  ]
+ },
+ {
+  "id": "case-121-2nd-2015",
+  "title": "Gas explosion and collapse of three buildings",
+  "address": "121 2nd Ave, Manhattan",
+  "bbl": "1004637502",
+  "lat": 40.728255,
+  "lon": -73.988333,
+  "date": "2015-03-26",
+  "hazards": [
+   "fire",
+   "structural"
+  ],
+  "severity": 3,
+  "job_type": "alteration",
+  "work_types": [
+   "plumbing"
+  ],
+  "conditions": {
+   "attached": true,
+   "construction": "masonry tenement",
+   "historic_district": true
   },
-  {
-    "id": "case-333-e-181-2022",
-    "title": "High-rise fire spread by failed self-closing doors",
-    "address": "333 E 181st St, Bronx",
-    "bbl": "2031430036",
-    "lat": 40.853828,
-    "lon": -73.898081,
-    "date": "2022-01-09",
-    "hazards": [
-      "fire"
-    ],
-    "severity": 3,
-    "job_type": null,
-    "work_types": [],
-    "conditions": {
-      "construction": "19-storey residential high-rise",
-      "year_built": 1972
-    },
-    "summary": "A fire that began in a lower-floor apartment spread smoke through a 19-storey residential building, killing 17 people and injuring dozens. All victims died of smoke inhalation.",
-    "cause_as_reported": "As publicly reported, FDNY identified a malfunctioning electric space heater as the ignition source, and determined that the self-closing door to the apartment of origin and a stairwell door on an upper floor failed to close, allowing smoke to spread through the building.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "ABC7 New York",
-        "url": "https://abc7ny.com/bronx-fire-today-181st-street-333-east-ny/11448093",
-        "date": "2022-01-11"
-      },
-      {
-        "name": "THE CITY",
-        "url": "https://www.thecity.nyc/2022/06/23/faulty-self-closing-doors-twin-parks-fire-cited-inspectors/",
-        "date": "2022-06-23"
-      }
-    ]
+  "summary": "A gas explosion during plumbing work destroyed three adjacent tenement buildings and badly damaged a fourth. Two people were killed and at least nineteen injured. The buildings were in a designated historic district.",
+  "cause_as_reported": "As publicly reported, prosecutors established that an illegal gas delivery system had been installed to divert gas from a commercial line to residential units. Utility inspectors had previously found an unsafe hookup and shut off the gas. Three defendants were convicted of manslaughter in 2019.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "NYC Department of Investigation",
+    "url": "https://www.nyc.gov/assets/doi/press-releases/2016/feb/pr_secondavenueexplosion_21116.pdf",
+    "date": "2016-02-11"
+   },
+   {
+    "name": "ABC7 New York, verdict",
+    "url": "https://abc7ny.com/all-3-defendants-guilty-in-deadly-2015-east-village-explosion/5699774/",
+    "date": "2019-11-15"
+   }
+  ]
+ },
+ {
+  "id": "case-333-e-181-2022",
+  "title": "High-rise fire spread by failed self-closing doors",
+  "address": "333 E 181st St, Bronx",
+  "bbl": "2031430036",
+  "lat": 40.853828,
+  "lon": -73.898081,
+  "date": "2022-01-09",
+  "hazards": [
+   "fire"
+  ],
+  "severity": 3,
+  "job_type": null,
+  "work_types": [],
+  "conditions": {
+   "construction": "19-storey residential high-rise",
+   "year_built": 1972
   },
-  {
-    "id": "case-ida-basement-2021",
-    "title": "Basement apartment drownings in extreme rainfall",
-    "address": "Woodside, Queens (basement apartment; address withheld)",
-    "bbl": null,
-    "lat": 40.7454,
-    "lon": -73.9067,
-    "date": "2021-09-01",
-    "hazards": [
-      "flood",
-      "weather"
-    ],
-    "severity": 3,
-    "job_type": null,
-    "work_types": [],
-    "conditions": {
-      "construction": "cellar-level dwelling unit",
-      "flood_zone": "outside mapped FEMA special flood hazard area; stormwater flooding"
-    },
-    "summary": "Record rainfall from the remnants of Hurricane Ida flooded basement and cellar apartments across the city. Eleven of the thirteen New York City deaths occurred in below-grade dwelling units, most in Queens, including three members of one family in Woodside where the storm also caused a partial building collapse.",
-    "cause_as_reported": "As publicly reported, the storm produced the greatest single-hour rainfall recorded in New York City, and rainwater entered below-grade units through their only exit. Most of the units involved were unregulated cellar conversions.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "Good Morning America / ABC News",
-        "url": "https://www.goodmorningamerica.com/news/story/calls-change-11-people-nyc-basement-apartments-died-79818549",
-        "date": "2021-09-03"
-      },
-      {
-        "name": "Queens Post",
-        "url": "https://queenspost.com/?p=39232",
-        "date": "2021-09-03"
-      }
-    ]
+  "summary": "A fire that began in a lower-floor apartment spread smoke through a 19-storey residential building, killing 17 people and injuring dozens. All victims died of smoke inhalation.",
+  "cause_as_reported": "As publicly reported, FDNY identified a malfunctioning electric space heater as the ignition source, and determined that the self-closing door to the apartment of origin and a stairwell door on an upper floor failed to close, allowing smoke to spread through the building.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "ABC7 New York",
+    "url": "https://abc7ny.com/bronx-fire-today-181st-street-333-east-ny/11448093",
+    "date": "2022-01-11"
+   },
+   {
+    "name": "THE CITY",
+    "url": "https://www.thecity.nyc/2022/06/23/faulty-self-closing-doors-twin-parks-fire-cited-inspectors/",
+    "date": "2022-06-23"
+   }
+  ]
+ },
+ {
+  "id": "case-ida-basement-2021",
+  "title": "Basement apartment drownings in extreme rainfall",
+  "address": "Woodside, Queens (basement apartment; address withheld)",
+  "bbl": null,
+  "lat": 40.7454,
+  "lon": -73.9067,
+  "date": "2021-09-01",
+  "hazards": [
+   "flood",
+   "weather"
+  ],
+  "severity": 3,
+  "job_type": null,
+  "work_types": [],
+  "conditions": {
+   "construction": "cellar-level dwelling unit",
+   "flood_zone": "outside mapped FEMA special flood hazard area; stormwater flooding"
   },
-  {
-    "id": "case-338-court-2020",
-    "title": "Collapse of building under alteration",
-    "address": "338 Court St, Brooklyn",
-    "bbl": "3003397503",
-    "lat": 40.682758,
-    "lon": -73.996154,
-    "date": "2020-07-01",
-    "hazards": [
-      "structural"
-    ],
-    "severity": 2,
-    "job_type": "alteration",
-    "work_types": [
-      "structural"
-    ],
-    "conditions": {
-      "attached": true,
-      "construction": "masonry"
-    },
-    "summary": "A three-storey building under construction collapsed, sending debris into the street and onto parked cars. FDNY reported no evidence of an explosion. No fatalities were reported.",
-    "cause_as_reported": "As publicly reported, a partial stop-work order for failure to maintain the building had been issued weeks before the collapse. DOB listed the cause as under investigation at the time.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "ABC7 New York",
-        "url": "https://abc7ny.com/amp/post/brooklyn-building-collapse-extensive-cleanup-operation-underway/6289390/",
-        "date": "2020-07-02"
-      }
-    ]
+  "summary": "Record rainfall from the remnants of Hurricane Ida flooded basement and cellar apartments across the city. Eleven of the thirteen New York City deaths occurred in below-grade dwelling units, most in Queens, including three members of one family in Woodside where the storm also caused a partial building collapse.",
+  "cause_as_reported": "As publicly reported, the storm produced the greatest single-hour rainfall recorded in New York City, and rainwater entered below-grade units through their only exit. Most of the units involved were unregulated cellar conversions.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "Good Morning America / ABC News",
+    "url": "https://www.goodmorningamerica.com/news/story/calls-change-11-people-nyc-basement-apartments-died-79818549",
+    "date": "2021-09-03"
+   },
+   {
+    "name": "Queens Post",
+    "url": "https://queenspost.com/?p=39232",
+    "date": "2021-09-03"
+   }
+  ]
+ },
+ {
+  "id": "case-338-court-2020",
+  "title": "Collapse of building under alteration",
+  "address": "338 Court St, Brooklyn",
+  "bbl": "3003397503",
+  "lat": 40.682758,
+  "lon": -73.996154,
+  "date": "2020-07-01",
+  "hazards": [
+   "structural"
+  ],
+  "severity": 2,
+  "job_type": "alteration",
+  "work_types": [
+   "structural"
+  ],
+  "conditions": {
+   "attached": true,
+   "construction": "masonry"
   },
-  {
-    "id": "case-1321-flatbush-2026",
-    "title": "Collapse at the edge of an excavation site",
-    "address": "1321 Flatbush Ave, Brooklyn",
-    "bbl": "3052110073",
-    "lat": 40.638989,
-    "lon": -73.953841,
-    "date": "2026-11-11",
-    "hazards": [
-      "structural",
-      "geotech"
-    ],
-    "severity": 3,
-    "job_type": null,
-    "work_types": [
-      "excavation"
-    ],
-    "conditions": {
-      "attached": true,
-      "construction": "three-storey masonry"
-    },
-    "summary": "A three-storey building collapsed at the edge of an adjacent construction site that was being excavated, filling the construction pit with debris. One person died and several were injured. Investigators have said they will examine structural integrity, construction and demolition records, excavation activity and regulatory compliance.",
-    "cause_status": "under_investigation",
-    "sources": [
-      {
-        "name": "Associated Press via 1News",
-        "url": "https://www.1news.co.nz/2026/11/12/new-york-city-building-collapse-traps-people-in-rubble/",
-        "date": "2026-11-12"
-      },
-      {
-        "name": "Gulf News",
-        "url": "https://gulfnews.com/world/americas/firefighters-dig-through-rubble-after-new-york-city-building-collapse-traps-people-in-wreckage-1.500744353",
-        "date": "2026-11-12"
-      }
-    ],
-    "cause_as_reported": null
+  "summary": "A three-storey building under construction collapsed, sending debris into the street and onto parked cars. FDNY reported no evidence of an explosion. No fatalities were reported.",
+  "cause_as_reported": "As publicly reported, a partial stop-work order for failure to maintain the building had been issued weeks before the collapse. DOB listed the cause as under investigation at the time.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "ABC7 New York",
+    "url": "https://abc7ny.com/amp/post/brooklyn-building-collapse-extensive-cleanup-operation-underway/6289390/",
+    "date": "2020-07-02"
+   }
+  ]
+ },
+ {
+  "id": "case-1321-flatbush-2026",
+  "title": "Collapse at the edge of an excavation site",
+  "address": "1321 Flatbush Ave, Brooklyn",
+  "bbl": "3052110073",
+  "lat": 40.638989,
+  "lon": -73.953841,
+  "date": "2026-11-11",
+  "hazards": [
+   "structural",
+   "geotech"
+  ],
+  "severity": 3,
+  "job_type": null,
+  "work_types": [
+   "excavation"
+  ],
+  "conditions": {
+   "attached": true,
+   "construction": "three-storey masonry"
   },
-  {
-    "id": "case-303-e-51-2008",
-    "title": "Tower crane collapse during a jump",
-    "address": "303 E 51st St, Manhattan",
-    "bbl": "1013447503",
-    "lat": 40.75558,
-    "lon": -73.96757,
-    "date": "2008-03-15",
-    "hazards": [
-      "construction_safety",
-      "structural"
-    ],
-    "severity": 3,
-    "job_type": "new_building",
-    "work_types": [
-      "structural"
-    ],
-    "conditions": {
-      "construction": "43-storey concrete frame under construction"
-    },
-    "summary": "A tower crane roughly 250 feet high collapsed while being jumped to a greater height at a 43-storey building under construction. Six construction workers and one civilian were killed, a neighbouring brownstone was destroyed and more than a dozen buildings were damaged.",
-    "cause_as_reported": "As publicly reported, OSHA's forensic investigation and the DOB report attributed the collapse to failure of the polyester slings securing the collar at the 18th floor, from sling misuse and rigging errors including choking the slings against unprotected edges without padding. A separate engineering review concluded the crane installation design met industry standards and was not a cause.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "OSHA Directorate of Construction, forensic report",
-        "url": "https://www.osha.gov/sites/default/files/2019-12/2008_r_02.pdf",
-        "date": "2008-09"
-      },
-      {
-        "name": "GlobeSt, on the DOB report",
-        "url": "https://www.globest.com/amp/2009/03/11/report-blames-crane-collapse-on-sling-misuse/",
-        "date": "2009-03-11"
-      }
-    ]
+  "summary": "A three-storey residential and commercial building collapsed at the edge of an adjacent construction site that was being excavated, its rear portion falling into the pit and filling it with brick and wood. Eight people died and 18 were injured; dozens were displaced. Neighbours had reported feeling vibrations from the construction site, and a witness saw bricks falling from the building moments before it came down. The adjoining site, 2625 Bedford Ave (BBL 3052110074, the next lot on the same block), held active DOB permits for excavation and foundation work; DOB issued a full stop-work order there after the collapse. That site had been cited in April for continuing demolition despite an earlier stop-work order, a violation later marked resolved.",
+  "cause_status": "under_investigation",
+  "sources": [
+   {
+    "name": "Associated Press via 1News",
+    "url": "https://www.1news.co.nz/2026/11/12/new-york-city-building-collapse-traps-people-in-rubble/",
+    "date": "2026-11-12"
+   },
+   {
+    "name": "Gulf News",
+    "url": "https://gulfnews.com/world/americas/firefighters-dig-through-rubble-after-new-york-city-building-collapse-traps-people-in-wreckage-1.500744353",
+    "date": "2026-11-12"
+   },
+   {
+    "name": "Brooklyn Paper, history of Brooklyn building collapses",
+    "url": "https://www.brooklynpaper.com/a-history-of-brooklyn-building-collapses/",
+    "date": "2026-11-13"
+   },
+   {
+    "name": "Gothamist, engineers question city-approved plans",
+    "url": "https://gothamist.com/news/engineers-question-city-approved-plans-after-brooklyn-building-collapse",
+    "date": "2026-11-13"
+   }
+  ],
+  "cause_as_reported": null
+ },
+ {
+  "id": "case-303-e-51-2008",
+  "title": "Tower crane collapse during a jump",
+  "address": "303 E 51st St, Manhattan",
+  "bbl": "1013447503",
+  "lat": 40.75558,
+  "lon": -73.96757,
+  "date": "2008-03-15",
+  "hazards": [
+   "construction_safety",
+   "structural"
+  ],
+  "severity": 3,
+  "job_type": "new_building",
+  "work_types": [
+   "structural"
+  ],
+  "conditions": {
+   "construction": "43-storey concrete frame under construction"
   },
-  {
-    "id": "case-e91-crane-2008",
-    "title": "Second tower crane collapse, ten weeks after the first",
-    "address": "E 91st St at 1st Ave, Manhattan",
-    "bbl": null,
-    "lat": 40.78052,
-    "lon": -73.94757,
-    "date": "2008-05-30",
-    "hazards": [
-      "construction_safety",
-      "structural"
-    ],
-    "severity": 3,
-    "job_type": "new_building",
-    "work_types": [
-      "structural"
-    ],
-    "conditions": {
-      "construction": "high-rise under construction"
-    },
-    "summary": "A second fatal tower crane collapse at an Upper East Side construction site killed two people, ten weeks after the East 51st Street collapse. The two incidents together prompted a package of city crane-safety legislation in 2009.",
-    "cause_as_reported": "As publicly reported, the two 2008 collapses led to twelve new laws in 2009 covering safety managers on site, job-specific safety procedures, rigging crew training, and restrictions on the use of nylon and polyester slings unless recommended by the crane manufacturer.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "GlobeSt",
-        "url": "https://www.globest.com/amp/2009/03/11/report-blames-crane-collapse-on-sling-misuse/",
-        "date": "2009-03-11"
-      },
-      {
-        "name": "The Real Deal",
-        "url": "https://therealdeal.com/2009/03/11/rigging-at-fault-in-crane-collapse/",
-        "date": "2009-03-11"
-      }
-    ]
+  "summary": "A tower crane roughly 250 feet high collapsed while being jumped to a greater height at a 43-storey building under construction. Six construction workers and one civilian were killed, a neighbouring brownstone was destroyed and more than a dozen buildings were damaged.",
+  "cause_as_reported": "As publicly reported, OSHA's forensic investigation and the DOB report attributed the collapse to failure of the polyester slings securing the collar at the 18th floor, from sling misuse and rigging errors including choking the slings against unprotected edges without padding. A separate engineering review concluded the crane installation design met industry standards and was not a cause.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "OSHA Directorate of Construction, forensic report",
+    "url": "https://www.osha.gov/sites/default/files/2019-12/2008_r_02.pdf",
+    "date": "2008-09"
+   },
+   {
+    "name": "GlobeSt, on the DOB report",
+    "url": "https://www.globest.com/amp/2009/03/11/report-blames-crane-collapse-on-sling-misuse/",
+    "date": "2009-03-11"
+   }
+  ]
+ },
+ {
+  "id": "case-e91-crane-2008",
+  "title": "Second tower crane collapse, ten weeks after the first",
+  "address": "E 91st St at 1st Ave, Manhattan",
+  "bbl": null,
+  "lat": 40.78052,
+  "lon": -73.94757,
+  "date": "2008-05-30",
+  "hazards": [
+   "construction_safety",
+   "structural"
+  ],
+  "severity": 3,
+  "job_type": "new_building",
+  "work_types": [
+   "structural"
+  ],
+  "conditions": {
+   "construction": "high-rise under construction"
   },
-  {
-    "id": "case-493-myrtle-2009",
-    "title": "Collapse of a building under repair with prior crack violation",
-    "address": "493 Myrtle Ave, Brooklyn",
-    "bbl": "3018917502",
-    "lat": 40.69373,
-    "lon": -73.96541,
-    "date": "2009-06-21",
-    "hazards": [
-      "structural"
-    ],
-    "severity": 2,
-    "job_type": "alteration",
-    "work_types": [
-      "structural"
-    ],
-    "conditions": {
-      "attached": true,
-      "construction": "four-storey brick"
-    },
-    "summary": "A four-storey building with ground-floor commercial space and apartments above collapsed while under repair. Four people outside the building were injured and six adjacent buildings were evacuated, leaving more than a dozen families displaced.",
-    "cause_as_reported": "As publicly reported, DOB had cited the building the previous month for cracks running from the ground floor to the roof of one wall.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "Insurance Journal / Associated Press",
-        "url": "https://www.insurancejournal.com/news/east/2009/06/23/101632.htm",
-        "date": "2009-06-23"
-      },
-      {
-        "name": "Brownstoner",
-        "url": "https://www.brownstoner.com/real-estate-market/fourstory-build",
-        "date": "2009-06"
-      }
-    ]
+  "summary": "A second fatal tower crane collapse at an Upper East Side construction site killed two people, ten weeks after the East 51st Street collapse. The two incidents together prompted a package of city crane-safety legislation in 2009.",
+  "cause_as_reported": "As publicly reported, the two 2008 collapses led to twelve new laws in 2009 covering safety managers on site, job-specific safety procedures, rigging crew training, and restrictions on the use of nylon and polyester slings unless recommended by the crane manufacturer.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "GlobeSt",
+    "url": "https://www.globest.com/amp/2009/03/11/report-blames-crane-collapse-on-sling-misuse/",
+    "date": "2009-03-11"
+   },
+   {
+    "name": "The Real Deal",
+    "url": "https://therealdeal.com/2009/03/11/rigging-at-fault-in-crane-collapse/",
+    "date": "2009-03-11"
+   }
+  ]
+ },
+ {
+  "id": "case-493-myrtle-2009",
+  "title": "Collapse of a building under repair with prior crack violation",
+  "address": "493 Myrtle Ave, Brooklyn",
+  "bbl": "3018917502",
+  "lat": 40.69373,
+  "lon": -73.96541,
+  "date": "2009-06-21",
+  "hazards": [
+   "structural"
+  ],
+  "severity": 2,
+  "job_type": "alteration",
+  "work_types": [
+   "structural"
+  ],
+  "conditions": {
+   "attached": true,
+   "construction": "four-storey brick"
   },
-  {
-    "id": "case-347-myrtle-2026",
-    "title": "Rear wall collapse at a long-vacant building",
-    "address": "347 Myrtle Ave, Brooklyn",
-    "bbl": "3020440087",
-    "lat": 40.693392,
-    "lon": -73.972361,
-    "date": "2026-04-18",
-    "hazards": [
-      "structural"
-    ],
-    "severity": 2,
-    "job_type": null,
-    "work_types": [],
-    "conditions": {
-      "attached": true,
-      "construction": "three-storey masonry",
-      "vacant": true
-    },
-    "summary": "The rear wall of a long-vacant three-storey building collapsed. DOB inspected three buildings afterwards and found major structural damage and cracks on multiple floors at the collapsed property, serious disrepair and a partially collapsed roof at one neighbour, and evacuated a third, displacing ten residents.",
-    "cause_as_reported": "As publicly reported, neighbours said the building had been deteriorating for years. DOB required an engineering report before the evacuated building could be reoccupied.",
-    "cause_status": "reported",
-    "sources": [
-      {
-        "name": "News 12 Brooklyn",
-        "url": "https://brooklyn.news12.com/2026/04/18/rear-wall-collapse-at-abandoned-fort-greene-property-displaces-ten-residents/6FwjQTE2Zt1R1tEJBwGLkp",
-        "date": "2026-04-18"
-      }
-    ]
-  }
+  "summary": "A four-storey building with ground-floor commercial space and apartments above collapsed while under repair. Four people outside the building were injured and six adjacent buildings were evacuated, leaving more than a dozen families displaced.",
+  "cause_as_reported": "As publicly reported, DOB had cited the building the previous month for cracks running from the ground floor to the roof of one wall.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "Insurance Journal / Associated Press",
+    "url": "https://www.insurancejournal.com/news/east/2009/06/23/101632.htm",
+    "date": "2009-06-23"
+   },
+   {
+    "name": "Brownstoner",
+    "url": "https://www.brownstoner.com/real-estate-market/fourstory-build",
+    "date": "2009-06"
+   }
+  ]
+ },
+ {
+  "id": "case-347-myrtle-2026",
+  "title": "Rear wall collapse at a long-vacant building",
+  "address": "347 Myrtle Ave, Brooklyn",
+  "bbl": "3020440087",
+  "lat": 40.693392,
+  "lon": -73.972361,
+  "date": "2026-04-18",
+  "hazards": [
+   "structural"
+  ],
+  "severity": 2,
+  "job_type": null,
+  "work_types": [],
+  "conditions": {
+   "attached": true,
+   "construction": "three-storey masonry",
+   "vacant": true
+  },
+  "summary": "The rear wall of a long-vacant three-storey building collapsed. DOB inspected three buildings afterwards and found major structural damage and cracks on multiple floors at the collapsed property, serious disrepair and a partially collapsed roof at one neighbour, and evacuated a third, displacing ten residents.",
+  "cause_as_reported": "As publicly reported, neighbours said the building had been deteriorating for years. DOB required an engineering report before the evacuated building could be reoccupied.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "News 12 Brooklyn",
+    "url": "https://brooklyn.news12.com/2026/04/18/rear-wall-collapse-at-abandoned-fort-greene-property-displaces-ten-residents/6FwjQTE2Zt1R1tEJBwGLkp",
+    "date": "2026-04-18"
+   }
+  ]
+ },
+ {
+  "id": "case-235-e-42-2026",
+  "title": "Buckled columns in an office-to-residential conversion",
+  "address": "235 E 42nd St, Manhattan",
+  "bbl": "1013160023",
+  "lat": 40.750443,
+  "lon": -73.972544,
+  "date": "2026-07-07",
+  "hazards": [
+   "structural"
+  ],
+  "severity": 2,
+  "job_type": "alteration",
+  "work_types": [
+   "structural"
+  ],
+  "conditions": {
+   "construction": "steel frame"
+  },
+  "summary": "Workers converting a former office tower to residential use found a buckled steel column on the 21st floor early in the morning. FDNY, called at about 8am, found a number of sagging floors, cracks and a second buckled column. The construction site and at least nine neighbouring buildings were evacuated as a precaution. After overnight shoring, officials described the building as safe and stable. No injuries were reported.",
+  "cause_as_reported": null,
+  "cause_status": "under_investigation",
+  "sources": [
+   {
+    "name": "Engineering News-Record",
+    "url": "https://www.enr.com/articles/63288-buckled-columns-leave-nyc-pfizer-hq-conversion-unstable",
+    "date": "2026-07-08"
+   },
+   {
+    "name": "NBC New York",
+    "url": "https://www.nbcnewyork.com/manhattan/fdny-responds-to-report-of-buckling-building-in-manhattan/6522605/",
+    "date": "2026-07-07"
+   },
+   {
+    "name": "NY1",
+    "url": "https://ny1.com/nyc/all-boroughs/politics/2026/07/07/unstable-building-east-42nd-street-metroloft",
+    "date": "2026-07-07"
+   }
+  ]
+ },
+ {
+  "id": "case-1266-50th-2024",
+  "title": "First floor collapsed into the cellar during unpermitted work",
+  "address": "1266 50th St, Brooklyn",
+  "bbl": "3056480034",
+  "lat": 40.63464,
+  "lon": -73.99344,
+  "date": "2024-02",
+  "hazards": [
+   "structural",
+   "construction_safety"
+  ],
+  "severity": 3,
+  "job_type": "alteration",
+  "work_types": [
+   "excavation",
+   "structural"
+  ],
+  "conditions": {
+   "construction": "two-storey"
+  },
+  "summary": "The first floor of a two-storey building folded into its cellar while three people were working below, pinning and killing one worker. DOB had tried to gain access in December after complaints about the construction, and on returning in January saw excavation under way and issued a stop-work order.",
+  "cause_as_reported": null,
+  "cause_status": "under_investigation",
+  "sources": [
+   {
+    "name": "Brownstoner",
+    "url": "https://www.brownstoner.com/interiors-renovation/borough-park-building-collapse-1266-50th-street/",
+    "date": "2024-02-05"
+   },
+   {
+    "name": "CBS New York",
+    "url": "https://www.cbsnews.com/newyork/news/1-dead-when-basement-collapses-at-brooklyn-residential-building/",
+    "date": "2024-02-02"
+   },
+   {
+    "name": "Brooklyn Paper, history of Brooklyn building collapses",
+    "url": "https://www.brooklynpaper.com/a-history-of-brooklyn-building-collapses/",
+    "date": "2026-11-13"
+   }
+  ]
+ },
+ {
+  "id": "case-420-melrose-2012",
+  "title": "Vacate order after a foundation crack beside an excavation",
+  "address": "420 Melrose St, Brooklyn",
+  "bbl": "3031660022",
+  "lat": 40.704983,
+  "lon": -73.926501,
+  "date": "2012-08",
+  "hazards": [
+   "geotech",
+   "structural"
+  ],
+  "severity": 1,
+  "job_type": null,
+  "work_types": [
+   "excavation"
+  ],
+  "conditions": {
+   "attached": true
+  },
+  "summary": "A crack in the foundation put this building under a full DOB vacate order, displacing more than a dozen residents; residents of the attached building next door were allowed to return. DOB issued five violations to the construction company working two doors away. About a month later the full vacate order was still in force, eight families had not been allowed back, and they were not aware of repair work under way.",
+  "cause_as_reported": null,
+  "cause_status": "unknown",
+  "sources": [
+   {
+    "name": "NBC New York",
+    "url": "https://www.nbcnewyork.com/news/local/bushwick-buildings-crack-foundation-brooklyn-melrose-evacuation/1954466/",
+    "date": "2012-08-21"
+   },
+   {
+    "name": "Brownstoner",
+    "url": "https://www.brownstoner.com/real-estate-market/420-melrose-place-residents-still-homeless/",
+    "date": "2012-09-20"
+   }
+  ]
+ },
+ {
+  "id": "case-1644-park-2014",
+  "title": "Gas explosion destroyed two buildings",
+  "address": "1644 Park Ave, Manhattan",
+  "bbl": "1016220035",
+  "lat": 40.79973,
+  "lon": -73.9434,
+  "date": "2014-03-12",
+  "hazards": [
+   "fire",
+   "structural"
+  ],
+  "severity": 3,
+  "job_type": null,
+  "work_types": [],
+  "conditions": {
+   "attached": true
+  },
+  "summary": "A natural-gas explosion at about 9:30am levelled two buildings just north of 116th Street, killing eight people, injuring 50 or more and displacing about 100 families. Debris on the elevated tracks suspended Metro-North service along Park Avenue for about seven and a half hours. Reported injury counts differ between 50 and more than 70.",
+  "cause_as_reported": "The NTSB reported that an earlier breach in a sewer line caused the gas main to sag, which cracked a defective fusion joint in a plastic service tee and let gas escape into the ground and migrate into the building. State regulators found the utility had not properly installed the pipeline.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "NTSB investigation DCA14MP002",
+    "url": "https://www.ntsb.gov/investigations/Pages/DCA14MP002.aspx",
+    "date": "2015-06-09"
+   },
+   {
+    "name": "ISHN, NTSB reveals cause",
+    "url": "https://www.ishn.com/articles/101657-ntsb-reveals-cause-of-new-york-gas-leak-that-killed-eight",
+    "date": "2015-06-23"
+   }
+  ]
+ },
+ {
+  "id": "case-130-liberty-2007",
+  "title": "Fire during simultaneous abatement and deconstruction",
+  "address": "130 Liberty St, Manhattan",
+  "bbl": "1000540040",
+  "lat": 40.710158,
+  "lon": -74.013161,
+  "date": "2007-08-18",
+  "hazards": [
+   "fire",
+   "contamination",
+   "construction_safety"
+  ],
+  "severity": 3,
+  "job_type": "demolition",
+  "work_types": [
+   "demolition"
+  ],
+  "conditions": {
+   "construction": "steel frame"
+  },
+  "summary": "A fire in a 41-storey tower being taken down floor by floor after the September 11 attacks killed two firefighters and injured 115 others, 46 seriously enough to require medical leave. The building was contaminated and shrouded, so decontamination and deconstruction were running at the same time: lower floors were sealed in plastic while torch work went on above. Several small fires had occurred in the three months before the fatal one.",
+  "cause_as_reported": "A state investigation reported that simultaneous abatement and deconstruction clearly made the building a fire hazard. A city investigation found that from the start of demolition in March 2007 until the fire in August, FDNY carried out no inspection of the site. Officials had questioned the subcontractor's qualifications before the fire, and the agency overseeing the site later abandoned doing both jobs at once and replaced that subcontractor.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "Wikipedia, Deutsche Bank Building",
+    "url": "https://en.wikipedia.org/wiki/Deutsche_Bank_Building",
+    "date": "2026-11-15"
+   },
+   {
+    "name": "WNYC, acquittals in Deutsche Bank blaze",
+    "url": "https://wnyc.org/story/145214-deutsche-bank",
+    "date": "2012-07-10"
+   },
+   {
+    "name": "FireRescue1, fire safety and environmental sealing agreed",
+    "url": "https://www.firerescue1.com/archive/articles/fire-safety-improvements-environmental-sealing-agreed-at-ny-deutsche-building-BMnmfYQYDrH1fCoZ/",
+    "date": "2007-09-04"
+   }
+  ]
+ },
+ {
+  "id": "case-60-hudson-crane-2016",
+  "title": "Crawler crane toppled while being lowered in high winds",
+  "address": "60 Hudson St, Manhattan",
+  "bbl": "1001440040",
+  "lat": 40.717659,
+  "lon": -74.008269,
+  "date": "2016-02-05",
+  "hazards": [
+   "construction_safety"
+  ],
+  "severity": 3,
+  "job_type": "alteration",
+  "work_types": [
+   "structural"
+  ],
+  "conditions": {},
+  "summary": "A crawler crane working on the renovation of an adjoining building toppled just before 8:30am and fell across Worth Street, killing a person sitting in a parked car and injuring three others. The crane was being moved into a secure position because of high winds.",
+  "cause_as_reported": "A city investigation reported in December 2016 attributed the collapse to several errors by the crane operator. A separate federal OSHA report on the collapse was issued in July 2016.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "DNAinfo, officials on the cause",
+    "url": "https://www.dnainfo.com/new-york/20161209/tribeca/deadly-tribeca-crane-collapse-caused-by-operator-errors-officials-say",
+    "date": "2016-12-09"
+   },
+   {
+    "name": "OSHA report",
+    "url": "https://www.osha.gov/sites/default/files/2019-12/2016_r_04.pdf",
+    "date": "2016-07-01"
+   },
+   {
+    "name": "NPR",
+    "url": "https://www.npr.org/sections/thetwo-way/2016/02/05/465692913/manhattan-crane-collapse-kills-at-least-1-person",
+    "date": "2016-02-05"
+   }
+  ]
+ },
+ {
+  "id": "case-2363-prospect-2017",
+  "title": "Apartment fire spread up an open stairway",
+  "address": "2363 Prospect Ave, Bronx",
+  "bbl": "2031020037",
+  "lat": 40.853253,
+  "lon": -73.883218,
+  "date": "2017-12-28",
+  "hazards": [
+   "fire"
+  ],
+  "severity": 3,
+  "job_type": null,
+  "work_types": [],
+  "conditions": {
+   "year_built": 1916,
+   "construction": "five-storey, 26 units"
+  },
+  "summary": "A fire that began in a first-floor apartment of a five-storey, 26-unit building from 1916 spread upward and killed 13 people, among them a baby, a toddler, a child and two teenagers. It was the city's deadliest fire in 25 years. More than 170 firefighters responded in cold and icy conditions. Early reports gave the toll as 12; later accounts give 13. One apartment had open violations for faulty carbon-monoxide and smoke detectors.",
+  "cause_as_reported": "Officials reported that a three-year-old playing with kitchen burners started the fire in a first-floor apartment and that it spread after the apartment door was left open.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "FDNY press release",
+    "url": "https://www.nyc.gov/site/fdny/news/fa7217/twelve-people-killed-5th-alarm-fire-the-bronx",
+    "date": "2017-12-28"
+   },
+   {
+    "name": "ABC7 New York, one-year anniversary",
+    "url": "https://abc7ny.com/post/1-year-ago-historic-bronx-fire-kills-13/4980679/",
+    "date": "2018-12-28"
+   }
+  ]
+ },
+ {
+  "id": "case-305-west-end-2015",
+  "title": "Falling window-sill masonry killed a child on the pavement",
+  "address": "305 West End Ave, Manhattan",
+  "bbl": "1011840077",
+  "lat": 40.781482,
+  "lon": -73.983655,
+  "date": "2015-05-17",
+  "hazards": [
+   "facade"
+  ],
+  "severity": 3,
+  "job_type": null,
+  "work_types": [
+   "facade"
+  ],
+  "conditions": {
+   "construction": "masonry"
+  },
+  "summary": "A piece of decorative window-sill masonry fell from a senior-residence building and struck a two-year-old child and her grandmother on the pavement at 74th Street. The child died the following night; her grandmother was injured. A building inspector was later charged over false certifications for the building, and in 2019 the developer pleaded guilty to two misdemeanours and paid the city $50,000 without serving time.",
+  "cause_as_reported": "As publicly reported, required facade filings for the building had been falsely certified. The developer's guilty plea in 2019 concerned the condition of the facade.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "Associated Press via Washington Times",
+    "url": "https://www.washingtontimes.com/news/2015/may/18/toddler-grandparent-struck-by-piece-of-manhattan-b/",
+    "date": "2015-05-18"
+   },
+   {
+    "name": "The Real Deal",
+    "url": "https://therealdeal.com/2019/04/26/developer-behind-fatal-facade-collapse-that-killed-2-year-old-to-pay-city-50k-but-wont-serve-time",
+    "date": "2019-04-26"
+   }
+  ]
+ },
+ {
+  "id": "case-breezy-point-2012",
+  "title": "Conflagration in flooded homes during Hurricane Sandy",
+  "address": "Breezy Point, Queens (neighbourhood level; no single lot)",
+  "bbl": null,
+  "lat": 40.55688,
+  "lon": -73.92073,
+  "date": "2012-10-29",
+  "hazards": [
+   "flood",
+   "fire",
+   "weather"
+  ],
+  "severity": 3,
+  "job_type": null,
+  "work_types": [],
+  "conditions": {
+   "construction": "closely spaced wood frame"
+  },
+  "summary": "As Sandy's surge flooded the peninsula, a fire broke out at about 8:27pm and spread through closely spaced wood-frame homes. The fire commissioner put the toll at 111 homes destroyed and 20 more damaged; a later department account gives 126 destroyed and 22 damaged, the largest private-residential fire in the department's history. More than 200 firefighters fought it while standing in floodwater. The community was in the city's low-lying evacuation zone, and floodwaters were blamed for two deaths there. Recorded at neighbourhood level: it has no single lot and will not place on a lot map.",
+  "cause_as_reported": "The fire was later reported to have been caused by electrical wires on one of the avenues. Counts of homes destroyed differ between sources, as noted above.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "Fire Engineering, Conflagration in Breezy Point",
+    "url": "https://www.fireengineering.com/firefighting/conflagration-in-breezy-point-queens/",
+    "date": "2013-03-01"
+   },
+   {
+    "name": "CBS New York, two years after the Sandy fire",
+    "url": "https://cbsnews.com/newyork/news/comeback-under-way-at-breezy-point-2-years-after-sandy-fire",
+    "date": "2014-10-28"
+   }
+  ]
+ },
+ {
+  "id": "case-770-eastern-pkwy-2024",
+  "title": "Unpermitted excavation destabilised two extensions",
+  "address": "770 Eastern Pkwy, Brooklyn",
+  "bbl": "3012710031",
+  "lat": 40.66896,
+  "lon": -73.942801,
+  "date": "2024-01",
+  "hazards": [
+   "geotech",
+   "structural"
+  ],
+  "severity": 1,
+  "job_type": "alteration",
+  "work_types": [
+   "excavation",
+   "underpinning"
+  ],
+  "conditions": {
+   "attached": true
+  },
+  "summary": "DOB found that a passageway dug beneath and between buildings at a house of worship had been built without approved plans or permits and with only rudimentary shoring in place. Engineers determined the excavation had caused structural stability problems in two single-storey extensions. DOB issued partial vacate orders for both extensions, and a full vacate order on a connected building where fire-rated walls had been removed.",
+  "cause_as_reported": "DOB reported that the unpermitted excavation, with inadequate shoring, caused the instability.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "ABC News",
+    "url": "https://abcnews.com/US/nyc-investigating-structural-stability-synagogue-secret-passageway/story?id=106262480",
+    "date": "2024-01-09"
+   }
+  ]
+ },
+ {
+  "id": "case-550-10th-ave-2023",
+  "title": "Tower crane fire and boom collapse",
+  "address": "550 10th Ave, Manhattan",
+  "bbl": "1010507502",
+  "lat": 40.75851,
+  "lon": -73.99591,
+  "date": "2023-07-26",
+  "hazards": [
+   "construction_safety",
+   "fire"
+  ],
+  "severity": 2,
+  "job_type": "new_building",
+  "work_types": [
+   "structural"
+  ],
+  "conditions": {},
+  "summary": "FDNY was called at about 7:25am to a fire in the engine compartment of a tower crane 45 storeys up, attached to a residential tower under construction. The boom broke loose and fell in an arc onto 10th Avenue with the load it was carrying, striking a neighbouring building that houses a school. Reported injury counts range from six to twelve, including firefighters; none were fatal.",
+  "cause_as_reported": null,
+  "cause_status": "under_investigation",
+  "sources": [
+   {
+    "name": "Engineering News-Record",
+    "url": "https://www.enr.com/articles/56832-burning-tower-crane-partially-collapses-in-new-york-city-injuring-six",
+    "date": "2023-07-26"
+   },
+   {
+    "name": "Mayor's office briefing transcript",
+    "url": "https://www.nyc.gov/mayors-office/news/2023/07/transcript-mayor-adams-briefs-media-crane-collapse-hudson-yards",
+    "date": "2023-07-26"
+   }
+  ]
+ },
+ {
+  "id": "case-152-graham-2020",
+  "title": "Brownfield cleanup site: contaminated soil and vapour intrusion",
+  "address": "152 Graham Ave, Brooklyn",
+  "bbl": "3030620002",
+  "lat": 40.706811,
+  "lon": -73.942831,
+  "date": "2020-11-09",
+  "hazards": [
+   "contamination"
+  ],
+  "severity": 0,
+  "job_type": null,
+  "work_types": [
+   "excavation"
+  ],
+  "conditions": {},
+  "summary": "A state Brownfield Cleanup Program site (DEC site C224208) on Block 3062, Lot 2. An interim remedial measure work plan filed in November 2020 governs how contaminated soil is excavated, handled and disposed of; a soil-vapour intrusion investigation was scheduled to follow once the new building was complete, and the associated state spill record was later closed. This is a recorded site condition, not an incident: it is in the library because contamination changes how excavation and foundation work has to be carried out and who has to sign off.",
+  "cause_as_reported": null,
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "NYSDEC, interim remedial measure work plan, site C224208",
+    "url": "https://extapps.dec.ny.gov/data/DecDocs/C224208/Work%20Plan.BCP.C224208.2020-11-09.Interim%20Remedial%20Measure%20Work%20Plan%20Final.pdf",
+    "date": "2020-11-09"
+   }
+  ]
+ },
+ {
+  "id": "case-250-water-2022",
+  "title": "Mercury in soil constraining a deep excavation",
+  "address": "250 Water St, Manhattan",
+  "bbl": "1000980001",
+  "lat": 40.70821,
+  "lon": -74.00268,
+  "date": "2022-04-20",
+  "hazards": [
+   "contamination",
+   "geotech"
+  ],
+  "severity": 0,
+  "job_type": "new_building",
+  "work_types": [
+   "excavation",
+   "foundation"
+  ],
+  "conditions": {
+   "excavation_depth_ft": 18.0
+  },
+  "summary": "A 1.1-acre former filling station and parking lot in the Seaport, enrolled in the state Brownfield Cleanup Program (DEC site C231127). Elemental mercury left by thermometer factories that once operated there was sealed beneath the surface along with a fuel tank. The remedy excavates roughly 21,700 cubic yards of contaminated and historic fill exceeding restricted-residential cleanup objectives and takes it off site, with particulate, VOC and mercury-vapour monitoring during the work; mercury removal was described as starting between 4 and 16 feet down, followed by site-wide excavation between 15 and 18 feet. A later work plan covers a pre-design geotechnical investigation to support foundation design. A recorded site condition, not an incident. Depths and volumes come from documents of different years and do not all match.",
+  "cause_as_reported": null,
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "NYSDEC fact sheet, remedial action starts, site C231127",
+    "url": "https://extapps.dec.ny.gov/data/DecDocs/C231127/Fact%20Sheet.BCP.C231127.2022-04-20.Starts%20Remedial%20Action.pdf",
+    "date": "2022-04-20"
+   },
+   {
+    "name": "NYSDEC subsurface investigation work plan, site C231127",
+    "url": "https://extapps.dec.ny.gov/data/DecDocs/C231127/Work%20Plan.BCP.C231127.2026-04-27.Subsurface%20Investigation%20Work%20Plan.pdf",
+    "date": "2026-04-27"
+   }
+  ]
+ },
+ {
+  "id": "case-204-bedford-2020",
+  "title": "Facade of a vacant storefront collapsed in a storm",
+  "address": "204 Bedford Ave, Brooklyn",
+  "bbl": "3023350022",
+  "lat": 40.71718,
+  "lon": -73.95875,
+  "date": "2020-08",
+  "hazards": [
+   "facade",
+   "structural",
+   "weather"
+  ],
+  "severity": 2,
+  "job_type": null,
+  "work_types": [
+   "facade"
+  ],
+  "conditions": {
+   "attached": true
+  },
+  "summary": "The facade and part of the structure of a vacant three-storey storefront crumbled into the street during a storm, burying parked cars in debris. No injuries were reported. The neighbouring building and a ground-floor restaurant were evacuated.",
+  "cause_as_reported": "The collapse was attributed in reporting to water damage, rot and structural deterioration during a storm.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "Brooklyn Paper, history of Brooklyn building collapses",
+    "url": "https://www.brooklynpaper.com/a-history-of-brooklyn-building-collapses/",
+    "date": "2026-11-13"
+   }
+  ]
+ },
+ {
+  "id": "case-927-grand-2026",
+  "title": "Exterior wall collapsed after a four-alarm fire",
+  "address": "927 Grand St, Brooklyn",
+  "bbl": "3029240056",
+  "lat": 40.712996,
+  "lon": -73.937178,
+  "date": "2026-05",
+  "hazards": [
+   "fire",
+   "structural"
+  ],
+  "severity": 2,
+  "job_type": null,
+  "work_types": [],
+  "conditions": {
+   "attached": true
+  },
+  "summary": "A four-alarm fire structurally damaged three buildings. The exterior wall of the building where the fire started collapsed into the street, and damage to a neighbouring building's rear wall prompted evacuations. Eighteen people were displaced.",
+  "cause_as_reported": null,
+  "cause_status": "unknown",
+  "sources": [
+   {
+    "name": "Brooklyn Paper, history of Brooklyn building collapses",
+    "url": "https://www.brooklynpaper.com/a-history-of-brooklyn-building-collapses/",
+    "date": "2026-11-13"
+   }
+  ]
+ },
+ {
+  "id": "case-338-court-2020-bulge",
+  "title": "Masonry bulged over the pavement three weeks before the collapse",
+  "address": "338 Court St, Brooklyn",
+  "bbl": "3003397503",
+  "lat": 40.682758,
+  "lon": -73.996154,
+  "date": "2020-06-10",
+  "hazards": [
+   "facade",
+   "structural"
+  ],
+  "severity": 1,
+  "job_type": "alteration",
+  "work_types": [
+   "facade"
+  ],
+  "conditions": {
+   "attached": true,
+   "construction": "masonry"
+  },
+  "summary": "About three weeks before the partial collapse at this address, a section of brick masonry roughly 20 by 15 feet began bulging out over the pavement while workers were removing stucco from an exterior wall. Officials issued a partial stop-work order. Recorded separately from the collapse because the visible warning and the failure are two different events at the same building, and the gap between them is the point.",
+  "cause_as_reported": "Reported as masonry bulging observed during stucco removal, after which a partial stop-work order was issued. No cause for the bulging was published.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "Brooklyn Paper, history of Brooklyn building collapses",
+    "url": "https://www.brooklynpaper.com/a-history-of-brooklyn-building-collapses/",
+    "date": "2026-11-13"
+   },
+   {
+    "name": "Yahoo News, building seen bulging three weeks earlier",
+    "url": "https://news.yahoo.com/building-collapses-court-street-brooklyn-211138120.html",
+    "date": "2020-07-01"
+   }
+  ]
+ },
+ {
+  "id": "case-2101-ralph-2025",
+  "title": "Drop ceiling fell on diners after roof water damage",
+  "address": "2101 Ralph Ave, Brooklyn",
+  "bbl": "3083440001",
+  "lat": 40.626329,
+  "lon": -73.915854,
+  "date": "2025-09-05",
+  "hazards": [
+   "structural"
+  ],
+  "severity": 2,
+  "job_type": null,
+  "work_types": [],
+  "conditions": {},
+  "summary": "A section of drop ceiling in a restaurant inside a commercial building gave way onto diners. Reported injury counts differ: nine people injured in most accounts, four with minor injuries in a later update by one outlet; all injuries were described as minor. The restaurant closed for inspection and repair. City records showed no active construction or renovation permits for the premises.",
+  "cause_as_reported": "DOB said the section of drop ceiling collapsed apparently due to potential water damage originating from the roof, and issued the owner a violation for failure to maintain the building.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "Brooklyn Paper",
+    "url": "https://www.brooklynpaper.com/nine-injured-ihop-collapse-georgetown",
+    "date": "2025-09-08"
+   },
+   {
+    "name": "News 12 Brooklyn",
+    "url": "https://brooklyn.news12.com/2025/09/05/4-people-injured-in-brooklyn-ceiling-collapse/6DVgGAGxdoMFK7ORN1Z6Og",
+    "date": "2025-09-05"
+   }
+  ]
+ },
+ {
+  "id": "case-133-20-rockaway-2019",
+  "title": "Unnotified excavation cracked a neighbour's underpinning",
+  "address": "133-20 Rockaway Blvd, Queens",
+  "bbl": "4117570055",
+  "lat": 40.674411,
+  "lon": -73.804689,
+  "date": "2019-01",
+  "hazards": [
+   "geotech",
+   "structural"
+  ],
+  "severity": 1,
+  "job_type": null,
+  "work_types": [
+   "excavation",
+   "underpinning"
+  ],
+  "conditions": {
+   "attached": true
+  },
+  "summary": "DOB issued $30,000 in penalties for several violations relating to dangerous excavation work near an occupied building. The work was carried out without first notifying the department and cracked the underpinning of the neighbouring commercial building, along with other hazardous conditions. The excavation caused structural damage to that building and led DOB to issue a full vacate order in the interest of public safety.",
+  "cause_as_reported": "DOB reported that excavation performed without the required notification caused structural damage to the adjoining building.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "NYC DOB Enforcement Action Bulletin, January 2019",
+    "url": "https://www.nyc.gov/assets/buildings/pdf/0119_enforcement_action_bulletin.pdf",
+    "date": "2019-01-31"
+   }
+  ]
+ },
+ {
+  "id": "case-42-sharon-2019",
+  "title": "Forty-foot wall left unbraced and in danger of collapse",
+  "address": "42 Sharon St, Brooklyn",
+  "bbl": "3029130016",
+  "lat": 40.715099,
+  "lon": -73.937571,
+  "date": "2019-01",
+  "hazards": [
+   "structural",
+   "construction_safety"
+  ],
+  "severity": 1,
+  "job_type": null,
+  "work_types": [
+   "structural"
+  ],
+  "conditions": {},
+  "summary": "DOB issued $25,000 in penalties against the construction superintendent for failure to perform required duties at a site where inspectors observed a 40-foot wall without proper bracing or support, leaving it in danger of collapse. The bulletin spells the street 'Sharron Street'; the lot is on Sharon Street.",
+  "cause_as_reported": "DOB reported the wall was left without proper bracing or support and that the construction superintendent had not carried out his required duties.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "NYC DOB Enforcement Action Bulletin, January 2019",
+    "url": "https://www.nyc.gov/assets/buildings/pdf/0119_enforcement_action_bulletin.pdf",
+    "date": "2019-01-31"
+   }
+  ]
+ },
+ {
+  "id": "case-595-smith-2019",
+  "title": "Sidewalk shed leaning into the street for months",
+  "address": "595 Smith St, Brooklyn",
+  "bbl": "3004890001",
+  "lat": 40.67116,
+  "lon": -73.99942,
+  "date": "2019-01",
+  "hazards": [
+   "facade",
+   "construction_safety"
+  ],
+  "severity": 1,
+  "job_type": null,
+  "work_types": [
+   "sidewalk_shed"
+  ],
+  "conditions": {},
+  "summary": "DOB issued $35,000 in penalties to the property owner after finding a sidewalk shed in disrepair and leaning into the street, with missing shed panels, for several months.",
+  "cause_as_reported": "DOB reported the shed was in disrepair, leaning into the street and missing panels over a period of several months.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "NYC DOB Enforcement Action Bulletin, January 2019",
+    "url": "https://www.nyc.gov/assets/buildings/pdf/0119_enforcement_action_bulletin.pdf",
+    "date": "2019-01-31"
+   }
+  ]
+ },
+ {
+  "id": "case-301-e-80-2019",
+  "title": "Worker in an eight-foot trench with no way out",
+  "address": "301 E 80th St, Manhattan",
+  "bbl": "1015437503",
+  "lat": 40.774123,
+  "lon": -73.95408,
+  "date": "2019-01",
+  "hazards": [
+   "geotech",
+   "construction_safety"
+  ],
+  "severity": 1,
+  "job_type": null,
+  "work_types": [
+   "excavation",
+   "earth_work"
+  ],
+  "conditions": {
+   "excavation_depth_ft": 8.0
+  },
+  "summary": "DOB issued $2,500 in penalties to the registered general contractor after inspectors found a worker inside an eight-foot-deep trench with no means of getting out of it. The worker was able to climb out after coworkers retrieved a ladder.",
+  "cause_as_reported": "DOB reported a worker in an eight-foot-deep trench with no means of egress.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "NYC DOB Enforcement Action Bulletin, January 2019",
+    "url": "https://www.nyc.gov/assets/buildings/pdf/0119_enforcement_action_bulletin.pdf",
+    "date": "2019-01-31"
+   }
+  ]
+ },
+ {
+  "id": "case-31-ainslie-2019",
+  "title": "Material hoist run without supported outriggers",
+  "address": "31 Ainslie St, Brooklyn",
+  "bbl": "3023710050",
+  "lat": 40.713156,
+  "lon": -73.953152,
+  "date": "2019-01",
+  "hazards": [
+   "construction_safety"
+  ],
+  "severity": 1,
+  "job_type": null,
+  "work_types": [
+   "structural"
+  ],
+  "conditions": {},
+  "summary": "DOB issued $15,000 in penalties to the registered general contractor for violations relating to operating a hoist in an unsafe manner and without a required certificate of onsite inspection. The machine was lifting construction material to the top of a building without properly supported outriggers, which DOB said could have led to it tipping over.",
+  "cause_as_reported": "DOB reported the hoist was operated unsafely, without the required certificate of onsite inspection and without properly supported outriggers.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "NYC DOB Enforcement Action Bulletin, January 2019",
+    "url": "https://www.nyc.gov/assets/buildings/pdf/0119_enforcement_action_bulletin.pdf",
+    "date": "2019-01-31"
+   }
+  ]
+ },
+ {
+  "id": "case-41-w-45-2019",
+  "title": "Open shaftway at a roof with no controlled access zone",
+  "address": "41 W 45th St, Manhattan",
+  "bbl": "1012610016",
+  "lat": 40.756357,
+  "lon": -73.981132,
+  "date": "2019-01",
+  "hazards": [
+   "construction_safety"
+  ],
+  "severity": 1,
+  "job_type": null,
+  "work_types": [
+   "structural"
+  ],
+  "conditions": {},
+  "summary": "DOB issued $12,500 in penalties for not having the required site safety supervisor on site, after inspectors observed an open shaftway at the roof of the building without the proper controlled access zone to prevent a person falling into it.",
+  "cause_as_reported": "DOB reported the site had no required site safety supervisor present and an unprotected open shaftway at roof level.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "NYC DOB Enforcement Action Bulletin, January 2019",
+    "url": "https://www.nyc.gov/assets/buildings/pdf/0119_enforcement_action_bulletin.pdf",
+    "date": "2019-01-31"
+   }
+  ]
+ },
+ {
+  "id": "case-555-west-end-2019",
+  "title": "Missing guard rails and an unplanked scaffold",
+  "address": "555 West End Ave, Manhattan",
+  "bbl": "1012487502",
+  "lat": 40.78953,
+  "lon": -73.97779,
+  "date": "2019-01",
+  "hazards": [
+   "construction_safety"
+  ],
+  "severity": 1,
+  "job_type": null,
+  "work_types": [
+   "scaffold"
+  ],
+  "conditions": {},
+  "summary": "DOB issued $10,000 in penalties against the construction superintendent for failure to perform required duties at a site with several unsafe conditions: missing guard rails, a scaffold that was not fully planked, an unsafe makeshift platform constructed in a stairway and missing handrails.",
+  "cause_as_reported": "DOB reported the construction superintendent had not carried out required duties and listed the unsafe conditions found on site.",
+  "cause_status": "reported",
+  "sources": [
+   {
+    "name": "NYC DOB Enforcement Action Bulletin, January 2019",
+    "url": "https://www.nyc.gov/assets/buildings/pdf/0119_enforcement_action_bulletin.pdf",
+    "date": "2019-01-31"
+   }
+  ]
+ }
 ]
