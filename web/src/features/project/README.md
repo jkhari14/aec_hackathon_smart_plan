@@ -59,5 +59,5 @@ one, the panel says the answer's text was not kept. Over 8000 characters an answ
 
 ## Limits
 
-- Built on the PR 0 placeholder tokens; it takes the design system's components once PR 1 lands.
+- Not mounted in the app shell yet. Built on the PR 0 placeholder tokens; it has not been moved onto the design system's components.
 - Checked in a browser against the project store and against the sample stubs; no test runner is set up in `web/` yet.

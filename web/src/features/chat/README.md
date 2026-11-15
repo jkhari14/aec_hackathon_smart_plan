@@ -60,6 +60,12 @@ test fails when it is out of date.
 
 ## Limits
 
-- Built on the PR 0 placeholder tokens; it takes the design system's panel, chip and source label once PR 1 lands.
+- Not mounted in the app shell yet, so the running app shows no chat.
+- Built on the PR 0 placeholder tokens; it has not been moved onto the design system's panel, chip and source label.
+- `chat_client.ts` calls `/api/chat` as a relative path. That works in local development (the dev server
+  forwards `/api`). A web app deployed on a different host from the API needs `VITE_API_BASE`, which the
+  shared client uses and this one does not yet: until then the deployed panel offers the saved answers.
+- No model has answered a question yet. The state and the plan for the first live call are in
+  `api/routers/chat/README.md` and `api/routers/chat/chat_first_live_call.md`.
 - A single record's chip flies to the site, since an answer part does not carry the record's own lot.
 - No test runner is set up in `web/` yet, so this folder is covered by the type check and a browser check only.
