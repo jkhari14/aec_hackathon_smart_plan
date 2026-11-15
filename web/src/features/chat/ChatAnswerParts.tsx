@@ -10,7 +10,7 @@ type Props = {
   onFlyTo?: (target: FlyTarget) => void;
 };
 
-const CHIP = "rounded border border-line px-1.5 py-0.5 text-xs text-text hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-400";
+const CHIP = "rounded border border-line px-1.5 py-0.5 text-xs text-text hover:bg-line/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--fs-focus)]";
 
 function SourceChips({ part, siteBbl, cases, onFlyTo }: { part: ChatPart } & Omit<Props, "parts">) {
   const link = safeLink(part.source_url);

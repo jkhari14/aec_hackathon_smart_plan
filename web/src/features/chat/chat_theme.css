@@ -1,0 +1,11 @@
+/* The chat and project panels were built on the PR 0 placeholder colours (web/src/app.css). Inside this
+   scope those names point at the design system's tokens, so both panels follow the light and dark themes. */
+.fs-chatscope {
+  --color-night: var(--fs-bg);
+  --color-panel: var(--fs-panel);
+  --color-line: var(--fs-line);
+  --color-text: var(--fs-text);
+  --color-muted: var(--fs-muted);
+  --color-sample: var(--fs-sample);
+  color: var(--fs-text);
+}

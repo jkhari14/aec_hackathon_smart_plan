@@ -21,7 +21,7 @@ import {
   SourceLabel,
   Toggle,
 } from "../design";
-import { ChatPanel } from "../features/chat/ChatPanel";
+import { ChatDock } from "../features/chat/ChatDock";
 import { SitePanel, useSiteData, type SiteTab } from "../features/site_panel/SitePanel";
 import { titleCase } from "./CommandBar";
 
@@ -140,18 +140,17 @@ type ChatSlotProps = {
   onToggleLayer: (id: string, on: boolean) => void;
 };
 
-// The chat frames itself; it stays mounted while closed so the conversation survives the chat button.
+// Opened and closed by the chat button; the panel stays mounted while closed, so the conversation survives.
 export function ChatSlot({ open, bbl, site, onPickBbl, onToggleLayer }: ChatSlotProps) {
   return (
-    <div className="fs-shell__chat" data-open={open}>
-      <ChatPanel
+    <Panel title={copy.chat.title} open={open} edge="bottom" className="fs-shell__chat" label="Chat">
+      <ChatDock
         bbl={bbl}
         siteLabel={site ? titleCase(site.label).split(",")[0] : undefined}
-        className="min-h-0 max-h-full"
         onFlyTo={(target) => target.bbl && onPickBbl(target.bbl)}
         onToggleLayer={onToggleLayer}
       />
-    </div>
+    </Panel>
   );
 }
 

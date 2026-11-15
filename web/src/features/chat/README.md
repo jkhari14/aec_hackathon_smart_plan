@@ -3,7 +3,17 @@ Docked chat. Owner: Jahleel (PR 4, 9).
 Questions about one site, answered in parts that each say where they came from. The server decides
 each part's kind from what the part rests on; this folder only shows it.
 
-## Mounting it
+## Where it sits
+
+The shell's chat slot (`web/src/app/slots.tsx`, `ChatSlot`) draws the frame and renders `ChatDock`
+inside it: two tabs, "Ask" (the chat) and "Project" (the workspace in `../project`). Both stay mounted,
+so switching tabs keeps the conversation. `ChatDock` passes the picked site, the open project, `onPin`
+from `useProject`, and the shell's two handlers: a fly-to that names a lot opens that lot as the site,
+and a layer switch changes the shell's layer set. A fly-to with only coordinates (a past case with no
+lot) does nothing yet.
+
+`ChatPanel` with `embedded` renders only the conversation and the question box, for a frame someone
+else draws. Without it, it is a self-contained dock:
 
 ```tsx
 import { ChatPanel } from "../features/chat/ChatPanel";
@@ -20,9 +30,8 @@ import { ChatPanel } from "../features/chat/ChatPanel";
 />
 ```
 
-The panel docks bottom right over the map and collapses to its title bar; pass `className` to place
-it elsewhere. The default spot covers the corner where MapLibre puts its attribution, so the shell
-should move one of the two.
+On its own, the panel docks bottom right over the map and collapses to its title bar; pass `className`
+to place it elsewhere.
 
 The handlers are how the chat acts on the page. An answer can carry actions (show or hide a layer, fly
 the map, pin an answer); the panel runs them in order through the handlers and says so in the answer
@@ -37,9 +46,11 @@ from today's view are never sent as context to a question about an earlier date.
 
 | File | What it holds |
 | --- | --- |
-| `ChatPanel.tsx` | The dock, the conversation, the question box |
+| `ChatDock.tsx` | What the shell's chat slot renders: the chat and the project workspace as two tabs |
+| `ChatPanel.tsx` | The conversation and the question box; a dock of its own when not `embedded` |
 | `ChatAnswerParts.tsx` | One answer: each part under its source label, with its source chips |
-| `chat_part_kinds.ts` | The label for each kind of part. Tone classes are placeholders for the design system's source label (PR 1) |
+| `chat_part_kinds.ts` | The label and the colour for each kind of part, from the design system's tokens |
+| `chat_theme.css` | Points the placeholder colour names at the design system's tokens inside these two panels |
 | `chat_client.ts` | `POST /api/chat` and `GET /api/chat/setup` |
 | `chat_conversation.ts` | The exchanges kept, and the earlier ones a follow-up sends within the server's caps |
 | `chat_page_actions.ts` | Running an answer's actions; where a source chip flies the map |
@@ -60,6 +71,9 @@ test fails when it is out of date.
 
 ## Limits
 
-- Built on the PR 0 placeholder tokens; it takes the design system's panel, chip and source label once PR 1 lands.
+- The colours are the design system's, through `chat_theme.css`; the layout is still this folder's own
+  classes, not the design system's card, chip and source label components.
+- The part labels are this folder's (`chat_part_kinds.ts`), not `copy.sourceLabels`: they carry the
+  qualifiers ("not checked by us", "a pattern, not a prediction") the short labels leave out.
 - A single record's chip flies to the site, since an answer part does not carry the record's own lot.
 - No test runner is set up in `web/` yet, so this folder is covered by the type check and a browser check only.

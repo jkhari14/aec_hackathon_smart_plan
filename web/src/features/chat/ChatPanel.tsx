@@ -3,7 +3,10 @@
 // through the handlers it is given. See README.md for how the shell mounts it.
 import { useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 
+import "./chat_theme.css";
+
 import { api } from "../../api/client";
+import { copy } from "../../copy";
 import type { Case, ChatRequest, ChatResponse } from "../../contracts";
 import { ChatAnswerParts } from "./ChatAnswerParts";
 import { askChat, DEFAULT_CHAT_SETUP, loadChatSetup, type ChatSetup } from "./chat_client";
@@ -24,12 +27,14 @@ export type ChatPanelProps = ChatPageHandlers & {
   defaultOpen?: boolean;
   /** Where the panel sits; the default docks it bottom right over the map. */
   className?: string;
+  /** Only the conversation and the question box, for a frame the shell already draws (its chat slot). */
+  embedded?: boolean;
 };
 
 type PinState = { state: "saving" } | { state: "pinned" } | { state: "failed"; reason: string };
 
 const DOCKED = "absolute bottom-4 right-4 z-10 w-[26rem] max-w-[calc(100vw-2rem)]";
-const BUTTON = "rounded border border-line px-2 py-1 text-xs hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-400 disabled:cursor-not-allowed disabled:opacity-50";
+const BUTTON = "rounded border border-line px-2 py-1 text-xs hover:bg-line/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--fs-focus)] disabled:cursor-not-allowed disabled:opacity-50";
 
 export function ChatPanel(props: ChatPanelProps) {
   const { bbl, siteLabel, projectId = null, asOf = null, jobType = null, stage = null, onFlyTo, onPin } = props;
@@ -144,29 +149,19 @@ export function ChatPanel(props: ChatPanelProps) {
         ? `A question is at most ${setup.max_question_chars} characters.`
         : null;
   const savedHere = savedAnswersFor(bbl, asOf);
+  const embedded = props.embedded ?? false;
+  const edge = embedded ? "" : "border-t border-line px-3";
 
-  return (
-    <section aria-label="Chat about this site" className={`${props.className ?? DOCKED} flex flex-col rounded-lg border border-line bg-panel/95 text-text shadow-lg backdrop-blur`}>
-      <button
-        type="button"
-        aria-expanded={open}
-        onClick={() => setOpen(!open)}
-        className="flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-left hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-400"
-      >
-        <span className="min-w-0">
-          <span className="block text-sm font-semibold">Ask about this site</span>
-          <span className="block truncate text-xs text-muted">
-            {bbl ? (siteLabel ?? `Lot ${bbl}`) : "No site picked"}
-            {asOf ? ` · as of ${asOf}` : ""}
-            {setup.live ? "" : " · offline answers"}
-          </span>
-        </span>
-        <span aria-hidden="true" className="text-muted">{open ? "–" : "+"}</span>
-      </button>
-
-      {open && (
+  const body = (
         <>
-          <div role="log" aria-live="polite" aria-label="Questions and answers" className="max-h-[50vh] space-y-4 overflow-y-auto border-t border-line px-3 py-3">
+          <div role="log" aria-live="polite" aria-label="Questions and answers" className={`${embedded ? "min-h-0 flex-1" : "max-h-[50vh]"} space-y-4 overflow-y-auto ${edge} py-3`}>
+            {embedded && (bbl || !setup.live) && (
+              <p className="truncate text-xs text-muted">
+                {bbl ? (siteLabel ?? `Lot ${bbl}`) : "No site picked"}
+                {asOf ? ` · as of ${asOf}` : ""}
+                {setup.live ? "" : " · offline answers"}
+              </p>
+            )}
             {exchanges.length === 0 && (
               <div className="space-y-2">
                 <p className="text-sm text-muted">
@@ -191,16 +186,16 @@ export function ChatPanel(props: ChatPanelProps) {
               const pinState = pins[exchange.id];
               return (
                 <article key={exchange.id} className="space-y-2">
-                  <p className="ml-8 rounded-md bg-white/10 px-2.5 py-1.5 text-sm">
+                  <p className="ml-8 rounded-md bg-line/60 px-2.5 py-1.5 text-sm">
                     <span className="sr-only">You asked: </span>
                     {exchange.question}
                   </p>
                   {outcome.state === "waiting" && <p className="text-sm text-muted">Looking this up…</p>}
                   {outcome.state === "refused" && (
-                    <p className="border-l-2 border-red-400/70 pl-2.5 text-sm">Not answered: {outcome.reason}</p>
+                    <p className="border-l-2 border-[color:var(--fs-error)] pl-2.5 text-sm">Not answered: {outcome.reason}</p>
                   )}
                   {outcome.state === "unreachable" && (
-                    <div className="space-y-2 border-l-2 border-red-400/70 pl-2.5 text-sm">
+                    <div className="space-y-2 border-l-2 border-[color:var(--fs-error)] pl-2.5 text-sm">
                       <p>The chat server could not be reached, so this question was not answered.</p>
                       {savedHere.length > 0 && (
                         <>
@@ -226,11 +221,11 @@ export function ChatPanel(props: ChatPanelProps) {
                         onFlyTo={onFlyTo}
                       />
                       {outcome.notDone.map((line) => (
-                        <p key={line} className="text-xs text-amber-300">{line}</p>
+                        <p key={line} className="text-xs text-sample">{line}</p>
                       ))}
                       <div className="flex flex-wrap items-center gap-1.5 text-xs text-muted">
-                        {outcome.saved && <span className="rounded bg-white/10 px-1.5 py-0.5">Saved answer: the chat server could not be reached</span>}
-                        {!outcome.saved && outcome.response.offline && <span className="rounded bg-white/10 px-1.5 py-0.5">Offline answer: no model was called</span>}
+                        {outcome.saved && <span className="rounded bg-line/60 px-1.5 py-0.5">Saved answer: the chat server could not be reached</span>}
+                        {!outcome.saved && outcome.response.offline && <span className="rounded bg-line/60 px-1.5 py-0.5">Offline answer: no model was called</span>}
                         {outcome.sample && <span className="rounded bg-sample/15 px-1.5 py-0.5 font-medium text-sample">Sample data</span>}
                         {onPin && projectId && outcome.response.answer_parts.some((part) => part.kind !== "notice") && (
                           <button
@@ -239,10 +234,10 @@ export function ChatPanel(props: ChatPanelProps) {
                             disabled={pinState?.state === "saving" || pinState?.state === "pinned"}
                             onClick={() => pin(exchange.id, exchange.question, outcome.response)}
                           >
-                            {pinState?.state === "pinned" ? "Pinned to the project" : pinState?.state === "saving" ? "Pinning…" : "Pin to the project"}
+                            {pinState?.state === "pinned" ? copy.chat.pinned : pinState?.state === "saving" ? "Pinning…" : copy.chat.pin}
                           </button>
                         )}
-                        {pinState?.state === "failed" && <span className="text-red-300">Not pinned: {pinState.reason}</span>}
+                        {pinState?.state === "failed" && <span className="text-[color:var(--fs-error)]">Not pinned: {pinState.reason}</span>}
                       </div>
                     </>
                   )}
@@ -252,7 +247,7 @@ export function ChatPanel(props: ChatPanelProps) {
             <div ref={logEnd} />
           </div>
 
-          <form onSubmit={submit} className="space-y-1.5 border-t border-line px-3 py-2">
+          <form onSubmit={submit} className={`shrink-0 space-y-1.5 ${edge} py-2`}>
             <label htmlFor={inputId} className="sr-only">Your question about this site</label>
             <div className="flex items-end gap-2">
               <textarea
@@ -262,21 +257,44 @@ export function ChatPanel(props: ChatPanelProps) {
                 disabled={!bbl}
                 onChange={(event) => setDraft(event.target.value)}
                 onKeyDown={onKeyDown}
-                placeholder={bbl ? "Ask a question about this site" : "Pick a site on the map first"}
-                className="min-h-0 flex-1 resize-none rounded border border-line bg-night px-2 py-1.5 text-sm placeholder:text-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-400 disabled:opacity-50"
+                placeholder={bbl ? copy.chat.placeholder : "Pick a site on the map first"}
+                className="min-h-0 flex-1 resize-none rounded border border-line bg-night px-2 py-1.5 text-sm placeholder:text-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--fs-focus)] disabled:opacity-50"
               />
               <button type="submit" className={`${BUTTON} px-3 py-1.5 text-sm font-medium`} disabled={whyDisabled !== null || !draft.trim()}>
                 Ask
               </button>
             </div>
-            {whyDisabled && bbl && <p className="text-xs text-amber-300">{whyDisabled}</p>}
+            {whyDisabled && bbl && <p className="text-xs text-sample">{whyDisabled}</p>}
             <p className="text-[0.7rem] leading-snug text-muted">
               Public records, reported cases and rule results only. Not a DOB determination or engineering advice. Names of
               owners, applicants and contractors are left out.
             </p>
           </form>
         </>
-      )}
+  );
+
+  // In the shell's frame the conversation scrolls and the question box stays in view.
+  if (embedded) return <div className="fs-chatscope flex min-h-0 flex-1 flex-col">{body}</div>;
+
+  return (
+    <section aria-label="Chat about this site" className={`fs-chatscope ${props.className ?? DOCKED} flex flex-col rounded-lg border border-line bg-panel/95 text-text shadow-lg backdrop-blur`}>
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+        className="flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-left hover:bg-line/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--fs-focus)]"
+      >
+        <span className="min-w-0">
+          <span className="block text-sm font-semibold">Ask about this site</span>
+          <span className="block truncate text-xs text-muted">
+            {bbl ? (siteLabel ?? `Lot ${bbl}`) : "No site picked"}
+            {asOf ? ` · as of ${asOf}` : ""}
+            {setup.live ? "" : " · offline answers"}
+          </span>
+        </span>
+        <span aria-hidden="true" className="text-muted">{open ? "–" : "+"}</span>
+      </button>
+      {open && body}
     </section>
   );
 }
