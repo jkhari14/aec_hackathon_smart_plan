@@ -29,3 +29,11 @@
 .maplibregl-ctrl-top-left:has(.deck-widget-container) {
   z-index: auto;
 }
+
+/* The 2D/3D switch sits in the control stack (bottom right). */
+.fs-view-mode button {
+  font: 600 11px/29px ui-sans-serif, system-ui, sans-serif;
+  /* The shell themes the control stack, so the label follows its text color in both themes. */
+  color: var(--fs-text, #121821);
+  letter-spacing: 0.02em;
+}
