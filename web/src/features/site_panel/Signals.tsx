@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { DatasetStatus, Signal } from "../../contracts";
 import { copy } from "../../copy";
 import { SEVERITY_LABELS } from "../../contracts";
+import { readRecordQuote, recordNumber } from "./record_text";
 import { bySignalPriority, Button, Card, EmptyState, Explain, HAZARD_LABELS, SeverityMark, SourceLabel } from "../../design";
 
 const TOP = 3;
@@ -54,10 +55,38 @@ function SignalCard({ signal, sourceUrl }: { signal: Signal; sourceUrl?: string 
         {HAZARD_LABELS[signal.hazard]} · {SEVERITY_LABELS[signal.severity]}
       </span>
       <Explain>
-        <p>{signal.explanation}</p>
-        <p className="fs-num">Record: {signal.record_ids.join(", ")}</p>
-        <p>Ranked by severity, with life-safety hazards first. Signals are what the record says, not a finding.</p>
+        <SignalWhy signal={signal} />
       </Explain>
     </Card>
+  );
+}
+
+/** The record in a few short lines: what it says, any code it cites, which record, and how to read it. */
+function SignalWhy({ signal }: { signal: Signal }) {
+  const quote = readRecordQuote(signal.explanation);
+  const parts = quote ? null : signal.explanation.split(/;\s+|\.\s+(?=[A-Z])/).filter(Boolean);
+  return (
+    <div className="fs-why">
+      <p className="fs-why__label">What the record says</p>
+      <ul className="fs-why__list">
+        {(quote ? quote.lines : parts ?? []).map((line, i) => (
+          <li key={i}>{line.replace(/\.$/, "")}</li>
+        ))}
+      </ul>
+      {quote && quote.codes.length > 0 && (
+        <p className="fs-why__row"><span>Code cited</span>{quote.codes.join(", ")}</p>
+      )}
+      <p className="fs-why__row">
+        <span>Record</span>
+        <span className="fs-num">{signal.source_name} #{signal.record_ids.map(recordNumber).join(", #")}</span>
+      </p>
+      {quote && (
+        <details className="fs-why__original">
+          <summary>Original text</summary>
+          <p>{signal.explanation}</p>
+        </details>
+      )}
+      <p className="fs-why__note">This is what the record says, not a finding. The top 3 are ranked by severity, life safety first.</p>
+    </div>
   );
 }
