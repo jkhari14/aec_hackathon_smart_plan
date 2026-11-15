@@ -95,5 +95,16 @@ class CoverageTest(unittest.TestCase):
         self.assertNotIn(hero["bbl"], {"3052110073", "3052110074"})
 
 
+class DemoSeedsTest(unittest.TestCase):
+    def test_seeds_point_at_real_sites_and_layers(self):
+        seeds = json.loads((ROOT / "pitch" / "demo_seeds.json").read_text(encoding="utf-8"))
+        site_ids = {s["id"] for s in json.loads(DEMO_SITES.read_text(encoding="utf-8"))["sites"]}
+        for key in ("hero_site_id", "backup_site_id", "offline_site_id"):
+            self.assertIn(seeds[key], site_ids, key)
+        catalog = json.loads((ROOT / "contracts" / "fixtures" / "layer_catalog.json").read_text(encoding="utf-8"))
+        self.assertLessEqual(set(seeds["layers_on"]), {layer["layer_id"] for layer in catalog})
+        self.assertEqual({m["role"] for m in seeds["project"]["members"]}, labels(contracts.Role))
+
+
 if __name__ == "__main__":
     unittest.main()
