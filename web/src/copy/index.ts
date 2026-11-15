@@ -37,9 +37,14 @@ export const copy = {
   sourceLabels: {
     public_record: "Public record",
     case: "Reported case",
+    warning: "Early warning",
+    action: "Action item",
     ai_suggestion: "AI suggestion",
     web: "Web source",
     user_input: "Added by your team",
+    not_found: "None found",
+    unknown: "Couldn't load",
+    notice: "Note",
   } satisfies Record<AnswerKind, string>,
 
   hazards: {
