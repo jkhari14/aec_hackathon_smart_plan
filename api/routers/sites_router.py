@@ -81,9 +81,12 @@ def load_site_part(part: str, bbl: str, job_type: Optional[str] = None, stage: O
     if build is None:
         return LoadedData(_MODELS[part].validate_python(fixture(fixture_name)), True)
     try:
-        options = {name: checked[name] for name in SITE_OPTIONS[part]}
+        params = inspect.signature(build).parameters
+        takes_any = any(p.kind is inspect.Parameter.VAR_KEYWORD for p in params.values())
+        # An owner gets the options it declares: one written before an option was added keeps working.
+        options = {name: checked[name] for name in SITE_OPTIONS[part] if takes_any or name in params}
         response = Response()
-        if "response" in inspect.signature(build).parameters:
+        if "response" in params:
             options["response"] = response
         answer = build(bbl, **options)
         return LoadedData(_MODELS[part].validate_python(answer), response.headers.get(FIXTURE_HEADER) == "true")
