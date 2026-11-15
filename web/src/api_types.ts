@@ -41,6 +41,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/projects/{project_id}/model/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Confirm Drawing
+         * @description The uploader confirmed a reading: keep it as the project's model (and the site's, for the profile),
+         *     list the document, and add or flag the checklist items it calls for, each saying who and why.
+         */
+        post: operations["confirm_drawing_api_projects__project_id__model_confirm_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/projects/{project_id}/geotech/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Confirm Geotech
+         * @description The uploader confirmed a report reading: list the document and add or flag the checklist items it calls for.
+         */
+        post: operations["confirm_geotech_api_projects__project_id__geotech_confirm_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/layers": {
         parameters: {
             query?: never;
@@ -391,6 +432,12 @@ export interface components {
             source_rule: string;
             /** Life Safety */
             life_safety: boolean;
+            /** Added By Role */
+            added_by_role?: ("architect" | "structural_engineer" | "developer" | "contractor") | null;
+            /** Added Reason */
+            added_reason?: string | null;
+            /** Added At */
+            added_at?: string | null;
         };
         /** ActionItemUpdate */
         ActionItemUpdate: {
@@ -593,6 +640,28 @@ export interface components {
             /** Source Url */
             source_url?: string | null;
         };
+        /**
+         * DrawingConfirm
+         * @description A drawing reading the uploader checked and confirmed: it becomes the project's structural model and
+         *     turns into checklist items for the roles it concerns (each saying which document added it and who).
+         */
+        DrawingConfirm: {
+            model: components["schemas"]["StructuralModel"];
+            /**
+             * By Role
+             * @enum {string}
+             */
+            by_role: "architect" | "structural_engineer" | "developer" | "contractor";
+            /** Document */
+            document: string;
+            /**
+             * Slot
+             * @default structural
+             */
+            slot: string;
+            /** Evidence */
+            evidence?: string | null;
+        };
         /** EarlyWarning */
         EarlyWarning: {
             /** Id */
@@ -645,6 +714,47 @@ export interface components {
             type: "Point" | "LineString" | "Polygon" | "MultiPolygon";
             /** Coordinates */
             coordinates: unknown;
+        };
+        /**
+         * GeotechConfirm
+         * @description A geotechnical report reading the uploader checked and confirmed: it turns into checklist items.
+         */
+        GeotechConfirm: {
+            findings: components["schemas"]["GeotechFindings"];
+            /**
+             * By Role
+             * @enum {string}
+             */
+            by_role: "architect" | "structural_engineer" | "developer" | "contractor";
+            /** Document */
+            document: string;
+            /**
+             * Slot
+             * @default geotech
+             */
+            slot: string;
+            /** Evidence */
+            evidence?: string | null;
+        };
+        /**
+         * GeotechFindings
+         * @description What a geotechnical report states, as read by AI and confirmed by the uploader. Null: not stated.
+         */
+        GeotechFindings: {
+            /** Groundwater Depth Ft */
+            groundwater_depth_ft?: number | null;
+            /** Soil Description */
+            soil_description?: string | null;
+            /** Allowable Bearing Tsf */
+            allowable_bearing_tsf?: number | null;
+            /** Rock Depth Ft */
+            rock_depth_ft?: number | null;
+            /** Boring Count */
+            boring_count?: number | null;
+            /** Max Boring Depth Ft */
+            max_boring_depth_ft?: number | null;
+            /** Confidence */
+            confidence: number;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -1150,6 +1260,76 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WarningRuleCheck"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    confirm_drawing_api_projects__project_id__model_confirm_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DrawingConfirm"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Project"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    confirm_geotech_api_projects__project_id__geotech_confirm_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GeotechConfirm"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Project"];
                 };
             };
             /** @description Validation Error */

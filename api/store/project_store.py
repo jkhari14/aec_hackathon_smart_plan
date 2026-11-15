@@ -22,6 +22,7 @@ _PROJECT_ID = re.compile(r"[0-9a-f]{16}", re.ASCII)
 UNCHANGED = object()  # update_items: leave the field as it is
 _ITEM_FIELDS = ("id", "discipline", "hazard", "title", "why", "code_ref", "proof_needed", "status", "owner_role",
                 "source_rule", "life_safety")
+_PROVENANCE = ("added_by_role", "added_reason", "added_at")
 
 
 class ProjectStoreError(ValueError):
@@ -150,7 +151,10 @@ class ProjectStore:
         return self.get_project(project_id)
 
     def add_items(self, project_id, items: list[dict]) -> dict:
-        """Add action items. An item already on the project keeps its status and owner; it is not reset."""
+        """Add action items. An item already on the project keeps its status and owner; it is not reset.
+
+        Provenance (`added_by_role`, `added_reason`, `added_at`) is never taken from here: only `record_items`
+        sets it, with the server's time."""
         rows = [_item_row(item) for item in items]
         with self._db(write=True) as db:
             self._project(db, project_id)
@@ -165,6 +169,45 @@ class ProjectStore:
                 f" VALUES (?, ?, ?, {', '.join('?' for _ in _ITEM_FIELDS)})",
                 [(project_id, start + i, now, *(row[f] for f in _ITEM_FIELDS)) for i, row in enumerate(new)])
             if new:
+                self._touch(db, project_id)
+        return self.get_project(project_id)
+
+    def record_items(self, project_id, items: list[dict], by_role) -> dict:
+        """Items a team member's document brought in, each with its `added_reason`, stamped with who and when.
+
+        A new item is added (its owner kept only if the project has that role). An item already on the
+        project keeps its status and owner, takes the new reason (`flagged_reason` when given) and time, and
+        gets the item's owner if it had none: so everyone sees that this document changed it. One transaction, one version bump.
+        """
+        rows = [(_item_row(item), _text(item.get("added_reason"), "added_reason", "reason"),
+                 _text(item.get("flagged_reason"), "flagged_reason", "reason", required=False)) for item in items]
+        with self._db(write=True) as db:
+            self._project(db, project_id)
+            role = self._member_role(db, project_id, by_role, "added_by_role")
+            members = {r["role"] for r in db.execute("SELECT role FROM members WHERE project_id = ?", (project_id,))}
+            existing = {r["id"]: r["owner_role"] for r in
+                        db.execute("SELECT id, owner_role FROM items WHERE project_id = ?", (project_id,))}
+            by_id = {row["id"]: (row, added, flagged) for row, added, flagged in rows}
+            new = [(row, added) for row, added, _ in by_id.values() if row["id"] not in existing]
+            self._room(db, project_id, "items", len(new))
+            start, now = len(existing), _now()
+            for i, (row, reason) in enumerate(new):
+                row = {**row, "owner_role": row["owner_role"] if row["owner_role"] in members else None}
+                columns = (*_ITEM_FIELDS, *_PROVENANCE)
+                db.execute(f"INSERT INTO items (project_id, position, updated_at, {', '.join(columns)})"
+                           f" VALUES (?, ?, ?, {', '.join('?' for _ in columns)})",
+                           (project_id, start + i, now, *(row[f] for f in _ITEM_FIELDS), role, reason, now))
+            for row, added, flagged in by_id.values():
+                if row["id"] not in existing:
+                    continue
+                reason = flagged or added
+                owner = existing[row["id"]]
+                if owner is None and row["owner_role"] in members:
+                    owner = row["owner_role"]
+                db.execute("UPDATE items SET added_by_role = ?, added_reason = ?, added_at = ?, owner_role = ?,"
+                           " updated_at = ? WHERE project_id = ? AND id = ?",
+                           (role, reason, now, owner, now, project_id, row["id"]))
+            if by_id:
                 self._touch(db, project_id)
         return self.get_project(project_id)
 
@@ -247,7 +290,7 @@ class ProjectStore:
             def rows(sql: str) -> list[dict]:
                 return [dict(r) for r in db.execute(sql, (project_id,)).fetchall()]
 
-            items = rows(f"SELECT {', '.join(_ITEM_FIELDS)} FROM items WHERE project_id = ? ORDER BY position")
+            items = rows(f"SELECT {', '.join(_ITEM_FIELDS + _PROVENANCE)} FROM items WHERE project_id = ? ORDER BY position")
             project = {
                 "id": row["id"], "name": row["name"], "site_bbl": row["site_bbl"], "stage": row["stage"],
                 "members": rows("SELECT name, role FROM members WHERE project_id = ? ORDER BY position"),

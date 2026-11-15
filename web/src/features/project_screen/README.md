@@ -16,7 +16,20 @@ link (`?project=<id>&screen=project`) and sees the same checklist, live.
   open → in progress → done; "not applicable" is in the unfolded row. Rows another tab changed flash briefly.
 - **Live:** `useProject` polls the project store every 4 s with its ETag; the header dot says Live or Offline.
 - **Documents** (`DocumentsStep.tsx`): slots shown only when the work makes them relevant (`DOC_SLOTS`).
-  A placeholder: attaching records the file's name as a `document` pin; the file is not uploaded.
+  A PDF in the structural slot goes to the drawing reader (`DrawingReader.tsx`, `POST /model/drawing`) while
+  `DrawingScan.tsx` plays (scan → 3D → read; the plan drawn is a labelled illustration). The reading is a
+  suggestion: the uploader corrects and confirms it (`POST /model/confirm`), and only then do
+  `actions/from_model.py`'s rules add or flag checklist items for the roles they concern. Any other file
+  records its name as a `document` pin; the file is not uploaded.
+- **Geotechnical report:** a PDF in the geotech slot goes to the report reader (`GeotechReader.tsx`,
+  `POST /geotech`) while `BoringScan.tsx` plays (borings drill through an illustrated section; once read, the
+  groundwater and rock are drawn at the depths the report states). Confirming (`POST /geotech/confirm`) runs
+  the geotech rules (`actions/rules.json` → `geotech_rules`): shallow groundwater → dewatering (contractor),
+  monitoring (contractor), waterproofing (architect); low bearing or fill → structural engineer.
+- **Living checklist:** an item a document added or flagged shows why, who and when (`added_reason`,
+  `added_by_role`, `added_at`). "New for you" (`newForRole`, `seen.ts`) counts items another role's document
+  added to your role's list since this browser last left the checklist as that role (or pressed "Got it");
+  the Checklist step shows the count and the checklist a banner and a tag per row.
 
 ## Files
 
@@ -26,5 +39,8 @@ link (`?project=<id>&screen=project`) and sees the same checklist, live.
 | `draft.ts` | "Draft checklist": create, load, add; its calls are passed in so it is testable |
 | `ProjectScreen.tsx` | The frame: header, live dot, acting-as role, share, steps |
 | `SetupStep.tsx`, `ChecklistStep.tsx`, `DocumentsStep.tsx` | The three steps |
+| `DrawingReader.tsx`, `DrawingScan.tsx` | Read a drawing, check and confirm it; the loading animation |
+| `GeotechReader.tsx`, `BoringScan.tsx` | The same for a geotechnical report |
+| `seen.ts` | When this browser last looked at the checklist as a role (localStorage) |
 
 Tests: `npm test` (Node's built-in runner, `web/tests/`).

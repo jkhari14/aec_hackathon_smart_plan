@@ -8,16 +8,25 @@ import { Button, Chip, EmptyState, HAZARD_LABELS } from "../../design";
 import { projectWrites, ROLE_LABELS, whyNotSaved } from "../project/project_client";
 import type { ProjectWorkspace } from "../project/useProject";
 import { addProjectItems } from "./draft";
-import { groupByOwner } from "./model";
+import { addedLine, groupByOwner } from "./model";
 
 type Status = ActionItem["status"];
 const STATUS_LABELS: Record<Status, string> = { open: "Open", in_progress: "In progress", done: "Done", not_applicable: "N/A" };
 const NEXT: Record<Status, Status> = { open: "in_progress", in_progress: "done", done: "open", not_applicable: "open" };
 const finished = (s: Status) => s === "done" || s === "not_applicable";
 
-type Props = { project: Project; workspace: ProjectWorkspace; notice: string | null; onDismissNotice: () => void };
+type Props = {
+  project: Project;
+  workspace: ProjectWorkspace;
+  notice: string | null;
+  onDismissNotice: () => void;
+  /** Items another role's document added to this role's list since it last looked. */
+  newForMe: ActionItem[];
+  onSeen: () => void;
+};
 
-export function ChecklistStep({ project, workspace, notice, onDismissNotice }: Props) {
+export function ChecklistStep({ project, workspace, notice, onDismissNotice, newForMe, onSeen }: Props) {
+  const newIds = useMemo(() => new Set(newForMe.map((i) => i.id)), [newForMe]);
   const [mine, setMine] = useState(false);
   const [lifeSafety, setLifeSafety] = useState(false);
   const [openOnly, setOpenOnly] = useState(false);
@@ -38,6 +47,16 @@ export function ChecklistStep({ project, workspace, notice, onDismissNotice }: P
         <div className="fs-ps-notice" role="status">
           <span>{notice}</span>
           <button type="button" className="fs-linkbtn" onClick={onDismissNotice}>Dismiss</button>
+        </div>
+      )}
+
+      {newForMe.length > 0 && (
+        <div className="fs-ps-notice fs-ps-new" role="status">
+          <span>
+            <strong>{newForMe.length} new for you</strong> since you last looked.{" "}
+            {[...new Set(newForMe.map((i) => i.added_reason).filter(Boolean))].slice(0, 2).join(" ")}
+          </span>
+          <button type="button" className="fs-linkbtn" onClick={onSeen}>Got it</button>
         </div>
       )}
 
@@ -68,7 +87,8 @@ export function ChecklistStep({ project, workspace, notice, onDismissNotice }: P
           </h3>
           <ul className="fs-ps-items">
             {group.items.map((item) => (
-              <ItemRow key={item.id} item={item} roles={memberRoles} workspace={workspace} flash={changed.has(item.id)} />
+              <ItemRow key={item.id} item={item} roles={memberRoles} workspace={workspace} flash={changed.has(item.id)}
+                isNew={newIds.has(item.id)} />
             ))}
           </ul>
         </section>
@@ -123,7 +143,9 @@ function NoItems({ project }: { project: Project }) {
   );
 }
 
-function ItemRow({ item, roles, workspace, flash }: { item: ActionItem; roles: Role[]; workspace: ProjectWorkspace; flash: boolean }) {
+function ItemRow({ item, roles, workspace, flash, isNew }: {
+  item: ActionItem; roles: Role[]; workspace: ProjectWorkspace; flash: boolean; isNew: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -153,6 +175,7 @@ function ItemRow({ item, roles, workspace, flash }: { item: ActionItem; roles: R
           <span className="fs-chip__dot" aria-hidden="true" title={HAZARD_LABELS[item.hazard]} />
           {item.title}
           {item.life_safety && <span className="fs-ps-ls" title="Life safety">Life safety</span>}
+          {isNew && <span className="fs-ps-newtag">New for you</span>}
         </button>
         <select className="fs-ps-owner" value={item.owner_role ?? ""} disabled={saving} aria-label="Owner"
           onChange={(e) => update({ owner_role: (e.target.value || null) as Role | null })}>
@@ -162,6 +185,11 @@ function ItemRow({ item, roles, workspace, flash }: { item: ActionItem; roles: R
           ))}
         </select>
       </div>
+      {item.added_reason && (
+        <p className="fs-ps-item__why">
+          {item.added_reason} <span className="fs-quiet fs-num">{addedLine(item, ROLE_LABELS)}</span>
+        </p>
+      )}
       {open && (
         <div className="fs-ps-item__more">
           <p>{item.why}</p>
@@ -179,16 +207,17 @@ function ItemRow({ item, roles, workspace, flash }: { item: ActionItem; roles: R
   );
 }
 
-/** Ids whose status or owner changed since the last copy of the project, for a short highlight. */
+/** Ids added, or whose status, owner or provenance changed, since the last copy of the project, for a short highlight. */
 function useChangedIds(items: ActionItem[]): Set<string> {
   const previous = useRef<Map<string, string> | null>(null);
   const [changed, setChanged] = useState<Set<string>>(new Set());
   useEffect(() => {
-    const now = new Map(items.map((i) => [i.id, `${i.status}|${i.owner_role ?? ""}`]));
+    const now = new Map(items.map((i) => [i.id, `${i.status}|${i.owner_role ?? ""}|${i.added_at ?? ""}`]));
     const before = previous.current;
     previous.current = now;
     if (!before) return;
-    const ids = new Set([...now].filter(([id, key]) => before.has(id) && before.get(id) !== key).map(([id]) => id));
+    // Changed rows, and rows another tab's document just added.
+    const ids = new Set([...now].filter(([id, key]) => before.get(id) !== key).map(([id]) => id));
     if (ids.size === 0) return;
     setChanged(ids);
     const timer = window.setTimeout(() => setChanged(new Set()), 2000);

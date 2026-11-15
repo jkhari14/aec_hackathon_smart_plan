@@ -54,6 +54,28 @@ class TestActions(unittest.TestCase):
         with self.assertRaises(ValueError):
             build_actions(self.profile, stage="not_a_stage")
 
+    def test_code_duties_follow_the_scope(self):
+        def ids(work_types):
+            return {a["id"] for a in build_actions({**self.profile, "work_types": work_types})}
+        facade_only = ids(["facade", "scaffold"])
+        self.assertIn("action-code-notice", facade_only, "notice applies to any work on an attached site")
+        for dig in ("action-code-foundation_protection", "action-code-support_drawings", "action-code-survey",
+                    "action-code-monitoring", "action-code-underpinning"):
+            self.assertNotIn(dig, facade_only)
+        digging = ids(["excavation", "foundation"])
+        self.assertIn("action-code-support_drawings", digging)
+        self.assertNotIn("action-code-underpinning", digging, "no underpinning picked, no underpinning duty")
+        self.assertIn("action-code-underpinning", ids(["excavation", "underpinning"]))
+
+    def test_unknown_scope_keeps_code_duties_with_a_note(self):
+        items = {a["id"]: a for a in build_actions({**self.profile, "work_types": None})}
+        self.assertIn("could not be determined", items["action-code-underpinning"]["why"])
+
+    def test_every_code_row_has_a_scope_condition(self):
+        from actions.build import CODE_SCOPE
+        from checklist.checklist_rules import RULES
+        self.assertEqual({r.condition for r in RULES} - set(CODE_SCOPE), set())
+
     def test_unknown_condition_is_rejected(self):
         with self.assertRaises(ValueError):
             evaluate_condition("not_a_condition", self.profile)

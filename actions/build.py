@@ -2,7 +2,8 @@
 
 Two sources feed it:
   * the BC 3309 / Chapter 17 duties already encoded in `checklist/checklist_rules.py`, mapped
-    from that module's party names onto the contract's four disciplines;
+    from that module's party names onto the contract's four disciplines, kept only when the job's scope
+    can call for them (CODE_SCOPE: no digging, no excavation duties; no underpinning, no underpinning duties);
   * the hazard rules in `actions/rules.json` (flood, fire, contamination, facade, weather).
 
 Nothing here marks an item done. Every row's proof is a document that public data does not
@@ -98,6 +99,18 @@ def evaluate_condition(name: str, profile: dict) -> Optional[bool]:
         if wt is None:
             return None
         return "plumbing" in wt or "mechanical" in wt
+    if name == "underpinning_in_scope":
+        wt = profile.get("work_types")
+        if wt is None:
+            return None
+        return "underpinning" in wt
+    if name == "excavation_or_exposed_wall":
+        dig, exposed = _excavating(profile), evaluate_condition("exposed_wall", profile)
+        if dig is None or exposed is None:
+            return None
+        return dig or exposed
+    if name == "always":
+        return True
     if name == "exposed_wall":
         wt = profile.get("work_types")
         if wt is None:
@@ -107,6 +120,19 @@ def evaluate_condition(name: str, profile: dict) -> Optional[bool]:
 
 
 # --- the code rows ----------------------------------------------------------
+
+# Which scope condition (above) decides whether a checklist row is on a job's list, by the row's condition
+# in checklist_rules. Only the scope the team picked is used here: the depth and distance thresholds the full
+# checklist engine applies need inputs this list does not have, so a row kept here may still not apply.
+CODE_SCOPE = {
+    "adjoining_access": "always",  # notice, license, examination: any work on an attached site
+    "excavation": "excavation",
+    "survey_threshold": "excavation",
+    "monitoring_distance": "excavation",
+    "dob_decides": "excavation",
+    "underpinning": "underpinning_in_scope",
+    "exposed_wall": "excavation_or_exposed_wall",
+}
 
 def _discipline_for(parties: Iterable[str], mapping: dict) -> Optional[str]:
     """First mapped discipline wins; the party order in checklist_rules is duty order."""
@@ -131,12 +157,18 @@ def code_actions(profile: dict, cfg: dict) -> list[dict]:
             hazard = "structural"
         if discipline is None:
             continue  # a DOB-only or adjoining-owner-only duty: in the checklist, not an action
+        applies = evaluate_condition(CODE_SCOPE.get(rule.condition, "always"), profile)
+        if applies is False:
+            continue  # the job's scope rules it out (no digging, no underpinning)
+        why = rule.requirement
+        if applies is None:
+            why += " Whether this applies could not be determined from the work picked for this job."
         out.append({
             "id": f"action-code-{rule.id}",
             "discipline": discipline,
             "hazard": hazard,
             "title": rule.title,
-            "why": rule.requirement,
+            "why": why,
             "code_ref": f"2022 NYC BC {rule.section}",
             "proof_needed": rule.proof_needed,
             "status": "open",
