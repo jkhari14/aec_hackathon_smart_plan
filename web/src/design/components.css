@@ -1,0 +1,499 @@
+/* ForeSite core components. Class names are prefixed fs- so they never collide with Tailwind utilities. */
+
+body {
+  background: var(--fs-bg);
+  color: var(--fs-text);
+  font-family: var(--fs-font);
+  font-size: var(--fs-text-md);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.fs-num {
+  font-variant-numeric: tabular-nums;
+}
+
+:where(button, a, input, [tabindex]):focus-visible {
+  outline: 2px solid var(--fs-focus);
+  outline-offset: 2px;
+  border-radius: var(--fs-radius-sm);
+}
+
+.fs-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Panel: the floating surface that slides over the map. */
+.fs-panel {
+  background: var(--fs-panel-glass);
+  backdrop-filter: var(--fs-blur);
+  -webkit-backdrop-filter: var(--fs-blur);
+  border: 1px solid var(--fs-line);
+  border-radius: var(--fs-radius-lg);
+  box-shadow: var(--fs-shadow);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.fs-panel__head {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-2);
+  padding: var(--fs-3) var(--fs-3) var(--fs-3) var(--fs-4);
+  border-bottom: 1px solid var(--fs-line);
+}
+.fs-panel__title {
+  font-size: var(--fs-text-md);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+.fs-panel__sub {
+  display: block;
+  font-size: var(--fs-text-xs);
+  font-weight: 400;
+  color: var(--fs-muted);
+  margin-top: 2px;
+}
+.fs-panel__body {
+  padding: var(--fs-4);
+  overflow: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-3);
+}
+
+/* Slide-in: panels enter from their own edge. */
+.fs-slide {
+  transition:
+    transform var(--fs-base) var(--fs-ease-out),
+    opacity var(--fs-base) var(--fs-ease-out);
+}
+.fs-slide[data-open="false"] {
+  opacity: 0;
+  pointer-events: none;
+}
+.fs-slide[data-edge="left"][data-open="false"] {
+  transform: translateX(-16px);
+}
+.fs-slide[data-edge="right"][data-open="false"] {
+  transform: translateX(16px);
+}
+.fs-slide[data-edge="bottom"][data-open="false"] {
+  transform: translateY(16px);
+}
+
+/* Card */
+.fs-card {
+  background: var(--fs-raised);
+  border: 1px solid var(--fs-line);
+  border-radius: var(--fs-radius);
+  padding: var(--fs-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-2);
+  transition:
+    border-color var(--fs-fast) var(--fs-ease),
+    background var(--fs-fast) var(--fs-ease);
+}
+.fs-card[data-interactive="true"] {
+  cursor: pointer;
+}
+.fs-card[data-interactive="true"]:hover {
+  border-color: var(--fs-line-strong);
+  background: var(--fs-hover);
+}
+.fs-card[data-hazard] {
+  border-left: 3px solid var(--fs-hz, var(--fs-line));
+}
+.fs-card__title {
+  font-weight: 600;
+  font-size: var(--fs-text-md);
+  margin: 0;
+}
+.fs-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fs-2);
+  color: var(--fs-muted);
+  font-size: var(--fs-text-xs);
+}
+
+/* Chip: a filter or a tag. Pressed state is shown by fill and a check, not only color. */
+.fs-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--fs-line);
+  background: transparent;
+  color: var(--fs-text-2);
+  font: inherit;
+  font-size: var(--fs-text-sm);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--fs-fast) var(--fs-ease),
+    border-color var(--fs-fast) var(--fs-ease),
+    color var(--fs-fast) var(--fs-ease);
+}
+.fs-chip:hover {
+  border-color: var(--fs-line-strong);
+  color: var(--fs-text);
+}
+.fs-chip[aria-pressed="true"] {
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-accent);
+  color: var(--fs-text);
+}
+.fs-chip__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--fs-hz, var(--fs-muted));
+  flex: none;
+}
+
+/* Source label: who says so, and when. Shape differs per kind so color is never the only cue. */
+.fs-src {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--fs-text-xs);
+  color: var(--fs-muted);
+  white-space: nowrap;
+  max-width: 100%;
+}
+.fs-src__kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border: 1px solid currentColor;
+}
+.fs-src[data-kind="record"] .fs-src__kind {
+  color: var(--fs-src-record);
+}
+.fs-src[data-kind="ai"] .fs-src__kind {
+  color: var(--fs-src-ai);
+  border-style: dashed;
+}
+.fs-src[data-kind="user"] .fs-src__kind {
+  color: var(--fs-src-user);
+  border-style: dotted;
+}
+.fs-src a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--fs-line-strong);
+  text-underline-offset: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fs-src a:hover {
+  color: var(--fs-text);
+}
+
+/* Badge: a short status word. */
+.fs-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 5px;
+  font-size: var(--fs-text-xs);
+  font-weight: 600;
+  background: var(--fs-raised);
+  color: var(--fs-text-2);
+  border: 1px solid var(--fs-line);
+  white-space: nowrap;
+}
+.fs-badge[data-tone="sample"] {
+  color: var(--fs-sample);
+  border-color: color-mix(in srgb, var(--fs-sample) 45%, transparent);
+  background: color-mix(in srgb, var(--fs-sample) 10%, transparent);
+}
+.fs-badge[data-tone="error"] {
+  color: var(--fs-error);
+  border-color: color-mix(in srgb, var(--fs-error) 45%, transparent);
+  border-style: dashed;
+  background: transparent;
+}
+.fs-badge[data-tone="accent"] {
+  color: var(--fs-accent);
+  border-color: color-mix(in srgb, var(--fs-accent) 45%, transparent);
+  background: var(--fs-accent-soft);
+}
+
+/* Severity mark: size and ring count carry the level; color only reinforces it. */
+.fs-sev {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  border-radius: 50%;
+  background: var(--fs-sev);
+}
+.fs-sev[data-level="0"] {
+  width: 6px;
+  height: 6px;
+  margin: 3px;
+}
+.fs-sev[data-level="1"] {
+  width: 8px;
+  height: 8px;
+  margin: 2px;
+  box-shadow: 0 0 0 2px var(--fs-panel), 0 0 0 3px var(--fs-sev);
+}
+.fs-sev[data-level="2"] {
+  width: 10px;
+  height: 10px;
+  margin: 1px;
+  box-shadow: 0 0 0 2px var(--fs-panel), 0 0 0 3.5px var(--fs-sev);
+}
+.fs-sev[data-level="3"] {
+  width: 12px;
+  height: 12px;
+  box-shadow:
+    0 0 0 2px var(--fs-panel),
+    0 0 0 3.5px var(--fs-sev),
+    0 0 0 5.5px var(--fs-panel),
+    0 0 0 7px var(--fs-sev);
+  margin: 0 3px;
+}
+
+/* Skeleton: every loading state is a shape, never a blank panel. */
+.fs-skel {
+  display: block;
+  border-radius: var(--fs-radius-sm);
+  background: linear-gradient(90deg, var(--fs-hover) 0%, var(--fs-line) 40%, var(--fs-hover) 80%);
+  background-size: 300% 100%;
+  animation: fs-shimmer 1.4s linear infinite;
+}
+@keyframes fs-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fs-skel {
+    animation: none;
+  }
+}
+:root[data-motion="reduce"] .fs-skel {
+  animation: none;
+}
+
+/* Empty and error states. */
+.fs-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--fs-2);
+  padding: var(--fs-4);
+  border-radius: var(--fs-radius);
+  border: 1px dashed var(--fs-line-strong);
+  color: var(--fs-text-2);
+  font-size: var(--fs-text-sm);
+}
+.fs-state__title {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-2);
+  margin: 0;
+  font-size: var(--fs-text-md);
+  font-weight: 600;
+  color: var(--fs-text);
+}
+.fs-state[data-tone="error"] {
+  border-color: color-mix(in srgb, var(--fs-error) 55%, transparent);
+}
+.fs-state[data-tone="error"] .fs-state__title {
+  color: var(--fs-error);
+}
+.fs-state p {
+  margin: 0;
+}
+
+/* Buttons */
+.fs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fs-2);
+  height: 32px;
+  padding: 0 var(--fs-3);
+  border-radius: var(--fs-radius-sm);
+  border: 1px solid var(--fs-line);
+  background: var(--fs-raised);
+  color: var(--fs-text);
+  font: inherit;
+  font-size: var(--fs-text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background var(--fs-fast) var(--fs-ease),
+    border-color var(--fs-fast) var(--fs-ease);
+}
+.fs-btn:hover {
+  background: var(--fs-hover);
+  border-color: var(--fs-line-strong);
+}
+.fs-btn[data-variant="primary"] {
+  background: var(--fs-accent);
+  border-color: var(--fs-accent);
+  color: var(--fs-accent-ink);
+}
+.fs-btn[data-variant="ghost"] {
+  background: transparent;
+  border-color: transparent;
+  color: var(--fs-text-2);
+}
+.fs-btn[data-variant="ghost"]:hover {
+  background: var(--fs-hover);
+  color: var(--fs-text);
+}
+.fs-btn[data-size="icon"] {
+  width: 32px;
+  padding: 0;
+}
+.fs-btn svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+/* Toggle switch: on/off is shown by knob position and fill. */
+.fs-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-3);
+  width: 100%;
+  padding: 6px 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.fs-toggle__track {
+  position: relative;
+  width: 30px;
+  height: 18px;
+  flex: none;
+  border-radius: 999px;
+  background: var(--fs-line-strong);
+  transition: background var(--fs-fast) var(--fs-ease);
+}
+.fs-toggle__track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--fs-text);
+  transition: transform var(--fs-fast) var(--fs-ease);
+}
+.fs-toggle[aria-checked="true"] .fs-toggle__track {
+  background: var(--fs-accent);
+}
+.fs-toggle[aria-checked="true"] .fs-toggle__track::after {
+  transform: translateX(12px);
+  background: var(--fs-accent-ink);
+}
+.fs-toggle__label {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Tabs */
+.fs-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--fs-radius);
+  background: var(--fs-raised);
+  border: 1px solid var(--fs-line);
+}
+.fs-tab {
+  flex: 1;
+  height: 28px;
+  padding: 0 var(--fs-2);
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--fs-muted);
+  font: inherit;
+  font-size: var(--fs-text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background var(--fs-fast) var(--fs-ease),
+    color var(--fs-fast) var(--fs-ease);
+}
+.fs-tab:hover {
+  color: var(--fs-text);
+}
+.fs-tab[aria-selected="true"] {
+  background: var(--fs-panel);
+  color: var(--fs-text);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+}
+
+/* Keyboard key */
+.fs-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 5px;
+  border: 1px solid var(--fs-line-strong);
+  border-bottom-width: 2px;
+  font-family: var(--fs-font);
+  font-size: var(--fs-text-xs);
+  color: var(--fs-text-2);
+  background: var(--fs-raised);
+}
+
+.fs-label {
+  font-size: var(--fs-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fs-muted);
+  margin: 0;
+}
+
+.fs-divider {
+  height: 1px;
+  background: var(--fs-line);
+  border: 0;
+  margin: var(--fs-1) 0;
+}
