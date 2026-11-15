@@ -708,6 +708,46 @@
         }
       }
     },
+    "/api/sites/{bbl}/outlook": {
+      "get": {
+        "summary": "Outlook",
+        "description": "What could go wrong here, for every option: lessons from similar past projects, from this lot's profile.",
+        "operationId": "outlook_api_sites__bbl__outlook_get",
+        "parameters": [
+          {
+            "name": "bbl",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bbl"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiteOutlook"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/cases": {
       "get": {
         "summary": "List Cases",
@@ -2651,6 +2691,192 @@
         ],
         "title": "LayerFeatureProperties"
       },
+      "Lesson": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "hazard": {
+            "type": "string",
+            "enum": [
+              "structural",
+              "geotech",
+              "fire",
+              "flood",
+              "contamination",
+              "facade",
+              "weather",
+              "construction_safety"
+            ],
+            "title": "Hazard"
+          },
+          "options": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "renovate",
+                "demolish_rebuild",
+                "new_build"
+              ]
+            },
+            "type": "array",
+            "title": "Options"
+          },
+          "scopes": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "earth_work",
+                "excavation",
+                "foundation",
+                "support_of_excavation",
+                "underpinning",
+                "structural",
+                "facade",
+                "demolition",
+                "sprinkler",
+                "standpipe",
+                "plumbing",
+                "mechanical",
+                "sidewalk_shed",
+                "scaffold",
+                "construction_fence"
+              ]
+            },
+            "type": "array",
+            "title": "Scopes"
+          },
+          "cases": {
+            "items": {
+              "$ref": "#/components/schemas/LessonCase"
+            },
+            "type": "array",
+            "title": "Cases"
+          },
+          "case_count": {
+            "type": "integer",
+            "title": "Case Count"
+          },
+          "prevent_with": {
+            "items": {
+              "$ref": "#/components/schemas/LessonItem"
+            },
+            "type": "array",
+            "title": "Prevent With"
+          },
+          "here": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Here"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "hazard",
+          "options",
+          "scopes",
+          "cases",
+          "case_count",
+          "prevent_with"
+        ],
+        "title": "Lesson",
+        "description": "A failure mode seen on similar past projects: the incidents, what prevents it, and this lot's own records."
+      },
+      "LessonCase": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "title": "Case Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "date": {
+            "type": "string",
+            "title": "Date"
+          },
+          "severity": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "title": "Severity"
+          },
+          "basis": {
+            "type": "string",
+            "enum": [
+              "reported_cause",
+              "event_only"
+            ],
+            "title": "Basis"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "case_id",
+          "title",
+          "address",
+          "date",
+          "severity",
+          "basis"
+        ],
+        "title": "LessonCase",
+        "description": "A past incident behind a lesson. `basis` says whether its failure mode comes from a reported cause or only\nfrom what happened (no cause published)."
+      },
+      "LessonItem": {
+        "properties": {
+          "source_rule": {
+            "type": "string",
+            "title": "Source Rule"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "code_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code Ref"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source_rule",
+          "title"
+        ],
+        "title": "LessonItem",
+        "description": "A checklist item that prevents the failure mode."
+      },
       "LotFacts": {
         "properties": {
           "address": {
@@ -3612,6 +3838,29 @@
           "results"
         ],
         "title": "SimilarCases"
+      },
+      "SiteOutlook": {
+        "properties": {
+          "bbl": {
+            "type": "string",
+            "title": "Bbl"
+          },
+          "lessons": {
+            "items": {
+              "$ref": "#/components/schemas/Lesson"
+            },
+            "type": "array",
+            "title": "Lessons"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "bbl",
+          "lessons"
+        ],
+        "title": "SiteOutlook",
+        "description": "What could go wrong here, for every option: lessons from similar past projects, worst first."
       },
       "SiteProfile": {
         "properties": {

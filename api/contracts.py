@@ -270,6 +270,47 @@ class SimilarCase(Contract):
     differs_on: list[str]
 
 
+class LessonCase(Contract):
+    """A past incident behind a lesson. `basis` says whether its failure mode comes from a reported cause or only
+    from what happened (no cause published)."""
+
+    case_id: str
+    title: str
+    address: str
+    date: str
+    severity: Severity
+    basis: Literal["reported_cause", "event_only"]
+
+
+class LessonItem(Contract):
+    """A checklist item that prevents the failure mode."""
+
+    source_rule: str
+    title: str
+    code_ref: Optional[str] = None
+
+
+class Lesson(Contract):
+    """A failure mode seen on similar past projects: the incidents, what prevents it, and this lot's own records."""
+
+    id: str
+    label: str
+    hazard: Hazard
+    options: list[Literal["renovate", "demolish_rebuild", "new_build"]]
+    scopes: list[WorkType]
+    cases: list[LessonCase]
+    case_count: int
+    prevent_with: list[LessonItem]
+    here: Optional[str] = None
+
+
+class SiteOutlook(Contract):
+    """What could go wrong here, for every option: lessons from similar past projects, worst first."""
+
+    bbl: str
+    lessons: list[Lesson]
+
+
 class SimilarCases(Contract):
     bbl: str
     results: list[SimilarCase]

@@ -15,7 +15,7 @@ from fastapi import APIRouter, HTTPException, Response
 from pydantic import TypeAdapter
 
 from api.contracts import (
-    ActionItem, EarlyWarning, Hazard, JobType, PatternScore, SimilarCases, SiteProfile, Stage, WorkType,
+    ActionItem, EarlyWarning, Hazard, JobType, PatternScore, SimilarCases, SiteOutlook, SiteProfile, Stage, WorkType,
 )
 from api.routers.router_data import (
     DataUnavailable, LoadedData, owner_function, served, valid_as_of, valid_bbl, valid_choice,
@@ -138,3 +138,12 @@ def actions(bbl: str, response: Response, stage: Optional[str] = None, job_type:
     project screen's setup choices."""
     return served(response, load_site_part, "actions", bbl, stage=stage, job_type=job_type, work_types=work_types,
                   excavation_depth_ft=excavation_depth_ft, proposed_storeys=proposed_storeys)
+
+
+@sites_router.get("/outlook", response_model=SiteOutlook)
+def outlook(bbl: str, response: Response):
+    """What could go wrong here, for every option: lessons from similar past projects, from this lot's profile."""
+    from lessons.outlook import site_outlook
+
+    profile = served(response, load_site_part, "profile", bbl)
+    return site_outlook(profile.model_dump() if hasattr(profile, "model_dump") else profile)
