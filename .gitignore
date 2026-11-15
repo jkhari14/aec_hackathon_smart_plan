@@ -6,3 +6,9 @@ node_modules/
 .DS_Store
 # Files imported by hand stay on the machine that fetched them; only provenance and facts are committed.
 data/manual_imports/**/raw/
+# Unredacted transcripts and source PDFs stay local; redacted copies live in planning/transcripts/.
+/*.pdf
+/AECtech_Hackathon_Brainstorm_Transcript*
+.env
+.env.*
+.claude/settings.local.json

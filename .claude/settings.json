@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git fetch:*)",
+      "Bash(git pull:*)",
+      "Bash(git checkout:*)",
+      "Bash(git switch:*)",
+      "Bash(git branch:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git add:*)",
+      "Bash(git restore --staged:*)",
+      "Bash(git commit:*)",
+      "Bash(git rebase:*)",
+      "Bash(git push -u origin:*)",
+      "Bash(gh auth status:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr edit:*)",
+      "Bash(gh pr comment:*)",
+      "Bash(gh run view:*)",
+      "Bash(python3 tools/foresite_status.py:*)",
+      "Bash(.venv/bin/python:*)",
+      "Bash(.venv/bin/pip install:*)",
+      "Bash(npm install:*)",
+      "Bash(npm ci:*)",
+      "Bash(npm run:*)"
+    ],
+    "deny": [
+      "Bash(gh pr merge:*)",
+      "Bash(git push origin main:*)",
+      "Bash(git push origin HEAD:main:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean:*)"
+    ]
+  }
+}

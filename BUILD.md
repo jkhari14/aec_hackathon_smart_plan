@@ -6,27 +6,40 @@ file is who builds what, in which order, and with which prompt.
 
 Deadline: **Sun Nov 15, 12:00 PM**. Feature freeze at **11:00 AM**.
 
-## Kickoff: paste this into your agent
+## Start your goal
 
-Pull `main`, open the repo in Cursor (or Claude Code), and paste this with your name:
+Your agent runs your whole part as one long-running goal: it pulls `main`, builds your PRs in the
+order below, opens each one on GitHub, and keeps them rebased and green. It does the git work for you
+and explains each step. The steps live in one skill, `.claude/skills/foresite-goal/SKILL.md`, which
+Cursor and Claude Code both load; `tools/foresite_status.py` tells the agent where you stand.
+
+**Once, on your laptop** (ask your agent to help with any step):
+
+1. Install the GitHub CLI (`brew install gh`) and run `gh auth login` (GitHub.com, HTTPS, browser).
+2. `gh repo clone jkhari14/aec_hackathon_smart_plan` and open that folder in Cursor, or `cd` into it
+   and run `claude`.
+3. Check where you stand: `python3 tools/foresite_status.py <your name>`.
+
+**Start the goal.** In **Cursor** (Agent chat, a new chat):
 
 ```text
-I'm <your name> on the ForeSite team. Read AGENTS.md, then BUILD.md: the shared sections and my own
-section. Build the first PR in my section that is not merged yet. Stay inside my paths, build against
-the contracts and fixtures in contracts/, check the jahleel/ references listed in my section and reuse
-what fits, run the tests, and open the PR with the title and branch name from BUILD.md. Tell me what
-you built, what you could not do, and what the next PR is.
+/goal I'm <your name> on the ForeSite team. Follow the foresite-goal skill: build every PR in my section
+of BUILD.md in order until each one is open on GitHub with green CI.
 ```
 
-When a PR is merged, start the next one with:
+If `/goal` is not in your Cursor yet, send the same text without `/goal`, or run `/foresite-goal <your name>`.
+
+In **Claude Code** (in the repo folder):
 
 ```text
-Pull main. Build my next unmerged PR from my section of BUILD.md, the same way.
+/foresite-goal <your name>
 ```
 
-Until PR 0 has merged, `contracts/`, `api/` and `web/` do not exist yet. Everyone except Jacob uses
-that time to read the plan and their section, and for research, data checks and sketches that need no
-shared code (listed under "Before PR 0" in each section).
+**After Jacob posts a merge in Slack,** run the same command again in a new chat. The agent rebases your
+open PRs, fixes review comments and CI, and moves on to your next PR.
+
+Until PR 0 has merged, `contracts/`, `api/` and `web/` do not exist yet; the goal tells you to do the
+"Before PR 0" prep in your section (research, data checks, sketches) instead.
 
 ## Who builds what
 
@@ -73,7 +86,8 @@ on" column have merged. Jacob merges, in this order, and posts each merge in Sla
 
 - **Your paths only.** Each section lists the paths you own. Do not edit anyone else's. A change to
   `contracts/` is its own small PR to Jacob, made before the PR that needs it.
-- **Branch and title.** Branch `<name>/pr<n>-<short-topic>` from the latest `main`. PR title
+- **Branch and title.** Branch `<name>/pr<n>-<short-topic>` from the latest `main` (or from your own
+  open PR when the new one builds on it; the status script says which). PR title
   `[W<wave>/PR<n>] <what it does>`. One PR per row above; keep it small.
 - **Before opening:** rebase on `main`, run `python -m unittest discover -s tests -t .` and
   `cd web && npm run build`, and fill in the PR template (what, how tested, screenshots for UI).
@@ -192,7 +206,7 @@ planning/         plan and transcripts
 ## Jacob: lead, integrator, merge captain
 
 **Owns:** `contracts/`, `api/main.py`, `api/contracts.py`, `api/stubs.py`, `web/src/contracts.ts`, `early_warning/`,
-`web/src/features/early_warnings/`, `.github/`, deploy config, `AGENTS.md`, `BUILD.md`.
+`web/src/features/early_warnings/`, `.github/`, `.claude/`, `tools/`, `.gitignore`, deploy config, `AGENTS.md`, `BUILD.md`.
 Also merges every PR in order and runs the end-to-end check after each wave.
 
 **References in `jahleel/`:** `api/brief/brief_models.py` (closed status sets), `api/preflight_api.py`
